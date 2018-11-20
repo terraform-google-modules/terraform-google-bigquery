@@ -13,3 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+#TODO: update the descriptions and change the defaults if needed
+variable "dataset_id" {
+  description = "update"
+}
+
+variable "dataset_name" {
+  description = "update"
+}
+
+variable "description" {
+  description = "update"
+}
+
+variable "region" {
+  description = "update"
+  default = "US"
+}
+
+variable "expiration" {
+  description = "update"
+}
+
+variable "project_id" {
+  description = "update"
+}
+
+variable "table_id" {
+  description = "update"
+}
+
+variable "time_partitioning" {
+  description = "update"
+}
+
+variable "schema_file" {
+  description = "update"
+}

@@ -11,6 +11,15 @@ There are multiple examples in the [examples](./examples/) folder
 ## Inputs
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| dataset_id | | string| | yes |
+| dataset_name | | string | | yes |
+| description | | string | | yes |
+| region | | string | US | yes |
+| expiration | | integer | | yes |
+| project_id | | string | | |
+| table_id  | | string | | |
+| time_partitioning  | | string | | |
+| schema_file  | | string | | |
 
 ## Outputs
 | Name | Description |
@@ -36,13 +45,19 @@ In order to execute this module you must have a Service Account with the followi
 Be sure you have the correct Terraform version (0.10.x), you can choose the binary here:
 - https://releases.hashicorp.com/terraform/
 
+## Run Examples
+`cd ./examples/basic_bq`
+`terraform init`
+`terraform plan -var-file example.tfvars`
+`terraform apply -var-file example.tfvars`
 
 ## TODO
 * modify test/integration/gcloud/integration.bats
 * Verify all tests in test/
 * Update the service account permissions required
 * Update helpers/setup-sa.sh
-* Create the TF module
-* Provide an example/
+* DONE: Create the TF module
+* DONE: Provide an example/
 * Add the scripts directory
 * update README.md
+* Create/update outputs.tf
