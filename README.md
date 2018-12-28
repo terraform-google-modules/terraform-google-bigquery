@@ -1,4 +1,3 @@
-#digangi_pr
 # terraform-google-bigquery
 
 This module allows you to create opinionated Google Cloud Platform Big Query datasets and tables.
@@ -42,14 +41,8 @@ In order to execute this module you must have a Service Account with the followi
 
 ## Install
 ### Terraform
-Be sure you have the correct Terraform version (0.10.x), you can choose the binary here:
+Be sure you have the correct Terraform version (0.11.x), you can choose the binary here:
 - https://releases.hashicorp.com/terraform/
-
-## Run Examples
-`cd ./examples/basic_bq`
-`terraform init`
-`terraform plan -var-file example.tfvars`
-`terraform apply -var-file example.tfvars`
 
 ## TODO
 * modify test/integration/gcloud/integration.bats
@@ -60,4 +53,4 @@ Be sure you have the correct Terraform version (0.10.x), you can choose the bina
 * DONE: Provide an example/
 * Add the scripts directory
 * update README.md
-* Create/update outputs.tf
+* DONE: Create/update outputs.tf
