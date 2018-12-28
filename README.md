@@ -5,6 +5,10 @@ This module allows you to create opinionated Google Cloud Platform Big Query dat
 ## Usage
 There are multiple examples in the [examples](./examples/) folder
 
+### kitchen-terraform
+1. Follow installation instructions: https://github.com/newcontext-oss/kitchen-terraform
+2. `bundle exec kitchen test`
+
 ## Features
 
 ## Inputs
@@ -45,12 +49,13 @@ Be sure you have the correct Terraform version (0.11.x), you can choose the bina
 - https://releases.hashicorp.com/terraform/
 
 ## TODO
-* modify test/integration/gcloud/integration.bats
-* Verify all tests in test/
-* Update the service account permissions required
-* Update helpers/setup-sa.sh
+* DONE: Verify all tests in test/
 * DONE: Create the TF module
 * DONE: Provide an example/
-* Add the scripts directory
-* update README.md
+* DONE: Add kitchen-terraform setup
 * DONE: Create/update outputs.tf
+* Update README.md
+* Update the service account permissions required
+* Update helpers/setup-sa.sh
+* Modify test/integration/gcloud/integration.bats
+* Add additional kitchen inspec tests

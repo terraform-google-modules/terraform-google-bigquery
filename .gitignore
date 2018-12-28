@@ -22,6 +22,9 @@ Session.vim
 # Local .terraform directories
 **/.terraform/*
 
+# Local .kitchen directories
+**/.kitchen/*
+
 # .tfstate files
 *.tfstate
 *.tfstate.*

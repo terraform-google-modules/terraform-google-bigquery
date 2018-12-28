@@ -1,0 +1,5 @@
+name: local
+attributes:
+  - name: something
+    required: True
+    type: string
