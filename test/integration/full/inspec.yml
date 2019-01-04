@@ -1,5 +1,5 @@
 name: local
 attributes:
-  - name: something
+  - name: dataset_id
     required: True
     type: string
