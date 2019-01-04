@@ -19,20 +19,22 @@
  *****************************************/
 locals {}
 
-resource "google_bigquery_dataset" "default" {
-  dataset_id                  = "${var.dataset_id}"
-  friendly_name               = "${var.dataset_name}"
-  description                 = "${var.description}"
+resource "google_bigquery_dataset" "main" {
+  dataset_id    = "${var.dataset_id}"
+  friendly_name = "${var.dataset_name}"
+  description   = "${var.description}"
+
   #TODO: add if condition to validate if neither US or EU are supplied
-  location                    = "${var.region}"
+  location = "${var.region}"
+
   #TODO: format this ne excluded by default but can optionally be defined if the user wishes
   default_table_expiration_ms = "${var.expiration}"
   project                     = "${var.project_id}"
 
   #TODO: Need to find a way to dynamically assign a dict object(s)
   labels {
-    env = "default"
-    foo = "bar"
+    env   = "default"
+    foo   = "bar"
     tonyd = "tonyd"
   }
 
@@ -53,8 +55,8 @@ resource "google_bigquery_dataset" "default" {
   # }
 }
 
-resource "google_bigquery_table" "default" {
-  dataset_id = "${google_bigquery_dataset.default.dataset_id}"
+resource "google_bigquery_table" "main" {
+  dataset_id = "${google_bigquery_dataset.main.dataset_id}"
   table_id   = "${var.table_id}"
   project    = "${var.project_id}"
 

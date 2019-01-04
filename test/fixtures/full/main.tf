@@ -1,5 +1,5 @@
 module "bigquery" {
-  source            = "../.."
+  source            = "../../.."
   dataset_id        = "${var.dataset_id}"
   dataset_name      = "${var.dataset_name}"
   description       = "${var.description}"

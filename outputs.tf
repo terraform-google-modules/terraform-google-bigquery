@@ -14,4 +14,32 @@
  * limitations under the License.
  */
 
-#TODO: Update the outputs
+ output "dataset_id" {
+   value = "${google_bigquery_dataset.main.id}"
+   description = "update"
+ }
+
+output "dataset_name" {
+  value = "${google_bigquery_dataset.main.friendly_name}"
+  description = "update"
+}
+
+output "dataset_project" {
+  value = "${google_bigquery_dataset.main.project}"
+  description = "update"
+}
+
+output "dataset_labels" {
+  value = "${google_bigquery_dataset.main.labels}"
+  description = "update"
+}
+
+output "table_id" {
+  value = "${google_bigquery_table.main.id}"
+  description = "update"
+}
+
+output "table_labels" {
+  value = "${google_bigquery_table.main.labels}"
+  description = "update"
+}

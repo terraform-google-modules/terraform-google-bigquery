@@ -29,7 +29,7 @@ variable "description" {
 
 variable "region" {
   description = "update"
-  default = "US"
+  default     = "US"
 }
 
 variable "expiration" {

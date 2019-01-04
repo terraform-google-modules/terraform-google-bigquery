@@ -1,10 +1,13 @@
-#digangi_pr
 # terraform-google-bigquery
 
 This module allows you to create opinionated Google Cloud Platform Big Query datasets and tables.
 
 ## Usage
 There are multiple examples in the [examples](./examples/) folder
+
+### kitchen-terraform
+1. Follow installation instructions: https://github.com/newcontext-oss/kitchen-terraform
+2. `bundle exec kitchen test`
 
 ## Features
 
@@ -42,22 +45,17 @@ In order to execute this module you must have a Service Account with the followi
 
 ## Install
 ### Terraform
-Be sure you have the correct Terraform version (0.10.x), you can choose the binary here:
+Be sure you have the correct Terraform version (0.11.x), you can choose the binary here:
 - https://releases.hashicorp.com/terraform/
 
-## Run Examples
-`cd ./examples/basic_bq`
-`terraform init`
-`terraform plan -var-file example.tfvars`
-`terraform apply -var-file example.tfvars`
-
 ## TODO
-* modify test/integration/gcloud/integration.bats
-* Verify all tests in test/
-* Update the service account permissions required
-* Update helpers/setup-sa.sh
+* DONE: Verify all tests in test/
 * DONE: Create the TF module
 * DONE: Provide an example/
-* Add the scripts directory
-* update README.md
-* Create/update outputs.tf
+* DONE: Add kitchen-terraform setup
+* DONE: Create/update outputs.tf
+* Update README.md
+* Update the service account permissions required
+* Update helpers/setup-sa.sh
+* Modify test/integration/gcloud/integration.bats
+* Add additional kitchen inspec tests
