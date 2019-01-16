@@ -12,21 +12,27 @@ There are multiple examples in the [examples](./examples/) folder
 ## Features
 
 ## Inputs
-| Name | Description | Type | Default | Required |
+| Name | Description | Type | Required | Default |
 |------|-------------|:----:|:-----:|:-----:|
-| dataset_id | | string| | yes |
-| dataset_name | | string | | yes |
+| dataset_id | string| yes |
+| dataset_name | string | yes |
 | description | | string | | yes |
-| region | | string | US | yes |
-| expiration | | integer | | yes |
-| project_id | | string | | |
-| table_id  | | string | | |
-| time_partitioning  | | string | | |
-| schema_file  | | string | | |
+| region | string | yes | US |
+| expiration | integer | yes |
+| project_id | string | yes |
+| table_id  | string | yes |
+| time_partitioning  | string | yes |
+| schema_file | string | yes |
 
 ## Outputs
 | Name | Description |
 |------|-------------|
+| dataset_id | Unique id for the dataset being provisioned |
+| dataset_name | Friendly name for the dataset being provisioned |
+| dataset_project | Project wheree the dataset and table are created |
+| table_id | Unique id for the table being provisioned |
+| dataset_labels | Key value pairs in a map for dataset labels |
+| table_labels | Key value pairs in a map for table labels |
 
 ## File structure
 The project has the following folders and files
@@ -47,6 +53,7 @@ In order to execute this module you must have a Service Account with the followi
 ### Terraform
 Be sure you have the correct Terraform version (0.11.x), you can choose the binary here:
 - https://releases.hashicorp.com/terraform/
+- test directory holds all integration tests and will require
 
 ## TODO
 * DONE: Verify all tests in test/

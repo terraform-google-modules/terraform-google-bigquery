@@ -16,38 +16,48 @@
 
 #TODO: update the descriptions and change the defaults if needed
 variable "dataset_id" {
-  description = "update"
+  description = "Unique id for the dataset being provisioned"
 }
 
 variable "dataset_name" {
-  description = "update"
+  description = "Friendly name for the dataset being provisioned"
 }
 
 variable "description" {
-  description = "update"
+  description = "Dataset description"
 }
 
 variable "region" {
-  description = "update"
+  description = "The regional location for the dataset only US and EU are allowed in module"
   default     = "US"
 }
 
 variable "expiration" {
-  description = "update"
+  description = "TTL of tables using the dataset in MS"
 }
 
 variable "project_id" {
-  description = "update"
+  description = "Project wheree the dataset and table are created"
 }
 
 variable "table_id" {
-  description = "update"
+  description = "Unique id for the table being provisioned"
 }
 
 variable "time_partitioning" {
-  description = "update"
+  description = "Configures time-based partitioning for this table"
 }
 
 variable "schema_file" {
-  description = "update"
+  description = " A JSON schema for the table"
+}
+
+variable "dataset_labels" {
+  description = "Key value pairs in a map for dataset labels"
+  type        = "map"
+}
+
+variable "table_labels" {
+  description = "Key value pairs in a map for table labels"
+  type        = "map"
 }

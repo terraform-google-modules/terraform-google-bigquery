@@ -19,6 +19,7 @@
  *****************************************/
 provider "google" {
   version = "~> 1.19.1"
+
   # credentials = "${file(local.credentials_file_path)}"
 }
 
