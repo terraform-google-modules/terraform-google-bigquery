@@ -5,24 +5,21 @@ This module allows you to create opinionated Google Cloud Platform Big Query dat
 ## Usage
 There are multiple examples in the [examples](./examples/) folder
 
-### kitchen-terraform
-1. Follow installation instructions: https://github.com/newcontext-oss/kitchen-terraform
-2. `bundle exec kitchen test`
-
 ## Features
+Module provides a example for deploying a single dataset and a table onside of the dataset with an example schema.
 
 ## Inputs
 | Name | Description | Type | Required | Default |
 |------|-------------|:----:|:-----:|:-----:|
-| dataset_id | string| yes |
-| dataset_name | string | yes |
-| description | | string | | yes |
-| region | string | yes | US |
-| expiration | integer | yes |
-| project_id | string | yes |
-| table_id  | string | yes |
-| time_partitioning  | string | yes |
-| schema_file | string | yes |
+| dataset_id | Unique id for the dataset being provisioned | string| yes ||
+| dataset_name | Friendly name for the dataset being provisioned | string | yes ||
+| description | Dataset description | string | | yes ||
+| region | The regional location for the dataset only US and EU are allowed in module | string | yes | US ||
+| expiration | TTL of tables using the dataset in MS | integer | yes ||
+| project_id | Project wheree the dataset and table are created | string | yes ||
+| table_id  | Unique id for the table being provisioned | string | yes ||
+| time_partitioning | Unique id for the table being provisioned | string | yes ||
+| schema_file | A JSON schema for the table | string | yes ||
 
 ## Outputs
 | Name | Description |
@@ -35,7 +32,22 @@ There are multiple examples in the [examples](./examples/) folder
 | table_labels | Key value pairs in a map for table labels |
 
 ## File structure
-The project has the following folders and files
+The project has the following folders and files:
+.
+├── docs                   # folder is the landing location for troubleshooting docs
+├── examples               # example deployments of the module
+├── helpers                # optional scripts to setup required packages, gcp services, etc
+├── test                   # kitchen fixtures, boilerplate & integration tests
+├── .kitchen.yml           # establishing the kitchen root
+├── config.tf              # terraform providers & Requirements
+├── Gemfile                # Gemfile containing reqired Gems for running kitchen-terraform
+├── Gemfile.lock           # Locked gem versions
+├── main.tf                # terraform module
+├── Makefile               # enables make to setup local environment
+├── outputs.tf             # module outputs
+├── variables.tf           # variables that can be consumed by the module           
+├── LICENSE
+└── README.md
 
 ## Requirements
 ### Terraform plugins
@@ -45,8 +57,10 @@ The project has the following folders and files
 
 ### Permissions
 In order to execute this module you must have a Service Account with the following roles:
+ - roles/bigquery.dataOwner
 
 #### Script Helper
+.helpers/setup-sa.sh
 
 
 ## Install
@@ -55,14 +69,13 @@ Be sure you have the correct Terraform version (0.11.x), you can choose the bina
 - https://releases.hashicorp.com/terraform/
 - test directory holds all integration tests and will require
 
-## TODO
-* DONE: Verify all tests in test/
-* DONE: Create the TF module
-* DONE: Provide an example/
-* DONE: Add kitchen-terraform setup
-* DONE: Create/update outputs.tf
-* Update README.md
-* Update the service account permissions required
-* Update helpers/setup-sa.sh
-* Modify test/integration/gcloud/integration.bats
-* Add additional kitchen inspec tests
+### kitchen-terraform
+Follow installation instructions for your mac osx
+- https://github.com/newcontext-oss/kitchen-terraform
+- kitchen tests are located: [test/integration/full](test/integration/full)
+- terraform test deployment scripts are located: [test/fixtures/full](test/fixtures/full) if there are tests added or if the module is changed these files will need updated
+
+## Running tests
+
+`cd /path/to/terraform-good-bigquery`
+`make` #this will run all tests that were created for this module. as a result you can run the tests found in this file individually if desired

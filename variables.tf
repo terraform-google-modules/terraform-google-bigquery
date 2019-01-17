@@ -49,7 +49,7 @@ variable "time_partitioning" {
 }
 
 variable "schema_file" {
-  description = " A JSON schema for the table"
+  description = "A JSON schema for the table"
 }
 
 variable "dataset_labels" {

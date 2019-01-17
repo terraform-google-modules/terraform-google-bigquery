@@ -32,4 +32,4 @@ suites:
       command_timeout: 1800
       root_module_directory: test/fixtures/full
       variables:
-        project_id: "scrum-team-admins-host"
+        project_id: "example-project"
