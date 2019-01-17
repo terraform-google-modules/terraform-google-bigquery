@@ -43,7 +43,7 @@ LINUXARQ_GO="linux-amd64"
 # Terraform installation path
 TERRAFORM_HOME="$HOME/terraform"
 # Terraform version
-TERRAFORM_VERSION="0.10.8"
+TERRAFORM_VERSION="0.11.11"
 # Terraform plugins path
 TERRAFORM_PLUGINS_PATH="$HOME/.terraform.d/plugins"
 

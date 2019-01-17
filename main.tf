@@ -17,57 +17,40 @@
 /******************************************
   Locals configuration
  *****************************************/
-locals {}
+locals {
+  location = "${var.region == "US" || var.region == "EU" ? var.region : "module only supports EU or US"}"
+}
 
 resource "google_bigquery_dataset" "main" {
   dataset_id    = "${var.dataset_id}"
   friendly_name = "${var.dataset_name}"
   description   = "${var.description}"
+  location      = "${local.location}"
 
-  #TODO: add if condition to validate if neither US or EU are supplied
-  location = "${var.region}"
-
-  #TODO: format this ne excluded by default but can optionally be defined if the user wishes
+  #TODO: terraform 0.12 will enable "expiration_mode ? a_table_expiration : null" (https://github.com/hashicorp/terraform/issues/17968)
   default_table_expiration_ms = "${var.expiration}"
   project                     = "${var.project_id}"
+  labels                      = "${var.dataset_labels}"
 
-  #TODO: Need to find a way to dynamically assign a dict object(s)
-  labels {
-    env   = "default"
-    foo   = "bar"
-    tonyd = "tonyd"
-  }
-
-  //TODO: array of users or groups needs to be added to have access. Need to figure out the best method of customers to allocate users or groups.
+  # TODO: revisit terraform 0.12 if arrays are available
   # access {
   #   role   = "READER"
   #   domain = "adigangi.com"
   # }
-  #
-  # access {
-  #   role           = "WRITER"
-  #   user_by_email = "adigangi@adigangi.com"
-  # }
-  #
-  # access {
-  #   role           = "OWNER"
-  #   special_group  = "projectOwners"
-  # }
 }
 
+# TODO: Should be configured to create multiple tables on central dataset
 resource "google_bigquery_table" "main" {
   dataset_id = "${google_bigquery_dataset.main.dataset_id}"
   table_id   = "${var.table_id}"
   project    = "${var.project_id}"
 
-  #TODO: is this required?
+  #TODO: terraform 0.12 will enable "time_partitioning ? time_partitioning_is_required : null" (https://github.com/hashicorp/terraform/issues/17968)
   time_partitioning {
     type = "${var.time_partitioning}"
   }
 
-  labels {
-    env = "default"
-  }
+  labels = "${var.table_labels}"
 
   schema = "${file("${var.schema_file}")}"
 }

@@ -44,7 +44,7 @@ then
 fi
 
 # Service Account creation
-SA_NAME="project-factory-${RANDOM}"
+SA_NAME="bq-${RANDOM}"
 SA_ID="${SA_NAME}@${HOST_PROJECT}.iam.gserviceaccount.com"
 STAGING_DIR="${PWD}"
 KEY_FILE="${STAGING_DIR}/credentials.json"
@@ -60,74 +60,18 @@ gcloud iam service-accounts keys create ${KEY_FILE} \
     --user-output-enabled false
 
 echo "Applying permissions for org $ORG_ID and project $HOST_PROJECT..."
-# Grant roles/resourcemanager.organizationViewer to the service account on the organization
-gcloud organizations add-iam-policy-binding \
-  "${ORG_ID}" \
-  --member="serviceAccount:${SA_ID}" \
-  --role="roles/resourcemanager.organizationViewer" \
-  --user-output-enabled false
-
-# Grant roles/resourcemanager.projectCreator to the service account on the organization
-gcloud organizations add-iam-policy-binding \
-  "${ORG_ID}" \
-  --member="serviceAccount:${SA_ID}" \
-  --role="roles/resourcemanager.projectCreator" \
-  --user-output-enabled false
-
-# Grant roles/billing.user to the service account on the organization
-gcloud organizations add-iam-policy-binding \
-  "${ORG_ID}" \
-  --member="serviceAccount:${SA_ID}" \
-  --role="roles/billing.user" \
-  --user-output-enabled false
-
-# Grant roles/compute.xpnAdmin to the service account on the organization
-gcloud organizations add-iam-policy-binding \
-  "${ORG_ID}" \
-  --member="serviceAccount:${SA_ID}" \
-  --role="roles/compute.xpnAdmin" \
-  --user-output-enabled false
-
-# Grant roles/compute.networkAdmin to the service account on the organization
-gcloud organizations add-iam-policy-binding \
-  "${ORG_ID}" \
-  --member="serviceAccount:${SA_ID}" \
-  --role="roles/compute.networkAdmin" \
-  --user-output-enabled false
-
-# Grant roles/iam.serviceAccountAdmin to the service account on the organization
-gcloud organizations add-iam-policy-binding \
-  "${ORG_ID}" \
-  --member="serviceAccount:${SA_ID}" \
-  --role="roles/iam.serviceAccountAdmin" \
-  --user-output-enabled false
 
 # Grant roles/resourcemanager.projectIamAdmin to the service account on the host project
 gcloud projects add-iam-policy-binding \
   "${HOST_PROJECT}" \
   --member="serviceAccount:${SA_ID}" \
-  --role="roles/resourcemanager.projectIamAdmin" \
+  --role="roles/bigquery.dataOwner" \
   --user-output-enabled false
 
 # Enable required API's
 gcloud services enable \
-  cloudresourcemanager.googleapis.com \
+  bigquery-json.googleapis.com \
   --project ${HOST_PROJECT}
 
-gcloud services enable \
-  cloudbilling.googleapis.com \
-  --project ${HOST_PROJECT}
-
-gcloud services enable \
-  iam.googleapis.com \
-  --project ${HOST_PROJECT}
-
-gcloud services enable \
-  admin.googleapis.com \
-  --project ${HOST_PROJECT}
-
-gcloud services enable \
-  appengine.googleapis.com \
-  --project ${HOST_PROJECT}
 
 echo "All done."

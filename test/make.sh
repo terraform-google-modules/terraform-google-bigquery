@@ -28,6 +28,11 @@ do
 done;
 }
 
+function check_kitchen() {
+  echo "Running kitchen tests"
+  find . -name ".kitchen.yml" -exec bash -c 'bundle exec kitchen test' \;
+}
+
 # This function makes sure that the required files for
 # releasing to OSS are present
 function basefiles() {
