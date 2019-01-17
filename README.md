@@ -13,7 +13,7 @@ Module provides a example for deploying a single dataset and a table onside of t
 |------|-------------|:----:|:-----:|:-----:|
 | dataset_id | Unique id for the dataset being provisioned | string| yes ||
 | dataset_name | Friendly name for the dataset being provisioned | string | yes ||
-| description | Dataset description | string | | yes ||
+| description | Dataset description | string | yes |  ||
 | region | The regional location for the dataset only US and EU are allowed in module | string | yes | US ||
 | expiration | TTL of tables using the dataset in MS | integer | yes ||
 | project_id | Project wheree the dataset and table are created | string | yes ||
@@ -33,6 +33,7 @@ Module provides a example for deploying a single dataset and a table onside of t
 
 ## File structure
 The project has the following folders and files:
+```bash
 .
 ├── docs                   # folder is the landing location for troubleshooting docs
 ├── examples               # example deployments of the module
@@ -48,7 +49,7 @@ The project has the following folders and files:
 ├── variables.tf           # variables that can be consumed by the module           
 ├── LICENSE
 └── README.md
-
+```
 ## Requirements
 ### Terraform plugins
 - [Terraform](https://www.terraform.io/downloads.html) 0.11.x
