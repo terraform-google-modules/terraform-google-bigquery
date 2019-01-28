@@ -33,6 +33,8 @@ Module provides a example for deploying a single dataset and a table onside of t
 | dataset_labels | Key value pairs in a map for dataset labels |
 | table_labels | Key value pairs in a map for table labels |
 
+[^]: (autogen_docs_end)
+
 ## File structure
 The project has the following folders and files:
 ```bash
