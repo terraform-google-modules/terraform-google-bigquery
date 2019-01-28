@@ -3,7 +3,7 @@
 This module allows you to create opinionated Google Cloud Platform Big Query datasets and tables.
 
 ## Usage
-There are multiple examples in the [examples](./examples/) folder
+There are multiple examples in the [examples](./examples/) folder.
 
 ## Features
 Module provides a example for deploying a single dataset and a table onside of the dataset with an example schema.
