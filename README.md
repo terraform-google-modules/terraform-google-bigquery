@@ -8,6 +8,8 @@ The root module can be used to provision a dataset and a table with a json schem
 ## Features
 Module provides a example for deploying a single dataset and a table onside of the dataset with an example schema.
 
+[^]: (autogen_docs_start)
+
 ## Inputs
 | Name | Description | Type | Required | Default |
 |------|-------------|:----:|:-----:|:-----:|
@@ -30,6 +32,8 @@ Module provides a example for deploying a single dataset and a table onside of t
 | table_id | Unique id for the table being provisioned |
 | dataset_labels | Key value pairs in a map for dataset labels |
 | table_labels | Key value pairs in a map for table labels |
+
+[^]: (autogen_docs_end)
 
 ## File structure
 The project has the following folders and files:
