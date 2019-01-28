@@ -8,6 +8,8 @@ There are multiple examples in the [examples](./examples/) folder.
 ## Features
 Module provides a example for deploying a single dataset and a table onside of the dataset with an example schema.
 
+[^]: (autogen_docs_start)
+
 ## Inputs
 | Name | Description | Type | Required | Default |
 |------|-------------|:----:|:-----:|:-----:|
