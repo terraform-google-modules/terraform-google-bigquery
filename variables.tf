@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-#TODO: update the descriptions and change the defaults if needed
 variable "dataset_id" {
-  description = "Unique id for the dataset being provisioned"
+  description = "Unique ID for the dataset being provisioned"
 }
 
 variable "dataset_name" {
@@ -41,7 +40,7 @@ variable "project_id" {
 }
 
 variable "table_id" {
-  description = "Unique id for the table being provisioned"
+  description = "Unique ID for the table being provisioned"
 }
 
 variable "time_partitioning" {

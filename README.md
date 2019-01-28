@@ -3,7 +3,7 @@
 This module allows you to create opinionated Google Cloud Platform Big Query datasets and tables.
 
 ## Usage
-There are multiple examples in the [examples](./examples/) folder.
+The root module can be used to provision a dataset and a table with a json schema associated with the table. There are multiple examples in the [examples](./examples/) folder.
 
 ## Features
 Module provides a example for deploying a single dataset and a table onside of the dataset with an example schema.
@@ -53,30 +53,26 @@ The project has the following folders and files:
 ## Requirements
 ### Terraform plugins
 - [Terraform](https://www.terraform.io/downloads.html) 0.11.x
-- [terraform-provider-google](https://github.com/terraform-providers/terraform-provider-google) plugin v1.8.0
-- [terraform-provider-gsuite](https://github.com/DeviaVir/terraform-provider-gsuite) plugin if GSuite functionality is desired
+- [terraform-provider-google](https://github.com/terraform-providers/terraform-provider-google) plugin v1.20.0
 
 ### Permissions
 In order to execute this module you must have a Service Account with the following roles:
  - roles/bigquery.dataOwner
 
 #### Script Helper
-.helpers/setup-sa.sh
-
+A helper script for configuring a Service Account is located at (./helpers/setup-sa.sh).
 
 ## Install
 ### Terraform
-Be sure you have the correct Terraform version (0.11.x), you can choose the binary here:
-- https://releases.hashicorp.com/terraform/
-- test directory holds all integration tests and will require
+Be sure you have the correct Terraform version (0.11.x), you can choose the binary from [Terraform releases](https://releases.hashicorp.com/terraform/).
 
 ### kitchen-terraform
-Follow installation instructions for your mac osx
-- https://github.com/newcontext-oss/kitchen-terraform
-- kitchen tests are located: [test/integration/full](test/integration/full)
-- terraform test deployment scripts are located: [test/fixtures/full](test/fixtures/full) if there are tests added or if the module is changed these files will need updated
+Tests verified on mac osx, to set this up on your machine follow the official [Kitchen installation](https://github.com/newcontext-oss/kitchen-terraform) instructions.
+- Kitchen tests are located: [test/integration/full](test/integration/full).
+- Terraform fixtures are located: [test/fixtures/full](test/fixtures/full).
 
 ## Running tests
 
-`cd /path/to/terraform-good-bigquery`
-`make` #this will run all tests that were created for this module. as a result you can run the tests found in this file individually if desired
+`cd /path/to/terraform-google-bigquery`
+The following command will run all tests for the module:
+`make`

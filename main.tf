@@ -15,6 +15,13 @@
  */
 
 /******************************************
+   Lock Terraform version
+  *****************************************/
+terraform {
+  required_version = "~> 0.11.11"
+}
+
+/******************************************
   Locals configuration
  *****************************************/
 locals {
@@ -27,25 +34,16 @@ resource "google_bigquery_dataset" "main" {
   description   = "${var.description}"
   location      = "${local.location}"
 
-  #TODO: terraform 0.12 will enable "expiration_mode ? a_table_expiration : null" (https://github.com/hashicorp/terraform/issues/17968)
   default_table_expiration_ms = "${var.expiration}"
   project                     = "${var.project_id}"
   labels                      = "${var.dataset_labels}"
-
-  # TODO: revisit terraform 0.12 if arrays are available
-  # access {
-  #   role   = "READER"
-  #   domain = "adigangi.com"
-  # }
 }
 
-# TODO: Should be configured to create multiple tables on central dataset
 resource "google_bigquery_table" "main" {
   dataset_id = "${google_bigquery_dataset.main.dataset_id}"
   table_id   = "${var.table_id}"
   project    = "${var.project_id}"
 
-  #TODO: terraform 0.12 will enable "time_partitioning ? time_partitioning_is_required : null" (https://github.com/hashicorp/terraform/issues/17968)
   time_partitioning {
     type = "${var.time_partitioning}"
   }

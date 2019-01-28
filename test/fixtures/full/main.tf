@@ -13,7 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
+/******************************************
+   Provider configuration
+  *****************************************/
+provider "google" {
+  version = "~> 1.20.0"
+
+  # credentials = "${file(local.credentials_file_path)}"
+}
+
 module "bigquery" {
   source            = "../../.."
   dataset_id        = "${var.dataset_id}"

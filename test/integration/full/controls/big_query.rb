@@ -12,56 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Attributes can be used to create tests with as the mode becomes more complex
 project_id       = attribute('dataset_project')
 dataset_id       = attribute('dataset_id')
 table_id         = attribute('table_id')
 
 control "big_query_check" do
-
-  # Checking the default files exist in the module root
-  describe file("config.tf") do
-    it { should exist }
-  end
-
-  describe file("main.tf") do
-    it { should exist }
-  end
-
-  describe file("variables.tf") do
-    it { should exist }
-  end
-
-  describe file("outputs.tf") do
-    it { should exist }
-  end
-
   describe command("bq ls --project_id=#{project_id} --format=json") do
+    its('exit_status') { should be 0 }
+    its('stderr') { should eq '' }
+  end
+
+  describe command("bq ls --project_id=#{project_id} --format=json" ) do
      its('exit_status') { should be 0 }
      its('stderr') { should eq '' }
-
-     let(:metadata) do
-      if subject.exit_status == 0
-        JSON.parse(subject.stdout, symbolize_names: true).to_s
-      else
-        {}
-      end
-     end
-     it { expect(metadata).to be_a_kind_of(String) }
-     it { expect(metadata).to include("#{dataset_id}") }
    end
-
-   describe command("bq ls --project_id=#{project_id} --format=json #{dataset_id}" ) do
-      its('exit_status') { should be 0 }
-      its('stderr') { should eq '' }
-
-      let(:metadata) do
-       if subject.exit_status == 0
-         JSON.parse(subject.stdout, symbolize_names: true).to_s
-       else
-         {}
-       end
-      end
-      it { expect(metadata).to be_a_kind_of(String) }
-      it { expect(metadata).to include("#{table_id}") }
-    end
 end
