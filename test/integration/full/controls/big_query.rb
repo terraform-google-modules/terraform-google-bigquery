@@ -18,13 +18,10 @@ dataset_id       = attribute('dataset_id')
 table_id         = attribute('table_id')
 
 control "big_query_check" do
-  describe command("bq ls --project_id=#{project_id} --format=json") do
-    its('exit_status') { should be 0 }
-    its('stderr') { should eq '' }
+  describe command("bq ls --project_id=#{project_id} --format=json #{dataset_id}" ) do
+    its(:exit_status) { should be 0 }
+    its(:stderr) { should eq '' }
+    its(:stdout) { should include "#{table_id}" }
+    its(:stdout) { should include "#{project_id}" }
   end
-
-  describe command("bq ls --project_id=#{project_id} --format=json" ) do
-     its('exit_status') { should be 0 }
-     its('stderr') { should eq '' }
-   end
 end
