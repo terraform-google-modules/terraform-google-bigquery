@@ -16,7 +16,7 @@ Module provides a example for deploying a single dataset and a table onside of t
 | dataset_id | Unique id for the dataset being provisioned | string| yes ||
 | dataset_name | Friendly name for the dataset being provisioned | string | yes ||
 | description | Dataset description | string | yes |  ||
-| region | The regional location for the dataset only US and EU are allowed in module | string | yes | US ||
+| location | The regional location for the dataset, all Big Query [dataset locations](https://cloud.google.com/bigquery/docs/locations) are allows | string | yes | US ||
 | expiration | TTL of tables using the dataset in MS | integer | yes ||
 | project_id | Project wheree the dataset and table are created | string | yes ||
 | table_id  | Unique id for the table being provisioned | string | yes ||

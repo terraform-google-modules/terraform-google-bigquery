@@ -19,8 +19,6 @@
   *****************************************/
 provider "google" {
   version = "~> 1.20.0"
-
-  # credentials = "${file(local.credentials_file_path)}"
 }
 
 module "bigquery" {
@@ -30,7 +28,7 @@ module "bigquery" {
   description       = "${var.description}"
   expiration        = "${var.expiration}"
   project_id        = "${var.project_id}"
-  region            = "${var.region}"
+  location          = "${var.location}"
   table_id          = "${var.table_id}"
   time_partitioning = "${var.time_partitioning}"
   schema_file       = "${var.schema_file}"

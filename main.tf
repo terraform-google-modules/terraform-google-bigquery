@@ -15,24 +15,17 @@
  */
 
 /******************************************
-   Lock Terraform version
-  *****************************************/
-terraform {
-  required_version = "~> 0.11.11"
-}
-
-/******************************************
   Locals configuration
  *****************************************/
 locals {
-  location = "${var.region == "US" || var.region == "EU" ? var.region : "module only supports EU or US"}"
+  schema = "${file("${var.schema_file}")}"
 }
 
 resource "google_bigquery_dataset" "main" {
   dataset_id    = "${var.dataset_id}"
   friendly_name = "${var.dataset_name}"
   description   = "${var.description}"
-  location      = "${local.location}"
+  location      = "${var.location}"
 
   default_table_expiration_ms = "${var.expiration}"
   project                     = "${var.project_id}"
@@ -50,5 +43,5 @@ resource "google_bigquery_table" "main" {
 
   labels = "${var.table_labels}"
 
-  schema = "${file("${var.schema_file}")}"
+  schema = "${local.schema}"
 }

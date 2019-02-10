@@ -38,7 +38,7 @@ variable "table_id" {
   description = "Unique ID for the table being provisioned"
 }
 
-variable "region" {
+variable "location" {
   description = "The regional location for the dataset only US and EU are allowed in module"
 }
 
@@ -51,7 +51,7 @@ variable "schema_file" {
 }
 
 variable "dataset_labels" {
-  description = "Key value pairs in a map for dataset labels"
+  description = "A mapping of labels to assign to the table"
   type        = "map"
 }
 

@@ -26,7 +26,7 @@ variable "description" {
   description = "Dataset description"
 }
 
-variable "region" {
+variable "location" {
   description = "The regional location for the dataset only US and EU are allowed in module"
   default     = "US"
 }

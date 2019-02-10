@@ -38,7 +38,7 @@ variable "table_id" {
   description = "Unique ID for the table being provisioned"
 }
 
-variable "region" {
+variable "location" {
   description = "The regional location for the dataset only US and EU are allowed in module"
 }
 

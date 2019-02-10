@@ -1,6 +1,6 @@
 dataset_id = "foo"
 dataset_name = "foo"
-region = "US"
+location = "US"
 description = "some description"
 expiration = 3600000
 project_id = "example-project"
