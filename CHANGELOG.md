@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] 2019-02-12
 
-### ADDED
+### Added
+
 - This is the initial release of the Big Query module.
 
 [0.1.0]: https://github.com/terraform-google-modules/terraform-google-bigquery/tree/v0.1.0/
