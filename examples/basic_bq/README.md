@@ -2,7 +2,6 @@
 
 ## Setup
 Copy `terraform.tfvars.example` to `terraform.tfvars` and update the contents to match your test environment.
-- Rename tfvars file `mv terraform.tfvars.example terraform.tfvars`
 
 ## Run example
 `cd ./examples/basic_bq`
