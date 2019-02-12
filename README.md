@@ -71,7 +71,7 @@ A helper script for configuring a Service Account is located at (./helpers/setup
 Be sure you have the correct Terraform version (0.11.x), you can choose the binary from [Terraform releases](https://releases.hashicorp.com/terraform/).
 
 ### kitchen-terraform
-Tests verified on mac osx, to set this up on your machine follow the official [Kitchen installation](https://github.com/newcontext-oss/kitchen-terraform) instructions.
+To set this up on your machine, follow the official [Kitchen installation](https://github.com/newcontext-oss/kitchen-terraform) instructions.
 - Kitchen tests are located: [test/integration/full](test/integration/full).
 - Terraform fixtures are located: [test/fixtures/full](test/fixtures/full).
 
