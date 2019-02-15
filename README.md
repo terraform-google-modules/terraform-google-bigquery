@@ -35,25 +35,6 @@ Module provides a parameterized template to deploy a single dataset and a single
 
 [^]: (autogen_docs_end)
 
-## File structure
-The project has the following folders and files:
-```bash
-.
-├── docs                   # folder is the landing location for troubleshooting docs
-├── examples               # example deployments of the module
-├── helpers                # optional scripts to setup required packages, gcp services, etc
-├── test                   # kitchen fixtures, boilerplate & integration tests
-├── .kitchen.yml           # establishing the kitchen root
-├── config.tf              # terraform providers & Requirements
-├── Gemfile                # Gemfile containing reqired Gems for running kitchen-terraform
-├── Gemfile.lock           # Locked gem versions
-├── main.tf                # terraform module
-├── Makefile               # enables make to setup local environment
-├── outputs.tf             # module outputs
-├── variables.tf           # variables that can be consumed by the module           
-├── LICENSE
-└── README.md
-```
 ## Requirements
 ### Terraform plugins
 - [Terraform](https://www.terraform.io/downloads.html) 0.11.x
