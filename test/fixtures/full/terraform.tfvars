@@ -1,12 +1,6 @@
-dataset_id = "foo"
-dataset_name = "foo"
-location = "US"
-description = "some description"
 expiration = 3600000
-project_id = "example-project"
-table_id = "foo"
+project_id = "scrum-team-coolkids-shared"
 time_partitioning = "DAY"
-schema_file = "sample_bq_schema.json"
 dataset_labels = {
   env   = "dev"
   billable   = "true"

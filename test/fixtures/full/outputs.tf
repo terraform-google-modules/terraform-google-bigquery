@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Google LLC
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,31 +15,31 @@
  */
 
 output "dataset_id" {
-  value       = "${module.bigquery.dataset_id}"
+  value       = "${module.example.dataset_id}"
   description = "Unique id for the dataset being provisioned"
 }
 
 output "dataset_name" {
-  value       = "${module.bigquery.dataset_name}"
+  value       = "${module.example.dataset_name}"
   description = "Friendly name for the dataset being provisioned"
 }
 
 output "dataset_project" {
-  value       = "${module.bigquery.dataset_project}"
+  value       = "${module.example.dataset_project}"
   description = "Project wheree the dataset and table are created"
 }
 
 output "table_id" {
-  value       = "${module.bigquery.table_id}"
+  value       = "${module.example.table_id}"
   description = "Unique id for the table being provisioned"
 }
 
 output "dataset_labels" {
-  value       = "${module.bigquery.dataset_labels}"
+  value       = "${module.example.dataset_labels}"
   description = "Key value pairs in a map for dataset labels"
 }
 
 output "table_labels" {
-  value       = "${module.bigquery.table_labels}"
+  value       = "${module.example.table_labels}"
   description = "Key value pairs in a map for table labels"
 }

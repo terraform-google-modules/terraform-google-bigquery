@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Google LLC
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,6 @@
  * limitations under the License.
  */
 
-variable "dataset_id" {
-  description = "Unique ID for the dataset being provisioned"
-}
-
-variable "dataset_name" {
-  description = "Friendly name for the dataset being provisioned"
-}
-
-variable "description" {
-  description = "Dataset description"
-}
-
 variable "expiration" {
   description = "TTL of tables using the dataset in MS"
 }
@@ -34,20 +22,8 @@ variable "project_id" {
   description = "Project wheree the dataset and table are created"
 }
 
-variable "table_id" {
-  description = "Unique ID for the table being provisioned"
-}
-
-variable "location" {
-  description = "The regional location for the dataset only US and EU are allowed in module"
-}
-
 variable "time_partitioning" {
   description = "Configures time-based partitioning for this table"
-}
-
-variable "schema_file" {
-  description = "A JSON schema for the table"
 }
 
 variable "dataset_labels" {
