@@ -6,7 +6,7 @@ This module allows you to create opinionated Google Cloud Platform Big Query dat
 Examples of how to use this module are located in the [examples directory](./examples)
 
 ## Features
-Module provides a parameterized template to deploy a single dataset and a single table. The consumer module can supply any of the listed inputs to customize to their needs.
+This module provisions a dataset and a table with an associated JSON schema.
 
 [^]: (autogen_docs_start)
 
