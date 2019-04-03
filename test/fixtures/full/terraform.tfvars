@@ -1,5 +1,5 @@
 expiration = 3600000
-project_id = "scrum-team-coolkids-shared"
+project_id = "example-project"
 time_partitioning = "DAY"
 dataset_labels = {
   env   = "dev"
