@@ -33,6 +33,7 @@ This module provisions a dataset and a table with an associated JSON schema.
 | dataset_labels | Key value pairs in a map for dataset labels |
 | table_labels | Key value pairs in a map for table labels |
 
+[^]: (autogen_docs_end)
 
 ## Requirements
 ### Terraform plugins
