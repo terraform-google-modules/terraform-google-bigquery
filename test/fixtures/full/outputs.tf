@@ -14,49 +14,32 @@
  * limitations under the License.
  */
 
-variable "dataset_id" {
-  description = "Unique ID for the dataset being provisioned"
+output "dataset_id" {
+  value       = "${module.example.dataset_id}"
+  description = "Unique id for the dataset being provisioned"
 }
 
-variable "dataset_name" {
+output "dataset_name" {
+  value       = "${module.example.dataset_name}"
   description = "Friendly name for the dataset being provisioned"
 }
 
-variable "description" {
-  description = "Dataset description"
-}
-
-variable "location" {
-  description = "The regional location for the dataset only US and EU are allowed in module"
-  default     = "US"
-}
-
-variable "expiration" {
-  description = "TTL of tables using the dataset in MS"
-}
-
-variable "project_id" {
+output "dataset_project" {
+  value       = "${module.example.dataset_project}"
   description = "Project wheree the dataset and table are created"
 }
 
-variable "table_id" {
-  description = "Unique ID for the table being provisioned"
+output "table_id" {
+  value       = "${module.example.table_id}"
+  description = "Unique id for the table being provisioned"
 }
 
-variable "time_partitioning" {
-  description = "Configures time-based partitioning for this table"
-}
-
-variable "schema_file" {
-  description = "A JSON schema for the table"
-}
-
-variable "dataset_labels" {
+output "dataset_labels" {
+  value       = "${module.example.dataset_labels}"
   description = "Key value pairs in a map for dataset labels"
-  type        = "map"
 }
 
-variable "table_labels" {
+output "table_labels" {
+  value       = "${module.example.table_labels}"
   description = "Key value pairs in a map for table labels"
-  type        = "map"
 }
