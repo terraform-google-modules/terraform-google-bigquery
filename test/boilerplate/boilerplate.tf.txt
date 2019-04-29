@@ -13,25 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-variable "expiration" {
-  description = "TTL of tables using the dataset in MS"
-}
-
-variable "project_id" {
-  description = "Project wheree the dataset and table are created"
-}
-
-variable "time_partitioning" {
-  description = "Configures time-based partitioning for this table"
-}
-
-variable "dataset_labels" {
-  description = "A mapping of labels to assign to the table"
-  type        = "map"
-}
-
-variable "table_labels" {
-  description = "Key value pairs in a map for table labels"
-  type        = "map"
-}

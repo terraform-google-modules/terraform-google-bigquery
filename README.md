@@ -3,10 +3,10 @@
 This module allows you to create opinionated Google Cloud Platform Big Query datasets and tables.
 
 ## Usage
-The root module can be used to provision a dataset and a table with a JSON schema associated with the table. There are multiple examples in the [examples](./examples/) folder.
+Examples of how to use this module are located in the [examples directory](./examples)
 
 ## Features
-Module provides a parameterized template to deploy a single dataset and a single table. The consumer module can supply any of the listed inputs to customize to their needs.
+This module provisions a dataset and a table with an associated JSON schema.
 
 [^]: (autogen_docs_start)
 
@@ -35,25 +35,6 @@ Module provides a parameterized template to deploy a single dataset and a single
 
 [^]: (autogen_docs_end)
 
-## File structure
-The project has the following folders and files:
-```bash
-.
-├── docs                   # folder is the landing location for troubleshooting docs
-├── examples               # example deployments of the module
-├── helpers                # optional scripts to setup required packages, gcp services, etc
-├── test                   # kitchen fixtures, boilerplate & integration tests
-├── .kitchen.yml           # establishing the kitchen root
-├── config.tf              # terraform providers & Requirements
-├── Gemfile                # Gemfile containing reqired Gems for running kitchen-terraform
-├── Gemfile.lock           # Locked gem versions
-├── main.tf                # terraform module
-├── Makefile               # enables make to setup local environment
-├── outputs.tf             # module outputs
-├── variables.tf           # variables that can be consumed by the module           
-├── LICENSE
-└── README.md
-```
 ## Requirements
 ### Terraform plugins
 - [Terraform](https://www.terraform.io/downloads.html) 0.11.x

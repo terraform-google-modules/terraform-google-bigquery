@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-variable "expiration" {
-  description = "TTL of tables using the dataset in MS"
+/******************************************
+   Provider configuration
+  *****************************************/
+provider "google" {
+  version = "~> 1.20.0"
 }
 
-variable "project_id" {
-  description = "Project wheree the dataset and table are created"
-}
-
-variable "time_partitioning" {
-  description = "Configures time-based partitioning for this table"
-}
-
-variable "dataset_labels" {
-  description = "A mapping of labels to assign to the table"
-  type        = "map"
-}
-
-variable "table_labels" {
-  description = "Key value pairs in a map for table labels"
-  type        = "map"
+module "example" {
+  source            = "../../../examples/basic_bq"
+  expiration        = "${var.expiration}"
+  project_id        = "${var.project_id}"
+  time_partitioning = "${var.time_partitioning}"
+  dataset_labels    = "${var.dataset_labels }"
+  table_labels      = "${var.table_labels}"
 }
