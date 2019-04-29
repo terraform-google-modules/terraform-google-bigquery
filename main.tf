@@ -18,7 +18,7 @@
   Locals configuration
  *****************************************/
 locals {
-  schema = "${file("${var.schema_file}")}"
+
 }
 
 resource "google_bigquery_dataset" "main" {
@@ -33,8 +33,9 @@ resource "google_bigquery_dataset" "main" {
 }
 
 resource "google_bigquery_table" "main" {
+  count = "${length(var.tables)}"
   dataset_id = "${google_bigquery_dataset.main.dataset_id}"
-  table_id   = "${var.table_id}"
+  table_id   = "${lookup(var.tables[count.index], "table_id")}"
   project    = "${var.project_id}"
 
   time_partitioning {
@@ -42,6 +43,5 @@ resource "google_bigquery_table" "main" {
   }
 
   labels = "${var.table_labels}"
-
-  schema = "${local.schema}"
+  schema = "${file(lookup(var.tables[count.index], "schema"))}"
 }

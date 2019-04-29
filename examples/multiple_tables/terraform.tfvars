@@ -1,5 +1,5 @@
 expiration = 3600000
-project_id = "example-project"
+project_id = "test-adigangi"
 time_partitioning = "DAY"
 dataset_labels = {
   env   = "dev"
@@ -14,6 +14,10 @@ table_labels = {
 tables = [
   {
     table_id = "foo",
+    schema = "sample_bq_schema.json"
+  },
+  {
+    table_id = "bar",
     schema = "sample_bq_schema.json"
   }
 ]
