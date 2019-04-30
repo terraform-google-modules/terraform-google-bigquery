@@ -14,14 +14,26 @@
 
 # Attributes can be used to create tests with as the mode becomes more complex
 project_id       = attribute('dataset_project')
-dataset_id       = attribute('dataset_id')
-table_id         = attribute('table_id')
+dataset_name     = attribute('dataset_name')
+table_name       = attribute('table_name')
 
-control "big_query_check" do
-  describe command("bq ls --project_id=#{project_id} --format=json #{dataset_id}" ) do
-    its(:exit_status) { should be 0 }
-    its(:stderr) { should eq '' }
-    its(:stdout) { should include "#{table_id}" }
-    its(:stdout) { should include "#{project_id}" }
-  end
+describe google_bigquery_dataset(project: "#{project_id}", name: "#{dataset_name}") do
+  it { should exist }
+
+  its('friendly_name') { should eq "#{dataset_name}" }
+  its('description') { should eq 'some description' }
+  its('location') { should eq 'US' }
+  its('default_table_expiration_ms') { should cmp '3600000' }
+end
+
+describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{table_name[0]}") do
+  it { should exist }
+  its('friendly_name') { should eq "#{table_name[0]}" }
+  its('time_partitioning.type') { should eq 'DAY' }
+end
+
+describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{table_name[1]}") do
+  it { should exist }
+  its('friendly_name') { should eq "#{table_name[1]}" }
+  its('time_partitioning.type') { should eq 'DAY' }
 end

@@ -38,7 +38,7 @@ This module provisions a dataset and a table with an associated JSON schema.
 ## Requirements
 ### Terraform plugins
 - [Terraform](https://www.terraform.io/downloads.html) 0.11.x
-- [terraform-provider-google](https://github.com/terraform-providers/terraform-provider-google) plugin v1.20.0
+- [terraform-provider-google](https://github.com/terraform-providers/terraform-provider-google) plugin v2.5.0
 
 ### Permissions
 In order to execute this module you must have a Service Account with the following roles:
@@ -56,8 +56,11 @@ To set this up on your machine, follow the official [Kitchen installation](https
 - Kitchen tests are located: [test/integration/full](test/integration/full).
 - Terraform fixtures are located: [test/fixtures/full](test/fixtures/full).
 
-## Running tests
+### macOS mojave notes
+To run kitchen tests on macOS > 10.14.4 xcode will need to be [reset](https://apple.stackexchange.com/questions/254380/why-am-i-getting-an-invalid-active-developer-path-when-attempting-to-use-git-a)
+`xcode-select --install`
 
+## Running tests
 `cd /path/to/terraform-google-bigquery`
 The following command will run all tests for the module:
 `make`
