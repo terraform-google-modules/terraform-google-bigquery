@@ -23,7 +23,7 @@ verifier:
   name: terraform
   systems:
     - name: system
-      backend: local
+      backend: gcp
 
 suites:
   - name: full

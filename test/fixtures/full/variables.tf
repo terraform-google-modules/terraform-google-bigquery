@@ -35,3 +35,8 @@ variable "table_labels" {
   description = "Key value pairs in a map for table labels"
   type        = "map"
 }
+
+variable "tables" {
+  description = "A list of table IDs that will be created on the single dataset"
+  type        = "list"
+}
