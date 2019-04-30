@@ -18,10 +18,11 @@ This module provisions a dataset and a table with an associated JSON schema.
 | description | Dataset description | string | yes |  ||
 | location | The regional location for the dataset, all Big Query [dataset locations](https://cloud.google.com/bigquery/docs/locations) are allows | string | yes | US ||
 | expiration | TTL of tables using the dataset in MS | integer | yes ||
-| project_id | Project wheree the dataset and table are created | string | yes ||
-| table_id  | Unique id for the table being provisioned | string | yes ||
+| project_id | Project where the dataset and table are created | string | yes ||
+| tables  | A list of maps containing table_id and schema files | array | yes ||
+| table_id  | A attribute in the map of the tables list, that contains a unique id for the table being provisioned | string | yes ||
 | time_partitioning | Unique id for the table being provisioned | string | yes ||
-| schema_file | A JSON schema for the table | string | yes ||
+| schema | A attribute in the map of the tables list, that contains JSON schema files for the table | string | yes ||
 
 ## Outputs
 | Name | Description |
@@ -29,7 +30,8 @@ This module provisions a dataset and a table with an associated JSON schema.
 | dataset_id | Unique id for the dataset being provisioned |
 | dataset_name | Friendly name for the dataset being provisioned |
 | dataset_project | Project wheree the dataset and table are created |
-| table_id | Unique id for the table being provisioned |
+| table_id | List of unique id for the table(s) being provisioned |
+| table_name | List friendly name(s) for the dataset being provisioned |
 | dataset_labels | Key value pairs in a map for dataset labels |
 | table_labels | Key value pairs in a map for table labels |
 
@@ -49,7 +51,7 @@ A helper script for configuring a Service Account is located at (./helpers/setup
 
 ## Install
 ### Terraform
-Be sure you have the correct Terraform version (0.11.x), you can choose the binary from [Terraform releases](https://releases.hashicorp.com/terraform/).
+Be sure you have the current Terraform version (0.11.x), you can choose the binary from [Terraform releases](https://releases.hashicorp.com/terraform/).
 
 ### kitchen-terraform
 To set this up on your machine, follow the official [Kitchen installation](https://github.com/newcontext-oss/kitchen-terraform) instructions.
