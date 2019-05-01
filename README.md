@@ -1,6 +1,8 @@
 # terraform-google-bigquery
 
-This module allows you to create opinionated Google Cloud Platform Big Query datasets and tables.
+This module allows you to create opinionated Google Cloud Platform BigQuery datasets and tables. 
+This will allow the user to programmatically create an empty table schema inside of a dataset, ready for loading. 
+Additional user accounts and permissions are necessary to begin querying the newly created table(s). 
 
 ## Usage
 Examples of how to use this module are located in the [examples directory](./examples)
