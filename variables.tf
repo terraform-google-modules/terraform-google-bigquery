@@ -54,6 +54,6 @@ variable "table_labels" {
 }
 
 variable "tables" {
-  description = "A list of table IDs that will be created on the single dataset"
+  description = "A list of maps that includes both table_id and schema in each element, the table(s) will be created on the single dataset"
   type = "list"
 }
