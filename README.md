@@ -4,6 +4,12 @@ This module allows you to create opinionated Google Cloud Platform BigQuery data
 This will allow the user to programmatically create an empty table schema inside of a dataset, ready for loading.
 Additional user accounts and permissions are necessary to begin querying the newly created table(s).
 
+## Upgrading
+
+The current version is 1.X. The following guide is available to assist with upgrades:
+
+- [0.1 -> 1.0](./docs/upgrading_to_bigquery_v1.0.md)
+
 ## Usage
 Examples of how to use this module are located in the [examples directory](./examples)
 
