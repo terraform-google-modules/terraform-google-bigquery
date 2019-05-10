@@ -162,12 +162,12 @@ output "table_labels" {
 Point at the existing state file. If the deployment referencing the v1.0 module has been updated correctly, specifically the `tables` attribute, the existing dataset and table should be retained and updated in place. Outputs will be refactored to the v1.0 format.
 
 ```hcl
-# terraform {
-#   backend "gcs" {
-#     bucket  = "my-bucket-name"
-#     prefix  = "terraform/state/bigquery"
-#   }
-# }
+terraform {
+   backend "gcs" {
+     bucket  = "my-bucket-name"
+     prefix  = "terraform/state/bigquery"
+   }
+}
 ```
 
 ### Reinitialize & apply Terraform
