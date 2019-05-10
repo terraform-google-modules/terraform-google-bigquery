@@ -1,8 +1,14 @@
 # terraform-google-bigquery
 
-This module allows you to create opinionated Google Cloud Platform BigQuery datasets and tables. 
-This will allow the user to programmatically create an empty table schema inside of a dataset, ready for loading. 
-Additional user accounts and permissions are necessary to begin querying the newly created table(s). 
+This module allows you to create opinionated Google Cloud Platform BigQuery datasets and tables.
+This will allow the user to programmatically create an empty table schema inside of a dataset, ready for loading.
+Additional user accounts and permissions are necessary to begin querying the newly created table(s).
+
+## Upgrading
+
+The current version is 1.X. The following guide is available to assist with upgrades:
+
+- [0.1 -> 1.0](./docs/upgrading_to_bigquery_v1.0.md)
 
 ## Usage
 Examples of how to use this module are located in the [examples directory](./examples)
@@ -60,11 +66,11 @@ To set this up on your machine, follow the official [Kitchen installation](https
 - Kitchen tests are located: [test/integration/full](test/integration/full).
 - Terraform fixtures are located: [test/fixtures/full](test/fixtures/full).
 
-### macOS mojave notes
-To run kitchen tests on macOS > 10.14.4 xcode will need to be [reset](https://apple.stackexchange.com/questions/254380/why-am-i-getting-an-invalid-active-developer-path-when-attempting-to-use-git-a)
-`xcode-select --install`
-
 ## Running tests
 `cd /path/to/terraform-google-bigquery`
 The following command will run all tests for the module:
 `make`
+
+### macOS mojave notes
+To run kitchen tests on macOS > 10.14.4 xcode will need to be [reset](https://apple.stackexchange.com/questions/254380/why-am-i-getting-an-invalid-active-developer-path-when-attempting-to-use-git-a)
+`xcode-select --install`
