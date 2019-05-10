@@ -1,7 +1,9 @@
 # Upgrading to Bigquery v1.0
 
-The v1.0 release of BigQuery is a backwards incompatible release and
-features changes, specifically with the replacement of `table_id` and `schema_file`, to `tables` which contains a list of maps with elements identified as `table_id` and `schema_file`.
+The v1.0 release of BigQuery is a backwards incompatible release and has
+features changes, specifically with the replacement of `table_id` and `schema_file`,
+to `tables` which contains a list of maps with elements identified as `table_id`
+and `schema_file`.
 
 ## Migration Instructions
 
