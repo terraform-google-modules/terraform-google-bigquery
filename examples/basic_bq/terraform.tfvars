@@ -11,3 +11,9 @@ table_labels = {
   billable   = "true"
   owner = "joedoe"
 }
+tables = [
+  {
+    table_id = "foo",
+    schema = "sample_bq_schema.json"
+  }
+]

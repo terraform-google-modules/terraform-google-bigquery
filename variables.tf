@@ -39,16 +39,8 @@ variable "project_id" {
   description = "Project wheree the dataset and table are created"
 }
 
-variable "table_id" {
-  description = "Unique ID for the table being provisioned"
-}
-
 variable "time_partitioning" {
   description = "Configures time-based partitioning for this table"
-}
-
-variable "schema_file" {
-  description = "A JSON schema for the table"
 }
 
 variable "dataset_labels" {
@@ -59,4 +51,9 @@ variable "dataset_labels" {
 variable "table_labels" {
   description = "Key value pairs in a map for table labels"
   type        = "map"
+}
+
+variable "tables" {
+  description = "A list of maps that includes both table_id and schema in each element, the table(s) will be created on the single dataset"
+  type = "list"
 }

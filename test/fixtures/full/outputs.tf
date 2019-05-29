@@ -34,6 +34,11 @@ output "table_id" {
   description = "Unique id for the table being provisioned"
 }
 
+output "table_name" {
+  value       = "${module.example.table_name}"
+  description = "Friendly name for the table being provisioned"
+}
+
 output "dataset_labels" {
   value       = "${module.example.dataset_labels}"
   description = "Key value pairs in a map for dataset labels"
