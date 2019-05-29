@@ -89,7 +89,6 @@ module "bigquery" {
   source            = "terraform-google-modules/bigquery/google"
 -  version           = "~> 0.1.0"
 +  version           = "~> 1.0"
-+ source       = "github.com/terraform-google-modules/terraform-google-bigquery.git?ref=v1.0.0"
   dataset_id   = "foo"
   dataset_name = "foo"
   description  = "some description"
