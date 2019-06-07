@@ -1,5 +1,5 @@
 expiration = 3600000
-project_id = "example-project"
+project_id = "gl-ipukha"
 time_partitioning = "DAY"
 dataset_labels = {
   env   = "dev"
@@ -17,3 +17,5 @@ tables = [
     schema = "sample_bq_schema.json"
   }
 ]
+
+
