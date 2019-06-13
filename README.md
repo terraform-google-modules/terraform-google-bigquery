@@ -47,7 +47,7 @@ This module provisions a dataset and a table with an associated JSON schema.
 
 ## Requirements
 ### Terraform plugins
-- [Terraform](https://www.terraform.io/downloads.html) 0.11.x
+- [Terraform](https://www.terraform.io/downloads.html) 0.12.x
 - [terraform-provider-google](https://github.com/terraform-providers/terraform-provider-google) plugin v2.5.0
 
 ### Permissions
@@ -59,7 +59,7 @@ A helper script for configuring a Service Account is located at (./helpers/setup
 
 ## Install
 ### Terraform
-Be sure you have the current Terraform version (0.11.x), you can choose the binary from [Terraform releases](https://releases.hashicorp.com/terraform/).
+Be sure you have the current Terraform version (0.12.x), you can choose the binary from [Terraform releases](https://releases.hashicorp.com/terraform/).
 
 ### kitchen-terraform
 To set this up on your machine, follow the official [Kitchen installation](https://github.com/newcontext-oss/kitchen-terraform) instructions.
