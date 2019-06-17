@@ -28,15 +28,16 @@ variable "time_partitioning" {
 
 variable "dataset_labels" {
   description = "Key value pairs in a map for dataset labels"
-  type        = "map"
+  type        = map(string)
 }
 
 variable "table_labels" {
   description = "Key value pairs in a map for table labels"
-  type        = "map"
+  type        = map(string)
 }
 
 variable "tables" {
   description = "A list of table IDs that will be created on the single dataset"
-  type        = "list"
+  type        = list
 }
+
