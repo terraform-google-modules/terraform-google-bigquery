@@ -31,13 +31,12 @@ variable "dataset_labels" {
   type        = map(string)
 }
 
-variable "table_labels" {
-  description = "Key value pairs in a map for table labels"
-  type        = map(string)
-}
-
 variable "tables" {
-  description = "A list of table IDs that will be created on the single dataset"
-  type        = list
+  description = "A list of maps that includes both table_id and schema in each element, the table(s) will be created on the single dataset"
+  default     = []
+  type        = list(object({
+    table_id  = string,
+    schema    = string,
+    labels    = map(string),
+}))
 }
-
