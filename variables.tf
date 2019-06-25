@@ -49,7 +49,7 @@ variable "dataset_labels" {
 }
 
 variable "tables" {
-  description = "A list of maps that includes both table_id and schema in each element, the table(s) will be created on the single dataset"
+  description = "A list of objects which include table_id, schema, and labels."
   default     = []
   type        = list(object({
     table_id  = string,
