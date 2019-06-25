@@ -30,13 +30,12 @@ resource "google_bigquery_table" "main" {
   dataset_id    = google_bigquery_dataset.main.dataset_id
   friendly_name = var.tables[count.index]["table_id"]
   table_id      = var.tables[count.index]["table_id"]
+  labels        = var.tables[count.index]["labels"]
+  schema        = file(var.tables[count.index]["schema"])
   project       = var.project_id
 
   time_partitioning {
     type = var.time_partitioning
   }
-
-  labels = var.table_labels
-  schema = file(var.tables[count.index]["schema"])
 }
 
