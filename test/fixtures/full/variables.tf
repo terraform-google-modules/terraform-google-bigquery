@@ -16,6 +16,7 @@
 
 variable "expiration" {
   description = "TTL of tables using the dataset in MS"
+  default     = 3600000
 }
 
 variable "project_id" {
