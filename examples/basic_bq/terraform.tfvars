@@ -1,4 +1,3 @@
-expiration = 3600000
 project_id = "example-project"
 time_partitioning = "DAY"
 dataset_labels = {
@@ -6,14 +5,16 @@ dataset_labels = {
   billable   = "true"
   owner = "janesmith"
 }
-table_labels = {
-  env   = "dev"
-  billable   = "true"
-  owner = "joedoe"
-}
 tables = [
   {
     table_id = "foo",
-    schema = "sample_bq_schema.json"
-  }
+    schema = "sample_bq_schema.json",
+    labels = {
+      env = "dev"
+      billable = "true"
+      owner = "joedoe"
+    },
+  },
 ]
+
+

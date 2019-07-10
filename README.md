@@ -16,38 +16,38 @@ Examples of how to use this module are located in the [examples directory](./exa
 ## Features
 This module provisions a dataset and a table with an associated JSON schema.
 
-[^]: (autogen_docs_start)
-
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
-| Name | Description | Type | Required | Default |
+
+| Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| dataset_id | Unique id for the dataset being provisioned | string| yes ||
-| dataset_name | Friendly name for the dataset being provisioned | string | yes ||
-| description | Dataset description | string | yes |  ||
-| location | The regional location for the dataset, all Big Query [dataset locations](https://cloud.google.com/bigquery/docs/locations) are allows | string | yes | US ||
-| expiration | TTL of tables using the dataset in MS | integer | yes ||
-| project_id | Project where the dataset and table are created | string | yes ||
-| tables  | A list of maps containing table_id and schema files | array | yes ||
-| table_id  | A attribute in the map of the tables list, that contains a unique id for the table being provisioned | string | yes ||
-| time_partitioning | Unique id for the table being provisioned | string | yes ||
-| schema | A attribute in the map of the tables list, that contains JSON schema files for the table | string | yes ||
+| dataset\_id | Unique ID for the dataset being provisioned | string | n/a | yes |
+| dataset\_labels | Key value pairs in a map for dataset labels | map(string) | n/a | yes |
+| dataset\_name | Friendly name for the dataset being provisioned | string | n/a | yes |
+| description | Dataset description | string | n/a | yes |
+| expiration | TTL of tables using the dataset in MS | string | `"3600000"` | no |
+| location | The regional location for the dataset only US and EU are allowed in module | string | `"US"` | no |
+| project\_id | Project wheree the dataset and table are created | string | n/a | yes |
+| tables | A list of objects which include table_id, schema, and labels. | object | `<list>` | no |
+| time\_partitioning | Configures time-based partitioning for this table | string | n/a | yes |
 
 ## Outputs
+
 | Name | Description |
 |------|-------------|
-| dataset_id | Unique id for the dataset being provisioned |
-| dataset_name | Friendly name for the dataset being provisioned |
-| dataset_project | Project wheree the dataset and table are created |
-| table_id | List of unique id for the table(s) being provisioned |
-| table_name | List friendly name(s) for the dataset being provisioned |
-| dataset_labels | Key value pairs in a map for dataset labels |
-| table_labels | Key value pairs in a map for table labels |
+| dataset\_id | Unique id for the dataset being provisioned |
+| dataset\_labels | Key value pairs in a map for dataset labels |
+| dataset\_name | Friendly name for the dataset being provisioned |
+| dataset\_project | Project wheree the dataset and table are created |
+| table\_id | Unique id for the table being provisioned |
+| table\_labels | Key value pairs in a map for table labels |
+| table\_name | Friendly name for the table being provisioned |
 
-[^]: (autogen_docs_end)
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Requirements
 ### Terraform plugins
-- [Terraform](https://www.terraform.io/downloads.html) 0.11.x
+- [Terraform](https://www.terraform.io/downloads.html) 0.12.x
 - [terraform-provider-google](https://github.com/terraform-providers/terraform-provider-google) plugin v2.5.0
 
 ### Permissions
@@ -59,7 +59,7 @@ A helper script for configuring a Service Account is located at (./helpers/setup
 
 ## Install
 ### Terraform
-Be sure you have the current Terraform version (0.11.x), you can choose the binary from [Terraform releases](https://releases.hashicorp.com/terraform/).
+Be sure you have the current Terraform version (0.12.x), you can choose the binary from [Terraform releases](https://releases.hashicorp.com/terraform/).
 
 ### kitchen-terraform
 To set this up on your machine, follow the official [Kitchen installation](https://github.com/newcontext-oss/kitchen-terraform) instructions.

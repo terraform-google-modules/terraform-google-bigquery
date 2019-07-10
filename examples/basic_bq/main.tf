@@ -26,11 +26,11 @@ module "bigquery" {
   dataset_id        = "foo"
   dataset_name      = "foo"
   description       = "some description"
-  expiration        = "${var.expiration}"
-  project_id        = "${var.project_id}"
+  expiration        = var.expiration
+  project_id        = var.project_id
   location          = "US"
-  tables            = "${var.tables}"
-  time_partitioning = "${var.time_partitioning}"
-  dataset_labels    = "${var.dataset_labels }"
-  table_labels      = "${var.table_labels}"
+  tables            = var.tables
+  time_partitioning = var.time_partitioning
+  dataset_labels    = var.dataset_labels
 }
+

@@ -15,27 +15,27 @@
  */
 
 resource "google_bigquery_dataset" "main" {
-  dataset_id    = "${var.dataset_id}"
-  friendly_name = "${var.dataset_name}"
-  description   = "${var.description}"
-  location      = "${var.location}"
+  dataset_id    = var.dataset_id
+  friendly_name = var.dataset_name
+  description   = var.description
+  location      = var.location
 
-  default_table_expiration_ms = "${var.expiration}"
-  project                     = "${var.project_id}"
-  labels                      = "${var.dataset_labels}"
+  default_table_expiration_ms = var.expiration
+  project                     = var.project_id
+  labels                      = var.dataset_labels
 }
 
 resource "google_bigquery_table" "main" {
-  count = "${length(var.tables)}"
-  dataset_id = "${google_bigquery_dataset.main.dataset_id}"
-  friendly_name   = "${lookup(var.tables[count.index], "table_id")}"
-  table_id   = "${lookup(var.tables[count.index], "table_id")}"
-  project    = "${var.project_id}"
+  count         = length(var.tables)
+  dataset_id    = google_bigquery_dataset.main.dataset_id
+  friendly_name = var.tables[count.index]["table_id"]
+  table_id      = var.tables[count.index]["table_id"]
+  labels        = var.tables[count.index]["labels"]
+  schema        = file(var.tables[count.index]["schema"])
+  project       = var.project_id
 
   time_partitioning {
-    type = "${var.time_partitioning}"
+    type = var.time_partitioning
   }
-
-  labels = "${var.table_labels}"
-  schema = "${file(lookup(var.tables[count.index], "schema"))}"
 }
+

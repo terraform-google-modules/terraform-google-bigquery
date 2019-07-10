@@ -15,6 +15,6 @@
 source "https://rubygems.org/" do
   gem(
     "kitchen-terraform",
-    "~> 4.8"
+    "~> 4.9"
   )
 end
