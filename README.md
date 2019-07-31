@@ -4,9 +4,16 @@ This module allows you to create opinionated Google Cloud Platform BigQuery data
 This will allow the user to programmatically create an empty table schema inside of a dataset, ready for loading.
 Additional user accounts and permissions are necessary to begin querying the newly created table(s).
 
+## Compatibility
+
+This module is meant for use with Terraform 0.12. If you haven't
+[upgraded](https://www.terraform.io/upgrade-guides/0-12.html) and need a Terraform 0.11.x-compatible version of this module, 
+the last released version intended for Terraform 0.11.x is
+[1.0.0](https://registry.terraform.io/modules/terraform-google-modules/bigquery/google/1.0.0).
+
 ## Upgrading
 
-The current version is 1.X. The following guide is available to assist with upgrades:
+The current version is 2.X. The following guide is available to assist with upgrades:
 
 - [0.1 -> 1.0](./docs/upgrading_to_bigquery_v1.0.md)
 
