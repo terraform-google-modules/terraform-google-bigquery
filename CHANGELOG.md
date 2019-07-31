@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Supported version of Terraform is 0.12. [#17]
 - The `table_labels` variable was replaced with a `labels` key in the `tables` variable object structure. [#20]
+- The `expiration` variable has a `null` default. [#23]
 
 ## [1.0.0] 2019-05-29
 
@@ -38,5 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.0.0]: https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/terraform-google-modules/terraform-google-bigquery/releases/tag/v0.1.0/
 
+[#23]: https://github.com/terraform-google-modules/terraform-google-bigquery/pulls/23
 [#20]: https://github.com/terraform-google-modules/terraform-google-bigquery/pulls/20
 [#17]: https://github.com/terraform-google-modules/terraform-google-bigquery/pulls/17
