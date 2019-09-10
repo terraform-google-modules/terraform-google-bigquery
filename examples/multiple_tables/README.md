@@ -9,7 +9,7 @@ This example is a good reference to understand and test the module usage.
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | dataset\_labels | A mapping of labels to assign to the table | map(string) | n/a | yes |
-| expiration | TTL of tables using the dataset in MS | string | `"3600000"` | no |
+| expiration | TTL of tables using the dataset in MS | string | `"null"` | no |
 | project\_id | Project wheree the dataset and table are created | string | n/a | yes |
 | tables | A list of maps that includes both table_id and schema in each element, the table(s) will be created on the single dataset | object | `<list>` | no |
 | time\_partitioning | Configures time-based partitioning for this table | string | n/a | yes |
