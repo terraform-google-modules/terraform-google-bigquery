@@ -115,6 +115,9 @@ The [Project Factory module][project-factory-module] and the
 [IAM module][iam-module] may be used in combination to provision a
 service account with the necessary roles applied.
 
+#### Script Helper
+A helper script for configuring a Service Account is located at (./helpers/setup-sa.sh).
+
 ### APIs
 
 A project with the following APIs enabled must be used to host the

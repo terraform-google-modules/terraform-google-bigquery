@@ -13,7 +13,7 @@
 # limitations under the License.
 
 steps:
-- name: 'gcr.io/cloud-foundation-cicd/cft/developer-tools:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
+- name: 'gcr.io/cloud-foundation-cicd/$_DOCKER_IMAGE_DEVELOPER_TOOLS:$_DOCKER_TAG_VERSION_DEVELOPER_TOOLS'
   id: 'lint'
   args: ['/usr/local/bin/test_lint.sh']
 tags:
