@@ -13,14 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-REPO_VER=v`cat ../CHANGELOG.md | grep "##" | head -n 1 | cut -d" " -f2`
-CUR_GIT_TAG=`git describe --abbrev=0 --tags`
+REPO_VER=v$(grep "##" ../CHANGELOG.md | head -n 1 | cut -d" " -f2)
+CUR_GIT_TAG=$(git describe --abbrev=0 --tags)
 INGIT=false
 
-echo "Current CHANGELOG version:" $REPO_VER
-echo "Latest tag in Git:" $CUR_GIT_TAG
+echo "Current CHANGELOG version:" "$REPO_VER"
+echo "Latest tag in Git:" "$CUR_GIT_TAG"
 
-for i in `git tag --list`
+for i in $(git tag --list)
 do
   if [ "$i" == "$REPO_VER" ]
     then
@@ -31,7 +31,7 @@ done
 
 if [ "$INGIT" == "false" ]
   then
-    git tag -a $REPO_VER -m "$REPO_VER"
+    git tag -a "$REPO_VER" -m "$REPO_VER"
     echo "Updating README.md Usage Ref"
     sed -i '' "s/ref=v[0-9]\.[0-9]\.[0-9]/ref=$REPO_VER/g" README.md
 fi

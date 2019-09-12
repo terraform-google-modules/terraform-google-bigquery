@@ -52,10 +52,10 @@ variable "dataset_labels" {
 variable "tables" {
   description = "A list of objects which include table_id, schema, and labels."
   default     = []
-  type        = list(object({
-    table_id  = string,
-    schema    = string,
-    labels    = map(string),
+  type = list(object({
+    table_id = string,
+    schema   = string,
+    labels   = map(string),
   }))
 }
 

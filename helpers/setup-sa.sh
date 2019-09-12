@@ -50,13 +50,13 @@ STAGING_DIR="${PWD}"
 KEY_FILE="${STAGING_DIR}/credentials.json"
 
 gcloud iam service-accounts \
-    --project ${HOST_PROJECT} create ${SA_NAME} \
-    --display-name ${SA_NAME}
+    --project "${HOST_PROJECT}" create "${SA_NAME}" \
+    --display-name "${SA_NAME}"
 
 echo "Downloading key to credentials.json..."
 
-gcloud iam service-accounts keys create ${KEY_FILE} \
-    --iam-account ${SA_ID} \
+gcloud iam service-accounts keys create "${KEY_FILE}" \
+    --iam-account "${SA_ID}" \
     --user-output-enabled false
 
 echo "Applying permissions for org $ORG_ID and project $HOST_PROJECT..."
@@ -71,7 +71,7 @@ gcloud projects add-iam-policy-binding \
 # Enable required API's
 gcloud services enable \
   bigquery-json.googleapis.com \
-  --project ${HOST_PROJECT}
+  --project "${HOST_PROJECT}"
 
 
 echo "All done."

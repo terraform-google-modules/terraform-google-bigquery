@@ -7,7 +7,7 @@ Additional user accounts and permissions are necessary to begin querying the new
 ## Compatibility
 
 This module is meant for use with Terraform 0.12. If you haven't
-[upgraded](https://www.terraform.io/upgrade-guides/0-12.html) and need a Terraform 0.11.x-compatible version of this module, 
+[upgraded](https://www.terraform.io/upgrade-guides/0-12.html) and need a Terraform 0.11.x-compatible version of this module,
 the last released version intended for Terraform 0.11.x is
 [1.0.0](https://registry.terraform.io/modules/terraform-google-modules/bigquery/google/1.0.0).
 
@@ -19,7 +19,47 @@ The current version is 2.X. The following guide is available to assist with upgr
 - [0.1 -> 1.0](./docs/upgrading_to_bigquery_v1.0.md)
 
 ## Usage
-Examples of how to use this module are located in the [examples directory](./examples)
+
+Basic usage of this module is as follows:
+
+```hcl
+module "bigquery" {
+  source  = "terraform-google-modules/bigquery/google"
+  version = "~> 2.0"
+
+  dataset_id        = "foo"
+  dataset_name      = "foo"
+  description       = "some description"
+  project_id        = "<PROJECT ID>"
+  location          = "US"
+  time_partitioning = "DAY"
+  tables = [
+    {
+      table_id = "foo",
+      schema   = "<PATH TO THE SCHEMA JSON FILE>",
+      labels = {
+        env      = "dev"
+        billable = "true"
+      },
+    },
+    {
+      table_id = "bar",
+      schema   = "<PATH TO THE SCHEMA JSON FILE>",
+      labels = {
+        env      = "devops"
+        billable = "true"
+      },
+    }
+  ]
+  dataset_labels = {
+    env      = "dev"
+    billable = "true"
+  }
+}
+```
+
+Functional examples are included in the
+[examples](./examples/) directory.
 
 ## Features
 This module provisions a dataset and a table with an associated JSON schema.
@@ -33,7 +73,7 @@ This module provisions a dataset and a table with an associated JSON schema.
 | dataset\_labels | Key value pairs in a map for dataset labels | map(string) | n/a | yes |
 | dataset\_name | Friendly name for the dataset being provisioned | string | n/a | yes |
 | description | Dataset description | string | n/a | yes |
-| expiration | TTL of tables using the dataset in MS | string | `"3600000"` | no |
+| expiration | TTL of tables using the dataset in MS | string | `"null"` | no |
 | location | The regional location for the dataset only US and EU are allowed in module | string | `"US"` | no |
 | project\_id | Project wheree the dataset and table are created | string | n/a | yes |
 | tables | A list of objects which include table_id, schema, and labels. | object | `<list>` | no |
@@ -54,31 +94,46 @@ This module provisions a dataset and a table with an associated JSON schema.
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Requirements
-### Terraform plugins
-- [Terraform](https://www.terraform.io/downloads.html) 0.12.x
-- [terraform-provider-google](https://github.com/terraform-providers/terraform-provider-google) plugin v2.5.0
 
-### Permissions
-In order to execute this module you must have a Service Account with the following roles:
- - roles/bigquery.dataOwner
+These sections describe requirements for using this module.
+
+### Software
+
+The following dependencies must be available:
+
+- [Terraform][terraform] v0.12
+- [Terraform Provider for GCP][terraform-provider-gcp] plugin v2.5
+
+### Service Account
+
+A service account with the following roles must be used to provision
+the resources of this module:
+
+- BigQuery Data Owner: `roles/bigquery.dataOwner`
+
+The [Project Factory module][project-factory-module] and the
+[IAM module][iam-module] may be used in combination to provision a
+service account with the necessary roles applied.
 
 #### Script Helper
 A helper script for configuring a Service Account is located at (./helpers/setup-sa.sh).
 
-## Install
-### Terraform
-Be sure you have the current Terraform version (0.12.x), you can choose the binary from [Terraform releases](https://releases.hashicorp.com/terraform/).
+### APIs
 
-### kitchen-terraform
-To set this up on your machine, follow the official [Kitchen installation](https://github.com/newcontext-oss/kitchen-terraform) instructions.
-- Kitchen tests are located: [test/integration/full](test/integration/full).
-- Terraform fixtures are located: [test/fixtures/full](test/fixtures/full).
+A project with the following APIs enabled must be used to host the
+resources of this module:
 
-## Running tests
-`cd /path/to/terraform-google-bigquery`
-The following command will run all tests for the module:
-`make`
+- BigQuery JSON API: `bigquery-json.googleapis.com`
 
-### macOS mojave notes
-To run kitchen tests on macOS > 10.14.4 xcode will need to be [reset](https://apple.stackexchange.com/questions/254380/why-am-i-getting-an-invalid-active-developer-path-when-attempting-to-use-git-a)
-`xcode-select --install`
+The [Project Factory module][project-factory-module] can be used to
+provision a project with the necessary APIs enabled.
+
+## Contributing
+
+Refer to the [contribution guidelines](./CONTRIBUTING.md) for
+information on contributing to this module.
+
+[iam-module]: https://registry.terraform.io/modules/terraform-google-modules/iam/google
+[project-factory-module]: https://registry.terraform.io/modules/terraform-google-modules/project-factory/google
+[terraform-provider-gcp]: https://www.terraform.io/docs/providers/google/index.html
+[terraform]: https://www.terraform.io/downloads.html
