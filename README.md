@@ -75,7 +75,7 @@ This module provisions a dataset and a table with an associated JSON schema.
 | description | Dataset description | string | n/a | yes |
 | expiration | TTL of tables using the dataset in MS | string | `"null"` | no |
 | location | The regional location for the dataset only US and EU are allowed in module | string | `"US"` | no |
-| project\_id | Project wheree the dataset and table are created | string | n/a | yes |
+| project\_id | Project where the dataset and table are created | string | n/a | yes |
 | tables | A list of objects which include table_id, schema, and labels. | object | `<list>` | no |
 | time\_partitioning | Configures time-based partitioning for this table | string | n/a | yes |
 
@@ -86,7 +86,7 @@ This module provisions a dataset and a table with an associated JSON schema.
 | dataset\_id | Unique id for the dataset being provisioned |
 | dataset\_labels | Key value pairs in a map for dataset labels |
 | dataset\_name | Friendly name for the dataset being provisioned |
-| dataset\_project | Project wheree the dataset and table are created |
+| dataset\_project | Project where the dataset and table are created |
 | table\_id | Unique id for the table being provisioned |
 | table\_labels | Key value pairs in a map for table labels |
 | table\_name | Friendly name for the table being provisioned |

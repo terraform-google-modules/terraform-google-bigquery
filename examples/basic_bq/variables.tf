@@ -20,7 +20,7 @@ variable "expiration" {
 }
 
 variable "project_id" {
-  description = "Project wheree the dataset and table are created"
+  description = "Project where the dataset and table are created"
 }
 
 variable "time_partitioning" {

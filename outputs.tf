@@ -26,7 +26,7 @@ output "dataset_name" {
 
 output "dataset_project" {
   value       = google_bigquery_dataset.main.project
-  description = "Project wheree the dataset and table are created"
+  description = "Project where the dataset and table are created"
 }
 
 output "table_id" {
