@@ -62,7 +62,7 @@ variable "tables" {
 variable "authorized_views" {
   description = "An object defining an authorized view to create."
   default     = []
-  type        = list(object({
+  type = list(object({
     table_full_name = string,
     view_full_name  = string,
     blacklist       = string,

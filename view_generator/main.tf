@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 // HACK -- should use local schema JSON instead of fetching it
 //    but right now we're waiting for tables to instantiate
 resource "null_resource" "before" {
@@ -31,7 +30,7 @@ resource "null_resource" "delay" {
 
 resource "null_resource" "main" {
   depends_on = ["null_resource.delay"]
-  count = length(var.authorized_views)
+  count      = length(var.authorized_views)
 
   triggers = {
     _always = uuid()
@@ -45,8 +44,8 @@ resource "null_resource" "main" {
       BQ_PATH          = var.bq_path
       BLACKLIST_FIELDS = var.authorized_views[count.index]["blacklist"]
 
-			TABLE_FQN = replace(var.authorized_views[count.index].table_full_name, "/^([\\w\\-]+)/", var.project_id)
-			VIEW_FQN = replace(var.authorized_views[count.index].view_full_name, "/^([\\w\\-]+)/", var.project_id)
+      TABLE_FQN = replace(var.authorized_views[count.index].table_full_name, "/^([\\w\\-]+)/", var.project_id)
+      VIEW_FQN  = replace(var.authorized_views[count.index].view_full_name, "/^([\\w\\-]+)/", var.project_id)
     }
   }
 

@@ -35,7 +35,7 @@ variable "dataset_labels" {
 variable "tables" {
   description = "A list of maps that includes both table_id and schema in each element, the table(s) will be created on the single dataset"
   default     = []
-  type        = list(object({
+  type = list(object({
     table_id = string,
     schema   = string,
     labels   = map(string),
@@ -45,7 +45,7 @@ variable "tables" {
 variable "authorized_views" {
   description = "An object defining an authorized view to create."
   default     = []
-  type        = list(object({
+  type = list(object({
     table_full_name = string,
     view_full_name  = string,
     blacklist       = string,
