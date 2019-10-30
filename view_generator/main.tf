@@ -43,14 +43,18 @@ resource "null_resource" "main" {
     environment = {
       BQ_PATH          = var.bq_path
       BLACKLIST_FIELDS = var.authorized_views[count.index]["blacklist"]
-
-      TABLE_FQN = replace(var.authorized_views[count.index].table_full_name, "/^([\\w\\-]+)/", var.project_id)
-      VIEW_FQN  = replace(var.authorized_views[count.index].view_full_name, "/^([\\w\\-]+)/", var.project_id)
+      TABLE_FQN        = replace(var.authorized_views[count.index].table_full_name, "/^([\\w\\-]+)/", var.project_id)
+      VIEW_FQN         = replace(var.authorized_views[count.index].view_full_name, "/^([\\w\\-]+)/", var.project_id)
     }
   }
 
   provisioner "local-exec" {
     when    = destroy
-    command = "echo 'WARNING: you MUST delete the view manually in the GCP UI.'"
+    command = "python ${path.module}/scripts/bigquery_view_destroyer.py && sleep 20"
+
+    environment = {
+      BQ_PATH  = var.bq_path
+      VIEW_FQN = replace(var.authorized_views[count.index].view_full_name, "/^([\\w\\-]+)/", var.project_id)
+    }
   }
 }
