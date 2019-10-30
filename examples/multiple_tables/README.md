@@ -8,6 +8,7 @@ This example is a good reference to understand and test the module usage.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| authorized\_views | An object defining an authorized view to create. | object | `<list>` | no |
 | dataset\_labels | A mapping of labels to assign to the table | map(string) | n/a | yes |
 | expiration | TTL of tables using the dataset in MS | string | `"null"` | no |
 | project\_id | Project where the dataset and table are created | string | n/a | yes |

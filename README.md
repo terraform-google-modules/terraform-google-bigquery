@@ -69,6 +69,7 @@ This module provisions a dataset and a table with an associated JSON schema.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| authorized\_views | An object defining an authorized view to create. | object | `<list>` | no |
 | dataset\_id | Unique ID for the dataset being provisioned | string | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels | map(string) | n/a | yes |
 | dataset\_name | Friendly name for the dataset being provisioned | string | n/a | yes |
