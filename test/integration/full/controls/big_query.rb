@@ -30,12 +30,10 @@ describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_nam
   it { should exist }
   its('friendly_name') { should eq "#{table_name[0]}" }
   its('time_partitioning.type') { should eq 'DAY' }
-  its('view') { should exist }
 end
 
 describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{table_name[1]}") do
   it { should exist }
   its('friendly_name') { should eq "#{table_name[1]}" }
   its('time_partitioning.type') { should eq 'DAY' }
-  its('view') { should exist }
 end
