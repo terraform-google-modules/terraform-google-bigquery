@@ -32,5 +32,5 @@ module "bigquery" {
   tables            = var.tables
   time_partitioning = var.time_partitioning
   dataset_labels    = var.dataset_labels
+  authorized_views  = var.authorized_views
 }
-

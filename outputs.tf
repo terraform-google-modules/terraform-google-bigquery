@@ -48,4 +48,3 @@ output "table_labels" {
   value       = google_bigquery_table.main.*.labels
   description = "Key value pairs in a map for table labels"
 }
-

@@ -1,0 +1,47 @@
+{
+  "schema": {
+    "fields": [
+      {
+        "fields": [
+          {
+            "mode": "NULLABLE", 
+            "name": "a_account", 
+            "type": "INTEGER"
+          }, 
+          {
+            "mode": "NULLABLE", 
+            "name": "a_ad", 
+            "type": "INTEGER"
+          }
+        ], 
+        "mode": "REPEATED", 
+        "name": "ac", 
+        "type": "RECORD"
+      }, 
+      {
+        "fields": [
+          {
+            "mode": "NULLABLE", 
+            "name": "a_line_item", 
+            "type": "INTEGER"
+          }, 
+          {
+            "mode": "NULLABLE", 
+            "name": "e_id", 
+            "type": "INTEGER"
+          } 
+         
+        ], 
+        "mode": "NULLABLE", 
+        "name": "accr", 
+        "type": "RECORD"
+      },
+      {
+       "mode": "REQUIRED",
+       "name": "HOUR_TIMESTAMP",
+       "type": "TIMESTAMP"  
+      }
+    ]
+  }, 
+  "type": "TABLE"
+}

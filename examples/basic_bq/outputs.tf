@@ -48,4 +48,3 @@ output "table_labels" {
   value       = module.bigquery.table_labels
   description = "Key value pairs in a map for table labels"
 }
-
