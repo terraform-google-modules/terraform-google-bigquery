@@ -41,13 +41,3 @@ variable "tables" {
     labels   = map(string),
   }))
 }
-
-variable "authorized_views" {
-  description = "An object defining an authorized view to create."
-  default     = []
-  type = list(object({
-    table_full_name = string,
-    view_full_name  = string,
-    blacklist       = string,
-  }))
-}

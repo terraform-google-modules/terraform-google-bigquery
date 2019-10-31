@@ -32,5 +32,16 @@ module "bigquery" {
   tables            = var.tables
   time_partitioning = var.time_partitioning
   dataset_labels    = var.dataset_labels
-  authorized_views  = var.authorized_views
+  authorized_views = [
+    {
+      table_full_name = "foo"
+      view_full_name  = "foo_view"
+      blacklist       = "foo"
+    },
+    {
+      table_full_name = "bar"
+      view_full_name  = "bar_view"
+      blacklist       = "visitId,fullVisitorId"
+    }
+  ]
 }

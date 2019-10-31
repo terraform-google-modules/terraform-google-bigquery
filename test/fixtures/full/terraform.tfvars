@@ -25,15 +25,3 @@ tables = [
     },
   }
 ]
-authorized_views = [
-  {
-    table_full_name = "my-project.foo.foo"
-    view_full_name  = "my-project.foo.foo_view"
-    blacklist       = "foo"
-  },
-  {
-    table_full_name = "my-project.foo.bar"
-    view_full_name  = "my-project.foo.bar_view"
-    blacklist       = "visitId,fullVisitorId"
-  }
-]
