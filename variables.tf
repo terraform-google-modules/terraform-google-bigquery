@@ -66,5 +66,6 @@ variable "authorized_views" {
     table_full_name = string,
     view_full_name  = string,
     blacklist       = string,
+    schema_path     = string,
   }))
 }

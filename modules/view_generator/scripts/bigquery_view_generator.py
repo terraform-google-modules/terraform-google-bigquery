@@ -138,6 +138,7 @@ def main():
     source_table_fqn = os.environ.get('TABLE_FQN', sys.argv[1:])
     blacklist_fields_string = os.environ.get('BLACKLIST_FIELDS', sys.argv[2:])
     destination_view_fqn = os.environ.get('VIEW_FQN', sys.argv[4:])
+    schema_path = os.environ.get('SCHEMA_PATH', sys.argv[5:])
     required_args = [bq_command_path, source_table_fqn, destination_view_fqn]
     if not all(required_args):
         print("required variable not set:\nbq_command_path: {}\nsource_table_fqn: {}\ndestination_view_fqn: {}".format(
@@ -148,8 +149,11 @@ def main():
     source_project_name = table_list[0]
     source_dataset_name = table_list[1]
     source_table_name = table_list[2]
-    source_schema = pull_table_schema(source_project_name, source_dataset_name,
-                                      source_table_name, bq_command_path)
+    if schema_path:
+        source_schema = json.load(open("../../../"+schema_path))
+    else:
+        source_schema = pull_table_schema(source_project_name, source_dataset_name,
+                                          source_table_name, bq_command_path)
     view_columns = view_columns_builder(source_schema, blacklist_fields_string)
     view_builder(view_columns, source_table_fqn, destination_view_fqn,
                  bq_command_path)

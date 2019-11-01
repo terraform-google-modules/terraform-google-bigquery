@@ -34,14 +34,16 @@ module "bigquery" {
   dataset_labels    = var.dataset_labels
   authorized_views = [
     {
-      table_full_name = "foo"
-      view_full_name  = "foo_view"
-      blacklist       = "foo"
+      table_full_name = "project.foo.foo"
+      view_full_name  = "project.foo.foo_view"
+      blacklist       = "",
+      schema_path     = "examples/multiple_tables/sample_bq_schema.json"
     },
     {
-      table_full_name = "bar"
-      view_full_name  = "bar_view"
-      blacklist       = "visitId,fullVisitorId"
+      table_full_name = "project.foo.bar"
+      view_full_name  = "project.foo.bar_view"
+      blacklist       = "visitId,fullVisitorId",
+      schema_path     = null
     }
   ]
 }
