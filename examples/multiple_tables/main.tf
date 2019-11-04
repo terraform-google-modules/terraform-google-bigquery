@@ -33,7 +33,7 @@ module "bigquery" {
   time_partitioning          = var.time_partitioning
   dataset_labels             = var.dataset_labels
   delete_contents_on_destroy = true
-  authorized_views           = [
+  authorized_views = [
     {
       table_full_name = "project.foo.foo"
       view_full_name  = "project.foo.foo_view"
