@@ -1,6 +1,7 @@
 import sys
 import subprocess
 import os
+import time
 
 def main():
     bq_path = os.environ.get('BQ_PATH', sys.argv[1:])
@@ -14,15 +15,25 @@ def main():
     dest_view_name = view_prj_name + ":" + view_ds_name + "." + view_vw_name
 
     destroy_view_command = " ".join([
-        bq_path, "rm", "-f", "-t", dest_view_name
+        bq_path, "--synchronous_mode", "rm", "-f", "-t", dest_view_name
     ])
 
-    try:
-        sys.stdout.write("Destroying BQ View:")
-        sys.stdout.write(destroy_view_command)
-        subprocess.check_output(destroy_view_command, shell=True)
-    except subprocess.CalledProcessError as err:
-        raise RuntimeError(err.output)
+    tries   = 3
+    attempt = 0
+
+    while attempt < tries:
+        attempt += 1
+        sys.stdout.write("Destroying BQ View, Attempt #"+str(attempt)+": ")
+        print(destroy_view_command)
+
+        try:
+            subprocess.check_output(destroy_view_command, shell=True)
+	    break
+        except subprocess.CalledProcessError as err:
+            if attempt >= tries:
+                raise RuntimeError(err.output)
+            else:
+                time.sleep(10)
 
 if __name__ == '__main__':
     main()
