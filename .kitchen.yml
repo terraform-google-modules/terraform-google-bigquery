@@ -24,8 +24,6 @@ verifier:
   systems:
     - name: system
       backend: gcp
-    - name: system
-      backend: bq
 
 suites:
   - name: full
