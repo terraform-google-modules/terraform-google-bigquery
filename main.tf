@@ -23,6 +23,7 @@ resource "google_bigquery_dataset" "main" {
   default_table_expiration_ms = var.expiration
   project                     = var.project_id
   labels                      = var.dataset_labels
+  delete_contents_on_destroy  = var.delete_contents_on_destroy
 }
 
 resource "google_bigquery_table" "main" {

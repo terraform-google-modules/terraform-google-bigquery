@@ -22,17 +22,18 @@ provider "google" {
 }
 
 module "bigquery" {
-  source            = "../.."
-  dataset_id        = "foo"
-  dataset_name      = "foo"
-  description       = "some description"
-  expiration        = var.expiration
-  project_id        = var.project_id
-  location          = "US"
-  tables            = var.tables
-  time_partitioning = var.time_partitioning
-  dataset_labels    = var.dataset_labels
-  authorized_views = [
+  source                     = "../.."
+  dataset_id                 = "foo"
+  dataset_name               = "foo"
+  description                = "some description"
+  expiration                 = var.expiration
+  project_id                 = var.project_id
+  location                   = "US"
+  tables                     = var.tables
+  time_partitioning          = var.time_partitioning
+  dataset_labels             = var.dataset_labels
+  delete_contents_on_destroy = true
+  authorized_views           = [
     {
       table_full_name = "project.foo.foo"
       view_full_name  = "project.foo.foo_view"

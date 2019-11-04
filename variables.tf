@@ -36,6 +36,11 @@ variable "expiration" {
   default     = null
 }
 
+variable "delete_contents_on_destroy" {
+  description = "Whether or not to destroy tables when destroying the dataset. Defaults to false"
+  default     = false
+}
+
 variable "project_id" {
   description = "Project where the dataset and table are created"
 }
