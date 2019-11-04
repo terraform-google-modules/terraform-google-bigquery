@@ -14,23 +14,8 @@
  * limitations under the License.
  */
 
-// HACK -- should use local schema JSON instead of fetching it
-//    but right now we're waiting for tables to instantiate
-resource "null_resource" "before" {
-}
-
-resource "null_resource" "delay" {
-  provisioner "local-exec" {
-    command = "sleep 10"
-  }
-  triggers = {
-    "before" = "${null_resource.before.id}"
-  }
-}
-
 resource "null_resource" "main" {
-  depends_on = ["null_resource.delay"]
-  count      = length(var.authorized_views)
+  count = length(var.authorized_views)
 
   triggers = {
     _always = uuid()
@@ -38,7 +23,7 @@ resource "null_resource" "main" {
 
   provisioner "local-exec" {
     when    = create
-    command = "python ${path.module}/scripts/bigquery_view_generator.py && sleep 10"
+    command = "python ${path.module}/scripts/bigquery_view_generator.py"
 
     environment = {
       BQ_PATH          = var.bq_path
@@ -51,7 +36,7 @@ resource "null_resource" "main" {
 
   provisioner "local-exec" {
     when    = destroy
-    command = "python ${path.module}/scripts/bigquery_view_destroyer.py && sleep 20"
+    command = "python ${path.module}/scripts/bigquery_view_destroyer.py"
 
     environment = {
       BQ_PATH  = var.bq_path

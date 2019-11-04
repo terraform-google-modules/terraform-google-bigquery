@@ -21,6 +21,7 @@ import json
 import sys
 import subprocess
 import os
+import time
 
 
 def view_builder(col_str, table_fqn, view_fqn, bq_path):
@@ -65,15 +66,28 @@ def pull_table_schema(src_proj, src_ds, src_table, bq_path):
     Output :
         A JSON string with source table schema is created on the local disk
     """
+    # Pull the JSON schema of the table using table FQN
     source_table_name = src_proj + ":" + src_ds + "." + src_table
-    # Pull the Json schema  of the table using table FQN
-    try:
-        schema_json = subprocess.check_output(" ".join([
-            bq_path, "show", "--format=prettyjson", source_table_name]), shell=True)
-    except subprocess.CalledProcessError as err:
-        raise RuntimeError(err.output)
+    tries             = 3
+    attempt           = 0
+
+    while attempt <= tries:
+        attempt += 1
+        try:
+            schema_json = subprocess.check_output(" ".join([
+                bq_path, "show", "--quiet", "--format=prettyjson", "--project_id", src_proj, source_table_name]), shell=True)
+            if schema_json:
+                break
+            else:
+                time.sleep(10)
+        except subprocess.CalledProcessError as err:
+            if attempt <= tries:
+                time.sleep(10)
+            else:
+                raise RuntimeError(err.output)
+
     # check that we got a json object
-    return json.loads(schema_json)
+    return json.loads(schema_json)["schema"]
 
 
 def view_columns_builder(source_table_schema, blacklist_str):
@@ -92,7 +106,7 @@ def view_columns_builder(source_table_schema, blacklist_str):
     blacklist = list(blacklist_str.split(','))
 
     # Loop through the schama and build a string with filtered columns
-    data = source_table_schema["schema"]["fields"]
+    data = source_table_schema["fields"]
     for p_columns in data:
         parent_col = p_columns["name"]
         parent_col_mode = p_columns["mode"]
