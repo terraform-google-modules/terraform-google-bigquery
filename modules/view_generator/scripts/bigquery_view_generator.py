@@ -77,7 +77,11 @@ def pull_table_schema(src_proj, src_ds, src_table, bq_path):
             schema_json = subprocess.check_output(" ".join([
                 bq_path, "show", "--quiet", "--format=prettyjson", "--project_id", src_proj, source_table_name]), shell=True)
             if schema_json:
-                break
+                try:
+                    schema = json.loads(schema_json)["schema"]
+                    break
+                except Exception as err:
+                    time.sleep(1)
             else:
                 time.sleep(10)
         except subprocess.CalledProcessError as err:
@@ -86,9 +90,7 @@ def pull_table_schema(src_proj, src_ds, src_table, bq_path):
             else:
                 raise RuntimeError(err.output)
 
-    # check that we got a json object
-    return json.loads(schema_json)["schema"]
-
+    return schema
 
 def view_columns_builder(source_table_schema, blacklist_str):
     """
