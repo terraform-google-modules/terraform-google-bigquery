@@ -43,7 +43,7 @@ resource "null_resource" "main" {
     environment = {
       BQ_PATH          = var.bq_path
       BLACKLIST_FIELDS = var.authorized_views[count.index]["blacklist"]
-      SCHEMA_PATH = var.authorized_views[count.index]["schema_path"]
+      SCHEMA_PATH      = var.authorized_views[count.index]["schema_path"]
       TABLE_FQN        = replace(var.authorized_views[count.index].table_full_name, "/^([\\w\\-]+)/", var.project_id)
       VIEW_FQN         = replace(var.authorized_views[count.index].view_full_name, "/^([\\w\\-]+)/", var.project_id)
     }
