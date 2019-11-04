@@ -59,7 +59,7 @@ def view_builder(col_str, table_fqn, view_fqn, bq_path):
         raise RuntimeError(err.output)
 
 
-def pull_table_schema(src_proj, src_ds, src_table, bq_path):
+def pull_table_fields(src_proj, src_ds, src_table, bq_path):
     """Function to pull the JSON schema of a given BigQuery's table
     Parameters:
         Source Project Name, Source Dataset Name, Source Table Name
@@ -78,7 +78,7 @@ def pull_table_schema(src_proj, src_ds, src_table, bq_path):
                 bq_path, "show", "--quiet", "--format=prettyjson", "--project_id", src_proj, source_table_name]), shell=True)
             if schema_json:
                 try:
-                    schema = json.loads(schema_json)["schema"]
+                    fields = json.loads(schema_json)["schema"]["fields"]
                     break
                 except Exception as err:
                     time.sleep(1)
@@ -90,9 +90,9 @@ def pull_table_schema(src_proj, src_ds, src_table, bq_path):
             else:
                 raise RuntimeError(err.output)
 
-    return schema
+    return fields
 
-def view_columns_builder(source_table_schema, blacklist_str):
+def view_columns_builder(source_table_fields, blacklist_str):
     """
     Function that loads and parses a JSON File and retunrs a string of
     whitelisted columns
@@ -108,8 +108,7 @@ def view_columns_builder(source_table_schema, blacklist_str):
     blacklist = list(blacklist_str.split(','))
 
     # Loop through the schama and build a string with filtered columns
-    data = source_table_schema["fields"]
-    for p_columns in data:
+    for p_columns in source_table_fields:
         parent_col = p_columns["name"]
         parent_col_mode = p_columns["mode"]
         parent_col_type = p_columns["type"]
@@ -166,11 +165,12 @@ def main():
     source_dataset_name = table_list[1]
     source_table_name = table_list[2]
     if schema_path:
-        source_schema = json.load(open("../../../"+schema_path))
+        source_table_fields = json.load(open("../../../"+schema_path))
     else:
-        source_schema = pull_table_schema(source_project_name, source_dataset_name,
+        source_table_fields = pull_table_fields(source_project_name, source_dataset_name,
                                           source_table_name, bq_command_path)
-    view_columns = view_columns_builder(source_schema, blacklist_fields_string)
+
+    view_columns = view_columns_builder(source_table_fields, blacklist_fields_string)
     view_builder(view_columns, source_table_fqn, destination_view_fqn,
                  bq_command_path)
 
