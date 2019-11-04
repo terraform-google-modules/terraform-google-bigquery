@@ -51,13 +51,21 @@ def view_builder(col_str, table_fqn, view_fqn, bq_path):
         new_view_query
     ])
 
-    try:
-        sys.stdout.write("Creating BQ View:")
-        sys.stdout.write(make_view_command)
-        subprocess.check_output(make_view_command, shell=True)
-    except subprocess.CalledProcessError as err:
-        raise RuntimeError(err.output)
+    tries             = 3
+    attempt           = 0
 
+    while attempt <= tries:
+        attempt += 1
+        try:
+            sys.stdout.write("Creating BQ View:")
+            sys.stdout.write(make_view_command)
+            subprocess.check_output(make_view_command, shell=True)
+            break
+        except subprocess.CalledProcessError as err:
+            if attempt <= tries:
+                time.sleep(10)
+            else:
+                raise RuntimeError(err.output)
 
 def pull_table_fields(src_proj, src_ds, src_table, bq_path):
     """Function to pull the JSON schema of a given BigQuery's table
