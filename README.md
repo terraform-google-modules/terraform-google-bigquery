@@ -73,6 +73,7 @@ This module provisions a dataset and a table with an associated JSON schema.
 | dataset\_id | Unique ID for the dataset being provisioned | string | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels | map(string) | n/a | yes |
 | dataset\_name | Friendly name for the dataset being provisioned | string | n/a | yes |
+| delete\_contents\_on\_destroy | Whether or not to destroy tables when destroying the dataset. Defaults to false | string | `"false"` | no |
 | description | Dataset description | string | n/a | yes |
 | expiration | TTL of tables using the dataset in MS | string | `"null"` | no |
 | location | The regional location for the dataset only US and EU are allowed in module | string | `"US"` | no |
