@@ -1,0 +1,14 @@
+[
+  {
+    "role": "OWNER",
+    "userByEmail": "admin@foo.com"
+  },
+  {
+    "role": "READER",
+    "domain": "foo.com"
+  },
+  {
+    "role": "WRITER",
+    "groupByEmail": "editors@foo.com"
+  }
+]

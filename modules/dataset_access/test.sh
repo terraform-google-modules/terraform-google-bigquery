@@ -1,10 +1,12 @@
+#! /usr/bin/env bash
+
 # Copyright 2019 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,27 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-provisioner:
-  name: terraform
+set -e
 
-platforms:
-  - name: local
+DATASET_ID=bq_perms_${RANDOM}
 
-verifier:
-  name: terraform
-  systems:
-    - name: system
-      backend: gcp
+echo "Creating test dataset: ${DATASET_ID}"
+bq mk ${DATASET_ID}
 
-suites:
-  - name: full
-    driver:
-      name: terraform
-      command_timeout: 1800
-      root_module_directory: test/fixtures/full
-  - name: dataset_access
-    driver:
-      name: terraform
-      command_timeout: 1800
-      root_module_directory: test/fixtures/dataset_access
+echo "Applying terraform"
+terraform apply -auto-approve -var-file terraform.tfvars -var "dataset_id=${DATASET_ID}"
+
+echo "Checking permissions"
+bq show ${DATASET_ID}
+
+echo "Remove test dataset: ${DATASET_ID}"
+bq rm -f ${DATASET_ID}
