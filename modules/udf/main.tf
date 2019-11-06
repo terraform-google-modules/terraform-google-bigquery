@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-/******************************************
-   Provider configuration
-  *****************************************/
-provider "google" {
-  version = "~> 2.5.0"
-}
+resource "null_resource" "main" {
+  count = var.add_udfs ? 1 : 0
 
-module "bigquery" {
-  source            = "../.."
-  dataset_id        = "foo"
-  dataset_name      = "foo"
-  description       = "some description"
-  expiration        = var.expiration
-  project_id        = var.project_id
-  location          = "US"
-  tables            = var.tables
-  time_partitioning = var.time_partitioning
-  dataset_labels    = var.dataset_labels
-  add_udfs          = true
+  triggers = {
+    _always = uuid()
+  }
+
+  provisioner "local-exec" {
+    when    = create
+    command = "${path.module}/scripts/persistent_udfs.sh create ${var.dataset_id}"
+
+    environment = {
+      DATASET_ID = var.dataset_id
+      BQ_PATH    = var.bq_path
+      PROJECT_ID = var.project_id
+    }
+  }
 }
 

@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-/******************************************
-   Provider configuration
-  *****************************************/
-provider "google" {
-  version = "~> 2.5.0"
+variable "add_udfs" {
+  description = "Whether or not this module should be enabled."
+  default     = false
 }
 
-module "bigquery" {
-  source            = "../.."
-  dataset_id        = "foo"
-  dataset_name      = "foo"
-  description       = "some description"
-  expiration        = var.expiration
-  project_id        = var.project_id
-  location          = "US"
-  tables            = var.tables
-  time_partitioning = var.time_partitioning
-  dataset_labels    = var.dataset_labels
-  add_udfs          = true
+variable "dataset_id" {
+  description = "Dataset id"
+}
+
+variable "gcloud_path" {
+  description = "Absolute path to the gcloud CLI binary"
+  default     = "gcloud"
+}
+
+variable "bq_path" {
+  description = "Absolute path to the bq CLI binary"
+  default     = "bq"
+}
+
+variable "project_id" {
+  description = "Project ID that contains the dataset"
 }
 
