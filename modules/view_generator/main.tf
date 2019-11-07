@@ -27,10 +27,12 @@ resource "null_resource" "main" {
 
     environment = {
       BQ_PATH          = var.bq_path
+			PROJECT_ID       = var.project_id
+			DATASET_ID       = var.dataset_id
       BLACKLIST_FIELDS = var.authorized_views[count.index]["blacklist"]
       SCHEMA_PATH      = var.authorized_views[count.index]["schema_path"]
-      TABLE_FQN        = replace(var.authorized_views[count.index].table_full_name, "/^([\\w\\-]+)/", var.project_id)
-      VIEW_FQN         = replace(var.authorized_views[count.index].view_full_name, "/^([\\w\\-]+)/", var.project_id)
+      TABLE_NAME       = var.authorized_views[count.index]["table_name"]
+      VIEW_NAME        = var.authorized_views[count.index]["view_name"]
     }
   }
 
@@ -39,8 +41,10 @@ resource "null_resource" "main" {
     command = "python ${path.module}/scripts/bigquery_view_destroyer.py"
 
     environment = {
-      BQ_PATH  = var.bq_path
-      VIEW_FQN = replace(var.authorized_views[count.index].view_full_name, "/^([\\w\\-]+)/", var.project_id)
+      BQ_PATH    = var.bq_path
+			PROJECT_ID = var.project_id
+			DATASET_ID = var.dataset_id
+      VIEW_NAME  = var.authorized_views[count.index]["view_name"]
     }
   }
 }

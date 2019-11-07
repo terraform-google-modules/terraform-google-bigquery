@@ -4,18 +4,14 @@ import os
 import time
 
 def main():
-    bq_path = os.environ.get('BQ_PATH', sys.argv[1:])
-    view_fqn = os.environ.get('VIEW_FQN', sys.argv[2:])
-
-    view_list = list(view_fqn.split('.'))
-    view_prj_name = view_list[0]
-    view_ds_name = view_list[1]
-    view_vw_name = view_list[2]
-
-    dest_view_name = view_prj_name + ":" + view_ds_name + "." + view_vw_name
+    bq_path    = os.environ.get('BQ_PATH', sys.argv[1:])
+    project_id = os.environ.get('PROJECT_ID', sys.argv[2:])
+    dataset_id = os.environ.get('DATASET_ID', sys.argv[3:])
+    view_name  = os.environ.get('VIEW_NAME', sys.argv[4:])
+    view_fqn   = project_id + ":" + dataset_id + "." + view_name
 
     destroy_view_command = " ".join([
-        bq_path, "--synchronous_mode", "rm", "-f", "-t", dest_view_name
+        bq_path, "--synchronous_mode", "rm", "-f", "-t", view_fqn
     ])
 
     tries   = 3

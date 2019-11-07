@@ -35,16 +35,16 @@ module "bigquery" {
   delete_contents_on_destroy = true
   authorized_views = [
     {
-      table_full_name = "project.foo.foo"
-      view_full_name  = "project.foo.foo_view"
-      blacklist       = "",
-      schema_path     = "examples/multiple_tables/sample_bq_schema.json"
+      table_name  = "foo"
+      view_name   = "foo_view"
+      blacklist   = "",
+      schema_path = "examples/multiple_tables/sample_bq_schema.json"
     },
     {
-      table_full_name = "project.foo.bar"
-      view_full_name  = "project.foo.bar_view"
-      blacklist       = "visitId,fullVisitorId",
-      schema_path     = null
+      table_name  = "bar"
+      view_name   = "bar_view"
+      blacklist   = "visitId,fullVisitorId",
+      schema_path = null
     }
   ]
 }

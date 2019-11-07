@@ -15,14 +15,18 @@
  */
 
 variable "authorized_views" {
-  description = "An object defining an authorized view to create, table_full_name: Full table name in the form: project.dataset.table, view_full_name: Full view name in the form: project.dataset.view, blacklist: Comma separated list of fields to exclude in source table from view (defaults to none), schema_path: null or path to local JSON table schema."
+  description = "An object defining an authorized view to create, table_name: Full table name in the form: project.dataset.table, view_name: Full view name in the form: project.dataset.view, blacklist: Comma separated list of fields to exclude in source table from view (defaults to none), schema_path: null or path to local JSON table schema."
   default     = []
   type = list(object({
-    table_full_name = string,
-    view_full_name  = string,
-    blacklist       = string,
-    schema_path     = string,
+    table_name  = string,
+    view_name   = string,
+    blacklist   = string,
+    schema_path = string,
   }))
+}
+
+variable "dataset_id" {
+  description = "Dataset where the table exists and the view will be created"
 }
 
 variable "project_id" {

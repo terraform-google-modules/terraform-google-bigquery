@@ -31,7 +31,7 @@ suites:
       name: terraform
       command_timeout: 1800
       root_module_directory: test/fixtures/full
-  - name: full
+  - name: view_generator
     driver:
       name: terraform
       command_timeout: 1800

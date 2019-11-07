@@ -24,7 +24,7 @@ import os
 import time
 
 
-def view_builder(col_str, table_fqn, view_fqn, bq_path):
+def view_builder(col_str, proj_name, ds_name, table_name, view_name, bq_path):
     """Idempotent function to create/update view
     Parameters :
         col_str : String of comma separated columns require for the view
@@ -35,24 +35,22 @@ def view_builder(col_str, table_fqn, view_fqn, bq_path):
             i.e. ProjectName.DatasetName.TableName
         Creates or updates a view
     """
-    # Parse the view_fqn
-    view_list = list(view_fqn.split('.'))
-    view_prj_name = view_list[0]
-    view_ds_name = view_list[1]
-    view_vw_name = view_list[2]
+    view_fqn  = proj_name + "." + ds_name + "." + view_name
+    table_fqn = proj_name + "." + ds_name + "." + table_name
 
     # Create the view with new columns and view name
     new_view_query = "\"CREATE OR REPLACE VIEW \`" + \
         view_fqn + \
         "\` AS SELECT " + col_str + " FROM \`" + table_fqn + "\`\""
+
     make_view_command = " ".join([
         bq_path, "query", "--use_legacy_sql=false",
-        "--project_id=" + view_prj_name,
+        "--project_id=" + proj_name,
         new_view_query
     ])
 
-    tries             = 3
-    attempt           = 0
+    tries   = 3
+    attempt = 0
 
     while attempt <= tries:
         attempt += 1
@@ -75,15 +73,15 @@ def pull_table_fields(src_proj, src_ds, src_table, bq_path):
         A JSON string with source table schema is created on the local disk
     """
     # Pull the JSON schema of the table using table FQN
-    source_table_name = src_proj + ":" + src_ds + "." + src_table
-    tries             = 3
-    attempt           = 0
+    table_name = src_proj + ":" + src_ds + "." + src_table
+    tries      = 3
+    attempt    = 0
 
     while attempt <= tries:
         attempt += 1
         try:
             schema_json = subprocess.check_output(" ".join([
-                bq_path, "show", "--quiet", "--format=prettyjson", "--project_id", src_proj, source_table_name]), shell=True)
+                bq_path, "show", "--quiet", "--format=prettyjson", "--project_id", src_proj, table_name]), shell=True)
             if schema_json:
                 try:
                     fields = json.loads(schema_json)["schema"]["fields"]
@@ -158,29 +156,28 @@ def view_columns_builder(source_table_fields, blacklist_str):
 
 def main():
     bq_command_path = os.environ.get('BQ_PATH', sys.argv[3:])
-    source_table_fqn = os.environ.get('TABLE_FQN', sys.argv[1:])
+    table_name = os.environ.get('TABLE_NAME', sys.argv[1:])
     blacklist_fields_string = os.environ.get('BLACKLIST_FIELDS', sys.argv[2:])
-    destination_view_fqn = os.environ.get('VIEW_FQN', sys.argv[4:])
+    view_name = os.environ.get('VIEW_NAME', sys.argv[4:])
     schema_path = os.environ.get('SCHEMA_PATH', sys.argv[5:])
-    required_args = [bq_command_path, source_table_fqn, destination_view_fqn]
-    if not all(required_args):
-        print("required variable not set:\nbq_command_path: {}\nsource_table_fqn: {}\ndestination_view_fqn: {}".format(
-            bq_command_path, source_table_fqn, destination_view_fqn))
-        exit(1)
-    view_columns = ""
-    table_list = list(source_table_fqn.split('.'))
-    source_project_name = table_list[0]
-    source_dataset_name = table_list[1]
-    source_table_name = table_list[2]
-    if schema_path:
-        source_table_fields = json.load(open("../../../"+schema_path))
-    else:
-        source_table_fields = pull_table_fields(source_project_name, source_dataset_name,
-                                          source_table_name, bq_command_path)
+    project_id = os.environ.get('PROJECT_ID', sys.argv[6:])
+    dataset_id = os.environ.get('DATASET_ID', sys.argv[7:])
 
-    view_columns = view_columns_builder(source_table_fields, blacklist_fields_string)
-    view_builder(view_columns, source_table_fqn, destination_view_fqn,
-                 bq_command_path)
+    required_args = [bq_command_path, project_id, dataset_id, table_name, view_name]
+    if not all(required_args):
+        print("required variable not set:\nbq_command_path: {}\nproject_id: {\ndataset_id: {}}\ntable_name: {}\nview_name: {}".format(
+            bq_command_path, project_id, dataset_id, table_name, view_name))
+        exit(1)
+
+    view_columns = ""
+
+    if schema_path:
+        table_fields = json.load(open("../../../"+schema_path))
+    else:
+        table_fields = pull_table_fields(project_id, dataset_id, table_name, bq_command_path)
+
+    view_columns = view_columns_builder(table_fields, blacklist_fields_string)
+    view_builder(view_columns, project_id, dataset_id, table_name, view_name, bq_command_path)
 
 
 if __name__ == '__main__':

@@ -43,5 +43,6 @@ resource "google_bigquery_table" "main" {
 module "authorized_views" {
   source           = "./modules/view_generator"
   project_id       = var.project_id
+  dataset_id       = var.dataset_id
   authorized_views = var.authorized_views
 }

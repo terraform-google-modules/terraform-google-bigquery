@@ -22,7 +22,7 @@ provider "google" {
 }
 
 module "example" {
-  source            = "../../../examples/multiple_tables"
+  source            = "../../../examples/view_generator"
   expiration        = var.expiration
   project_id        = var.project_id
   tables            = var.tables
