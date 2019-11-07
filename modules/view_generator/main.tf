@@ -27,8 +27,8 @@ resource "null_resource" "main" {
 
     environment = {
       BQ_PATH          = var.bq_path
-			PROJECT_ID       = var.project_id
-			DATASET_ID       = var.dataset_id
+      PROJECT_ID       = var.project_id
+      DATASET_ID       = var.dataset_id
       BLACKLIST_FIELDS = var.authorized_views[count.index]["blacklist"]
       SCHEMA_PATH      = var.authorized_views[count.index]["schema_path"]
       TABLE_NAME       = var.authorized_views[count.index]["table_name"]
@@ -42,8 +42,8 @@ resource "null_resource" "main" {
 
     environment = {
       BQ_PATH    = var.bq_path
-			PROJECT_ID = var.project_id
-			DATASET_ID = var.dataset_id
+      PROJECT_ID = var.project_id
+      DATASET_ID = var.dataset_id
       VIEW_NAME  = var.authorized_views[count.index]["view_name"]
     }
   }
