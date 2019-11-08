@@ -69,7 +69,7 @@ This module provisions a dataset and a table with an associated JSON schema.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| add\_udf\_utilities | Whether or not to add a handful of UDF utilities to your dataset. | string | `"false"` | no |
+| add\_udfs | Whether or not to add a handful of UDF utilities to your dataset. | string | `"false"` | no |
 | dataset\_id | Unique ID for the dataset being provisioned | string | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels | map(string) | n/a | yes |
 | dataset\_name | Friendly name for the dataset being provisioned | string | n/a | yes |
@@ -84,6 +84,7 @@ This module provisions a dataset and a table with an associated JSON schema.
 
 | Name | Description |
 |------|-------------|
+| added\_udfs | List of UDFs utility functions added. |
 | dataset\_id | Unique id for the dataset being provisioned |
 | dataset\_labels | Key value pairs in a map for dataset labels |
 | dataset\_name | Friendly name for the dataset being provisioned |
