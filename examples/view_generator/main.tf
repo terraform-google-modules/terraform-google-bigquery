@@ -23,8 +23,8 @@ provider "google" {
 
 module "bigquery" {
   source                     = "../.."
-  dataset_id                 = "foo"
-  dataset_name               = "foo"
+  dataset_id                 = "plane"
+  dataset_name               = "plane"
   description                = "some description"
   expiration                 = var.expiration
   project_id                 = var.project_id
