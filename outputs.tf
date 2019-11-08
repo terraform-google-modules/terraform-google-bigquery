@@ -48,3 +48,8 @@ output "table_labels" {
   value       = google_bigquery_table.main.*.labels
   description = "Key value pairs in a map for table labels"
 }
+
+output "authorized_views_fqns" {
+  value       = module.authorized_views.authorized_views_fqns
+  description = "FQNs of any authorized views created"
+}

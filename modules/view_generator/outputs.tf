@@ -14,7 +14,20 @@
  * limitations under the License.
  */
 
+output "dataset_id" {
+  description = "Project ID"
+  value       = var.dataset_id
+}
+
 output "project_id" {
   description = "Project ID"
   value       = var.project_id
+}
+
+output "authorized_views_fqns" {
+  description = "FQNs of any authorized views created"
+  value = [
+    for view in var.authorized_views :
+    join(".", var.project_id, var.dataset_id, view["view_name"])
+  ]
 }
