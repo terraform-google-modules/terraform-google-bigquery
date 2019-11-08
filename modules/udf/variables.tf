@@ -14,26 +14,15 @@
  * limitations under the License.
  */
 
-variable "add_udfs" {
-  description = "Whether or not this module should be enabled."
-  default     = false
-}
-
 variable "dataset_id" {
   description = "Dataset id"
-}
-
-variable "gcloud_path" {
-  description = "Absolute path to the gcloud CLI binary"
-  default     = "gcloud"
-}
-
-variable "bq_path" {
-  description = "Absolute path to the bq CLI binary"
-  default     = "bq"
 }
 
 variable "project_id" {
   description = "Project ID that contains the dataset"
 }
 
+variable "add_udfs" {
+  description = "Whether or not this module should be enabled."
+  default     = false
+}
