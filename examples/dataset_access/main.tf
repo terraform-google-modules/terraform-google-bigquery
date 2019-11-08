@@ -43,5 +43,5 @@ module "dataset_access" {
   roles_json              = var.roles_json
 
   // Uncomment if running tests on a mac
-  platform = "darwin"
+  // platform = "darwin"
 }
