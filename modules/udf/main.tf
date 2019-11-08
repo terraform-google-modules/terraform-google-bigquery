@@ -66,6 +66,7 @@ EOT
   destroy_cmd_body = "--project_id ${var.project_id} query --use_legacy_sql=false \"DROP FUNCTION IF EXISTS ${var.dataset_id}.check_protocol\""
 }
 
+// depends_on = module.bq_check_protocol
 module "bq_parse_url" {
   source  = "github.com/milesmatthias/terraform-google-gcloud?ref=master-initial-work"
   enabled = var.add_udfs
@@ -88,7 +89,7 @@ module "bq_parse_url" {
       WHEN part = 'PROTOCOL' THEN RTRIM(REGEXP_EXTRACT(url, '^[a-zA-Z]+://'), '://')
       ELSE ''
     END
-  );"
+  );" && echo ${module.bq_check_protocol.create_cmd_bin}
 EOT
 
   destroy_cmd_body = "--project_id ${var.project_id} query --use_legacy_sql=false \"DROP FUNCTION IF EXISTS ${var.dataset_id}.parse_url\""
