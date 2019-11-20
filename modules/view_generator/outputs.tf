@@ -25,6 +25,7 @@ output "project_id" {
 }
 
 output "authorized_views_fqns" {
+  depends_on  = [null_resource.main]
   description = "FQNs of any authorized views created"
   value = [
     for view in var.authorized_views :
