@@ -24,7 +24,7 @@ def main():
 
         try:
             subprocess.check_output(destroy_view_command, shell=True)
-	    break
+            break
         except subprocess.CalledProcessError as err:
             if attempt >= tries:
                 raise RuntimeError(err.output)
