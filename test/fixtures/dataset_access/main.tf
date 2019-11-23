@@ -25,9 +25,7 @@ module "example" {
   source            = "../../../examples/dataset_access"
   expiration        = var.expiration
   project_id        = var.project_id
-  tables            = var.tables
   time_partitioning = var.time_partitioning
   dataset_labels    = var.dataset_labels
-  roles_json        = "${file("../../../examples/dataset_access/roles.json")}"
 }
 

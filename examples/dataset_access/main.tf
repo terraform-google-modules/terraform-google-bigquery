@@ -29,9 +29,28 @@ module "bigquery" {
   expiration        = var.expiration
   project_id        = var.project_id
   location          = "US"
-  tables            = var.tables
   time_partitioning = var.time_partitioning
   dataset_labels    = var.dataset_labels
+  tables = [
+    {
+      table_id = "foo",
+      schema   = "sample_bq_schema.json",
+      labels = {
+        env      = "dev"
+        billable = "true"
+        owner    = "joedoe"
+      },
+    },
+    {
+      table_id = "bar",
+      schema   = "sample_bq_schema.json",
+      labels = {
+        env      = "devops"
+        billable = "true"
+        owner    = "joedoe"
+      },
+    }
+  ]
 }
 
 module "dataset_access" {
@@ -40,7 +59,7 @@ module "dataset_access" {
   project    = var.project_id
 
   preserve_special_groups = true
-  roles_json              = var.roles_json
+  roles_json              = "${file("../../../examples/dataset_access/roles.json")}"
 
   // Uncomment if running tests on a mac
   // platform = "darwin"
