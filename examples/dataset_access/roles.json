@@ -1,14 +1,14 @@
 [
   {
     "role": "OWNER",
-    "userByEmail": "admin@foo.com"
+    "userByEmail": "test-gcp-org-admins@test.infra.cft.tips"
   },
   {
     "role": "READER",
-    "domain": "foo.com"
+    "domain": "test.infra.cft.tips"
   },
   {
     "role": "WRITER",
-    "groupByEmail": "editors@foo.com"
+    "groupByEmail": "test-gcp-billing-admins@test.infra.cft.tips"
   }
 ]
