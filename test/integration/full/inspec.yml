@@ -10,6 +10,6 @@ attributes:
   - name: bigquery_dataset
     required: true
     type: hash
-  - name: bigquery_tables
+  - name: bigquery_tables_list
     required: true
-    type: hash
+    type: array

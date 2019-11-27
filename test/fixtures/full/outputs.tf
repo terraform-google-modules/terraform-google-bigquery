@@ -19,7 +19,7 @@ output "bigquery_dataset" {
   description = "Bigquery dataset resource."
 }
 
-output "bigquery_tables" {
-  value       = module.example.bigquery_tables
-  description = "Bigquery table resources being provisioned."
+output "bigquery_tables_list" {
+  value       = module.example.bigquery_tables_list
+  description = "List of bigquery table resources being provisioned."
 }

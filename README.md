@@ -74,7 +74,7 @@ module "bigquery" {
 Functional examples are included in the
 [examples](./examples/) directory.
 
-## Variable `tables` detailed desctiption
+### Variable `tables` detailed description
 
 The `tables` variable should be provided as a list of object with the following keys:
 ```hcl
