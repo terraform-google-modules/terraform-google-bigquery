@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -  The `expiration` variable renamed to `default_table_expiration` [#40]
 -  `expiration_time` can be specified on a table basis [#40]
 -  `partitioning` now can be specified on a table basis and started to be optional, also started supporting additional parameters
--  Outputs updated to output the whole resources instead of attributes [#40] 
+-  Outputs updated to output the whole resources instead of attributes [#40]
 
 ## [2.0.0] 2019-08-02
 
