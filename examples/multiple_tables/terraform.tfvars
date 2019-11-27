@@ -1,4 +1,4 @@
-project_id        = "example-project"
+project_id               = "example-project"
 default_table_expiration = 3600000
 dataset_labels = {
   env      = "dev"

@@ -13,9 +13,9 @@
 # limitations under the License.
 
 # Attributes can be used to create tests with as the mode becomes more complex
-project_id       = attribute('dataset_project')
-dataset_name     = attribute('dataset_name')
-table_name       = attribute('table_name')
+project_id       = attribute('bigquery_dataset')['project']
+dataset_name     = attribute('bigquery_dataset')['friendly_name']
+table_names      = attribute('bigquery_tables').keys
 
 describe google_bigquery_dataset(project: "#{project_id}", name: "#{dataset_name}") do
   it { should exist }

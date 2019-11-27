@@ -22,13 +22,13 @@ provider "google" {
 }
 
 module "bigquery" {
-  source            = "../.."
-  dataset_id        = "foo"
-  dataset_name      = "foo"
-  description       = "some description"
-  default_table_expiration        = var.default_table_expiration
-  project_id        = var.project_id
-  location          = "US"
-  tables            = var.tables
-  dataset_labels    = var.dataset_labels
+  source                   = "../.."
+  dataset_id               = "foo"
+  dataset_name             = "foo"
+  description              = "some description"
+  default_table_expiration = var.default_table_expiration
+  project_id               = var.project_id
+  location                 = "US"
+  tables                   = var.tables
+  dataset_labels           = var.dataset_labels
 }

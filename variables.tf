@@ -49,16 +49,16 @@ variable "tables" {
   description = "A list of objects which include table_id, schema, clustering, time_partitioning, expiration_time and labels."
   default     = []
   type = list(object({
-    table_id          = string,
-    schema            = string,
-    clustering        = list(string),
+    table_id   = string,
+    schema     = string,
+    clustering = list(string),
     time_partitioning = object({
-      expiration_ms = string,
-      field = string,
-      type = string,
+      expiration_ms            = string,
+      field                    = string,
+      type                     = string,
       require_partition_filter = bool,
     }),
-    expiration_time   = string,
-    labels            = map(string),
+    expiration_time = string,
+    labels          = map(string),
   }))
 }

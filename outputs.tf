@@ -20,6 +20,6 @@ output "bigquery_dataset" {
 }
 
 output "bigquery_tables" {
-  value       = google_bigquery_table.main[*]
+  value       = { for table in var.tables: table["table_id"] => google_bigquery_table.main[table["table_id"]]}
   description = "Bigquery table resources being provisioned."
 }

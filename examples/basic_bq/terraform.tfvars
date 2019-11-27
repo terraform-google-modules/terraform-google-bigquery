@@ -1,4 +1,4 @@
-project_id        = "example-project"
+project_id = "example-project"
 dataset_labels = {
   env      = "dev"
   billable = "true"

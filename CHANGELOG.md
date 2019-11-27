@@ -8,10 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.0.0] 2019-11-27
 
--  Add support for `clustering/partitioning` on a table basis [Issue #26](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/26)
+-  Add support for `clustering` on a table basis [Issue #26](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/26)
 -  `count` is replaced with for_each [Issue #39](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/39)
 -  The `expiration` variable renamed to `default_table_expiration` [#40]
 -  `expiration_time` can be specified on a table basis [#40]
+-  `partitioning` now can be specified on a table basis and started to be optional, also started supporting additional parameters
+-  Outputs updated to output the whole resources instead of attributes [#40] 
 
 ## [2.0.0] 2019-08-02
 
