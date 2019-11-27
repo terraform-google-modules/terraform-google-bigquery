@@ -13,8 +13,9 @@ the last released version intended for Terraform 0.11.x is
 
 ## Upgrading
 
-The current version is 2.X. The following guide is available to assist with upgrades:
+The current version is 2.X. The following guides are available to assist with upgrades:
 
+- [2.0 -> 3.0](./docs/upgrading_to_bigquery_v3.0.md)
 - [1.0 -> 2.0](./docs/upgrading_to_bigquery_v2.0.md)
 - [0.1 -> 1.0](./docs/upgrading_to_bigquery_v1.0.md)
 
@@ -25,30 +26,43 @@ Basic usage of this module is as follows:
 ```hcl
 module "bigquery" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
-  dataset_id        = "foo"
-  dataset_name      = "foo"
-  description       = "some description"
-  project_id        = "<PROJECT ID>"
-  location          = "US"
-  time_partitioning = "DAY"
+  dataset_id               = "foo"
+  dataset_name             = "foo"
+  description              = "some description"
+  project_id               = "<PROJECT ID>"
+  location                 = "US"
+  default_table_expiration = 3600000
+
   tables = [
-    {
-      table_id = "foo",
-      schema   = "<PATH TO THE SCHEMA JSON FILE>",
-      labels = {
-        env      = "dev"
-        billable = "true"
-      },
+  {
+    table_id          = "foo",
+    schema            =  "<PATH TO THE SCHEMA JSON FILE>",
+    time_partitioning = {
+      type                     = "DAY",
+      field                    = null,
+      require_partition_filter = false,
+      expiration_ms            = null,
     },
-    {
-      table_id = "bar",
-      schema   = "<PATH TO THE SCHEMA JSON FILE>",
-      labels = {
-        env      = "devops"
-        billable = "true"
-      },
+    expiration_time = null,
+    clustering      = ["fullVisitorId", "visitId"],
+    labels          = {
+      env      = "dev"
+      billable = "true"
+      owner    = "joedoe"
+    },
+  },
+  {
+    table_id          = "bar",
+    schema            =  "<PATH TO THE SCHEMA JSON FILE>",
+    time_partitioning = null,
+    expiration_time   = 2524604400000, # 2050/01/01
+    clustering        = [],
+    labels = {
+      env      = "devops"
+      billable = "true"
+      owner    = "joedoe"
     }
   ]
   dataset_labels = {
@@ -62,7 +76,7 @@ Functional examples are included in the
 [examples](./examples/) directory.
 
 ## Features
-This module provisions a dataset and a table with an associated JSON schema.
+This module provisions a dataset and a list of tables with associated JSON schemas.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
@@ -102,7 +116,7 @@ These sections describe requirements for using this module.
 The following dependencies must be available:
 
 - [Terraform][terraform] v0.12
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin v2.5
+- [Terraform Provider for GCP][terraform-provider-gcp] plugin v2.15
 
 ### Service Account
 

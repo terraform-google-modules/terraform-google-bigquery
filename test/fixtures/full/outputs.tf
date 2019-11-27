@@ -14,38 +14,12 @@
  * limitations under the License.
  */
 
-output "dataset_id" {
-  value       = module.example.dataset_id
-  description = "Unique id for the dataset being provisioned"
+output "bigquery_dataset" {
+  value       = module.example.bigquery_dataset
+  description = "Bigquery dataset resource."
 }
 
-output "dataset_name" {
-  value       = module.example.dataset_name
-  description = "Friendly name for the dataset being provisioned"
+output "bigquery_tables" {
+  value       = module.example.bigquery_tables
+  description = "Bigquery table resources being provisioned."
 }
-
-output "dataset_project" {
-  value       = module.example.dataset_project
-  description = "Project where the dataset and table are created"
-}
-
-output "table_id" {
-  value       = module.example.table_id
-  description = "Unique id for the table being provisioned"
-}
-
-output "table_name" {
-  value       = module.example.table_name
-  description = "Friendly name for the table being provisioned"
-}
-
-output "dataset_labels" {
-  value       = module.example.dataset_labels
-  description = "Key value pairs in a map for dataset labels"
-}
-
-output "table_labels" {
-  value       = module.example.table_labels
-  description = "Key value pairs in a map for table labels"
-}
-

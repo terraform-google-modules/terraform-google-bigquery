@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] 2019-11-27
+
+-  Add support for `clustering/partitioning` on a table basis [Issue #26](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/26)
+-  `count` is replaced with for_each [Issue #39](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/39)
+-  The `expiration` variable renamed to `default_table_expiration` [#40]
+-  `expiration_time` can be specified on a table basis [#40]
+
 ## [2.0.0] 2019-08-02
 
 ### Changed
@@ -34,11 +41,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - This is the initial release of the Big Query module.
 
-[Unreleased]: https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/terraform-google-modules/terraform-google-bigquery/releases/tag/v0.1.0/
 
+[#40]: https://github.com/terraform-google-modules/terraform-google-bigquery/pulls/40
 [#23]: https://github.com/terraform-google-modules/terraform-google-bigquery/pulls/23
 [#20]: https://github.com/terraform-google-modules/terraform-google-bigquery/pulls/20
 [#17]: https://github.com/terraform-google-modules/terraform-google-bigquery/pulls/17

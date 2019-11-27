@@ -18,15 +18,13 @@
    Provider configuration
   *****************************************/
 provider "google" {
-  version = "~> 2.5.0"
+  version = "~> 2.15"
 }
 
 module "example" {
-  source            = "../../../examples/multiple_tables"
-  expiration        = var.expiration
-  project_id        = var.project_id
-  tables            = var.tables
-  time_partitioning = var.time_partitioning
-  dataset_labels    = var.dataset_labels
+  source                   = "../../../examples/multiple_tables"
+  default_table_expiration = var.default_table_expiration
+  project_id               = var.project_id
+  tables                   = var.tables
+  dataset_labels           = var.dataset_labels
 }
-
