@@ -21,5 +21,5 @@ output "bigquery_dataset" {
 
 output "bigquery_tables" {
   value       = module.bigquery.bigquery_tables
-  description = "Bigquery table resources being provisioned."
+  description = "Map of bigquery table resources being provisioned."
 }

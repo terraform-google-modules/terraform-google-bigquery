@@ -16,7 +16,7 @@ The basic_bq example uses the root terraform-google-bigquery module to deploy a 
 | Name | Description |
 |------|-------------|
 | bigquery\_dataset | Bigquery dataset resource. |
-| bigquery\_tables | Bigquery table resources being provisioned. |
+| bigquery\_tables | Map of bigquery table resources being provisioned. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

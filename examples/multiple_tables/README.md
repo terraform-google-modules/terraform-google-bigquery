@@ -18,7 +18,7 @@ This example is a good reference to understand and test the module usage.
 | Name | Description |
 |------|-------------|
 | bigquery\_dataset | Bigquery dataset resource. |
-| bigquery\_tables\_list | List of bigquery table resources being provisioned. |
+| bigquery\_tables | Map of bigquery table resources being provisioned. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
