@@ -24,7 +24,7 @@ resource "google_bigquery_dataset" "main" {
   description   = var.description
   location      = var.location
 
-  default_table_expiration_ms = var.default_table_expiration
+  default_table_expiration_ms = var.default_table_expiration_ms
   project                     = var.project_id
   labels                      = var.dataset_labels
 }

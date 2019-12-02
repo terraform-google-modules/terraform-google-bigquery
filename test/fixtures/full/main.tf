@@ -22,9 +22,9 @@ provider "google" {
 }
 
 module "example" {
-  source                   = "../../../examples/multiple_tables"
-  default_table_expiration = var.default_table_expiration
-  project_id               = var.project_id
-  tables                   = var.tables
-  dataset_labels           = var.dataset_labels
+  source                      = "../../../examples/multiple_tables"
+  default_table_expiration_ms = var.default_table_expiration_ms
+  project_id                  = var.project_id
+  tables                      = var.tables
+  dataset_labels              = var.dataset_labels
 }

@@ -3,13 +3,13 @@
 The v3.0 release of BigQuery is a backwards incompatible release.
 - The `time_partitioning` variable has been inlined to the `table` object structure.
 - The `clustering` and `expiration_time` keys were added to the `table` object structure.
-- The `expiration` variable renamed to `default_table_expiration`
+- The `expiration` variable renamed to `default_table_expiration_ms`
 - `count` replaced with `for_each`.
 - Outputs changed to output raw resources.
 
 ## Migration Instructions
 
-1. Rename `expiration` variable to `default_table_expiration`.
+1. Rename `expiration` variable to `default_table_expiration_ms`.
 ```diff
 module "bigquery" {
   source  = "terraform-google-modules/bigquery/google"
@@ -17,7 +17,7 @@ module "bigquery" {
 -  version = "~> 3.0"
 
 - expiration = 3600000
-+ default_table_expiration = 3600000
++ default_table_expiration_ms = 3600000
 ....
 }
 ```

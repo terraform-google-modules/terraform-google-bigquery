@@ -1,5 +1,5 @@
-project_id               = "example-project"
-default_table_expiration = 3600000
+project_id                  = "example-project"
+default_table_expiration_ms = 3600000
 dataset_labels = {
   env      = "dev"
   billable = "true"

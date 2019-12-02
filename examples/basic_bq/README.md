@@ -7,7 +7,7 @@ The basic_bq example uses the root terraform-google-bigquery module to deploy a 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | dataset\_labels | A mapping of labels to assign to the table. | map(string) | n/a | yes |
-| default\_table\_expiration | Default TTL of tables using the dataset in MS. | string | `"null"` | no |
+| default\_table\_expiration\_ms | Default TTL of tables using the dataset in MS. | string | `"null"` | no |
 | project\_id | Project where the dataset and table are created. | string | n/a | yes |
 | tables | A list of maps that includes table_id, schema, clustering, time_partitioning, expiration_time, labels in each element. | object | `<list>` | no |
 

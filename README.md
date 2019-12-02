@@ -27,12 +27,12 @@ module "bigquery" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 3.0"
 
-  dataset_id               = "foo"
-  dataset_name             = "foo"
-  description              = "some description"
-  project_id               = "<PROJECT ID>"
-  location                 = "US"
-  default_table_expiration = 3600000
+  dataset_id                  = "foo"
+  dataset_name                = "foo"
+  description                 = "some description"
+  project_id                  = "<PROJECT ID>"
+  location                    = "US"
+  default_table_expiration_ms = 3600000
 
   tables = [
   {
@@ -107,7 +107,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | dataset\_id | Unique ID for the dataset being provisioned. | string | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels | map(string) | n/a | yes |
 | dataset\_name | Friendly name for the dataset being provisioned. | string | n/a | yes |
-| default\_table\_expiration | TTL of tables using the dataset in MS | string | `"null"` | no |
+| default\_table\_expiration\_ms | TTL of tables using the dataset in MS | string | `"null"` | no |
 | description | Dataset description. | string | n/a | yes |
 | location | The regional location for the dataset only US and EU are allowed in module | string | `"US"` | no |
 | project\_id | Project where the dataset and table are created | string | n/a | yes |

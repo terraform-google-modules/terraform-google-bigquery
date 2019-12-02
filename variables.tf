@@ -31,7 +31,7 @@ variable "location" {
   default     = "US"
 }
 
-variable "default_table_expiration" {
+variable "default_table_expiration_ms" {
   description = "TTL of tables using the dataset in MS"
   default     = null
 }

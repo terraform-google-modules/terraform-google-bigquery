@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-variable "default_table_expiration" {
+variable "default_table_expiration_ms" {
   description = "Default TTL of tables using the dataset in MS"
 }
 
