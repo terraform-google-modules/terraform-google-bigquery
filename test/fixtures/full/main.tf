@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-/******************************************
-   Provider configuration
-  *****************************************/
-provider "google" {
-  version = "~> 2.15"
-}
-
 module "example" {
   source                      = "../../../examples/multiple_tables"
   default_table_expiration_ms = var.default_table_expiration_ms

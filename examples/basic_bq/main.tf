@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-/******************************************
-   Provider configuration
-  *****************************************/
-provider "google" {
-  version = "~> 2.15"
-}
-
 module "bigquery" {
   source         = "../.."
   dataset_id     = "foo"
@@ -31,4 +24,3 @@ module "bigquery" {
   tables         = var.tables
   dataset_labels = var.dataset_labels
 }
-
