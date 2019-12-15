@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-module "bigquery" {
-  source                      = "../.."
-  dataset_id                  = "foo"
-  dataset_name                = "foo"
-  description                 = "some description"
-  default_table_expiration_ms = var.default_table_expiration_ms
-  project_id                  = var.project_id
-  location                    = "US"
-  tables                      = var.tables
-  dataset_labels              = var.dataset_labels
+terraform {
+  required_version = "~> 0.12.6"
+  required_providers {
+    google = "~> 2.15"
+  }
 }

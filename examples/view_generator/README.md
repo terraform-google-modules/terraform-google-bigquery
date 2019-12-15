@@ -12,7 +12,7 @@ This example is a good reference to understand and test the module usage.
 | expiration | TTL of tables using the dataset in MS | string | `"null"` | no |
 | project\_id | Project where the dataset and table are created | string | n/a | yes |
 | tables | A list of maps that includes both table_id and schema in each element, the table(s) will be created on the single dataset | object | `<list>` | no |
-| time\_partitioning | Configures time-based partitioning for this table | string | n/a | yes |
+| time\_partitioning | Configures time-based partitioning for this table | string | `"null"` | no |
 
 ## Outputs
 

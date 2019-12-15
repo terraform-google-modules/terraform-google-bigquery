@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-output "dataset_id" {
-  value       = google_bigquery_dataset.main.id
-  description = "Unique id for the dataset being provisioned"
+output "bigquery_dataset" {
+  value       = google_bigquery_dataset.main
+  description = "Bigquery dataset resource."
 }
 
-output "dataset_name" {
-  value       = google_bigquery_dataset.main.friendly_name
-  description = "Friendly name for the dataset being provisioned"
+output "bigquery_tables" {
+  value       = google_bigquery_table.main
+  description = "Map of bigquery table resources being provisioned."
 }
 
 output "dataset_project" {
