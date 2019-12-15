@@ -22,19 +22,19 @@ provider "google" {
 }
 
 module "bigquery" {
-  source            = "../.."
-  dataset_id        = "plane"
-  dataset_name      = "plane"
-  description       = "some description"
-  expiration        = var.expiration
-  project_id        = var.project_id
-  location          = "US"
-  time_partitioning = var.time_partitioning
-  dataset_labels    = var.dataset_labels
+  source                      = "../.."
+  dataset_id                  = "plane"
+  dataset_name                = "plane"
+  description                 = "some description"
+  default_table_expiration_ms = var.expiration
+  project_id                  = var.project_id
+  location                    = "US"
+  dataset_labels              = var.dataset_labels
   tables = [
     {
-      table_id = "foo",
-      schema   = "sample_bq_schema.json",
+      table_id          = "foo",
+      schema            = "sample_bq_schema.json",
+      time_partitioning = var.time_partitioning,
       labels = {
         env      = "dev"
         billable = "true"
@@ -42,8 +42,9 @@ module "bigquery" {
       },
     },
     {
-      table_id = "bar",
-      schema   = "sample_bq_schema.json",
+      table_id          = "bar",
+      schema            = "sample_bq_schema.json",
+      time_partitioning = var.time_partitioning,
       labels = {
         env      = "devops"
         billable = "true"
@@ -59,7 +60,7 @@ module "dataset_access" {
   project    = var.project_id
 
   preserve_special_groups = true
-  roles_json              = "${file("../../../examples/dataset_access/roles.json")}"
+  roles_json              = "${file("../../examples/dataset_access/roles.json")}"
 
   // Uncomment if running tests on a mac
   // platform = "darwin"
