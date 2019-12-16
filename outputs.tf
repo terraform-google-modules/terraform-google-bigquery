@@ -23,3 +23,8 @@ output "bigquery_tables" {
   value       = google_bigquery_table.main
   description = "Map of bigquery table resources being provisioned."
 }
+
+output "bigquery_views" {
+  value       = google_bigquery_table.view
+  description = "Map of bigquery view resources being provisioned."
+}

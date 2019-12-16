@@ -16,6 +16,7 @@
 project_id       = attribute('bigquery_dataset')['project']
 dataset_name     = attribute('bigquery_dataset')['friendly_name']
 tables           = attribute('bigquery_tables')
+views           = attribute('bigquery_views')
 
 describe google_bigquery_dataset(project: "#{project_id}", name: "#{dataset_name}") do
   it { should exist }
@@ -38,4 +39,11 @@ describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_nam
   its('friendly_name') { should eq "#{tables["bar"]["friendly_name"]}" }
   its('time_partitioning.type') { should be nil }
   its('clustering') { should be nil }
+end
+
+describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{views["test_view"]["friendly_name"]}") do
+  it { should exist }
+  its('friendly_name') { should eq "#{views["test_view"]["friendly_name"]}" }
+  its('type') { should eq "VIEW" }
+  its('view.use_legacy_sql') { should be true }
 end

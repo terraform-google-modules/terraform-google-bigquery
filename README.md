@@ -79,7 +79,7 @@ Functional examples are included in the
 The `tables` variable should be provided as a list of object with the following keys:
 ```hcl
 {
-  table_id = "some_id"                        # Unique table id (will be used as ID and Freandly name for the table).
+  table_id = "some_table_id"                  # Unique table id (will be used as ID and Freandly name for the table).
   schema = "path/to/schema.json"              # Path to the schema json file.
   time_partitioning = {                       # Set it to `null` to omit partitioning configuration for the table.
         type                     = "DAY",     # The only type supported is DAY, which will generate one partition per day based on data loading time.
@@ -104,6 +104,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| access | An array of objects that define dataset access for one or more entities. [Link to the structure] (https://www.terraform.io/docs/providers/google/r/bigquery_dataset.html#access) | object | `<list>` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | string | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels | map(string) | n/a | yes |
 | dataset\_name | Friendly name for the dataset being provisioned. | string | n/a | yes |
@@ -119,6 +120,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 |------|-------------|
 | bigquery\_dataset | Bigquery dataset resource. |
 | bigquery\_tables | Map of bigquery table resources being provisioned. |
+| bigquery\_views | Map of bigquery view resources being provisioned. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

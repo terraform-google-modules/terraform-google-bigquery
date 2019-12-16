@@ -13,3 +13,6 @@ attributes:
   - name: bigquery_tables
     required: true
     type: hash
+  - name: bigquery_views
+    required: true
+    type: hash

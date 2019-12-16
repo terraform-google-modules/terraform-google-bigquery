@@ -8,8 +8,8 @@ This example is a good reference to understand and test the module usage.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| dataset\_labels | A mapping of labels to assign to the table. | map(string) | n/a | yes |
-| default\_table\_expiration\_ms | Default TTL of tables using the dataset in MS. | string | `"null"` | no |
+| dataset\_labels | A mapping of labels to assign to the table. | map(string) | `<map>` | no |
+| default\_table\_expiration\_ms | Default TTL of tables using the dataset in MS. | string | `"3600000"` | no |
 | project\_id | Project where the dataset and table are created. | string | n/a | yes |
 | tables | A list of maps that includes table_id, schema, clustering, time_partitioning, expiration_time, labels in each element. | object | `<list>` | no |
 
@@ -19,13 +19,11 @@ This example is a good reference to understand and test the module usage.
 |------|-------------|
 | bigquery\_dataset | Bigquery dataset resource. |
 | bigquery\_tables | Map of bigquery table resources being provisioned. |
+| bigquery\_views | Map of bigquery view resources being provisioned. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-
-## Setup
-Update the contents of `terraform.tfvars` to match your test environment.
 
 ## Run example
 `terraform init`
 `terraform plan`
-`terraform apply -var-file terraform.tfvars`
+`terraform apply`

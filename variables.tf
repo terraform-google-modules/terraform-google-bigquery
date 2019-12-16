@@ -59,6 +59,27 @@ variable "tables" {
       require_partition_filter = bool,
     }),
     expiration_time = string,
-    labels          = map(string),
+    view = object({
+      query          = string,
+      use_legacy_sql = bool,
+    }),
+    labels = map(string),
+  }))
+}
+
+variable "access" {
+  description = "An array of objects that define dataset access for one or more entities. [Link to the structure] (https://www.terraform.io/docs/providers/google/r/bigquery_dataset.html#access)"
+  default     = []
+  type = list(object({
+    domain         = string
+    group_by_email = string
+    role           = string
+    special_group  = string
+    user_by_email  = string
+    view = object({
+      dataset_id = string
+      project_id = string
+      table_id   = string
+    })
   }))
 }

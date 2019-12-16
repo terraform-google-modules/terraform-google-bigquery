@@ -15,7 +15,8 @@
  */
 
 locals {
-  tables = { for table in var.tables : table["table_id"] => table }
+  tables = { for table in var.tables : table["table_id"] => table if lookup(table, "view", null) == null }
+  views  = { for table in var.tables : table["table_id"] => table if lookup(table, "view", null) != null }
 }
 
 resource "google_bigquery_dataset" "main" {
@@ -39,6 +40,31 @@ resource "google_bigquery_table" "main" {
   clustering      = each.value["clustering"]
   expiration_time = each.value["expiration_time"]
   project         = var.project_id
+  dynamic "time_partitioning" {
+    for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
+    content {
+      type                     = time_partitioning.value["type"]
+      expiration_ms            = time_partitioning.value["expiration_ms"]
+      field                    = time_partitioning.value["field"]
+      require_partition_filter = time_partitioning.value["require_partition_filter"]
+    }
+  }
+}
+
+resource "google_bigquery_table" "view" {
+  for_each        = local.views
+  dataset_id      = google_bigquery_dataset.main.dataset_id
+  friendly_name   = each.key
+  table_id        = each.key
+  labels          = each.value["labels"]
+  clustering      = each.value["clustering"]
+  expiration_time = each.value["expiration_time"]
+  project         = var.project_id
+  depends_on      = [google_bigquery_table.main]
+  view {
+    query          = each.value["view"]["query"]
+    use_legacy_sql = each.value["view"]["use_legacy_sql"]
+  }
   dynamic "time_partitioning" {
     for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
     content {
