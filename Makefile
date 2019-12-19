@@ -21,7 +21,6 @@ SHELL := /usr/bin/env bash
 DOCKER_TAG_VERSION_DEVELOPER_TOOLS := 0
 DOCKER_IMAGE_DEVELOPER_TOOLS := cft/developer-tools
 REGISTRY_URL := gcr.io/cloud-foundation-cicd
-EXCLUDE_LINT_DIR=modules/dataset_access/build
 
 # Enter docker container for local development
 .PHONY: docker_run
@@ -69,10 +68,11 @@ docker_test_integration:
 .PHONY: docker_test_lint
 docker_test_lint:
 	docker run --rm -it \
-		-e EXCLUDE_LINT_DIRS:["modules/dataset_access/build"] \
+		-e "EXCLUDE_LINT_DIRS":["modules/dataset_access/build"] \
 		-v $(CURDIR):/workspace \
 		$(REGISTRY_URL)/${DOCKER_IMAGE_DEVELOPER_TOOLS}:${DOCKER_TAG_VERSION_DEVELOPER_TOOLS} \
 		/usr/local/bin/test_lint.sh
+
 
 # Generate documentation
 .PHONY: docker_generate_docs
