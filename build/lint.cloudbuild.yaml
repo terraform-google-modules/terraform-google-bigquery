@@ -17,7 +17,7 @@ steps:
   id: 'lint'
   args: ['/usr/local/bin/test_lint.sh']
   env:
-  - "EXCLUDE_LINT_DIRS=['modules/view_generator/scripts']"
+  - "EXCLUDE_LINT_DIRS=('\./modules/view_generator/scripts')"
 tags:
 - 'ci'
 - 'lint'
