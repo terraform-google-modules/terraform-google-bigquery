@@ -16,7 +16,7 @@
 
 locals {
   int_required_roles = [
-    "roles/bigquery.dataOwner"
+    "roles/bigquery.admin"
   ]
 }
 
