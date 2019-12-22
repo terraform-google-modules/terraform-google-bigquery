@@ -35,6 +35,8 @@ module "bigquery" {
       table_id          = "foo",
       schema            = "sample_bq_schema.json",
       time_partitioning = var.time_partitioning,
+      clustering        = [],
+      expiration_time   = "3600",
       labels = {
         env      = "dev"
         billable = "true"
@@ -45,6 +47,8 @@ module "bigquery" {
       table_id          = "bar",
       schema            = "sample_bq_schema.json",
       time_partitioning = var.time_partitioning,
+      clustering        = [],
+      expiration_time   = "3600",
       labels = {
         env      = "devops"
         billable = "true"
@@ -56,11 +60,11 @@ module "bigquery" {
 
 module "dataset_access" {
   source     = "../../modules/dataset_access"
-  dataset_id = module.bigquery.dataset_id
+  dataset_id = module.bigquery.bigquery_dataset.dataset_id
   project    = var.project_id
 
   preserve_special_groups = true
-  roles_json              = "${file("../../examples/dataset_access/roles.json")}"
+  roles_json              = "${file("examples/dataset_access/roles.json")}"
 
   // Uncomment if running tests on a mac
   // platform = "darwin"
