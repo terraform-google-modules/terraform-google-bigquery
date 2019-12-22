@@ -64,7 +64,7 @@ module "dataset_access" {
   project    = var.project_id
 
   preserve_special_groups = true
-  roles_json              = "${file("examples/dataset_access/roles.json")}"
+  roles_json              = "${file("/workspace/examples/dataset_access/roles.json")}"
 
   // Uncomment if running tests on a mac
   // platform = "darwin"
