@@ -68,11 +68,10 @@ docker_test_integration:
 .PHONY: docker_test_lint
 docker_test_lint:
 	docker run --rm -it \
-		-e "EXCLUDE_LINT_DIRS":["modules/dataset_access/build"] \
+		-e "EXCLUDE_LINT_DIRS=\./modules/dataset_access/build" \
 		-v $(CURDIR):/workspace \
 		$(REGISTRY_URL)/${DOCKER_IMAGE_DEVELOPER_TOOLS}:${DOCKER_TAG_VERSION_DEVELOPER_TOOLS} \
 		/usr/local/bin/test_lint.sh
-
 
 # Generate documentation
 .PHONY: docker_generate_docs
