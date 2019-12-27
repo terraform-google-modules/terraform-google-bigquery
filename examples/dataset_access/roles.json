@@ -1,7 +1,7 @@
 [
   {
     "role": "OWNER",
-    "userByEmail": "test-gcp-org-admins@test.infra.cft.tips"
+    "groupByEmail": "test-gcp-org-admins@test.infra.cft.tips"
   },
   {
     "role": "READER",
