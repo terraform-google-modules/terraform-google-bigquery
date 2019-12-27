@@ -22,7 +22,7 @@ provider "google" {
 }
 
 module "example" {
-  source            = "../../../examples/view_generator"
-  project_id        = var.project_id
+  source     = "../../../examples/view_generator"
+  project_id = var.project_id
 }
 

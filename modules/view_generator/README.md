@@ -1,6 +1,6 @@
 # view\_generator
 
-Generates 1 or more [BigQuery views](https://cloud.google.com/bigquery/docs/authorized-views) without blacklisted fields. 
+Generates 1 or more [BigQuery views](https://cloud.google.com/bigquery/docs/authorized-views) without blacklisted fields.
 
 The views here must exist in the same project, but can be in different datasets & tables.
 
