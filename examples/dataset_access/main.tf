@@ -33,10 +33,10 @@ module "bigquery" {
   tables = [
     {
       table_id          = "foo",
-      schema            = "sample_bq_schema.json",
+      schema            = "/workspace/examples/dataset_access/sample_bq_schema.json",
       clustering        = [],
       time_partitioning = null,
-      expiration_time   = "3600",
+      expiration_time   = null,
       labels = {
         env      = "dev"
         billable = "true"
@@ -45,10 +45,10 @@ module "bigquery" {
     },
     {
       table_id          = "bar",
-      schema            = "sample_bq_schema.json",
+      schema            = "/workspace/examples/dataset_access/sample_bq_schema.json",
       clustering        = [],
       time_partitioning = null,
-      expiration_time   = "3600",
+      expiration_time   = null,
       labels = {
         env      = "devops"
         billable = "true"
