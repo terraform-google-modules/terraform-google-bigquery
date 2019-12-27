@@ -15,12 +15,12 @@
  */
 
 output "dataset_id" {
-  value       = module.bigquery.dataset_id
+  value       = module.bigquery.bigquery_dataset.dataset_id
   description = "Unique id for the dataset being provisioned"
 }
 
 output "dataset_name" {
-  value       = module.bigquery.dataset_name
+  value       = module.bigquery.bigquery_dataset.friendly_name
   description = "Friendly name for the dataset being provisioned"
 }
 
