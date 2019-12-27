@@ -26,11 +26,9 @@ module "bigquery" {
   dataset_id                 = "plane"
   dataset_name               = "plane"
   description                = "some description"
-  expiration                 = var.expiration
   project_id                 = var.project_id
   location                   = "US"
   tables                     = var.tables
-  time_partitioning          = var.time_partitioning
   dataset_labels             = var.dataset_labels
   delete_contents_on_destroy = true
   authorized_views = [

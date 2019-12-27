@@ -14,6 +14,9 @@ tables = [
       billable = "true"
       owner    = "joedoe"
     },
+		clustering        = null,
+		time_partitioning = null,
+		expiration_time   = null
   },
   {
     table_id = "bar",
@@ -23,5 +26,8 @@ tables = [
       billable = "true"
       owner    = "joedoe"
     },
+		clustering        = null,
+		time_partitioning = null,
+		expiration_time   = null
   }
 ]

@@ -14,18 +14,8 @@
  * limitations under the License.
  */
 
-variable "expiration" {
-  description = "TTL of tables using the dataset in MS"
-  default     = null
-}
-
 variable "project_id" {
   description = "Project where the dataset and table are created"
-}
-
-variable "time_partitioning" {
-  description = "Configures time-based partitioning for this table"
-  default     = null
 }
 
 variable "dataset_labels" {
@@ -37,8 +27,16 @@ variable "tables" {
   description = "A list of maps that includes both table_id and schema in each element, the table(s) will be created on the single dataset"
   default     = []
   type = list(object({
-    table_id = string,
-    schema   = string,
-    labels   = map(string),
+    table_id   = string,
+    schema     = string,
+    labels     = map(string),
+    clustering = list(string),
+    time_partitioning = object({
+      expiration_ms            = string,
+      field                    = string,
+      type                     = string,
+      require_partition_filter = bool,
+    }),
+    expiration_time = string,
   }))
 }
