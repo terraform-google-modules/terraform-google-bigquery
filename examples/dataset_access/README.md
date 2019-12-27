@@ -8,10 +8,10 @@ This example is a good reference to understand and test the module usage.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| dataset\_labels | A mapping of labels to assign to the table | map(string) | n/a | yes |
+| dataset\_labels | A mapping of labels to assign to the table | map(string) | `<map>` | no |
 | expiration | TTL of tables using the dataset in MS | string | `"null"` | no |
 | project\_id | Project where the dataset and table are created | string | n/a | yes |
-| time\_partitioning | Configures time-based partitioning for this table | string | n/a | yes |
+| time\_partitioning | Configures time-based partitioning for this table | map(string) | `"null"` | no |
 
 ## Outputs
 

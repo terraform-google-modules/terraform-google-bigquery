@@ -34,8 +34,8 @@ module "bigquery" {
     {
       table_id          = "foo",
       schema            = "sample_bq_schema.json",
-      time_partitioning = var.time_partitioning,
       clustering        = [],
+      time_partitioning = null,
       expiration_time   = "3600",
       labels = {
         env      = "dev"
@@ -46,8 +46,8 @@ module "bigquery" {
     {
       table_id          = "bar",
       schema            = "sample_bq_schema.json",
-      time_partitioning = var.time_partitioning,
       clustering        = [],
+      time_partitioning = null,
       expiration_time   = "3600",
       labels = {
         env      = "devops"
