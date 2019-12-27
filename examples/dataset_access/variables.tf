@@ -25,9 +25,12 @@ variable "project_id" {
 
 variable "time_partitioning" {
   description = "Configures time-based partitioning for this table"
+  type        = map(string)
+  default     = {type: "DAY"}
 }
 
 variable "dataset_labels" {
   description = "A mapping of labels to assign to the table"
   type        = map(string)
+  default     = {}
 }

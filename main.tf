@@ -37,6 +37,7 @@ resource "google_bigquery_table" "main" {
   labels          = each.value["labels"]
   schema          = file(each.value["schema"])
   expiration_time = each.value["expiration_time"]
+  clustering      = each.value["clustering"]
   project         = var.project_id
   dynamic "time_partitioning" {
     for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
@@ -48,7 +49,3 @@ resource "google_bigquery_table" "main" {
     }
   }
 }
-
-
-// clustering was added in v3.0.0 of google TF provider
-// clustering      = each.value["clustering"]

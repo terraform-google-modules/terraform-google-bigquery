@@ -18,14 +18,11 @@
    Provider configuration
   *****************************************/
 provider "google" {
-  version = "~> 2.5.0"
+  version = "~> 3.0.0"
 }
 
 module "example" {
-  source            = "../../../examples/dataset_access"
-  expiration        = var.expiration
-  project_id        = var.project_id
-  time_partitioning = var.time_partitioning
-  dataset_labels    = var.dataset_labels
+  source     = "../../../examples/dataset_access"
+  project_id = var.project_id
 }
 
