@@ -67,5 +67,5 @@ module "dataset_access" {
   roles_json              = "${file("/workspace/examples/dataset_access/roles.json")}"
 
   // Uncomment if running tests on a mac
-  platform = "darwin"
+  // platform = "darwin"
 }
