@@ -21,6 +21,7 @@ variable "project_id" {
 variable "dataset_labels" {
   description = "A mapping of labels to assign to the table"
   type        = map(string)
+  default     = {}
 }
 
 variable "tables" {
