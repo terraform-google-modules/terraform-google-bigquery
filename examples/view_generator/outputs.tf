@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
+output "bigquery_dataset" {
+  value       = module.bigquery.bigquery_dataset
+  description = "Bigquery dataset resource."
+}
+
+output "bigquery_tables" {
+  value       = module.bigquery.bigquery_tables
+  description = "Map of bigquery table resources being provisioned."
+}
+
 output "dataset_id" {
   value       = module.bigquery.bigquery_dataset.dataset_id
   description = "Unique id for the dataset being provisioned"

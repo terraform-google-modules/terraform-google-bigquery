@@ -23,7 +23,7 @@ resource "null_resource" "main" {
 
   provisioner "local-exec" {
     when    = create
-    command = "python ${path.module}/scripts/bigquery_view_generator.py"
+    command = "sleep 10 && python ${path.module}/scripts/bigquery_view_generator.py"
 
     environment = {
       BQ_PATH          = var.bq_path

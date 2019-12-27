@@ -22,14 +22,15 @@ provider "google" {
 }
 
 module "bigquery" {
-  source                     = "../.."
-  dataset_id                 = "foo"
-  dataset_name               = "foo"
-  description                = "some description"
-  project_id                 = var.project_id
-  location                   = "US"
-  tables                     = var.tables
-  dataset_labels             = var.dataset_labels
+  source                      = "../.."
+  dataset_id                  = "plane"
+  dataset_name                = "plane"
+  description                 = "some description"
+  default_table_expiration_ms = var.default_table_expiration_ms
+  project_id                  = var.project_id
+  location                    = "US"
+  tables                      = var.tables
+  dataset_labels              = var.dataset_labels
   delete_contents_on_destroy = true
   authorized_views = [
     {
