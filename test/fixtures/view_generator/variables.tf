@@ -18,6 +18,15 @@ variable "project_id" {
   description = "Project where the dataset and table are created"
 }
 
+variable "default_table_expiration_ms" {
+  description = "Default TTL of tables using the dataset in MS"
+}
+
+variable "dataset_labels" {
+  description = "Key value pairs in a map for dataset labels"
+  type        = map(string)
+}
+
 variable "tables" {
   description = "A list of maps that includes table_id, schema, clustering, time_partitioning, expiration_time, labels in each element"
   default     = []
