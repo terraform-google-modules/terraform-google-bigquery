@@ -31,19 +31,19 @@ module "bigquery" {
   location                    = "US"
   tables                      = var.tables
   dataset_labels              = var.dataset_labels
-  delete_contents_on_destroy  = true
-  authorized_views = [
-    {
-      table_name  = "foo"
-      view_name   = "foo_view"
-      blacklist   = "",
-      schema_path = "examples/multiple_tables/sample_bq_schema.json"
-    },
-    {
-      table_name  = "bar"
-      view_name   = "bar_view"
-      blacklist   = "visitId,fullVisitorId",
-      schema_path = null
-    }
-  ]
+//  delete_contents_on_destroy  = true
+//  authorized_views = [
+//    {
+//      table_name  = "foo"
+//      view_name   = "foo_view"
+//      blacklist   = "",
+//      schema_path = "examples/multiple_tables/sample_bq_schema.json"
+//    },
+//    {
+//      table_name  = "bar"
+//      view_name   = "bar_view"
+//      blacklist   = "visitId,fullVisitorId",
+//      schema_path = null
+//    }
+//  ]
 }
