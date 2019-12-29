@@ -22,7 +22,10 @@ provider "google" {
 }
 
 module "example" {
-  source     = "../../../examples/view_generator"
-  project_id = var.project_id
+  source                      = "../../../examples/view_generator"
+  project_id                  = var.project_id
+  tables                      = var.tables
+  default_table_expiration_ms = var.default_table_expiration_ms
+  dataset_labels              = var.dataset_labels
 }
 
