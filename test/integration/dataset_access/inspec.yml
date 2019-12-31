@@ -7,12 +7,9 @@ depends:
 supports:
   - platform: gcp
 attributes:
-  - name: dataset_project
+  - name: bigquery_dataset
     required: true
-    type: string
-  - name: dataset_name
+    type: hash
+  - name: bigquery_tables
     required: true
-    type: string
-  - name: table_name
-    required: true
-    type: array
+    type: hash
