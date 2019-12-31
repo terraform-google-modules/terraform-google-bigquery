@@ -66,10 +66,9 @@ EOT
   destroy_cmd_body = "--project_id ${var.project_id} query --use_legacy_sql=false \"DROP FUNCTION IF EXISTS ${var.dataset_id}.check_protocol\""
 }
 
-//enabled = var.add_udfs
 module "bq_parse_url" {
   source  = "github.com/terraform-google-modules/terraform-google-gcloud"
-  enabled = module.bq_check_protocol.create_cmd_bin != "" && var.add_udfs
+  enabled = module.bq_check_protocol.wait != "" && var.add_udfs
 
   platform              = "linux"
   additional_components = ["bq"]
