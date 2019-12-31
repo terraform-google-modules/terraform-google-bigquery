@@ -26,7 +26,7 @@ module "bigquery" {
   dataset_id                  = "plane"
   dataset_name                = "plane"
   description                 = "some description"
-  default_table_expiration_ms = var.expiration
+  default_table_expiration_ms = var.default_table_expiration_ms
   project_id                  = var.project_id
   location                    = "US"
   dataset_labels              = var.dataset_labels
