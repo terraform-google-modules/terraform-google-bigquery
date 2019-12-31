@@ -23,6 +23,9 @@ provider "google" {
 
 module "example" {
   source     = "../../../examples/dataset_access"
-  project_id = var.project_id
+  default_table_expiration_ms = var.default_table_expiration_ms
+  project_id                  = var.project_id
+  tables                      = var.tables
+  dataset_labels              = var.dataset_labels
 }
 
