@@ -22,7 +22,7 @@ provider "google" {
 }
 
 module "example" {
-  source     = "../../../examples/dataset_access"
+  source                      = "../../../examples/dataset_access"
   default_table_expiration_ms = var.default_table_expiration_ms
   project_id                  = var.project_id
   tables                      = var.tables
