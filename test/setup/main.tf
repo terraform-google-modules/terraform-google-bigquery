@@ -26,7 +26,8 @@ module "project" {
 
   activate_apis = [
     "cloudresourcemanager.googleapis.com",
-    "bigquery-json.googleapis.com",
+    "bigquery.googleapis.com",
+    "bigquerystorage.googleapis.com",
     "serviceusage.googleapis.com"
   ]
 }
