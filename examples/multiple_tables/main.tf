@@ -24,5 +24,4 @@ module "bigquery" {
   location                    = "US"
   tables                      = var.tables
   dataset_labels              = var.dataset_labels
-  add_udfs                    = true
 }
