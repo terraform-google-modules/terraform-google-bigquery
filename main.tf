@@ -23,6 +23,18 @@ resource "google_bigquery_dataset" "main" {
   default_table_expiration_ms = var.expiration
   project                     = var.project_id
   labels                      = var.dataset_labels
+
+  dynamic "access" {
+    for_each = var.access
+    content {
+      role = access.role
+
+      domain         = lookup(access, "domain", null)
+      group_by_email = lookup(access, "group_by_email", null)
+      user_by_email  = lookup(access, "user_by_email", null)
+      special_group  = lookup(access, "special_group", null)
+    }
+  }
 }
 
 resource "google_bigquery_table" "main" {
@@ -38,4 +50,3 @@ resource "google_bigquery_table" "main" {
     type = var.time_partitioning
   }
 }
-
