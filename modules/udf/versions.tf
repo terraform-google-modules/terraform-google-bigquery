@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-output "bigquery_dataset" {
-  value       = module.example.bigquery_dataset
-  description = "Bigquery dataset resource."
-}
-
-output "bigquery_tables" {
-  value       = module.example.bigquery_tables
-  description = "Map of bigquery table resources being provisioned."
+terraform {
+  required_version = ">= 0.12"
 }

@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-output "bigquery_dataset" {
-  value       = module.example.bigquery_dataset
-  description = "Bigquery dataset resource."
+variable "dataset_id" {
+  description = "Dataset id"
 }
 
-output "bigquery_tables" {
-  value       = module.example.bigquery_tables
-  description = "Map of bigquery table resources being provisioned."
+variable "project_id" {
+  description = "Project ID that contains the dataset"
 }
