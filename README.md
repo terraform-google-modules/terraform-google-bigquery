@@ -104,12 +104,12 @@ This module provisions a dataset and a list of tables with associated JSON schem
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| add\_udfs | Whether or not to add a handful of UDF utilities to your dataset. | string | `"false"` | no |
+| access | An array of objects that define dataset access for one or more entities. | any | `<list>` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | string | n/a | yes |
-| dataset\_labels | Key value pairs in a map for dataset labels | map(string) | n/a | yes |
-| dataset\_name | Friendly name for the dataset being provisioned. | string | n/a | yes |
+| dataset\_labels | Key value pairs in a map for dataset labels | map(string) | `"null"` | no |
+| dataset\_name | Friendly name for the dataset being provisioned. | string | `"null"` | no |
 | default\_table\_expiration\_ms | TTL of tables using the dataset in MS | string | `"null"` | no |
-| description | Dataset description. | string | n/a | yes |
+| description | Dataset description. | string | `"null"` | no |
 | location | The regional location for the dataset only US and EU are allowed in module | string | `"US"` | no |
 | project\_id | Project where the dataset and table are created | string | n/a | yes |
 | tables | A list of objects which include table_id, schema, clustering, time_partitioning, expiration_time and labels. | object | `<list>` | no |
@@ -118,14 +118,8 @@ This module provisions a dataset and a list of tables with associated JSON schem
 
 | Name | Description |
 |------|-------------|
-| added\_udfs | List of UDFs utility functions added. |
 | bigquery\_dataset | Bigquery dataset resource. |
 | bigquery\_tables | Map of bigquery table resources being provisioned. |
-| dataset\_labels | Key value pairs in a map for dataset labels |
-| dataset\_project | Project where the dataset and table are created |
-| table\_id | Unique id for the table being provisioned |
-| table\_labels | Key value pairs in a map for table labels |
-| table\_name | Friendly name for the table being provisioned |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
