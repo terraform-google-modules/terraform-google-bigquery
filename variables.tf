@@ -51,7 +51,7 @@ variable "project_id" {
 variable "dataset_labels" {
   description = "Key value pairs in a map for dataset labels"
   type        = map(string)
-  default     = null
+  default     = {}
 }
 
 variable "tables" {
