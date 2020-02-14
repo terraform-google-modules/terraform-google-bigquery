@@ -62,8 +62,3 @@ variable "tables" {
     labels          = map(string),
   }))
 }
-
-variable "add_udfs" {
-  description = "Whether or not to add a handful of UDF utilities to your dataset."
-  default     = false
-}

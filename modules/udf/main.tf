@@ -16,7 +16,7 @@
 
 module "bq_find_in_set" {
   source  = "github.com/terraform-google-modules/terraform-google-gcloud"
-  enabled = var.add_udfs
+  enabled = true
 
   platform              = "linux"
   additional_components = ["bq"]
@@ -45,7 +45,7 @@ EOT
 
 module "bq_check_protocol" {
   source  = "github.com/terraform-google-modules/terraform-google-gcloud"
-  enabled = var.add_udfs
+  enabled = true
 
   platform              = "linux"
   additional_components = ["bq"]
@@ -67,9 +67,8 @@ EOT
 }
 
 module "bq_parse_url" {
-  source  = "github.com/terraform-google-modules/terraform-google-gcloud"
-  enabled = module.bq_check_protocol.wait != "" && var.add_udfs
-
+  source                = "github.com/terraform-google-modules/terraform-google-gcloud"
+  enabled               = module.bq_check_protocol.wait != ""
   platform              = "linux"
   additional_components = ["bq"]
 
@@ -96,7 +95,7 @@ EOT
 
 module "bq_csv_to_struct" {
   source  = "github.com/terraform-google-modules/terraform-google-gcloud"
-  enabled = var.add_udfs
+  enabled = true
 
   platform              = "linux"
   additional_components = ["bq"]
@@ -124,4 +123,3 @@ EOT
 
   destroy_cmd_body = "--project_id ${var.project_id} query --use_legacy_sql=false \"DROP FUNCTION IF EXISTS ${var.dataset_id}.csv_to_struct\""
 }
-
