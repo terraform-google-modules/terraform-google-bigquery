@@ -18,7 +18,7 @@ variable "dataset_id" {
   description = "Unique ID for the dataset being provisioned."
 }
 
-variable "dataset_name" {
+variable "friendly_name" {
   description = "Friendly name for the dataset being provisioned."
 }
 
@@ -40,7 +40,7 @@ variable "project_id" {
   description = "Project where the dataset and table are created"
 }
 
-variable "dataset_labels" {
+variable "labels" {
   description = "Key value pairs in a map for dataset labels"
   type        = map(string)
 }
