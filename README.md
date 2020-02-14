@@ -106,7 +106,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 |------|-------------|:----:|:-----:|:-----:|
 | add\_udfs | Whether or not to add a handful of UDF utilities to your dataset. | string | `"false"` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | string | n/a | yes |
-| dataset\_labels | Key value pairs in a map for dataset labels | map(string) | `"null"` | no |
+| dataset\_labels | Key value pairs in a map for dataset labels | map(string) | `<map>` | no |
 | dataset\_name | Friendly name for the dataset being provisioned. | string | `"null"` | no |
 | default\_table\_expiration\_ms | TTL of tables using the dataset in MS | number | `"null"` | no |
 | description | Dataset description. | string | `"null"` | no |
