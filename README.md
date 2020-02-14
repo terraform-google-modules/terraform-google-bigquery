@@ -117,7 +117,6 @@ This module provisions a dataset and a list of tables with associated JSON schem
 
 | Name | Description |
 |------|-------------|
-| added\_udfs | List of UDFs utility functions added. |
 | bigquery\_dataset | Bigquery dataset resource. |
 | bigquery\_tables | Map of bigquery table resources being provisioned. |
 | dataset\_labels | Key value pairs in a map for dataset labels |
