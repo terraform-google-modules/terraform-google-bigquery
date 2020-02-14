@@ -118,14 +118,8 @@ This module provisions a dataset and a list of tables with associated JSON schem
 
 | Name | Description |
 |------|-------------|
-| added\_udfs | List of UDFs utility functions added. |
 | bigquery\_dataset | Bigquery dataset resource. |
 | bigquery\_tables | Map of bigquery table resources being provisioned. |
-| dataset\_labels | Key value pairs in a map for dataset labels |
-| dataset\_project | Project where the dataset and table are created |
-| table\_id | Unique id for the table being provisioned |
-| table\_labels | Key value pairs in a map for table labels |
-| table\_name | Friendly name for the table being provisioned |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
