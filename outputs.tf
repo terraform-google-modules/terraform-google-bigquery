@@ -48,8 +48,3 @@ output "table_labels" {
   value       = google_bigquery_table.main.*.labels
   description = "Key value pairs in a map for table labels"
 }
-
-output "added_udfs" {
-  description = "List of UDFs utility functions added."
-  value       = module.udfs.added_udfs
-}
