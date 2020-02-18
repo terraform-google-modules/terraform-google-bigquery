@@ -24,27 +24,23 @@ output "bigquery_tables" {
   description = "Map of bigquery table resources being provisioned."
 }
 
-output "dataset_project" {
+output "project" {
   value       = google_bigquery_dataset.main.project
-  description = "Project where the dataset and table are created"
+  description = "Project where the dataset and tables are created"
 }
 
-output "table_id" {
-  value       = google_bigquery_table.main.*.id
+output "table_ids" {
+  value = [
+    for table in google_bigquery_table.main :
+    table.table_id
+  ]
   description = "Unique id for the table being provisioned"
 }
 
-output "table_name" {
-  value       = google_bigquery_table.main.*.friendly_name
-  description = "Friendly name for the table being provisioned"
-}
-
-output "dataset_labels" {
-  value       = google_bigquery_dataset.main.labels
-  description = "Key value pairs in a map for dataset labels"
-}
-
-output "table_labels" {
-  value       = google_bigquery_table.main.*.labels
-  description = "Key value pairs in a map for table labels"
+output "table_names" {
+  value = [
+    for table in google_bigquery_table.main :
+    table.friendly_name
+  ]
+  description = "Unique id for the table being provisioned"
 }
