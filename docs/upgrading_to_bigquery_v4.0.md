@@ -47,22 +47,24 @@ module "bigquery" {
 ```diff
 module "bigquery" {
   source  = "terraform-google-modules/bigquery/google"
-+ access {
-+  role          = "READER"
-+  special_group = "projectReaders"
-+ }
-+ access {
-+  role          = "WRITER"
-+  special_group = "projectWriters"
-+ }
-+ access {
-+  role          = "OWNER"
-+  special_group = "projectOwners"
-+ }
-+ access {
-+  role          = "OWNER"
-+  user_by_email = "<Original Creator>"
-+ }
++ access = [
++   {
++    role          = "READER"
++    special_group = "projectReaders"
++   },
++   {
++    role          = "WRITER"
++    special_group = "projectWriters"
++   },
++   {
++    role          = "OWNER"
++    special_group = "projectOwners"
++   },
++   {
++    role          = "OWNER"
++    user_by_email = "<Original Creator>"
++   },
++ ]
 ...
 }
 ```
