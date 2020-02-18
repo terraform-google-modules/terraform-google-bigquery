@@ -61,10 +61,3 @@ resource "google_bigquery_table" "main" {
     }
   }
 }
-
-module "udfs" {
-  source     = "./modules/udf"
-  project_id = var.project_id
-  dataset_id = google_bigquery_dataset.main.dataset_id
-  add_udfs   = var.add_udfs
-}
