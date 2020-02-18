@@ -106,10 +106,10 @@ This module provisions a dataset and a list of tables with associated JSON schem
 |------|-------------|:----:|:-----:|:-----:|
 | access | An array of objects that define dataset access for one or more entities. | any | `<list>` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | string | n/a | yes |
-| dataset\_labels | Key value pairs in a map for dataset labels | map(string) | n/a | yes |
-| dataset\_name | Friendly name for the dataset being provisioned. | string | n/a | yes |
-| default\_table\_expiration\_ms | TTL of tables using the dataset in MS | string | `"null"` | no |
-| description | Dataset description. | string | n/a | yes |
+| dataset\_labels | Key value pairs in a map for dataset labels | map(string) | `<map>` | no |
+| dataset\_name | Friendly name for the dataset being provisioned. | string | `"null"` | no |
+| default\_table\_expiration\_ms | TTL of tables using the dataset in MS | number | `"null"` | no |
+| description | Dataset description. | string | `"null"` | no |
 | location | The regional location for the dataset only US and EU are allowed in module | string | `"US"` | no |
 | project\_id | Project where the dataset and table are created | string | n/a | yes |
 | tables | A list of objects which include table_id, schema, clustering, time_partitioning, expiration_time and labels. | object | `<list>` | no |
