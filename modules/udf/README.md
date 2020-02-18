@@ -4,7 +4,7 @@ This submodule adds some utility [user defined functions](https://cloud.google.c
 you may find useful when building BigQuery queries.
 
 Example:
-
+```
 module "dataset" {
   source = "terraform-google-modules/bigquery/google"
   version "~> 4.0"
@@ -23,3 +23,4 @@ module "add_udfs" {
   dataset_id = module.dataset.bigquery_dataset.dataset_id
   project_id = module.dataset.bigquery_dataset.project
 }
+```
