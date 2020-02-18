@@ -124,4 +124,3 @@ EOT
 
   destroy_cmd_body = "--project_id ${var.project_id} query --use_legacy_sql=false \"DROP FUNCTION IF EXISTS ${var.dataset_id}.csv_to_struct\""
 }
-
