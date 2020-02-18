@@ -20,7 +20,7 @@ Datasets are created with the following
 The problematic default is
 `access.userByEmail: [dataset creator email]; access.role: OWNER`.
 This will subtly grant owner access to the creating user and leave that access
-on, even if the acess to the project, etc is revoked.
+on, even if the access to the project, etc is revoked.
 
 The new default will only set
 `specialGroup: projectOwners; access.role: roles/bigquery.admin`. This is done
