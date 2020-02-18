@@ -25,3 +25,10 @@ module "bigquery" {
   tables                      = var.tables
   dataset_labels              = var.dataset_labels
 }
+
+module "add_udfs" {
+  source = "../../modules/udf"
+
+  dataset_id = module.bigquery.bigquery_dataset.dataset_id
+  project_id = module.bigquery.bigquery_dataset.project
+}

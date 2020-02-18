@@ -21,3 +21,8 @@ variable "dataset_id" {
 variable "project_id" {
   description = "Project ID that contains the dataset"
 }
+
+variable "add_udfs" {
+  description = "Whether or not this module should be enabled."
+  default     = false
+}
