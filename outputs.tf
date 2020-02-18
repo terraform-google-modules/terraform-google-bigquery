@@ -23,3 +23,24 @@ output "bigquery_tables" {
   value       = google_bigquery_table.main
   description = "Map of bigquery table resources being provisioned."
 }
+
+output "project" {
+  value       = google_bigquery_dataset.main.project
+  description = "Project where the dataset and tables are created"
+}
+
+output "table_ids" {
+  value = [
+    for table in google_bigquery_table.main :
+    table.table_id
+  ]
+  description = "Unique id for the table being provisioned"
+}
+
+output "table_names" {
+  value = [
+    for table in google_bigquery_table.main :
+    table.friendly_name
+  ]
+  description = "Unique id for the table being provisioned"
+}
