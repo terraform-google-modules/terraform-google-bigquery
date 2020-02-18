@@ -120,6 +120,9 @@ This module provisions a dataset and a list of tables with associated JSON schem
 |------|-------------|
 | bigquery\_dataset | Bigquery dataset resource. |
 | bigquery\_tables | Map of bigquery table resources being provisioned. |
+| project | Project where the dataset and tables are created |
+| table\_ids | Unique id for the table being provisioned |
+| table\_names | Unique id for the table being provisioned |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
