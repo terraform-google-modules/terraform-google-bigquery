@@ -104,6 +104,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| access | An array of objects that define dataset access for one or more entities. | any | `<list>` | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | string | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels | map(string) | n/a | yes |
 | dataset\_name | Friendly name for the dataset being provisioned. | string | n/a | yes |

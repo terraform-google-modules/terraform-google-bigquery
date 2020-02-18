@@ -45,6 +45,23 @@ variable "dataset_labels" {
   type        = map(string)
 }
 
+# Format: list(objects)
+# domain: A domain to grant access to.
+# group_by_email: An email address of a Google Group to grant access to.
+# user_by_email:  An email address of a user to grant access to.
+# group_by_email: An email address of a Google Group to grant access to.
+# special_group: A special group to grant access to.
+variable "access" {
+  description = "An array of objects that define dataset access for one or more entities."
+  type        = any
+
+  # At least one owner access is required.
+  default = [{
+    role          = "roles/bigquery.dataOwner"
+    special_group = "projectOwners"
+  }]
+}
+
 variable "tables" {
   description = "A list of objects which include table_id, schema, clustering, time_partitioning, expiration_time and labels."
   default     = []

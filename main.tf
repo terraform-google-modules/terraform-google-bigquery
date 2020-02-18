@@ -27,6 +27,18 @@ resource "google_bigquery_dataset" "main" {
   default_table_expiration_ms = var.default_table_expiration_ms
   project                     = var.project_id
   labels                      = var.dataset_labels
+
+  dynamic "access" {
+    for_each = var.access
+    content {
+      role = access.value.role
+
+      domain         = lookup(access.value, "domain", null)
+      group_by_email = lookup(access.value, "group_by_email", null)
+      user_by_email  = lookup(access.value, "user_by_email", null)
+      special_group  = lookup(access.value, "special_group", null)
+    }
+  }
 }
 
 resource "google_bigquery_table" "main" {
