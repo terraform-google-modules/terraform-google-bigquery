@@ -43,28 +43,11 @@ module "bigquery" {
 }
 ```
 
-2. Set access if you wish to preserve existing behaviour
+2. Set access to an empty slice if you wish to preserve existing behaviour
 ```diff
 module "bigquery" {
   source  = "terraform-google-modules/bigquery/google"
-+ access = [
-+   {
-+    role          = "READER"
-+    special_group = "projectReaders"
-+   },
-+   {
-+    role          = "WRITER"
-+    special_group = "projectWriters"
-+   },
-+   {
-+    role          = "OWNER"
-+    special_group = "projectOwners"
-+   },
-+   {
-+    role          = "OWNER"
-+    user_by_email = "<Original Creator>"
-+   },
-+ ]
++ access = []
 ...
 }
 ```
