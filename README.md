@@ -12,8 +12,9 @@ the last released version intended for Terraform 0.11.x is [1.0.0](https://regis
 
 ## Upgrading
 
-The current version is 3.X. The following guides are available to assist with upgrades:
+The current version is 4.X. The following guides are available to assist with upgrades:
 
+- [3.0 -> 4.0](./docs/upgrading_to_bigquery_v4.0.md)
 - [2.0 -> 3.0](./docs/upgrading_to_bigquery_v3.0.md)
 - [1.0 -> 2.0](./docs/upgrading_to_bigquery_v2.0.md)
 - [0.1 -> 1.0](./docs/upgrading_to_bigquery_v1.0.md)
