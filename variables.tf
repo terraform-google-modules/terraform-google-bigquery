@@ -66,7 +66,7 @@ variable "access" {
 
   # At least one owner access is required.
   default = [{
-    role          = "roles/bigquery.dataOwner"
+    role          = "OWNER"
     special_group = "projectOwners"
   }]
 }
