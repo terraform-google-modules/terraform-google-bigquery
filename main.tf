@@ -16,6 +16,8 @@
 
 locals {
   tables = { for table in var.tables : table["table_id"] => table }
+  views  = { for view in var.views : view["view_id"] => view }
+
   iam_to_primitive = {
     "roles/bigquery.dataOwner" : "OWNER"
     "roles/bigquery.dataEditor" : "WRITER"
@@ -59,6 +61,7 @@ resource "google_bigquery_table" "main" {
   clustering      = each.value["clustering"]
   expiration_time = each.value["expiration_time"]
   project         = var.project_id
+
   dynamic "time_partitioning" {
     for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
     content {
@@ -67,5 +70,19 @@ resource "google_bigquery_table" "main" {
       field                    = time_partitioning.value["field"]
       require_partition_filter = time_partitioning.value["require_partition_filter"]
     }
+  }
+}
+
+resource "google_bigquery_table" "view" {
+  for_each      = local.views
+  dataset_id    = google_bigquery_dataset.main.dataset_id
+  friendly_name = each.key
+  table_id      = each.key
+  labels        = each.value["labels"]
+  project       = var.project_id
+
+  view {
+    query          = each.value["query"]
+    use_legacy_sql = each.value["use_legacy_sql"]
   }
 }

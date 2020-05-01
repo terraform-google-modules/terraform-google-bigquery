@@ -24,6 +24,11 @@ output "bigquery_tables" {
   description = "Map of bigquery table resources being provisioned."
 }
 
+output "bigquery_views" {
+  value       = google_bigquery_table.view
+  description = "Map of bigquery view resources being provisioned."
+}
+
 output "project" {
   value       = google_bigquery_dataset.main.project
   description = "Project where the dataset and tables are created"
@@ -42,5 +47,21 @@ output "table_names" {
     for table in google_bigquery_table.main :
     table.friendly_name
   ]
-  description = "Unique id for the table being provisioned"
+  description = "Friendly name for the table being provisioned"
+}
+
+output "view_ids" {
+  value = [
+    for view in google_bigquery_table.view :
+    view.table_id
+  ]
+  description = "Unique id for the view being provisioned"
+}
+
+output "view_names" {
+  value = [
+    for view in google_bigquery_table.view :
+    view.friendly_name
+  ]
+  description = "friendlyname for the view being provisioned"
 }

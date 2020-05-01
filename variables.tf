@@ -88,3 +88,14 @@ variable "tables" {
     labels          = map(string),
   }))
 }
+
+variable "views" {
+  description = "A list of objects which include table_id, which is view id, and view query"
+  default     = []
+  type = list(object({
+    view_id        = string,
+    query          = string,
+    use_legacy_sql = bool,
+    labels         = map(string),
+  }))
+}

@@ -14,6 +14,7 @@ tables = [
       require_partition_filter = false,
       expiration_ms            = null,
     },
+    view            = null,
     expiration_time = null,
     clustering      = ["fullVisitorId", "visitId"],
     labels = {
@@ -26,6 +27,7 @@ tables = [
     table_id          = "bar",
     schema            = "sample_bq_schema.json",
     time_partitioning = null,
+    view              = null,
     expiration_time   = 2524604400000, # 2050/01/01
     clustering        = [],
     labels = {
