@@ -15,20 +15,21 @@
  */
 
 variable "default_table_expiration_ms" {
-  description = "Default TTL of tables using the dataset in MS"
+  description = "Default TTL of tables using the dataset in MS."
+  default     = null
 }
 
-variable "project_id" {
-  description = "Project where the dataset and table are created"
+variable "table_project_id" {
+  description = "Project where the dataset and table are created."
 }
 
-variable "dataset_labels" {
-  description = "Key value pairs in a map for dataset labels"
+variable "table_dataset_labels" {
+  description = "A mapping of labels to assign to the table."
   type        = map(string)
 }
 
 variable "tables" {
-  description = "A list of maps that includes table_id, schema, clustering, time_partitioning, expiration_time, labels in each element"
+  description = "A list of maps that includes table_id, schema, clustering, time_partitioning, view, expiration_time, labels in each element."
   default     = []
   type = list(object({
     table_id   = string,
@@ -40,11 +41,30 @@ variable "tables" {
       type                     = string,
       require_partition_filter = bool,
     }),
-    view = object({
-      query          = string,
-      use_legacy_sql = bool,
-    }),
     expiration_time = string,
     labels          = map(string),
+  }))
+}
+
+
+### Views ###
+
+variable "view_project_id" {
+  description = "Project where the dataset and table are created."
+}
+
+variable "view_dataset_labels" {
+  description = "A mapping of labels to assign to the table."
+  type        = map(string)
+}
+
+variable "views" {
+  description = "A list of objects which include table_id, which is view id, and view query"
+  default     = []
+  type = list(object({
+    view_id        = string,
+    query          = string,
+    use_legacy_sql = bool,
+    labels         = map(string),
   }))
 }

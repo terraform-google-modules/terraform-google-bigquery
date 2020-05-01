@@ -63,6 +63,28 @@ module "bigquery" {
       env      = "devops"
       billable = "true"
       owner    = "joedoe"
+    },
+  }
+  ],
+
+  views = [
+    {
+      view_id    = "barview",
+      use_legacy_sql = false,
+      query          = <<EOF
+      SELECT
+       column_a,
+       column_b,
+      FROM
+        `project_id.dataset_id.table_id`
+      WHERE
+        approved_user = SESSION_USER
+      EOF,
+      labels = {
+        env      = "devops"
+        billable = "true"
+        owner    = "joedoe"
+      }
     }
   ]
   dataset_labels = {
@@ -81,7 +103,7 @@ The `tables` variable should be provided as a list of object with the following 
 ```hcl
 {
   table_id = "some_id"                        # Unique table id (will be used as ID and Freandly name for the table).
-  schema = "path/to/schema.json"              # Path to the schema json file.
+  schema = "path/to/schema.json"              # Path to the schema json file. If it is a view, set to null
   time_partitioning = {                       # Set it to `null` to omit partitioning configuration for the table.
         type                     = "DAY",     # The only type supported is DAY, which will generate one partition per day based on data loading time.
         field                    = null,      # The field used to determine how to create a time-based partition. If time-based partitioning is enabled without this value, the table is partitioned based on the load time. Set it to `null` to omit configuration.
@@ -90,15 +112,31 @@ The `tables` variable should be provided as a list of object with the following 
       },
   clustering = ["fullVisitorId", "visitId"]   # Specifies column names to use for data clustering. Up to four top-level columns are allowed, and should be specified in descending priority order. Partitioning should be configured in order to use clustering.
   expiration_time = 2524604400000             # The time when this table expires, in milliseconds since the epoch. If set to `null`, the table will persist indefinitely.
-  dataset_labels = {                          # A mapping of labels to assign to the table.
+  labels = {                                  # A mapping of labels to assign to the table.
       env      = "dev"
       billable = "true"
     }
 }
 ```
 
+### Variable `views` detailed description
+
+The `views` variable should be provided as a list of object with the following keys:
+```hcl
+{
+  view_id = "some_id"                                                # Unique view id. it will be set to friendly name as well
+  query = "Select user_id, name from `project_id.dataset_id.table`"  # the Select query that will create the view. Tables should be created before.
+  use_legacy_sql = false                                             # whether to use legacy sql or standard sql
+  labels = {                                                         # A mapping of labels to assign to the view.
+      env      = "dev"
+      billable = "true"
+  }
+}
+```
+A detailed example with authorized views can be found [here](./examples/basic_view/main.tf).
+
 ## Features
-This module provisions a dataset and a list of tables with associated JSON schemas.
+This module provisions a dataset and a list of tables with associated JSON schemas and views from queries.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
@@ -114,6 +152,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | location | The regional location for the dataset only US and EU are allowed in module | string | `"US"` | no |
 | project\_id | Project where the dataset and table are created | string | n/a | yes |
 | tables | A list of objects which include table_id, schema, clustering, time_partitioning, expiration_time and labels. | object | `<list>` | no |
+| views | A list of objects which include table_id, which is view id, and view query | object | `<list>` | no |
 
 ## Outputs
 
@@ -121,9 +160,12 @@ This module provisions a dataset and a list of tables with associated JSON schem
 |------|-------------|
 | bigquery\_dataset | Bigquery dataset resource. |
 | bigquery\_tables | Map of bigquery table resources being provisioned. |
+| bigquery\_views | Map of bigquery view resources being provisioned. |
 | project | Project where the dataset and tables are created |
 | table\_ids | Unique id for the table being provisioned |
-| table\_names | Unique id for the table being provisioned |
+| table\_names | Friendly name for the table being provisioned |
+| view\_ids | Unique id for the view being provisioned |
+| view\_names | friendlyname for the view being provisioned |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
@@ -136,7 +178,7 @@ These sections describe requirements for using this module.
 The following dependencies must be available:
 
 - [Terraform][terraform] v0.12
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin v2.15
+- [Terraform Provider for GCP][terraform-provider-gcp] plugin v3
 
 ### Service Account
 
