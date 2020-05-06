@@ -18,7 +18,7 @@ locals {
   tables = { for table in var.tables : table["table_id"] => table }
   iam_to_primitive = {
     "roles/bigquery.dataOwner" : "OWNER"
-    "roles/bigquery.dataEditor" : "WRITER"
+    "roles/bigquery.dataEditor" : "EDITOR"
     "roles/bigquery.dataViewer" : "READER"
   }
 }
