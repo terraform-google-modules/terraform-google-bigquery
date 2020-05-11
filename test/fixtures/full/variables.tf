@@ -40,10 +40,6 @@ variable "tables" {
       type                     = string,
       require_partition_filter = bool,
     }),
-    view = object({
-      query          = string,
-      use_legacy_sql = bool,
-    }),
     expiration_time = string,
     labels          = map(string),
   }))

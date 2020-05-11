@@ -103,7 +103,7 @@ The `tables` variable should be provided as a list of object with the following 
 ```hcl
 {
   table_id = "some_id"                        # Unique table id (will be used as ID and Freandly name for the table).
-  schema = "path/to/schema.json"              # Path to the schema json file. If it is a view, set to null
+  schema = "path/to/schema.json"              # Path to the schema json file.
   time_partitioning = {                       # Set it to `null` to omit partitioning configuration for the table.
         type                     = "DAY",     # The only type supported is DAY, which will generate one partition per day based on data loading time.
         field                    = null,      # The field used to determine how to create a time-based partition. If time-based partitioning is enabled without this value, the table is partitioned based on the load time. Set it to `null` to omit configuration.
