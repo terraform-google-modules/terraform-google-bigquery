@@ -35,11 +35,11 @@ output "bigquery_views" {
 }
 
 output "authorized_views" {
-  value       = module.authorize_views_roles.authorized_views
+  value       = module.authorization.authorized_views
   description = "Map of authorized views created"
 }
 
 output "access_roles" {
-  value       = module.authorize_views_roles.authorized_roles
+  value       = module.authorization.authorized_roles
   description = "Map of roles assigned to identities"
 }
