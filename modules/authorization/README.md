@@ -30,7 +30,7 @@ module "dataset" {
 }
 
 module "add_authorization" {
-  source = "terraform-google-modules/bigquery/google//modules/authorize_views_roles"
+  source = "terraform-google-modules/bigquery/google//modules/authorization"
   version = "~> 4.1"
 
   dataset_id = module.dataset.bigquery_dataset.dataset_id
