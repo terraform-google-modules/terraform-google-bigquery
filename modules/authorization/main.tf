@@ -16,7 +16,7 @@
 
 locals {
   roles = { for role in var.roles : role["role"] => role }
-  views = { for view in var.authorized_views : view["table_id"] => view }
+  views = { for view in var.authorized_views : "${view["project_id"]}_${view["dataset_id"]}_${view["table_id"]}" => view }
 
   iam_to_primitive = {
     "roles/bigquery.dataOwner" : "OWNER"
@@ -32,7 +32,7 @@ resource "google_bigquery_dataset_access" "authorized_view" {
   view {
     project_id = each.value.project_id
     dataset_id = each.value.dataset_id
-    table_id   = each.key
+    table_id   = each.value.table_id
   }
 }
 
