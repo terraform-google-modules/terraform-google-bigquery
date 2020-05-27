@@ -15,7 +15,17 @@
  */
 
 locals {
-  roles = { for role in var.roles : role["role"] => role }
+  role_keys = [
+    for role in var.roles :
+    join("_", compact([
+      role["role"],
+      lookup(role, "domain", null),
+      lookup(role, "group_by_email", null),
+      lookup(role, "user_by_email", null),
+      lookup(role, "special_group", null)
+    ]))
+  ]
+  roles = zipmap(local.role_keys, var.roles)
   views = { for view in var.authorized_views : "${view["project_id"]}_${view["dataset_id"]}_${view["table_id"]}" => view }
 
   iam_to_primitive = {
