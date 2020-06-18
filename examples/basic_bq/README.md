@@ -6,6 +6,7 @@ The basic_bq example uses the root terraform-google-bigquery module to deploy a 
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | bool | `"null"` | no |
 | project\_id | Project where the dataset and table are created. | string | n/a | yes |
 
 ## Outputs

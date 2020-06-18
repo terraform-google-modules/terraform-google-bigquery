@@ -1,4 +1,5 @@
-table_project_id = "example-table-project"
+delete_contents_on_destroy = true
+table_project_id           = "example-table-project"
 table_dataset_labels = {
   env      = "dev"
   billable = "true"
