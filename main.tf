@@ -29,6 +29,7 @@ resource "google_bigquery_dataset" "main" {
   dataset_id    = var.dataset_id
   friendly_name = var.dataset_name
   description   = var.description
+  delete_contents_on_destroy  = var.delete_contents_on_destroy
   location      = var.location
 
   default_table_expiration_ms = var.default_table_expiration_ms
