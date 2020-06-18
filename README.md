@@ -148,6 +148,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | dataset\_labels | Key value pairs in a map for dataset labels | map(string) | `<map>` | no |
 | dataset\_name | Friendly name for the dataset being provisioned. | string | `"null"` | no |
 | default\_table\_expiration\_ms | TTL of tables using the dataset in MS | number | `"null"` | no |
+| delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | bool | `"null"` | no |
 | description | Dataset description. | string | `"null"` | no |
 | location | The regional location for the dataset only US and EU are allowed in module | string | `"US"` | no |
 | project\_id | Project where the dataset and table are created | string | n/a | yes |

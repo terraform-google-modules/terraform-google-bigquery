@@ -16,14 +16,15 @@
 
 
 module "bigquery_tables" {
-  source         = "../.."
-  dataset_id     = "foo"
-  dataset_name   = "foo"
-  description    = "some description"
-  project_id     = var.table_project_id
-  location       = "US"
-  tables         = var.tables
-  dataset_labels = var.table_dataset_labels
+  source                     = "../.."
+  dataset_id                 = "foo"
+  dataset_name               = "foo"
+  description                = "some description"
+  project_id                 = var.table_project_id
+  location                   = "US"
+  delete_contents_on_destroy = var.delete_contents_on_destroy
+  tables                     = var.tables
+  dataset_labels             = var.table_dataset_labels
 
   # we provide the access control separately with another module, see bottom.
   # Authorization module has the capability of authorizing views
@@ -32,14 +33,15 @@ module "bigquery_tables" {
 }
 
 module "bigquery_views_without_pii" {
-  source         = "../.."
-  dataset_id     = "${module.bigquery_tables.bigquery_dataset.dataset_id}_view_without_pii" # this creates a dependency so that we have the tables first
-  dataset_name   = "foo view"
-  description    = "some description"
-  project_id     = var.view_project_id
-  location       = "US"
-  views          = var.views
-  dataset_labels = var.view_dataset_labels
+  source                     = "../.."
+  dataset_id                 = "${module.bigquery_tables.bigquery_dataset.dataset_id}_view_without_pii" # this creates a dependency so that we have the tables first
+  dataset_name               = "foo view"
+  description                = "some description"
+  project_id                 = var.view_project_id
+  delete_contents_on_destroy = var.delete_contents_on_destroy
+  location                   = "US"
+  views                      = var.views
+  dataset_labels             = var.view_dataset_labels
 
   access = [
     {

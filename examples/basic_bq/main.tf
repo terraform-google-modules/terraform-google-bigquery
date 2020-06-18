@@ -15,12 +15,13 @@
  */
 
 module "bigquery" {
-  source       = "../.."
-  dataset_id   = "foo"
-  dataset_name = "foo"
-  description  = "some description"
-  project_id   = var.project_id
-  location     = "US"
+  source                     = "../.."
+  dataset_id                 = "foo"
+  dataset_name               = "foo"
+  description                = "some description"
+  project_id                 = var.project_id
+  location                   = "US"
+  delete_contents_on_destroy = var.delete_contents_on_destroy
   tables = [
     {
       table_id          = "bar",
