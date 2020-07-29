@@ -49,6 +49,12 @@ variable "default_table_expiration_ms" {
   default     = null
 }
 
+variable "default_partition_expiration_ms" {
+  description = "TTL of partitioned tables using the dataset in MS"
+  type        = number
+  default     = null
+}
+
 variable "project_id" {
   description = "Project where the dataset and table are created"
   type        = string

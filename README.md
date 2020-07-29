@@ -147,6 +147,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | dataset\_id | Unique ID for the dataset being provisioned. | string | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels | map(string) | `<map>` | no |
 | dataset\_name | Friendly name for the dataset being provisioned. | string | `"null"` | no |
+| default\_partition\_expiration\_ms | TTL of partitioned tables using the dataset in MS | number | `"null"` | no |
 | default\_table\_expiration\_ms | TTL of tables using the dataset in MS | number | `"null"` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | bool | `"null"` | no |
 | description | Dataset description. | string | `"null"` | no |
