@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # Attributes can be used to create tests with as the mode becomes more complex
-project_id       = attribute('bigquery_dataset')['project']
-dataset_name     = attribute('bigquery_dataset')['friendly_name']
+project_id       = attribute('bigquery_dataset')[:project]
+dataset_name     = attribute('bigquery_dataset')[:friendly_name]
 tables           = attribute('bigquery_tables')
 
 describe google_bigquery_dataset(project: "#{project_id}", name: "#{dataset_name}") do
@@ -26,16 +26,16 @@ describe google_bigquery_dataset(project: "#{project_id}", name: "#{dataset_name
   its('default_table_expiration_ms') { should cmp '3600000' }
 end
 
-describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{tables["foo"]["friendly_name"]}") do
+describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{tables[:foo][:friendly_name]}") do
   it { should exist }
-  its('friendly_name') { should eq "#{tables["foo"]["friendly_name"]}" }
+  its('friendly_name') { should eq "#{tables[:foo][:friendly_name]}" }
   its('time_partitioning.type') { should eq 'DAY' }
   its('clustering') { should_not be nil }
 end
 
-describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{tables["bar"]["friendly_name"]}") do
+describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{tables[:bar][:friendly_name]}") do
   it { should exist }
-  its('friendly_name') { should eq "#{tables["bar"]["friendly_name"]}" }
+  its('friendly_name') { should eq "#{tables[:bar][:friendly_name]}" }
   its('time_partitioning.type') { should be nil }
   its('clustering') { should be nil }
 end
