@@ -7,15 +7,15 @@ This is a common practice for providing limited data in a different dataset.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| default\_table\_expiration\_ms | Default TTL of tables using the dataset in MS. | string | `"null"` | no |
-| delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | bool | `"null"` | no |
-| table\_dataset\_labels | A mapping of labels to assign to the table. | map(string) | n/a | yes |
-| table\_project\_id | Project where the dataset and table are created. | string | n/a | yes |
-| tables | A list of maps that includes table_id, schema, clustering, time_partitioning, view, expiration_time, labels in each element. | object | `<list>` | no |
-| view\_dataset\_labels | A mapping of labels to assign to the table. | map(string) | n/a | yes |
-| view\_project\_id | Project where the dataset and table are created. | string | n/a | yes |
-| views | A list of objects which include table_id, which is view id, and view query | object | `<list>` | no |
+|------|-------------|------|---------|:--------:|
+| default\_table\_expiration\_ms | Default TTL of tables using the dataset in MS. | `any` | `null` | no |
+| delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `null` | no |
+| table\_dataset\_labels | A mapping of labels to assign to the table. | `map(string)` | n/a | yes |
+| table\_project\_id | Project where the dataset and table are created. | `any` | n/a | yes |
+| tables | A list of maps that includes table\_id, schema, clustering, time\_partitioning, view, expiration\_time, labels in each element. | <pre>list(object({<br>    table_id   = string,<br>    schema     = string,<br>    clustering = list(string),<br>    time_partitioning = object({<br>      expiration_ms            = string,<br>      field                    = string,<br>      type                     = string,<br>      require_partition_filter = bool,<br>    }),<br>    expiration_time = string,<br>    labels          = map(string),<br>  }))</pre> | `[]` | no |
+| view\_dataset\_labels | A mapping of labels to assign to the table. | `map(string)` | n/a | yes |
+| view\_project\_id | Project where the dataset and table are created. | `any` | n/a | yes |
+| views | A list of objects which include table\_id, which is view id, and view query | <pre>list(object({<br>    view_id        = string,<br>    query          = string,<br>    use_legacy_sql = bool,<br>    labels         = map(string),<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 
