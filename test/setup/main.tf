@@ -40,10 +40,11 @@ module "kms_keyring" {
   version    = "~> 1.2"
   depends_on = [module.project] #waits for API config
 
-  project_id = module.project.project_id
-  location   = "us"
-  keyring    = "ci-bigquery-keyring"
-  keys       = ["foo"]
+  project_id      = module.project.project_id
+  location        = "us"
+  keyring         = "ci-bigquery-keyring"
+  keys            = ["foo"]
+  prevent_destroy = "false"
 }
 
 module "initialize_encryption_account" {
