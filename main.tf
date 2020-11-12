@@ -36,8 +36,7 @@ resource "google_bigquery_dataset" "main" {
   labels                      = var.dataset_labels
 
   dynamic "default_encryption_configuration" {
-    for_each = (var.dataset_default_encryption_key == null ||
-      var.dataset_default_encryption_key == "null") ? [] : list(var.dataset_default_encryption_key)
+    for_each = (var.dataset_default_encryption_key == null || var.dataset_default_encryption_key == "null") ? [] : list(var.dataset_default_encryption_key)
     content {
       kms_key_name = var.dataset_default_encryption_key
     }

@@ -15,10 +15,10 @@
  */
 
 module "example" {
-  source                         = "../../../examples/multiple_tables"
-  default_table_expiration_ms    = var.default_table_expiration_ms
-  project_id                     = var.project_id
-  tables                         = var.tables
-  dataset_labels                 = var.dataset_labels
-  kms_key                        = jsondecode(var.kms_keys)["foo"]
+  source                      = "../../../examples/multiple_tables"
+  default_table_expiration_ms = var.default_table_expiration_ms
+  project_id                  = var.project_id
+  tables                      = var.tables
+  dataset_labels              = var.dataset_labels
+  kms_key                     = jsondecode(var.kms_keys)["foo"]
 }
