@@ -40,7 +40,8 @@ resource "google_service_account_key" "int_test" {
 }
 
 resource "google_project_iam_member" "bq_encryption_account" {
-  project = module.project.project_id
-  role    = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member  = format("serviceAccount:bq-%s@bigquery-encryption.iam.gserviceaccount.com", module.project.project_number)
+  depends_on = [module.initialize_encryption_account] #waits for account initialization
+  project    = module.project.project_id
+  role       = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  member     = format("serviceAccount:bq-%s@bigquery-encryption.iam.gserviceaccount.com", module.project.project_number)
 }
