@@ -15,16 +15,17 @@
  */
 
 module "bigquery" {
-  source                      = "../.."
-  dataset_id                  = "foo"
-  dataset_name                = "foo"
-  description                 = "some description"
-  delete_contents_on_destroy  = var.delete_contents_on_destroy
-  default_table_expiration_ms = var.default_table_expiration_ms
-  project_id                  = var.project_id
-  location                    = "US"
-  tables                      = var.tables
-  dataset_labels              = var.dataset_labels
+  source                         = "../.."
+  dataset_id                     = "foo"
+  dataset_name                   = "foo"
+  description                    = "some description"
+  delete_contents_on_destroy     = var.delete_contents_on_destroy
+  default_table_expiration_ms    = var.default_table_expiration_ms
+  project_id                     = var.project_id
+  location                       = "US"
+  tables                         = var.tables
+  dataset_labels                 = var.dataset_labels
+  dataset_default_encryption_key = var.kms_key == null ? null : var.kms_key
 }
 
 module "add_udfs" {

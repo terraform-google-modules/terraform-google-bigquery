@@ -22,3 +22,7 @@ output "sa_key" {
   value     = google_service_account_key.int_test.private_key
   sensitive = true
 }
+
+output "kms_keys" {
+  value = module.kms_keyring.keys
+}

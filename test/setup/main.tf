@@ -26,9 +26,35 @@ module "project" {
   skip_gcloud_download = true
 
   activate_apis = [
+    "cloudkms.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "bigquery.googleapis.com",
     "bigquerystorage.googleapis.com",
     "serviceusage.googleapis.com"
   ]
+}
+
+#Can't delete this with Terraform.
+module "kms_keyring" {
+  source     = "terraform-google-modules/kms/google"
+  version    = "~> 1.2"
+  depends_on = [module.project] #waits for API config
+
+  project_id = module.project.project_id
+  location   = "us"
+  keyring    = "ci-bigquery-keyring"
+  keys       = ["foo"]
+}
+
+module "initialize_encryption_account" {
+  #pinned to prevent bug with random cache count evaluation, see #82
+  source     = "github.com/terraform-google-modules/terraform-google-gcloud?ref=v1.2.0"
+  depends_on = [module.project] #waits for API config
+
+  platform              = "linux"
+  additional_components = ["bq"]
+  #skip_download         = true
+
+  create_cmd_entrypoint = "bq"
+  create_cmd_body       = format("show --encryption_service_account --project_id %s", module.project.project_id)
 }

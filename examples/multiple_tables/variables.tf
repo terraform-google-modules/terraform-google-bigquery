@@ -34,6 +34,12 @@ variable "dataset_labels" {
   type        = map(string)
 }
 
+variable "kms_key" {
+  description = "The KMS key to use to encrypt data by default"
+  type        = string
+  default     = null
+}
+
 variable "tables" {
   description = "A list of maps that includes table_id, schema, clustering, time_partitioning, expiration_time, labels in each element."
   default     = []
