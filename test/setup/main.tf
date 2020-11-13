@@ -35,9 +35,8 @@ module "project" {
 }
 
 module "kms_keyring" {
-  source     = "terraform-google-modules/kms/google"
-  version    = "~> 1.2"
-  depends_on = [module.project] #waits for API config
+  source  = "terraform-google-modules/kms/google"
+  version = "~> 1.2"
 
   project_id      = module.project.project_id
   location        = "us"
@@ -47,7 +46,6 @@ module "kms_keyring" {
 }
 
 module "initialize_encryption_account" {
-  #pinned to prevent bug with random cache count evaluation, see #82
   source  = "terraform-google-modules/gcloud/google"
   version = "~> 2.0"
 
