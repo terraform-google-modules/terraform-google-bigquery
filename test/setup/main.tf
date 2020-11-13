@@ -34,7 +34,6 @@ module "project" {
   ]
 }
 
-#Can't delete this with Terraform.
 module "kms_keyring" {
   source     = "terraform-google-modules/kms/google"
   version    = "~> 1.2"
