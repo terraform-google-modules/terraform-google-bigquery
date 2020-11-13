@@ -54,7 +54,7 @@ variable "project_id" {
   type        = string
 }
 
-variable "dataset_default_encryption_key" {
+variable "encryption_key" {
   description = "Default encryption key to apply to the dataset. Defaults to null (Google-managed)."
   type        = string
   default     = null
