@@ -50,11 +50,11 @@ module "kms_keyring" {
 module "initialize_encryption_account" {
   #pinned to prevent bug with random cache count evaluation, see #82
   source  = "terraform-google-modules/gcloud/google"
-  version = "1.2.0"
+  version = "~> 2.0"
 
   platform              = "linux"
   additional_components = ["bq"]
-  #skip_download         = true
+  skip_download         = true
 
   create_cmd_entrypoint = "bq"
   create_cmd_body       = format("show --encryption_service_account --project_id %s", module.project.project_id)
