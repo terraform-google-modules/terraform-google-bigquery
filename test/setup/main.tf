@@ -51,7 +51,6 @@ module "initialize_encryption_account" {
   #pinned to prevent bug with random cache count evaluation, see #82
   source     = "terraform-google-modules/gcloud/google"
   version    = "1.2.0"
-  depends_on = [module.project] #waits for API config
 
   platform              = "linux"
   additional_components = ["bq"]
