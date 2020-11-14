@@ -24,6 +24,7 @@ describe google_bigquery_dataset(project: "#{project_id}", name: "#{dataset_name
   its('description') { should eq 'some description' }
   its('location') { should eq 'US' }
   its('default_table_expiration_ms') { should cmp '3600000' }
+  its('default_encryption_configuration.kms_key_name') { should cmp "projects/#{project_id}/locations/us/keyRings/ci-bigquery-keyring/cryptoKeys/foo" }
 end
 
 describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{tables[:foo][:friendly_name]}") do

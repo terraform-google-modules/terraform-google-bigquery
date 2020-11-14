@@ -22,6 +22,11 @@ variable "project_id" {
   description = "Project where the dataset and table are created"
 }
 
+variable "kms_keys" {
+  description = "The KMS key module output"
+  default     = null
+}
+
 variable "dataset_labels" {
   description = "Key value pairs in a map for dataset labels"
   type        = map(string)

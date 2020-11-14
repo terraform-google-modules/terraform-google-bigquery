@@ -26,9 +26,33 @@ module "project" {
   skip_gcloud_download = true
 
   activate_apis = [
+    "cloudkms.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "bigquery.googleapis.com",
     "bigquerystorage.googleapis.com",
     "serviceusage.googleapis.com"
   ]
+}
+
+module "kms_keyring" {
+  source  = "terraform-google-modules/kms/google"
+  version = "~> 1.2"
+
+  project_id      = module.project.project_id
+  location        = "us"
+  keyring         = "ci-bigquery-keyring"
+  keys            = ["foo"]
+  prevent_destroy = "false"
+}
+
+module "initialize_encryption_account" {
+  source  = "terraform-google-modules/gcloud/google"
+  version = "~> 2.0"
+
+  platform              = "linux"
+  additional_components = ["bq"]
+  skip_download         = true
+
+  create_cmd_entrypoint = "bq"
+  create_cmd_body       = format("show --encryption_service_account --project_id %s", module.project.project_id)
 }

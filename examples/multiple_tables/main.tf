@@ -25,6 +25,7 @@ module "bigquery" {
   location                    = "US"
   tables                      = var.tables
   dataset_labels              = var.dataset_labels
+  encryption_key              = var.kms_key
 }
 
 module "add_udfs" {

@@ -20,4 +20,5 @@ module "example" {
   project_id                  = var.project_id
   tables                      = var.tables
   dataset_labels              = var.dataset_labels
+  kms_key                     = jsondecode(var.kms_keys)["foo"]
 }

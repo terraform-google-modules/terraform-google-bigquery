@@ -16,7 +16,8 @@
 
 locals {
   int_required_roles = [
-    "roles/bigquery.admin"
+    "roles/bigquery.admin",
+    "roles/cloudkms.cryptoKeyEncrypterDecrypter"
   ]
 }
 
@@ -36,4 +37,11 @@ resource "google_project_iam_member" "int_test" {
 
 resource "google_service_account_key" "int_test" {
   service_account_id = google_service_account.int_test.id
+}
+
+resource "google_project_iam_member" "bq_encryption_account" {
+  depends_on = [module.initialize_encryption_account] #waits for account initialization
+  project    = module.project.project_id
+  role       = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  member     = format("serviceAccount:bq-%s@bigquery-encryption.iam.gserviceaccount.com", module.project.project_number)
 }
