@@ -28,9 +28,13 @@ module "bigquery" {
   encryption_key              = var.kms_key
 }
 
-module "add_udfs" {
+
+module "udfs" {
   source = "../../modules/udf"
 
   dataset_id = module.bigquery.bigquery_dataset.dataset_id
   project_id = module.bigquery.bigquery_dataset.project
+  udf_ddl_queries = [
+    for ddl_file in fileset(path.module, "ddl/*.sql"): file("${path.module}/${ddl_file}")
+  ]
 }
