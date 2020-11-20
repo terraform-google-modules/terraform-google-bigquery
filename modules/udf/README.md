@@ -49,7 +49,7 @@ module "add_udfs" {
 |------|-------------|:----:|:-----:|:-----:|
 | dataset\_id | Default Dataset ID in which to deploy the cloud function (this may be overwritten in the UDF DDL) | string | n/a | yes |
 | project\_id | Default Project ID that contains the dataset (this may be overwritten in the UDF DDL) | string | n/a | yes |
-| udf\_ddl\_query | Query Defining this UDF. | string | n/a | yes |
+| udf\_ddl\_queries | Query Defining this UDF. | list(string) | n/a | yes |
 
 ## Outputs
 
