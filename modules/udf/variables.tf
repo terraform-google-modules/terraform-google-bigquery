@@ -22,7 +22,7 @@ variable "dataset_id" {
   description = "Default Dataset ID in which to deploy the cloud function (this may be overwritten in the UDF DDL)"
 }
 
-variable "udf_ddl_query" {
+variable "udf_ddl_queries" {
   description = "Query Defining this UDF."
-  type        = string
+  type        = list(string)
 }

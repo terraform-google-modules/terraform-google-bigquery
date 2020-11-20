@@ -23,6 +23,7 @@
  }
 
 module "udf" {
+  for_each = toset(var.udf_ddl_queries)
   source  = "github.com/terraform-google-modules/terraform-google-gcloud"
   enabled = var.add_udfs
 

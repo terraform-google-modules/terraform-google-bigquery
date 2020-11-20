@@ -16,13 +16,8 @@ module "dataset" {
   location                    = "US"
 }
 
-module "add_udfs" {
-  source = "terraform-google-modules/bigquery/google//modules/udf"
-  version = "~> 4.0"
-
-  dataset_id = module.dataset.bigquery_dataset.dataset_id
-  project_id = module.dataset.bigquery_dataset.project
-  udf_ddl_query = <<EOT
+local {
+  parse_url_udf_ddl = <<EOT
   CREATE FUNCTION IF NOT EXISTS parse_url(url STRING, part STRING)
   AS (
     CASE
@@ -36,5 +31,14 @@ module "add_udfs" {
     END
   );"
   EOT
+}
+
+module "add_udfs" {
+  source = "terraform-google-modules/bigquery/google//modules/udf"
+  version = "~> 4.0"
+
+  dataset_id = module.dataset.bigquery_dataset.dataset_id
+  project_id = module.dataset.bigquery_dataset.project
+  udf_ddl_query = [parse_url_udf_ddl, ]
 }
 ```
