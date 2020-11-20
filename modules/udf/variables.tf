@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-variable "dataset_id" {
-  description = "Dataset id"
-}
-
 variable "project_id" {
-  description = "Project ID that contains the dataset"
+  description = "Default Project ID that contains the dataset (this may be overwritten in the UDF DDL)"
 }
 
-variable "add_udfs" {
-  description = "Whether or not this module should be enabled."
-  default     = false
+variable "dataset_id" {
+  description = "Default Dataset ID in which to deploy the cloud function (this may be overwritten in the UDF DDL)"
+}
+
+variable "udf_ddl_query" {
+  description = "Query Defining this UDF."
+  type        = string
 }

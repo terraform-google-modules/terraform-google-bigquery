@@ -22,5 +22,19 @@ module "add_udfs" {
 
   dataset_id = module.dataset.bigquery_dataset.dataset_id
   project_id = module.dataset.bigquery_dataset.project
+  udf_ddl_query = <<EOT
+  CREATE FUNCTION IF NOT EXISTS parse_url(url STRING, part STRING)
+  AS (
+    CASE
+      -- Return HOST part of the URL.
+      WHEN part = 'HOST' THEN SPLIT(\`${PROJECT_ID}\`.${dataset_name}.check_protocol(url), '/')[OFFSET(2)]
+      WHEN part = 'REF' THEN
+        IF(REGEXP_CONTAINS(url, '#'), SPLIT(\`${PROJECT_ID}\`.${dataset_name}.check_protocol
+        (url), '#')[OFFSET(1)], NULL)
+      WHEN part = 'PROTOCOL' THEN RTRIM(REGEXP_EXTRACT(url, '^[a-zA-Z]+://'), '://')
+      ELSE ''
+    END
+  );"
+  EOT
 }
 ```
