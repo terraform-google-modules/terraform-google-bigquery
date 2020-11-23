@@ -18,8 +18,8 @@
 -- Input:
 -- url: string to search for.
 -- Output: url + http:// if scheme is missing otherwise url
--- this is a test of a udf with project and dataset.
-CREATE FUNCTION IF NOT EXISTS project_id.dataset_name.check_protocol(url STRING)
+-- this is a test of a udf with IF NOT EXISTS in the DDL.
+CREATE FUNCTION IF NOT EXISTS check_protocol(url STRING)
   AS (
     CASE
       WHEN REGEXP_CONTAINS(url, '^[a-zA-Z]+://') THEN url

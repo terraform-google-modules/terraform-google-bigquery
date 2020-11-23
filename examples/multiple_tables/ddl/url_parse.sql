@@ -17,8 +17,9 @@
 --url_parse(string urlString, string partToExtract)
 --Returns the specified part from the URL. Valid values for partToExtract include PROTOCOL, HOST, PATH, QUERY, and REF.
 --For example, parse_url('http://facebook.com/path1/p.php?k1=v1&k2=v2#Ref1', 'HOST') returns 'facebook.com'.
--- this is a test case of UDF without project or dataset
-CREATE OR REPLACE FUNCTION url_parse(url STRING, part STRING)
+-- this is a test case of UDF definition w/ OR REPLACE or IF NOT EXISTS and split onto multiple lines
+CREATE FUNCTION
+url_parse(url STRING, part STRING)
 AS (
   CASE
     WHEN UPPER(part) = 'HOST'  THEN REGEXP_EXTRACT(url, r'(?:[a-zA-Z]+://)?([a-zA-Z0-9-.]+)/?')

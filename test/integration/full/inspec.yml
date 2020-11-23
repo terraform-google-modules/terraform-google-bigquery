@@ -13,3 +13,6 @@ attributes:
   - name: bigquery_tables
     required: true
     type: hash
+  - name: bigquery_udf_names
+    required: true
+    type: hash

@@ -23,3 +23,8 @@ output "bigquery_tables" {
   value       = module.example.bigquery_tables
   description = "Map of bigquery table resources being provisioned."
 }
+
+output "bigquery_udf_names" {
+  value       = keys(module.udfs.added_udfs)
+  description = "Map of User defined functions created"
+}

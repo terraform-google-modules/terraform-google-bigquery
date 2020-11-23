@@ -35,6 +35,12 @@ module "udfs" {
   dataset_id = module.bigquery.bigquery_dataset.dataset_id
   project_id = module.bigquery.bigquery_dataset.project
   udf_ddl_queries = [
-    for ddl_file in fileset(path.module, "ddl/*.sql"): file("${path.module}/${ddl_file}")
+    for ddl_file in fileset(path.module, "ddl/*.sql") :
+    templatefile("${path.module}/${ddl_file}",
+      {
+        dataset_id = module.bigquery.bigquery_dataset.dataset_id
+        project_id = module.bigquery.bigquery_dataset.project
+      }
+    )
   ]
 }

@@ -23,8 +23,8 @@
 -- str: string to search for.
 -- strList: string in which to search for.
 -- Output: Position of str in strList
--- this is a test of a udf with dataset but no project
-CREATE OR REPLACE FUNCTION fn.find_in_set(str STRING, strList STRING)
+-- this is a test of a udf with OR REPLACE in the DDL
+CREATE OR REPLACE FUNCTION find_in_set(str STRING, strList STRING)
 AS (
   CASE
     WHEN STRPOS(str, ',') > 0 THEN 0

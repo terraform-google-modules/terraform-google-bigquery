@@ -26,5 +26,6 @@ output "bigquery_tables" {
 
 output "bigquery_udfs" {
   value       = module.udfs.added_udfs
-  description = "Map of User defined functions created in the dataset"
+  description = "Map of User defined functions created"
 }
+

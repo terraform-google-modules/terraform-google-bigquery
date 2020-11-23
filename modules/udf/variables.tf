@@ -15,14 +15,14 @@
  */
 
 variable "project_id" {
-  description = "Default Project ID that contains the dataset (this may be overwritten in the UDF DDL)"
+  description = "Project ID that contains the dataset in which to deploy the UDF"
 }
 
 variable "dataset_id" {
-  description = "Default Dataset ID in which to deploy the UDF (this may be overwritten in the UDF DDL)"
+  description = "Dataset ID in which to deploy the UDF"
 }
 
 variable "udf_ddl_queries" {
-  description = "Query Defining this UDF."
+  description = "Queries Defining the UDFs to deploy in the dataset."
   type        = list(string)
 }

@@ -16,6 +16,7 @@
 project_id       = attribute('bigquery_dataset')[:project]
 dataset_name     = attribute('bigquery_dataset')[:friendly_name]
 tables           = attribute('bigquery_tables')
+udf_names        = attribute('bigquery_udf_names')
 
 describe google_bigquery_dataset(project: "#{project_id}", name: "#{dataset_name}") do
   it { should exist }
@@ -39,4 +40,12 @@ describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_nam
   its('friendly_name') { should eq "#{tables[:bar][:friendly_name]}" }
   its('time_partitioning.type') { should be nil }
   its('clustering') { should be nil }
+end
+
+describe udf_names do
+  expect(udf_names).to include(
+    "check_protocol",
+    "find_in_set",
+    "url_parse",
+  )
 end

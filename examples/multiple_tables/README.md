@@ -21,7 +21,7 @@ This example is a good reference to understand and test the module usage.
 |------|-------------|
 | bigquery\_dataset | Bigquery dataset resource. |
 | bigquery\_tables | Map of bigquery table resources being provisioned. |
-| bigquery\_udfs | Map of User defined functions created in the dataset |
+| bigquery\_udfs | Map of User defined functions created |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
