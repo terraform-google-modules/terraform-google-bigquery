@@ -16,5 +16,5 @@
 
 output "added_udfs" {
   description = "Name of the UDF created"
-  value       = local.function_name
+  value       = local.function_map
 }

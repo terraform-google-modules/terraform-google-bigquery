@@ -19,11 +19,14 @@
    // see https://cloud.google.com/bigquery/docs/reference/standard-sql/user-defined-functions#temporary-udf-syntax
    // You can view test cases at: https://regex101.com/r/a7CNA6/2/
    function_name_regex = "CREATE\\s+(?:OR REPLACE\\s+)?FUNCTION\\s+(?:IF NOT EXISTS)?\\s*((?:[a-zA-Z0-9_]+.)*?(?:[a-zA-Z0-9_]+.)*?[a-zA-Z0-9_]+)(?=\\s*\\()"
-   function_name = regex(local.function_name_regex, var.udf_ddl_query)
+   function_map = {
+     for udf_query in var.udf_ddl_queries:
+     regex(local.function_name_regex, udf_ddl_query) => udf_query
+   }
  }
 
 module "udf" {
-  for_each = toset(var.udf_ddl_queries)
+  for_each = local.function_map
   source  = "github.com/terraform-google-modules/terraform-google-gcloud"
   enabled = var.add_udfs
 
@@ -33,7 +36,7 @@ module "udf" {
   create_cmd_entrypoint  = "bq"
   destroy_cmd_entrypoint = "bq"
 
-  create_cmd_body = "--project_id ${var.project_id} query --dataset_id=${var.dataset_id} --use_legacy_sql=false '${var.udf_ddl_query}'"
+  create_cmd_body = "--project_id ${var.project_id} query --dataset_id=${var.dataset_id} --use_legacy_sql=false '${each.value}'"
 
-  destroy_cmd_body = "--project_id ${var.project_id} query --use_legacy_sql=false 'DROP FUNCTION IF EXISTS ${local.function_name}'"
+  destroy_cmd_body = "--project_id ${var.project_id} query --use_legacy_sql=false 'DROP FUNCTION IF EXISTS ${each.key}'"
 }

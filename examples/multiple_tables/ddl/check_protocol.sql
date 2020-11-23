@@ -1,11 +1,11 @@
-/**
+/*
  * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-variable "project_id" {
-  description = "Default Project ID that contains the dataset (this may be overwritten in the UDF DDL)"
-}
-
-variable "dataset_id" {
-  description = "Default Dataset ID in which to deploy the UDF (this may be overwritten in the UDF DDL)"
-}
-
-variable "udf_ddl_queries" {
-  description = "Query Defining this UDF."
-  type        = list(string)
-}
+-- check_protocol:
+-- Input:
+-- url: string to search for.
+-- Output: url + http:// if scheme is missing otherwise url
+-- this is a test of a udf with project and dataset.
+CREATE FUNCTION IF NOT EXISTS project_id.dataset_name.check_protocol(url STRING)
+  AS (
+    CASE
+      WHEN REGEXP_CONTAINS(url, '^[a-zA-Z]+://') THEN url
+      ELSE CONCAT('http://', url)
+    END
+  );"
