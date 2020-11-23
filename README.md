@@ -142,19 +142,19 @@ This module provisions a dataset and a list of tables with associated JSON schem
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| access | An array of objects that define dataset access for one or more entities. | `any` | <pre>[<br>  {<br>    "role": "roles/bigquery.dataOwner",<br>    "special_group": "projectOwners"<br>  }<br>]</pre> | no |
-| dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
-| dataset\_labels | Key value pairs in a map for dataset labels | `map(string)` | `{}` | no |
-| dataset\_name | Friendly name for the dataset being provisioned. | `string` | `null` | no |
-| default\_table\_expiration\_ms | TTL of tables using the dataset in MS | `number` | `null` | no |
-| delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `null` | no |
-| description | Dataset description. | `string` | `null` | no |
-| encryption\_key | Default encryption key to apply to the dataset. Defaults to null (Google-managed). | `string` | `null` | no |
-| location | The regional location for the dataset only US and EU are allowed in module | `string` | `"US"` | no |
-| project\_id | Project where the dataset and table are created | `string` | n/a | yes |
-| tables | A list of objects which include table\_id, schema, clustering, time\_partitioning, expiration\_time and labels. | <pre>list(object({<br>    table_id   = string,<br>    schema     = string,<br>    clustering = list(string),<br>    time_partitioning = object({<br>      expiration_ms            = string,<br>      field                    = string,<br>      type                     = string,<br>      require_partition_filter = bool,<br>    }),<br>    expiration_time = string,<br>    labels          = map(string),<br>  }))</pre> | `[]` | no |
-| views | A list of objects which include table\_id, which is view id, and view query | <pre>list(object({<br>    view_id        = string,<br>    query          = string,<br>    use_legacy_sql = bool,<br>    labels         = map(string),<br>  }))</pre> | `[]` | no |
+|------|-------------|:----:|:-----:|:-----:|
+| access | An array of objects that define dataset access for one or more entities. | any | `<list>` | no |
+| dataset\_id | Unique ID for the dataset being provisioned. | string | n/a | yes |
+| dataset\_labels | Key value pairs in a map for dataset labels | map(string) | `<map>` | no |
+| dataset\_name | Friendly name for the dataset being provisioned. | string | `"null"` | no |
+| default\_table\_expiration\_ms | TTL of tables using the dataset in MS | number | `"null"` | no |
+| delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | bool | `"null"` | no |
+| description | Dataset description. | string | `"null"` | no |
+| encryption\_key | Default encryption key to apply to the dataset. Defaults to null (Google-managed). | string | `"null"` | no |
+| location | The regional location for the dataset only US and EU are allowed in module | string | `"US"` | no |
+| project\_id | Project where the dataset and table are created | string | n/a | yes |
+| tables | A list of objects which include table_id, schema, clustering, time_partitioning, expiration_time and labels. | object | `<list>` | no |
+| views | A list of objects which include table_id, which is view id, and view query | object | `<list>` | no |
 
 ## Outputs
 
