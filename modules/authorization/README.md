@@ -1,7 +1,7 @@
 # BigQuery Authorized Views
 
 This submodule is used to add [authorized views](https://cloud.google.com/bigquery/docs/share-access-views#authorize_the_view_to_access_the_source_dataset).
-The views that are created at another dataset are given readonly access so that even if the user does not ahve read access to the real dataset,
+The views that are created at another dataset are given readonly access so that even if the user does not have read access to the real dataset,
 they can read data over the view.
 
 ## Background
