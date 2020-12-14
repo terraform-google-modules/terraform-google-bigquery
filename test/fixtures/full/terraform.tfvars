@@ -6,8 +6,9 @@ dataset_labels = {
 }
 tables = [
   {
-    table_id = "foo",
-    schema   = "sample_bq_schema.json",
+    table_id      = "foo",
+    friendly_name = "foo_freindly",
+    schema        = "sample_bq_schema.json",
     time_partitioning = {
       type                     = "DAY",
       field                    = null,
@@ -24,6 +25,7 @@ tables = [
   },
   {
     table_id          = "bar",
+    friendly_name     = "bar_freindly",
     schema            = "sample_bq_schema.json",
     time_partitioning = null,
     expiration_time   = 2524604400000, # 2050/01/01
