@@ -25,6 +25,7 @@ module "bigquery" {
   tables = [
     {
       table_id          = "bar",
+      friendly_name     = "bar_friendly",
       schema            = "sample_bq_schema.json",
       time_partitioning = null,
       expiration_time   = 2524604400000, # 2050/01/01
