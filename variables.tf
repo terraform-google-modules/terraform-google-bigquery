@@ -70,7 +70,6 @@ variable "dataset_labels" {
 # domain: A domain to grant access to.
 # group_by_email: An email address of a Google Group to grant access to.
 # user_by_email:  An email address of a user to grant access to.
-# group_by_email: An email address of a Google Group to grant access to.
 # special_group: A special group to grant access to.
 variable "access" {
   description = "An array of objects that define dataset access for one or more entities."
