@@ -84,5 +84,5 @@ output "external_table_names" {
     for table in google_bigquery_table.external_table :
     table.friendly_name
   ]
-  description = "Friendly name for the external table being provisioned"
+  description = "Friendly names for any external tables being provisioned"
 }
