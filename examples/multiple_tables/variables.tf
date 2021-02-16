@@ -57,3 +57,36 @@ variable "tables" {
     labels          = map(string),
   }))
 }
+
+variable "external_tables" {
+  description = "A list of objects which include table_id, expiration_time, external_data_configuration, and labels."
+  default     = []
+  type = list(object({
+    table_id              = string,
+    autodetect            = bool,
+    compression           = string,
+    ignore_unknown_values = bool,
+    max_bad_records       = number,
+    schema                = string,
+    source_format         = string,
+    source_uris           = list(string),
+    csv_options = object({
+      quote                 = string,
+      allow_jagged_rows     = bool,
+      allow_quoted_newlines = bool,
+      encoding              = string,
+      field_delimiter       = string,
+      skip_leading_rows     = number,
+    }),
+    google_sheets_options = object({
+      range             = string,
+      skip_leading_rows = number,
+    }),
+    hive_partitioning_options = object({
+      mode              = string,
+      source_uri_prefix = string,
+    }),
+    expiration_time = string,
+    labels          = map(string),
+  }))
+}

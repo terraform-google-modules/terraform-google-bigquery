@@ -13,3 +13,6 @@ attributes:
   - name: bigquery_tables
     required: true
     type: hash
+  - name: bigquery_external_tables
+    required: true
+    type: hash

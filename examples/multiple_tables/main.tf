@@ -24,6 +24,7 @@ module "bigquery" {
   project_id                  = var.project_id
   location                    = "US"
   tables                      = var.tables
+  external_tables             = var.external_tables
   dataset_labels              = var.dataset_labels
   encryption_key              = var.kms_key
 }

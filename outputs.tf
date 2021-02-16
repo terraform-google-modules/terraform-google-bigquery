@@ -29,6 +29,11 @@ output "bigquery_views" {
   description = "Map of bigquery view resources being provisioned."
 }
 
+output "bigquery_external_tables" {
+  value       = google_bigquery_table.external_table
+  description = "Map of bigquery external table resources being provisioned."
+}
+
 output "project" {
   value       = google_bigquery_dataset.main.project
   description = "Project where the dataset and tables are created"
@@ -64,4 +69,20 @@ output "view_names" {
     view.friendly_name
   ]
   description = "friendlyname for the view being provisioned"
+}
+
+output "external_table_ids" {
+  value = [
+    for external_table in google_bigquery_table.external_table :
+    external_table.table_id
+  ]
+  description = "Unique id for the external table being provisioned"
+}
+
+output "external_table_names" {
+  value = [
+    for table in google_bigquery_table.external_table :
+    table.friendly_name
+  ]
+  description = "Friendly name for the external table being provisioned"
 }

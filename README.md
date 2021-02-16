@@ -151,6 +151,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `null` | no |
 | description | Dataset description. | `string` | `null` | no |
 | encryption\_key | Default encryption key to apply to the dataset. Defaults to null (Google-managed). | `string` | `null` | no |
+| external\_tables | A list of objects which include table\_id, expiration\_time, external\_data\_configuration, and labels. | <pre>list(object({<br>    table_id              = string,<br>    autodetect            = bool,<br>    compression           = string,<br>    ignore_unknown_values = bool,<br>    max_bad_records       = number,<br>    schema                = string,<br>    source_format         = string,<br>    source_uris           = list(string),<br>    csv_options = object({<br>      quote                 = string,<br>      allow_jagged_rows     = bool,<br>      allow_quoted_newlines = bool,<br>      encoding              = string,<br>      field_delimiter       = string,<br>      skip_leading_rows     = number,<br>    }),<br>    google_sheets_options = object({<br>      range             = string,<br>      skip_leading_rows = number,<br>    }),<br>    hive_partitioning_options = object({<br>      mode              = string,<br>      source_uri_prefix = string,<br>    }),<br>    expiration_time = string,<br>    labels          = map(string),<br>  }))</pre> | `[]` | no |
 | location | The regional location for the dataset only US and EU are allowed in module | `string` | `"US"` | no |
 | project\_id | Project where the dataset and table are created | `string` | n/a | yes |
 | tables | A list of objects which include table\_id, schema, clustering, time\_partitioning, expiration\_time and labels. | <pre>list(object({<br>    table_id   = string,<br>    schema     = string,<br>    clustering = list(string),<br>    time_partitioning = object({<br>      expiration_ms            = string,<br>      field                    = string,<br>      type                     = string,<br>      require_partition_filter = bool,<br>    }),<br>    expiration_time = string,<br>    labels          = map(string),<br>  }))</pre> | `[]` | no |
@@ -161,8 +162,11 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | Name | Description |
 |------|-------------|
 | bigquery\_dataset | Bigquery dataset resource. |
+| bigquery\_external\_tables | Map of bigquery external table resources being provisioned. |
 | bigquery\_tables | Map of bigquery table resources being provisioned. |
 | bigquery\_views | Map of bigquery view resources being provisioned. |
+| external\_table\_ids | Unique id for the external table being provisioned |
+| external\_table\_names | Friendly name for the external table being provisioned |
 | project | Project where the dataset and tables are created |
 | table\_ids | Unique id for the table being provisioned |
 | table\_names | Friendly name for the table being provisioned |

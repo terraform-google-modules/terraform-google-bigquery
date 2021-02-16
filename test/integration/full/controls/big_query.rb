@@ -16,6 +16,7 @@
 project_id       = attribute('bigquery_dataset')[:project]
 dataset_name     = attribute('bigquery_dataset')[:friendly_name]
 tables           = attribute('bigquery_tables')
+external_tables  = attribute('bigquery_external_tables')
 
 describe google_bigquery_dataset(project: "#{project_id}", name: "#{dataset_name}") do
   it { should exist }
@@ -37,6 +38,20 @@ end
 describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{tables[:bar][:friendly_name]}") do
   it { should exist }
   its('friendly_name') { should eq "#{tables[:bar][:friendly_name]}" }
+  its('time_partitioning.type') { should be nil }
+  its('clustering') { should be nil }
+end
+
+describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{external_tables[:csv_example][:friendly_name]}") do
+  it { should exist }
+  its('friendly_name') { should eq "#{external_tables[:csv_example][:friendly_name]}" }
+  its('time_partitioning.type') { should be nil }
+  its('clustering') { should be nil }
+end
+
+describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{external_tables[:hive_example][:friendly_name]}") do
+  it { should exist }
+  its('friendly_name') { should eq "#{external_tables[:hive_example][:friendly_name]}" }
   its('time_partitioning.type') { should be nil }
   its('clustering') { should be nil }
 end
