@@ -23,7 +23,37 @@ module "bigquery" {
   default_table_expiration_ms = var.default_table_expiration_ms
   project_id                  = var.project_id
   location                    = "US"
-  tables                      = var.tables
+  tables = [
+    {
+      table_id = "foo",
+      schema   = "sample_bq_schema.json",
+      time_partitioning = {
+        type                     = "DAY",
+        field                    = null,
+        require_partition_filter = false,
+        expiration_ms            = null,
+      },
+      expiration_time = null,
+      clustering      = ["fullVisitorId", "visitId"],
+      labels = {
+        env      = "dev"
+        billable = "true"
+        owner    = "joedoe"
+      },
+    },
+    {
+      table_id          = "bar",
+      schema            = "sample_bq_schema.json",
+      time_partitioning = null,
+      expiration_time   = 2524604400000, # 2050/01/01
+      clustering        = [],
+      labels = {
+        env      = "devops"
+        billable = "true"
+        owner    = "joedoe"
+      },
+    }
+  ]
   external_tables = [
     {
       table_id              = "csv_example"
