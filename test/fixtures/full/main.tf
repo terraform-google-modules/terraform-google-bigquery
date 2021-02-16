@@ -19,7 +19,6 @@ module "example" {
   default_table_expiration_ms = var.default_table_expiration_ms
   project_id                  = var.project_id
   tables                      = var.tables
-  external_tables             = var.external_tables
   dataset_labels              = var.dataset_labels
   kms_key                     = jsondecode(var.kms_keys)["foo"]
 }
