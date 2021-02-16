@@ -31,7 +31,7 @@ output "bigquery_views" {
 
 output "bigquery_external_tables" {
   value       = google_bigquery_table.external_table
-  description = "Map of bigquery external table resources being provisioned."
+  description = "Map of BigQuery external table resources being provisioned."
 }
 
 output "project" {
