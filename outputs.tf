@@ -76,7 +76,7 @@ output "external_table_ids" {
     for external_table in google_bigquery_table.external_table :
     external_table.table_id
   ]
-  description = "Unique id for the external table being provisioned"
+  description = "Unique IDs for any external tables being provisioned"
 }
 
 output "external_table_names" {
