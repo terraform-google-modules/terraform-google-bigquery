@@ -16,3 +16,4 @@ attributes:
   - name: bigquery_external_tables
     required: true
     type: hash
+    
