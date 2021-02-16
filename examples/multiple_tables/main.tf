@@ -105,6 +105,28 @@ module "bigquery" {
         source_uri_prefix = "gs://terraform-gcp-bigquery-external-data/hive_partition_example/"
       }
       google_sheets_options = null
+    },
+    {
+      table_id              = "google_sheets_example"
+      autodetect            = true
+      compression           = null
+      ignore_unknown_values = true
+      max_bad_records       = 0
+      source_format         = "GOOGLE_SHEETS"
+      schema                = null
+      expiration_time       = 2524604400000 # 2050/01/01
+      labels = {
+        env      = "devops"
+        billable = "true"
+        owner    = "joedoe"
+      }
+      source_uris               = ["https://docs.google.com/spreadsheets/d/1skH7e-_WLrQJ-QQk2JQHaY9dU5H49VfF1hmTFwydp3c"]
+      csv_options               = null
+      hive_partitioning_options = null
+      google_sheets_options = {
+        range             = null
+        skip_leading_rows = 1
+      },
     }
   ]
   dataset_labels = var.dataset_labels
