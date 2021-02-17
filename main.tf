@@ -15,8 +15,9 @@
  */
 
 locals {
-  tables = { for table in var.tables : table["table_id"] => table }
-  views  = { for view in var.views : view["view_id"] => view }
+  tables          = { for table in var.tables : table["table_id"] => table }
+  views           = { for view in var.views : view["view_id"] => view }
+  external_tables = { for external_table in var.external_tables : external_table["table_id"] => external_table }
 
   iam_to_primitive = {
     "roles/bigquery.dataOwner" : "OWNER"
@@ -91,5 +92,53 @@ resource "google_bigquery_table" "view" {
   view {
     query          = each.value["query"]
     use_legacy_sql = each.value["use_legacy_sql"]
+  }
+}
+
+resource "google_bigquery_table" "external_table" {
+  for_each        = local.external_tables
+  dataset_id      = google_bigquery_dataset.main.dataset_id
+  friendly_name   = each.key
+  table_id        = each.key
+  labels          = each.value["labels"]
+  expiration_time = each.value["expiration_time"]
+  project         = var.project_id
+
+  external_data_configuration {
+    autodetect            = each.value["autodetect"]
+    compression           = each.value["compression"]
+    ignore_unknown_values = each.value["ignore_unknown_values"]
+    max_bad_records       = each.value["max_bad_records"]
+    schema                = each.value["schema"]
+    source_format         = each.value["source_format"]
+    source_uris           = each.value["source_uris"]
+
+    dynamic "csv_options" {
+      for_each = each.value["csv_options"] != null ? [each.value["csv_options"]] : []
+      content {
+        quote                 = csv_options.value["quote"]
+        allow_jagged_rows     = csv_options.value["allow_jagged_rows"]
+        allow_quoted_newlines = csv_options.value["allow_quoted_newlines"]
+        encoding              = csv_options.value["encoding"]
+        field_delimiter       = csv_options.value["field_delimiter"]
+        skip_leading_rows     = csv_options.value["skip_leading_rows"]
+      }
+    }
+
+    dynamic "google_sheets_options" {
+      for_each = each.value["google_sheets_options"] != null ? [each.value["google_sheets_options"]] : []
+      content {
+        range             = google_sheets_options.value["range"]
+        skip_leading_rows = google_sheets_options.value["skip_leading_rows"]
+      }
+    }
+
+    dynamic "hive_partitioning_options" {
+      for_each = each.value["hive_partitioning_options"] != null ? [each.value["hive_partitioning_options"]] : []
+      content {
+        mode              = hive_partitioning_options.value["mode"]
+        source_uri_prefix = hive_partitioning_options.value["source_uri_prefix"]
+      }
+    }
   }
 }

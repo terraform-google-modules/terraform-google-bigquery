@@ -16,6 +16,7 @@
 project_id       = attribute('bigquery_dataset')[:project]
 dataset_name     = attribute('bigquery_dataset')[:friendly_name]
 tables           = attribute('bigquery_tables')
+external_tables  = attribute('bigquery_external_tables')
 
 describe google_bigquery_dataset(project: "#{project_id}", name: "#{dataset_name}") do
   it { should exist }
@@ -39,4 +40,54 @@ describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_nam
   its('friendly_name') { should eq "#{tables[:bar][:friendly_name]}" }
   its('time_partitioning.type') { should be nil }
   its('clustering') { should be nil }
+end
+
+describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{external_tables[:csv_example][:friendly_name]}") do
+  it { should exist }
+  its('friendly_name') { should eq "#{external_tables[:csv_example][:friendly_name]}" }
+  its('time_partitioning.type') { should be nil }
+  its('clustering') { should be nil }
+  its('type') { should eq "EXTERNAL" }
+  its('external_data_configuration.autodetect') { should be true }
+  its('external_data_configuration.compression') { should eq "NONE" }
+  its('external_data_configuration.ignore_unknown_values') { should be true }
+  its('external_data_configuration.max_bad_records') { should be nil }
+  its('external_data_configuration.source_format') { should eq "CSV" }
+  its('external_data_configuration.source_uris') { should eq ["gs://ci-bq-external-data/bigquery-external-table-test.csv"] }
+
+  its('external_data_configuration.csv_options.quote') { should eq "\"" }
+  its('external_data_configuration.csv_options.allow_jagged_rows') { should be nil }
+  its('external_data_configuration.csv_options.allow_quoted_newlines') { should be true }
+  its('external_data_configuration.csv_options.encoding') { should eq "UTF-8" }
+  its('external_data_configuration.csv_options.field_delimiter') { should eq "," }
+  its('external_data_configuration.csv_options.skip_leading_rows') { should eq "1" }
+end
+
+describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{external_tables[:hive_example][:friendly_name]}") do
+  it { should exist }
+  its('friendly_name') { should eq "#{external_tables[:hive_example][:friendly_name]}" }
+  its('time_partitioning.type') { should be nil }
+  its('clustering') { should be nil }
+  its('type') { should eq "EXTERNAL" }
+  its('external_data_configuration.autodetect') { should be true }
+  its('external_data_configuration.compression') { should eq "NONE" }
+  its('external_data_configuration.ignore_unknown_values') { should be true }
+  its('external_data_configuration.max_bad_records') { should be nil }
+  its('external_data_configuration.source_format') { should eq "CSV" }
+  its('external_data_configuration.source_uris') { should eq ["gs://ci-bq-external-data/hive_partition_example/year=2012/foo.csv","gs://ci-bq-external-data/hive_partition_example/year=2013/bar.csv"] }
+end
+
+describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{external_tables[:google_sheets_example][:friendly_name]}") do
+  it { should exist }
+  its('type') { should eq "EXTERNAL" }
+  its('friendly_name') { should eq "#{external_tables[:google_sheets_example][:friendly_name]}" }
+  its('time_partitioning.type') { should be nil }
+  its('clustering') { should be nil }
+  its('external_data_configuration.autodetect') { should be true }
+  its('external_data_configuration.compression') { should eq "NONE" }
+  its('external_data_configuration.ignore_unknown_values') { should be true }
+  its('external_data_configuration.max_bad_records') { should be nil }
+  its('external_data_configuration.source_format') { should eq "GOOGLE_SHEETS" }
+  its('external_data_configuration.source_uris') { should eq ["https://docs.google.com/spreadsheets/d/15v4N2UG6bv1RmX__wru4Ei_mYMdVcM1MwRRLxFKc55s"] }
+  its('external_data_configuration.google_sheets_options.skip_leading_rows') { should eq "1" }
 end

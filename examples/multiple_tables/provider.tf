@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-output "bigquery_dataset" {
-  value       = module.example.bigquery_dataset
-  description = "Bigquery dataset resource."
-}
-
-output "bigquery_tables" {
-  value       = module.example.bigquery_tables
-  description = "Map of bigquery table resources being provisioned."
-}
-
-output "bigquery_external_tables" {
-  value       = module.example.bigquery_external_tables
-  description = "Map of bigquery table resources being provisioned."
+provider "google" {
+  scopes = [
+    # To configure an external table with a Google Sheet you must pass this scope
+    # see: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/bigquery_table#source_format
+    "https://www.googleapis.com/auth/drive.readonly",
+    # Because we are using scopes, you must also give it the BigQuery scope
+    "https://www.googleapis.com/auth/bigquery",
+  ]
 }
