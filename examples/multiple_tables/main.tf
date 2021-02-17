@@ -69,7 +69,9 @@ module "bigquery" {
         billable = "true"
         owner    = "joedoe"
       }
-      source_uris = ["gs://terraform-gcp-bigquery-external-data/bigquery-external-table-test.csv"]
+      # DO NOT CHANGE - this is a publicly available file provided by Google
+      # see here for reference: https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/pull/872
+      source_uris = ["gs://ci-bq-external-data/bigquery-external-table-test.csv"]
       csv_options = {
         quote                 = "\""
         allow_jagged_rows     = false
@@ -95,14 +97,17 @@ module "bigquery" {
         billable = "true"
         owner    = "joedoe"
       }
+      # DO NOT CHANGE - these are publicly available files provided by Google
+      # see here for reference: https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/pull/872
       source_uris = [
-        "gs://terraform-gcp-bigquery-external-data/hive_partition_example/year=2012/foo.csv",
-        "gs://terraform-gcp-bigquery-external-data/hive_partition_example/year=2013/bar.csv"
+        "gs://ci-bq-external-data/hive_partition_example/year=2012/foo.csv",
+        "gs://ci-bq-external-data/hive_partition_example/year=2013/bar.csv"
       ]
       csv_options = null
       hive_partitioning_options = {
-        mode              = "AUTO"
-        source_uri_prefix = "gs://terraform-gcp-bigquery-external-data/hive_partition_example/"
+        mode = "AUTO"
+        # DO NOT CHANGE - see above source_uris
+        source_uri_prefix = "gs://ci-bq-external-data/hive_partition_example/"
       }
       google_sheets_options = null
     },
@@ -120,7 +125,9 @@ module "bigquery" {
         billable = "true"
         owner    = "joedoe"
       }
-      source_uris               = ["https://docs.google.com/spreadsheets/d/1skH7e-_WLrQJ-QQk2JQHaY9dU5H49VfF1hmTFwydp3c"]
+      # DO NOT CHANGE - this is a publicly available Google Sheet provided by Google
+      # see here for reference: https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/pull/872
+      source_uris               = ["https://docs.google.com/spreadsheets/d/15v4N2UG6bv1RmX__wru4Ei_mYMdVcM1MwRRLxFKc55s"]
       csv_options               = null
       hive_partitioning_options = null
       google_sheets_options = {

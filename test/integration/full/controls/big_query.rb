@@ -53,7 +53,7 @@ describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_nam
   its('external_data_configuration.ignore_unknown_values') { should be true }
   its('external_data_configuration.max_bad_records') { should be nil }
   its('external_data_configuration.source_format') { should eq "CSV" }
-  its('external_data_configuration.source_uris') { should eq ["gs://terraform-gcp-bigquery-external-data/bigquery-external-table-test.csv"] }
+  its('external_data_configuration.source_uris') { should eq ["gs://ci-bq-external-data/bigquery-external-table-test.csv"] }
 
   its('external_data_configuration.csv_options.quote') { should eq "\"" }
   its('external_data_configuration.csv_options.allow_jagged_rows') { should be nil }
@@ -74,7 +74,7 @@ describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_nam
   its('external_data_configuration.ignore_unknown_values') { should be true }
   its('external_data_configuration.max_bad_records') { should be nil }
   its('external_data_configuration.source_format') { should eq "CSV" }
-  its('external_data_configuration.source_uris') { should eq ["gs://terraform-gcp-bigquery-external-data/hive_partition_example/year=2012/foo.csv", "gs://terraform-gcp-bigquery-external-data/hive_partition_example/year=2013/bar.csv"] }
+  its('external_data_configuration.source_uris') { should eq ["gs://ci-bq-external-data/hive_partition_example/year=2012/foo.csv","gs://ci-bq-external-data/hive_partition_example/year=2013/bar.csv"] }
 end
 
 describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{external_tables[:google_sheets_example][:friendly_name]}") do
@@ -88,6 +88,6 @@ describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_nam
   its('external_data_configuration.ignore_unknown_values') { should be true }
   its('external_data_configuration.max_bad_records') { should be nil }
   its('external_data_configuration.source_format') { should eq "GOOGLE_SHEETS" }
-  its('external_data_configuration.source_uris') { should eq ["https://docs.google.com/spreadsheets/d/1skH7e-_WLrQJ-QQk2JQHaY9dU5H49VfF1hmTFwydp3c"] }
+  its('external_data_configuration.source_uris') { should eq ["https://docs.google.com/spreadsheets/d/15v4N2UG6bv1RmX__wru4Ei_mYMdVcM1MwRRLxFKc55s"] }
   its('external_data_configuration.google_sheets_options.skip_leading_rows') { should eq "1" }
 end
