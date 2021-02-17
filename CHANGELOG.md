@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.5.0](https://www.github.com/terraform-google-modules/terraform-google-bigquery/compare/v4.4.0...v4.5.0) (2021-02-17)
+
+
+### Features
+
+* Add support for external tables ([#105](https://www.github.com/terraform-google-modules/terraform-google-bigquery/issues/105)) ([bbb166d](https://www.github.com/terraform-google-modules/terraform-google-bigquery/commit/bbb166dee9a006df682581e9ab7d85a5ee1e9227))
+
 ## [4.4.0](https://www.github.com/terraform-google-modules/terraform-google-bigquery/compare/v4.3.0...v4.4.0) (2020-12-04)
 
 
