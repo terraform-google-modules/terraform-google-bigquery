@@ -79,6 +79,18 @@ resource "google_bigquery_table" "main" {
       require_partition_filter = time_partitioning.value["require_partition_filter"]
     }
   }
+
+  dynamic "range_partitioning" {
+    for_each = each.value["range_partitioning"] != null ? [each.value["range_partitioning"]] : []
+    content {
+      field      = range_partitioning.value["field"]
+      range {
+        start    = range_partitioning.value["range"].start
+        end      = range_partitioning.value["range"].end
+        interval = range_partitioning.value["range"].interval
+      }
+    }
+  }
 }
 
 resource "google_bigquery_table" "view" {

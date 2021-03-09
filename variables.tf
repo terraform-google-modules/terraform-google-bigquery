@@ -95,6 +95,14 @@ variable "tables" {
       type                     = string,
       require_partition_filter = bool,
     }),
+    range_partitioning = object({
+      field = string,
+      range = object ({
+        start    = string,
+        end      = string,
+        interval = string,
+        }),
+    }),
     expiration_time = string,
     labels          = map(string),
   }))
