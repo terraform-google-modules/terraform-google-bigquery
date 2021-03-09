@@ -49,7 +49,7 @@ variable "tables" {
     }),
     range_partitioning = object({
       field = string,
-      range = object ({
+      range = object({
         start    = string,
         end      = string,
         interval = string,

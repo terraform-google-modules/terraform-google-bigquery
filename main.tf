@@ -83,7 +83,7 @@ resource "google_bigquery_table" "main" {
   dynamic "range_partitioning" {
     for_each = each.value["range_partitioning"] != null ? [each.value["range_partitioning"]] : []
     content {
-      field      = range_partitioning.value["field"]
+      field = range_partitioning.value["field"]
       range {
         start    = range_partitioning.value["range"].start
         end      = range_partitioning.value["range"].end
