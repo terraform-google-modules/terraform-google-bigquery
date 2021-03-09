@@ -47,11 +47,11 @@ module "bigquery" {
     },
     range_partitioning = {
       field = "customer_id",
-      range = ({
+      range = {
         start    = "1"
         end      = "100",
         interval = "10",
-      }),
+      },
     },
     expiration_time = null,
     clustering      = ["fullVisitorId", "visitId"],
@@ -121,11 +121,11 @@ The `tables` variable should be provided as a list of object with the following 
       },
   range_partitioning = {                      # Set it to `null` to omit partitioning configuration for the table.
     field = "integer_column",                 # The column used to create the integer range partitions.
-    range = ({
+    range = {
       start    = "1"                          # The start of range partitioning, inclusive.
       end      = "100",                       # The end of range partitioning, exclusive.
       interval = "10",                        # The width of each range within the partition.
-        }),
+        },
       },  
   clustering = ["fullVisitorId", "visitId"]   # Specifies column names to use for data clustering. Up to four top-level columns are allowed, and should be specified in descending priority order. Partitioning should be configured in order to use clustering.
   expiration_time = 2524604400000             # The time when this table expires, in milliseconds since the epoch. If set to `null`, the table will persist indefinitely.

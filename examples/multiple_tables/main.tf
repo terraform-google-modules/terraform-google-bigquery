@@ -35,11 +35,11 @@ module "bigquery" {
       },
       range_partitioning = {
         field = "visitNumber",
-        range = ({
+        range = {
           start    = "1"
           end      = "100",
           interval = "10",
-        }),
+        },
       },
       expiration_time = null,
       clustering      = ["fullVisitorId", "visitId"],
