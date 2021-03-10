@@ -45,14 +45,7 @@ module "bigquery" {
       require_partition_filter = false,
       expiration_ms            = null,
     },
-    range_partitioning = {
-      field = "customer_id",
-      range = {
-        start    = "1"
-        end      = "100",
-        interval = "10",
-      },
-    },
+    range_partitioning = null,
     expiration_time = null,
     clustering      = ["fullVisitorId", "visitId"],
     labels          = {
@@ -65,7 +58,14 @@ module "bigquery" {
     table_id           = "bar",
     schema             =  "<PATH TO THE SCHEMA JSON FILE>",
     time_partitioning  = null,
-    range_partitioning = null,
+    range_partitioning = {
+      field = "customer_id",
+      range = {
+        start    = "1"
+        end      = "100",
+        interval = "10",
+      },
+    },
     expiration_time    = 2524604400000, # 2050/01/01
     clustering         = [],
     labels = {
