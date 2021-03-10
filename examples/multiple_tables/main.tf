@@ -33,8 +33,9 @@ module "bigquery" {
         require_partition_filter = false,
         expiration_ms            = null,
       },
-      expiration_time = null,
-      clustering      = ["fullVisitorId", "visitId"],
+      range_partitioning = null,
+      expiration_time    = null,
+      clustering         = ["fullVisitorId", "visitId"],
       labels = {
         env      = "dev"
         billable = "true"
@@ -45,8 +46,16 @@ module "bigquery" {
       table_id          = "bar",
       schema            = "sample_bq_schema.json",
       time_partitioning = null,
-      expiration_time   = 2524604400000, # 2050/01/01
-      clustering        = [],
+      range_partitioning = {
+        field = "visitNumber",
+        range = {
+          start    = "1"
+          end      = "100",
+          interval = "10",
+        },
+      },
+      expiration_time = 2524604400000, # 2050/01/01
+      clustering      = [],
       labels = {
         env      = "devops"
         billable = "true"

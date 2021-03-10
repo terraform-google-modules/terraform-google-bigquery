@@ -35,7 +35,7 @@ variable "table_dataset_labels" {
 }
 
 variable "tables" {
-  description = "A list of maps that includes table_id, schema, clustering, time_partitioning, view, expiration_time, labels in each element."
+  description = "A list of maps that includes table_id, schema, clustering, time_partitioning, range_partitioning, view, expiration_time, labels in each element."
   default     = []
   type = list(object({
     table_id   = string,
@@ -46,6 +46,14 @@ variable "tables" {
       field                    = string,
       type                     = string,
       require_partition_filter = bool,
+    }),
+    range_partitioning = object({
+      field = string,
+      range = object({
+        start    = string,
+        end      = string,
+        interval = string,
+      }),
     }),
     expiration_time = string,
     labels          = map(string),

@@ -13,11 +13,12 @@ view_dataset_labels = {
 }
 tables = [
   {
-    table_id          = "bar",
-    schema            = "sample_bq_schema.json",
-    time_partitioning = null,
-    expiration_time   = 2524604400000, # 2050/01/01
-    clustering        = [],
+    table_id           = "bar",
+    schema             = "sample_bq_schema.json",
+    time_partitioning  = null,
+    range_partitioning = null,
+    expiration_time    = 2524604400000, # 2050/01/01
+    clustering         = [],
     labels = {
       env      = "devops"
       billable = "true"
@@ -31,7 +32,7 @@ views = [
     view_id        = "bar",
     use_legacy_sql = false,
     query          = <<EOF
-      SELECT 
+      SELECT
         fullVisitorId,
         visitId
       FROM
@@ -45,5 +46,3 @@ views = [
     },
   }
 ]
-
-
