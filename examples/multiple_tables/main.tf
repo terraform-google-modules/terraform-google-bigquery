@@ -26,7 +26,7 @@ module "bigquery" {
   tables = [
     {
       table_id = "foo",
-      schema   = "sample_bq_schema.json",
+      schema   = file("sample_bq_schema.json"),
       time_partitioning = {
         type                     = "DAY",
         field                    = null,
