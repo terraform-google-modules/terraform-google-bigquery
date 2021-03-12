@@ -44,7 +44,7 @@ module "bigquery" {
     },
     {
       table_id          = "bar",
-      schema            = "sample_bq_schema.json",
+      schema            = file("sample_bq_schema.json"),
       time_partitioning = null,
       range_partitioning = {
         field = "visitNumber",
