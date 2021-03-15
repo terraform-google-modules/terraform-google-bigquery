@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0](https://www.github.com/terraform-google-modules/terraform-google-bigquery/compare/v4.5.0...v5.0.0) (2021-03-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* Add Terraform 0.13 constraint and module attribution (#112)
+* Schema should now be passed as a JSON string instead of a file path (#111)
+* Table configuration must now specify `range_partitioning = null` to preserve old defaults.
+
+### Features
+
+* Add range partitioning support ([#109](https://www.github.com/terraform-google-modules/terraform-google-bigquery/issues/109)) ([66311eb](https://www.github.com/terraform-google-modules/terraform-google-bigquery/commit/66311eb65ee4e9762c1b97840c806d4299e37c89))
+* Add Terraform 0.13 constraint and module attribution ([#112](https://www.github.com/terraform-google-modules/terraform-google-bigquery/issues/112)) ([7cd92fe](https://www.github.com/terraform-google-modules/terraform-google-bigquery/commit/7cd92fe31aaded94677091daefada1c2cbc45d41))
+* Schema should now be passed as a JSON string instead of a file path ([#111](https://www.github.com/terraform-google-modules/terraform-google-bigquery/issues/111)) ([7180061](https://www.github.com/terraform-google-modules/terraform-google-bigquery/commit/71800616c9ebe3acab6e44731432e2bfe4f02b3c))
+
 ## [4.5.0](https://www.github.com/terraform-google-modules/terraform-google-bigquery/compare/v4.4.0...v4.5.0) (2021-02-17)
 
 
