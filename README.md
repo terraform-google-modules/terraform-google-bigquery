@@ -38,7 +38,7 @@ module "bigquery" {
   tables = [
   {
     table_id           = "foo",
-    schema             =  "<PATH TO THE SCHEMA JSON FILE>",
+    schema             =  "<SCHEMA JSON DATA>",
     time_partitioning  = {
       type                     = "DAY",
       field                    = null,
@@ -56,7 +56,7 @@ module "bigquery" {
   },
   {
     table_id           = "bar",
-    schema             =  "<PATH TO THE SCHEMA JSON FILE>",
+    schema             =  "<SCHEMA JSON DATA>",
     time_partitioning  = null,
     range_partitioning = {
       field = "customer_id",
