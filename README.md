@@ -5,10 +5,10 @@ This will allow the user to programmatically create an empty table schema inside
 Additional user accounts and permissions are necessary to begin querying the newly created table(s).
 
 ## Compatibility
-
-This module is meant for use with Terraform 0.12. If you haven't
-[upgraded](https://www.terraform.io/upgrade-guides/0-12.html) and need a Terraform 0.11.x-compatible version of this module,
-the last released version intended for Terraform 0.11.x is [1.0.0](https://registry.terraform.io/modules/terraform-google-modules/bigquery/google/1.0.0).
+This module is meant for use with Terraform 0.13. If you haven't
+[upgraded](https://www.terraform.io/upgrade-guides/0-13.html) and need a Terraform
+0.12.x-compatible version of this module, the last released version
+intended for Terraform 0.12.x is [v4.5.0](https://registry.terraform.io/modules/terraform-google-modules/-bigquery/google/v4.5.0).
 
 ## Upgrading
 
@@ -200,7 +200,7 @@ These sections describe requirements for using this module.
 
 The following dependencies must be available:
 
-- [Terraform][terraform] v0.12
+- [Terraform](https://www.terraform.io/downloads.html) >= 0.13.0
 - [Terraform Provider for GCP][terraform-provider-gcp] plugin v3
 
 ### Service Account
