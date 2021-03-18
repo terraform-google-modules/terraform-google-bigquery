@@ -60,15 +60,16 @@ resource "google_bigquery_dataset" "main" {
 }
 
 resource "google_bigquery_table" "main" {
-  for_each        = local.tables
-  dataset_id      = google_bigquery_dataset.main.dataset_id
-  friendly_name   = each.key
-  table_id        = each.key
-  labels          = each.value["labels"]
-  schema          = each.value["schema"]
-  clustering      = each.value["clustering"]
-  expiration_time = each.value["expiration_time"]
-  project         = var.project_id
+  for_each            = local.tables
+  dataset_id          = google_bigquery_dataset.main.dataset_id
+  friendly_name       = each.key
+  table_id            = each.key
+  labels              = each.value["labels"]
+  schema              = each.value["schema"]
+  clustering          = each.value["clustering"]
+  expiration_time     = each.value["expiration_time"]
+  project             = var.project_id
+  deletion_protection = var.deletion_protection
 
   dynamic "time_partitioning" {
     for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []

@@ -108,6 +108,12 @@ variable "tables" {
   }))
 }
 
+variable "deletion_protection" {
+  description = "Whether or not to allow Terraform to destroy the instance. Unless this field is set to false in Terraform state, a terraform destroy or terraform apply that would delete the instance will fail."
+  type        = bool
+  default     = true
+}
+
 variable "views" {
   description = "A list of objects which include table_id, which is view id, and view query"
   default     = []
