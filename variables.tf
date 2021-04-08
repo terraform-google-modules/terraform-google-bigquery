@@ -46,19 +46,19 @@ variable "delete_contents_on_destroy" {
 variable "deletion_protection_table" {
   description = "(Whether or not to allow Terraform to destroy the instance. Unless this field is set to false in Terraform state, a terraform destroy or terraform apply that would delete the instance will fail"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "deletion_protection_view" {
   description = "(Whether or not to allow Terraform to destroy the instance. Unless this field is set to false in Terraform state, a terraform destroy or terraform apply that would delete the instance will fail"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "deletion_protection_external_table" {
   description = "(Whether or not to allow Terraform to destroy the instance. Unless this field is set to false in Terraform state, a terraform destroy or terraform apply that would delete the instance will fail"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "default_table_expiration_ms" {
