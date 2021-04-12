@@ -117,7 +117,7 @@ resource "google_bigquery_table" "external_table" {
   labels              = each.value["labels"]
   expiration_time     = each.value["expiration_time"]
   project             = var.project_id
-  deletion_protection = var.deletion_protection_table
+  deletion_protection = var.deletion_protection
 
   external_data_configuration {
     autodetect            = each.value["autodetect"]
