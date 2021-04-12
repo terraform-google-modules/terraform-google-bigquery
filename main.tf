@@ -69,7 +69,7 @@ resource "google_bigquery_table" "main" {
   clustering          = each.value["clustering"]
   expiration_time     = each.value["expiration_time"]
   project             = var.project_id
-  deletion_protection = var.deletion_protection_table
+  deletion_protection = var.deletion_protection
 
   dynamic "time_partitioning" {
     for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
@@ -101,7 +101,7 @@ resource "google_bigquery_table" "view" {
   table_id            = each.key
   labels              = each.value["labels"]
   project             = var.project_id
-  deletion_protection = var.deletion_protection_view
+  deletion_protection = false
 
   view {
     query          = each.value["query"]
