@@ -55,12 +55,6 @@ variable "deletion_protection_view" {
   default     = false
 }
 
-variable "deletion_protection_external_table" {
-  description = "(Whether or not to allow Terraform to destroy the instance. Unless this field is set to false in Terraform state, a terraform destroy or terraform apply that would delete the instance will fail"
-  type        = bool
-  default     = false
-}
-
 variable "default_table_expiration_ms" {
   description = "TTL of tables using the dataset in MS"
   type        = number
