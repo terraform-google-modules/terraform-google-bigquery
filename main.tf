@@ -60,15 +60,16 @@ resource "google_bigquery_dataset" "main" {
 }
 
 resource "google_bigquery_table" "main" {
-  for_each        = local.tables
-  dataset_id      = google_bigquery_dataset.main.dataset_id
-  friendly_name   = each.key
-  table_id        = each.key
-  labels          = each.value["labels"]
-  schema          = each.value["schema"]
-  clustering      = each.value["clustering"]
-  expiration_time = each.value["expiration_time"]
-  project         = var.project_id
+  for_each            = local.tables
+  dataset_id          = google_bigquery_dataset.main.dataset_id
+  friendly_name       = each.key
+  table_id            = each.key
+  labels              = each.value["labels"]
+  schema              = each.value["schema"]
+  clustering          = each.value["clustering"]
+  expiration_time     = each.value["expiration_time"]
+  project             = var.project_id
+  deletion_protection = var.deletion_protection
 
   dynamic "time_partitioning" {
     for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
@@ -94,12 +95,13 @@ resource "google_bigquery_table" "main" {
 }
 
 resource "google_bigquery_table" "view" {
-  for_each      = local.views
-  dataset_id    = google_bigquery_dataset.main.dataset_id
-  friendly_name = each.key
-  table_id      = each.key
-  labels        = each.value["labels"]
-  project       = var.project_id
+  for_each            = local.views
+  dataset_id          = google_bigquery_dataset.main.dataset_id
+  friendly_name       = each.key
+  table_id            = each.key
+  labels              = each.value["labels"]
+  project             = var.project_id
+  deletion_protection = false
 
   view {
     query          = each.value["query"]
@@ -108,13 +110,14 @@ resource "google_bigquery_table" "view" {
 }
 
 resource "google_bigquery_table" "external_table" {
-  for_each        = local.external_tables
-  dataset_id      = google_bigquery_dataset.main.dataset_id
-  friendly_name   = each.key
-  table_id        = each.key
-  labels          = each.value["labels"]
-  expiration_time = each.value["expiration_time"]
-  project         = var.project_id
+  for_each            = local.external_tables
+  dataset_id          = google_bigquery_dataset.main.dataset_id
+  friendly_name       = each.key
+  table_id            = each.key
+  labels              = each.value["labels"]
+  expiration_time     = each.value["expiration_time"]
+  project             = var.project_id
+  deletion_protection = var.deletion_protection
 
   external_data_configuration {
     autodetect            = each.value["autodetect"]
