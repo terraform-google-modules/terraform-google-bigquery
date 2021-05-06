@@ -92,10 +92,10 @@ resource "google_bigquery_table" "main" {
       }
     }
   }
-    
+
   lifecycle {
     ignore_changes = [
-      encryption_configuration, # managed by google_bigquery_dataset.main.default_encryption_configuration
+      encryption_configuration # managed by google_bigquery_dataset.main.default_encryption_configuration
     ]
   }
 }
@@ -116,7 +116,7 @@ resource "google_bigquery_table" "view" {
 
   lifecycle {
     ignore_changes = [
-      encryption_configuration, # managed by google_bigquery_dataset.main.default_encryption_configuration
+      encryption_configuration # managed by google_bigquery_dataset.main.default_encryption_configuration
     ]
   }
 }
@@ -171,7 +171,7 @@ resource "google_bigquery_table" "external_table" {
 
   lifecycle {
     ignore_changes = [
-      encryption_configuration, # managed by google_bigquery_dataset.main.default_encryption_configuration
+      encryption_configuration # managed by google_bigquery_dataset.main.default_encryption_configuration
     ]
   }
 }
