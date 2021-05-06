@@ -92,6 +92,12 @@ resource "google_bigquery_table" "main" {
       }
     }
   }
+
+  lifecycle {
+    ignore_changes = [
+      encryption_configuration # managed by google_bigquery_dataset.main.default_encryption_configuration
+    ]
+  }
 }
 
 resource "google_bigquery_table" "view" {
@@ -106,6 +112,12 @@ resource "google_bigquery_table" "view" {
   view {
     query          = each.value["query"]
     use_legacy_sql = each.value["use_legacy_sql"]
+  }
+
+  lifecycle {
+    ignore_changes = [
+      encryption_configuration # managed by google_bigquery_dataset.main.default_encryption_configuration
+    ]
   }
 }
 
@@ -155,5 +167,11 @@ resource "google_bigquery_table" "external_table" {
         source_uri_prefix = hive_partitioning_options.value["source_uri_prefix"]
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      encryption_configuration # managed by google_bigquery_dataset.main.default_encryption_configuration
+    ]
   }
 }
