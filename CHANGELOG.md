@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.1.0](https://www.github.com/terraform-google-modules/terraform-google-bigquery/compare/v5.0.0...v5.1.0) (2021-05-06)
+
+
+### Features
+
+* add feature deletion_protection in bigquery table ([#114](https://www.github.com/terraform-google-modules/terraform-google-bigquery/issues/114)) ([f56f444](https://www.github.com/terraform-google-modules/terraform-google-bigquery/commit/f56f44486227e66263e1cc81ff3cb2b68d1c6651))
+
+
+### Bug Fixes
+
+* Add missing equals sign ([#116](https://www.github.com/terraform-google-modules/terraform-google-bigquery/issues/116)) ([b1f8423](https://www.github.com/terraform-google-modules/terraform-google-bigquery/commit/b1f842371e47ca8b78b232920cc569d4562c36be))
+* Prevent forcing table recreation after dataset table list modification with enabled encryption ([#121](https://www.github.com/terraform-google-modules/terraform-google-bigquery/issues/121)) ([06cc7e0](https://www.github.com/terraform-google-modules/terraform-google-bigquery/commit/06cc7e0b8fdc6c53f8632bb4eecb06e456f45343))
+
 ## [5.0.0](https://www.github.com/terraform-google-modules/terraform-google-bigquery/compare/v4.5.0...v5.0.0) (2021-03-15)
 
 
