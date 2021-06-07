@@ -170,10 +170,10 @@ variable "routines" {
     return_type         = string,
     routine_description = string,
     arguments = object({
-      name            = string,
-      data_type       = string,
-      argument_kind   = string,
-      mode            = string,
+      name          = string,
+      data_type     = string,
+      argument_kind = string,
+      mode          = string,
     }),
   }))
 }
