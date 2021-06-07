@@ -156,18 +156,20 @@ The `views` variable should be provided as a list of object with the following k
 The `routines` variable should be provided as a list of object with the following keys:
 ```hcl
 {
-  routine_id = "some_id"                      # The ID of the the routine. The ID must contain only letters, numbers, or underscores. The maximum length is 256 characters.
-  routine_type = "PROCEDURE"                  # The type of routine. Possible values are SCALAR_FUNCTION and PROCEDURE.
-  routine_language = "SQL"                    # The language of the routine. Possible values are SQL and JAVASCRIPT.
+  routine_id = "some_id"                     # The ID of the the routine. The ID must contain only letters, numbers, or underscores. The maximum length is 256 characters.
+  routine_type = "PROCEDURE"                 # The type of routine. Possible values are SCALAR_FUNCTION and PROCEDURE.
+  routine_language = "SQL"                   # The language of the routine. Possible values are SQL and JAVASCRIPT.
   definition_body = "CREATE FUNCTION test return x*y;"  # The body of the routine. For functions, this is the expression in the AS clause. If language=SQL, it is the substring inside (but excluding) the parentheses.
-  return_type     = null                      # A JSON schema for the return type. Optional if language = "SQL"; required otherwise. If absent, the return type is inferred from definitionBody at query time in each query that references this routine. If present, then the evaluated result will be cast to the specified returned type at query time.
-  routine_description = "Description"         # The description of the routine if defined.
-  arguments = {                               # Set it to `null` to omit arguments block configuration for the routine.
-        name      = "x",                      # The name of this argument. Can be absent for function return argument.
-        data_type = null,                     # A JSON schema for the data type. Required unless argumentKind = ANY_TYPE.
-        argument_kind = "ANY_TYPE"            # Defaults to FIXED_TYPE. Default value is FIXED_TYPE. Possible values are FIXED_TYPE and ANY_TYPE.
-        mode = null                           # Specifies whether the argument is input or output. Can be set for procedures only. Possible values are IN, OUT, and INOUT.
-      },
+  return_type     = null                     # A JSON schema for the return type. Optional if language = "SQL"; required otherwise. If absent, the return type is inferred from definitionBody at query time in each query that references this routine. If present, then the evaluated result will be cast to the specified returned type at query time.
+  routine_description = "Description"       # The description of the routine if defined.
+  arguments = [                             # Set it to `null` to omit arguments block configuration for the routine.
+    {
+      name      = "x",                      # The name of this argument. Can be absent for function return argument.
+      data_type = null,                     # A JSON schema for the data type. Required unless argumentKind = ANY_TYPE.
+      argument_kind = "ANY_TYPE"            # Defaults to FIXED_TYPE. Default value is FIXED_TYPE. Possible values are FIXED_TYPE and ANY_TYPE.
+      mode = null                           # Specifies whether the argument is input or output. Can be set for procedures only. Possible values are IN, OUT, and INOUT.
+    }
+  ]
 }
 ```
 A detailed example with authorized views can be found [here](./examples/basic_view/main.tf).
@@ -192,7 +194,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | external\_tables | A list of objects which include table\_id, expiration\_time, external\_data\_configuration, and labels. | <pre>list(object({<br>    table_id              = string,<br>    autodetect            = bool,<br>    compression           = string,<br>    ignore_unknown_values = bool,<br>    max_bad_records       = number,<br>    schema                = string,<br>    source_format         = string,<br>    source_uris           = list(string),<br>    csv_options = object({<br>      quote                 = string,<br>      allow_jagged_rows     = bool,<br>      allow_quoted_newlines = bool,<br>      encoding              = string,<br>      field_delimiter       = string,<br>      skip_leading_rows     = number,<br>    }),<br>    google_sheets_options = object({<br>      range             = string,<br>      skip_leading_rows = number,<br>    }),<br>    hive_partitioning_options = object({<br>      mode              = string,<br>      source_uri_prefix = string,<br>    }),<br>    expiration_time = string,<br>    labels          = map(string),<br>  }))</pre> | `[]` | no |
 | location | The regional location for the dataset only US and EU are allowed in module | `string` | `"US"` | no |
 | project\_id | Project where the dataset and table are created | `string` | n/a | yes |
-| routines | A list of objects which include routine\_id, routine\_type, routine\_language, definition\_body, return\_type, routine\_description and arguments. | <pre>list(object({<br>    routine_id          = string,<br>    routine_type        = string,<br>    routine_language    = string,<br>    definition_body     = string,<br>    return_type         = string,<br>    routine_description = string,<br>    arguments = object({<br>      name          = string,<br>      data_type     = string,<br>      argument_kind = string,<br>      mode          = string,<br>    }),<br>  }))</pre> | `[]` | no |
+| routines | A list of objects which include routine\_id, routine\_type, routine\_language, definition\_body, return\_type, routine\_description and arguments. | <pre>list(object({<br>    routine_id          = string,<br>    routine_type        = string,<br>    routine_language    = string,<br>    definition_body     = string,<br>    return_type         = string,<br>    routine_description = string,<br>    arguments = list(object({<br>      name          = string,<br>      data_type     = string,<br>      argument_kind = string,<br>      mode          = string,<br>    })),<br>  }))</pre> | `[]` | no |
 | tables | A list of objects which include table\_id, schema, clustering, time\_partitioning, range\_partitioning, expiration\_time and labels. | <pre>list(object({<br>    table_id   = string,<br>    schema     = string,<br>    clustering = list(string),<br>    time_partitioning = object({<br>      expiration_ms            = string,<br>      field                    = string,<br>      type                     = string,<br>      require_partition_filter = bool,<br>    }),<br>    range_partitioning = object({<br>      field = string,<br>      range = object({<br>        start    = string,<br>        end      = string,<br>        interval = string,<br>      }),<br>    }),<br>    expiration_time = string,<br>    labels          = map(string),<br>  }))</pre> | `[]` | no |
 | views | A list of objects which include table\_id, which is view id, and view query | <pre>list(object({<br>    view_id        = string,<br>    query          = string,<br>    use_legacy_sql = bool,<br>    labels         = map(string),<br>  }))</pre> | `[]` | no |
 

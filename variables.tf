@@ -169,11 +169,11 @@ variable "routines" {
     definition_body     = string,
     return_type         = string,
     routine_description = string,
-    arguments = object({
+    arguments = list(object({
       name          = string,
       data_type     = string,
       argument_kind = string,
       mode          = string,
-    }),
+    })),
   }))
 }
