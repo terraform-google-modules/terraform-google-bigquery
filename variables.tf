@@ -157,3 +157,23 @@ variable "external_tables" {
     labels          = map(string),
   }))
 }
+
+
+variable "routines" {
+  description = "A list of objects which include routine_id, routine_type, routine_language, definition_body, return_type, routine_description and arguments."
+  default     = []
+  type = list(object({
+    routine_id          = string,
+    routine_type        = string,
+    routine_language    = string,
+    definition_body     = string,
+    return_type         = string,
+    routine_description = string,
+    arguments = object({
+      name            = string,
+      data_type       = string,
+      argument_kind   = string,
+      mode            = string,
+    }),
+  }))
+}

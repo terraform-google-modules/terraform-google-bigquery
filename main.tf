@@ -18,6 +18,7 @@ locals {
   tables          = { for table in var.tables : table["table_id"] => table }
   views           = { for view in var.views : view["view_id"] => view }
   external_tables = { for external_table in var.external_tables : external_table["table_id"] => external_table }
+  routines        = { for routine in var.routines : routine["routine_id"] => routine }
 
   iam_to_primitive = {
     "roles/bigquery.dataOwner" : "OWNER"
@@ -174,4 +175,27 @@ resource "google_bigquery_table" "external_table" {
       encryption_configuration # managed by google_bigquery_dataset.main.default_encryption_configuration
     ]
   }
+}
+
+resource "google_bigquery_routine" "routine" {
+  for_each        = local.routines
+  dataset_id      = google_bigquery_dataset.main.dataset_id
+  routine_id      = each.key
+  description     = each.value["routine_description"]
+  routine_type    = each.value["routine_type"]
+  language        = each.value["routine_language"]
+  definition_body = each.value["definition_body"]
+  project         = var.project_id
+
+  dynamic "arguments" {
+    for_each = each.value["arguments"] != null ? [each.value["arguments"]] : []
+    content {
+      name          = arguments.value["name"]
+      data_type     = arguments.value["data_type"]
+      mode          = arguments.value["mode"]
+      argument_kind = arguments.value["argument_kind"]
+    }
+  }
+
+  return_type = each.value["return_type"]
 }
