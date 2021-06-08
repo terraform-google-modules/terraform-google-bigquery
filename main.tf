@@ -181,9 +181,9 @@ resource "google_bigquery_routine" "routine" {
   for_each        = local.routines
   dataset_id      = google_bigquery_dataset.main.dataset_id
   routine_id      = each.key
-  description     = each.value["routine_description"]
+  description     = each.value["description"]
   routine_type    = each.value["routine_type"]
-  language        = each.value["routine_language"]
+  language        = each.value["language"]
   definition_body = each.value["definition_body"]
   project         = var.project_id
 
