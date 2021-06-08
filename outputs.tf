@@ -86,3 +86,11 @@ output "external_table_names" {
   ]
   description = "Friendly names for any external tables being provisioned"
 }
+
+output "routine_ids" {
+  value = [
+    for routine in google_bigquery_routine.routine :
+    routine.routine_id
+  ]
+  description = "Unique IDs for any routine being provisioned"
+}
