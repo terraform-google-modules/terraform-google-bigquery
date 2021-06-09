@@ -156,12 +156,12 @@ The `views` variable should be provided as a list of object with the following k
 The `routines` variable should be provided as a list of object with the following keys:
 ```hcl
 {
-  routine_id = "some_id"                     # The ID of the the routine. The ID must contain only letters, numbers, or underscores. The maximum length is 256 characters.
+  routine_id = "some_id"                     # The ID of the routine. The ID must contain only letters, numbers, or underscores. The maximum length is 256 characters.
   routine_type = "PROCEDURE"                 # The type of routine. Possible values are SCALAR_FUNCTION and PROCEDURE.
-  routine_language = "SQL"                   # The language of the routine. Possible values are SQL and JAVASCRIPT.
+  language = "SQL"                           # The language of the routine. Possible values are SQL and JAVASCRIPT.
   definition_body = "CREATE FUNCTION test return x*y;"  # The body of the routine. For functions, this is the expression in the AS clause. If language=SQL, it is the substring inside (but excluding) the parentheses.
   return_type     = null                     # A JSON schema for the return type. Optional if language = "SQL"; required otherwise. If absent, the return type is inferred from definitionBody at query time in each query that references this routine. If present, then the evaluated result will be cast to the specified returned type at query time.
-  routine_description = "Description"       # The description of the routine if defined.
+  description = "Description"               # The description of the routine if defined.
   arguments = [                             # Set it to `null` to omit arguments block configuration for the routine.
     {
       name      = "x",                      # The name of this argument. Can be absent for function return argument.
