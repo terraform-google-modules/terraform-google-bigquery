@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2.0](https://www.github.com/terraform-google-modules/terraform-google-bigquery/compare/v5.1.0...v5.2.0) (2021-06-16)
+
+
+### Features
+
+* Add support for creating BigQuery routines ([#124](https://www.github.com/terraform-google-modules/terraform-google-bigquery/issues/124)) ([0d11437](https://www.github.com/terraform-google-modules/terraform-google-bigquery/commit/0d11437b0e5e486a138b06ddcfb9ad47d9170b05))
+
+
+### Bug Fixes
+
+* Loosen version constraint on Google provider ([#128](https://www.github.com/terraform-google-modules/terraform-google-bigquery/issues/128)) ([cb6aaa4](https://www.github.com/terraform-google-modules/terraform-google-bigquery/commit/cb6aaa4efd59e653a2fb6beb5c975621c5ecff02))
+
 ## [5.1.0](https://www.github.com/terraform-google-modules/terraform-google-bigquery/compare/v5.0.0...v5.1.0) (2021-05-06)
 
 
