@@ -62,6 +62,22 @@ resource "google_bigquery_dataset" "main" {
       special_group  = lookup(access.value, "special_group", "")
     }
   }
+
+  dynamic "access" {
+    for_each = var.authorized_views
+    content {
+      role           = ""
+      group_by_email = ""
+      user_by_email  = ""
+      special_group  = ""
+      domain         = ""
+      view {
+        project_id = access.value.project_id
+        dataset_id = access.value.dataset_id
+        table_id   = access.value.table_id
+      }
+    }
+  }
 }
 
 resource "google_bigquery_table" "main" {

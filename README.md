@@ -185,6 +185,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | access | An array of objects that define dataset access for one or more entities. | `any` | <pre>[<br>  {<br>    "role": "roles/bigquery.dataOwner",<br>    "special_group": "projectOwners"<br>  }<br>]</pre> | no |
+| authorized_views | An array of objects with attributes of dataset_id, project_id, and table_id. | list(object) | empty list | no |
 | dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
 | dataset\_labels | Key value pairs in a map for dataset labels | `map(string)` | `{}` | no |
 | dataset\_name | Friendly name for the dataset being provisioned. | `string` | `null` | no |

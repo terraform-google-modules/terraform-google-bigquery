@@ -94,6 +94,16 @@ variable "access" {
   }]
 }
 
+variable "authorized_views" {
+  description = "An array of views to give authorize for the dataset"
+  type = list(object({
+    dataset_id = string,
+    project_id = string,
+    table_id   = string # this is the view id, but we keep table_id to stay consistent as the resource
+  }))
+  default = []
+}
+
 variable "tables" {
   description = "A list of objects which include table_id, table_name, schema, clustering, time_partitioning, range_partitioning, expiration_time and labels."
   default     = []
