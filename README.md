@@ -5,7 +5,8 @@ This will allow the user to programmatically create an empty table schema inside
 Additional user accounts and permissions are necessary to begin querying the newly created table(s).
 
 ## Compatibility
-This module is meant for use with Terraform 0.13. If you haven't
+This module is meant for use with Terraform 0.13+ and tested using Terraform 1.0+. If you find incompatibilities using Terraform >=0.13, please open an issue.
+ If you haven't
 [upgraded](https://www.terraform.io/upgrade-guides/0-13.html) and need a Terraform
 0.12.x-compatible version of this module, the last released version
 intended for Terraform 0.12.x is [v4.5.0](https://registry.terraform.io/modules/terraform-google-modules/-bigquery/google/v4.5.0).
