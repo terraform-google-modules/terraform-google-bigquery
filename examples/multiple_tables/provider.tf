@@ -15,7 +15,6 @@
  */
 
 provider "google" {
-  version = "~> 3.63.0"
   scopes = [
     # To configure an external table with a Google Sheet you must pass this scope
     # see: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/bigquery_table#source_format
