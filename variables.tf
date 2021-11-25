@@ -109,14 +109,14 @@ variable "tables" {
         interval = string,
       }),
     }),
-    materialized_view = object({
-      query               = string,
-      enable_refresh      = bool,
-      refresh_interval_ms = string,
-    }),
     expiration_time = string,
     labels          = map(string),
   }))
+  materialized_view = object({
+    query               = string,
+    enable_refresh      = bool,
+    refresh_interval_ms = string,
+  })
 }
 
 variable "views" {
