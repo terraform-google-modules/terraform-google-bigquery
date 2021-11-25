@@ -76,9 +76,9 @@ resource "google_bigquery_table" "main" {
   dynamic "materialized_view" {
     for_each = each.value["materialized_view"] != null ? [each.value["materialized_view"]] : []
     content {
-      query               = materialized_view.value["query"]
-      enable_refresh      = materialized_view.value["enable_refresh"]
-      refresh_interval_ms = materialized_view.value["refresh_interval_ms"]
+      query               = lookup(materialized_view.value, "query", null)
+      enable_refresh      = lookup(materialized_view.value, "enable_refresh", null)
+      refresh_interval_ms = lookup(materialized_view.value, "refresh_interval_ms", null)
     }
   }
 
