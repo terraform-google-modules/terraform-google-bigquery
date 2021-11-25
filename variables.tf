@@ -90,7 +90,7 @@ variable "access" {
 
 variable "tables" {
   description = "A list of objects which include table_id, schema, clustering, time_partitioning, materialized view, range_partitioning, expiration_time and labels."
-  default     = [{}]
+  default     = []
   type = list(object({
     table_id   = string,
     schema     = string,
