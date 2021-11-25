@@ -30,6 +30,7 @@ module "bigquery" {
       range_partitioning = null,
       expiration_time    = 2524604400000, # 2050/01/01
       clustering         = [],
+      materialized_view  = null,
       labels = {
         env      = "devops"
         billable = "true"
