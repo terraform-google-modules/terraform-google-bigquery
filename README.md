@@ -54,6 +54,11 @@ module "bigquery" {
       billable = "true"
       owner    = "joedoe"
     },
+    materialized_view = {
+      query               = "string containing query"
+      enable_refresh      = true,
+      refresh_interval_ms = 20000,
+    }
   },
   {
     table_id           = "bar",
@@ -73,7 +78,7 @@ module "bigquery" {
       env      = "devops"
       billable = "true"
       owner    = "joedoe"
-    },
+    }
   }
   ],
 
