@@ -115,7 +115,7 @@ variable "tables" {
       refresh_interval_ms = string,
     }),
     expiration_time = string,
-    labels = map(string),
+    labels          = map(string),
   }))
 }
 
