@@ -55,9 +55,13 @@ variable "tables" {
         interval = string,
       }),
     }),
-    expiration_time   = string,
-    labels            = map(string),
-    materialized_view = null,
+    expiration_time = string,
+    labels          = map(string),
+    materialized_view = object({
+      query               = string,
+      enable_refresh      = bool,
+      refresh_interval_ms = string,
+    }),
   }))
 }
 
