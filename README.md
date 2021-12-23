@@ -106,6 +106,76 @@ module "bigquery" {
 Functional examples are included in the
 [examples](./examples/) directory.
 
+
+### Seagen GDCT Team bigquery.tf example:
+
+Below is a use case the GDCT Team developed to test this module:
+
+```hcl
+// cloudbuild api is required
+resource "google_project_service" "bigquery_service" {
+  project = local.project_id
+  service = "bigquery.googleapis.com"
+}
+
+module "bigquery" {
+  source  = "app.terraform.io/Seagen/bigquery/google"
+  version = "5.2.0"
+
+  dataset_id   = "example_dataset"
+  dataset_name = "example-dataset"
+  description  = "example dataset description"
+  project_id   = local.project_id
+  location     = "US"
+
+  tables = [
+    {
+      table_id           = "example_table",
+      schema             = file("bigquery/example_table_schema.json"),
+      time_partitioning  = null,
+      range_partitioning = null,
+      expiration_time    = null,
+      clustering         = [],
+      labels = {
+        env   = "dev"
+        owner = "nneumiller"
+      },
+    }
+  ]
+  dataset_labels = {
+    env   = "dev"
+    owner = "chrislundy"
+  }
+}
+```
+Depending on the schema of your example you will need to create a folder within your repo called 'bigquery'.
+Inside this folder add the example_table_schema.json file such as the one below:
+
+```hcl
+[
+    {
+      "description": "description of field NAME",
+      "mode": "REQUIRED",
+      "name": "NAME",
+      "type": "STRING"
+    },
+    {
+      "description": "description of field LOCATION",
+      "mode": "REQUIRED",
+      "name": "LOCATION",
+      "type": "STRING"
+    },
+    {
+      "description": "description of field OCCUPATION",
+      "mode": "REQUIRED",
+      "name": "OCCUPATION",
+      "type": "STRING"
+    }
+  ]
+
+```
+
+
 ### Variable `tables` detailed description
 
 The `tables` variable should be provided as a list of object with the following keys:
