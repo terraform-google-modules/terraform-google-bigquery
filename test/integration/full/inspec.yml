@@ -16,7 +16,7 @@ name: local
 depends:
   - name: inspec-gcp
     git: https://github.com/inspec/inspec-gcp.git
-    tag: v0.10.0
+    tag: v1.10.0
 supports:
   - platform: gcp
 attributes:
