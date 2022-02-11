@@ -72,6 +72,16 @@ resource "google_bigquery_table" "main" {
   project             = var.project_id
   deletion_protection = var.deletion_protection
 
+
+  dynamic "materialized_view" {
+    for_each = each.value["materialized_view"] != null ? [each.value["materialized_view"]] : []
+    content {
+      query               = lookup(materialized_view.value, "query", null)
+      enable_refresh      = lookup(materialized_view.value, "enable_refresh", null)
+      refresh_interval_ms = lookup(materialized_view.value, "refresh_interval_ms", null)
+    }
+  }
+
   dynamic "time_partitioning" {
     for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
     content {
