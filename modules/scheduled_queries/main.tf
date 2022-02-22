@@ -25,9 +25,9 @@ resource "google_project_iam_member" "bq_transfer_permission" {
 }
 
 resource "google_bigquery_data_transfer_config" "query_config" {
-  for_each = { for i in var.query_config : i.display_name => i }
+  for_each = { for i in var.queries : i.name => i }
 
-  display_name              = each.value.display_name
+  display_name              = each.value.name
   location                  = lookup(each.value, "location", null)
   data_source_id            = each.value.data_source_id
   schedule                  = lookup(each.value, "schedule", "")

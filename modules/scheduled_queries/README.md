@@ -20,11 +20,11 @@ module "scheduled_queries" {
   source = "terraform-google-modules/bigquery/google//modules/scheduled_queries"
   version = "~> 5.3.0"
 
-  project = module.dataset.bigquery_dataset.project_id
+  project_id = module.dataset.bigquery_dataset.project_id
 
-  query_config = [
+  queries = [
     {
-      display_name           = "my-query"
+      name                   = "my-query"
       location               = "EU"
       data_source_id         = "scheduled_query"
       destination_dataset_id = module.dataset.bigquery_dataset.dataset_id
