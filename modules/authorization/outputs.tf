@@ -23,3 +23,8 @@ output "authorized_roles" {
   value       = google_bigquery_dataset_access.access_role
   description = "Authorized roles for the dataset"
 }
+
+output "authorized_dataset" {
+  value       = google_bigquery_dataset_access.authorized_dataset
+  description = "Authorized dataset for the BQ dataset"
+}

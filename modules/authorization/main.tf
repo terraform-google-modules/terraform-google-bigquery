@@ -25,8 +25,9 @@ locals {
       lookup(role, "special_group", null)
     ]))
   ]
-  roles = zipmap(local.role_keys, var.roles)
-  views = { for view in var.authorized_views : "${view["project_id"]}_${view["dataset_id"]}_${view["table_id"]}" => view }
+  roles    = zipmap(local.role_keys, var.roles)
+  views    = { for view in var.authorized_views : "${view["project_id"]}_${view["dataset_id"]}_${view["table_id"]}" => view }
+  datasets = { for dataset in var.authorized_datasets : "${dataset["project_id"]}_${dataset["dataset_id"]}" => dataset }
 
   iam_to_primitive = {
     "roles/bigquery.dataOwner" : "OWNER"
@@ -58,4 +59,17 @@ resource "google_bigquery_dataset_access" "access_role" {
   group_by_email = lookup(each.value, "group_by_email", null)
   user_by_email  = lookup(each.value, "user_by_email", null)
   special_group  = lookup(each.value, "special_group", null)
+}
+
+resource "google_bigquery_dataset_access" "authorized_dataset" {
+  for_each   = local.datasets
+  dataset_id = var.dataset_id
+  project    = var.project_id
+  dataset {
+    dataset {
+      project_id = each.value.project_id
+      dataset_id = each.value.dataset_id
+    }
+    target_types = ["VIEWS"]
+  }
 }

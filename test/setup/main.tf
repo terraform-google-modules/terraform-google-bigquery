@@ -42,16 +42,11 @@ module "kms_keyring" {
   keyring         = "ci-bigquery-keyring"
   keys            = ["foo"]
   prevent_destroy = "false"
+  depends_on = [
+    module.project
+  ]
 }
 
-module "initialize_encryption_account" {
-  source  = "terraform-google-modules/gcloud/google"
-  version = "~> 2.0"
-
-  platform              = "linux"
-  additional_components = ["bq"]
-  skip_download         = true
-
-  create_cmd_entrypoint = "bq"
-  create_cmd_body       = format("show --encryption_service_account --project_id %s", module.project.project_id)
+data "google_bigquery_default_service_account" "initialize_encryption_account" {
+  project = module.project.project_id
 }
