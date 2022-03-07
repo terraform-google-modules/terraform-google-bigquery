@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,4 +27,9 @@ output "bigquery_tables" {
 output "bigquery_external_tables" {
   value       = module.example.bigquery_external_tables
   description = "Map of bigquery table resources being provisioned."
+}
+
+output "authorization" {
+  value       = module.example.authorization
+  description = "Authorized dataset for the BQ dataset"
 }

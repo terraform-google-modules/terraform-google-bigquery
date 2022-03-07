@@ -18,6 +18,8 @@ This example is a good reference to understand and test the module usage.
 
 | Name | Description |
 |------|-------------|
+| authorization | Authorization Bigquery dataset resource. |
+| bigquery\_auth\_dataset | Authorized Bigquery dataset resource. |
 | bigquery\_dataset | Bigquery dataset resource. |
 | bigquery\_external\_tables | Map of bigquery table resources being provisioned. |
 | bigquery\_tables | Map of bigquery table resources being provisioned. |

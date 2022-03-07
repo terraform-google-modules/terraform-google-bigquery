@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,4 +43,13 @@ variable "authorized_views" {
     project_id = string,
     table_id   = string # this is the view id, but we keep table_id to stay consistent as the resource
   }))
+}
+
+variable "authorized_datasets" {
+  description = "An array of datasets to be authorized on the dataset"
+  type = list(object({
+    dataset_id = string,
+    project_id = string,
+  }))
+  default = []
 }
