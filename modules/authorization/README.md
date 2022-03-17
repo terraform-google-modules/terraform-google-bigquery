@@ -50,5 +50,32 @@ module "add_authorization" {
       table_id   = "view_id"
     }
   ]
+  authorized_datasets = [
+    {
+      project_id = "auth_dataset_project"
+      dataset_id = "auth_dataset"
+    }
+  ]
 }
 ```
+
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| authorized\_datasets | An array of datasets to be authorized on the dataset | <pre>list(object({<br>    dataset_id = string,<br>    project_id = string,<br>  }))</pre> | `[]` | no |
+| authorized\_views | An array of views to give authorize for the dataset | <pre>list(object({<br>    dataset_id = string,<br>    project_id = string,<br>    table_id   = string # this is the view id, but we keep table_id to stay consistent as the resource<br>  }))</pre> | n/a | yes |
+| dataset\_id | Unique ID for the dataset being provisioned. | `string` | n/a | yes |
+| project\_id | Project where the dataset and table are created | `string` | n/a | yes |
+| roles | An array of objects that define dataset access for one or more entities. | `any` | `[]` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| authorized\_dataset | Authorized datasets for the BQ dataset |
+| authorized\_roles | Authorized roles for the dataset |
+| authorized\_views | Authorized views for the dataset |
+
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

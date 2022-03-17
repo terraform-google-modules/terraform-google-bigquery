@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -156,4 +156,33 @@ module "add_udfs" {
 
   dataset_id = module.bigquery.bigquery_dataset.dataset_id
   project_id = module.bigquery.bigquery_dataset.project
+}
+
+module "auth_dataset" {
+  source                      = "../.."
+  dataset_id                  = "auth_dataset"
+  dataset_name                = "auth_dataset"
+  description                 = "some description"
+  delete_contents_on_destroy  = var.delete_contents_on_destroy
+  default_table_expiration_ms = var.default_table_expiration_ms
+  project_id                  = var.project_id
+  location                    = "US"
+  access                      = []
+}
+
+module "add_authorization" {
+  source = "../../modules/authorization"
+
+  dataset_id       = module.bigquery.bigquery_dataset.dataset_id
+  project_id       = module.bigquery.bigquery_dataset.project
+  authorized_views = []
+  authorized_datasets = [
+    {
+      dataset_id = module.auth_dataset.bigquery_dataset.dataset_id
+      project_id = module.auth_dataset.bigquery_dataset.project
+    },
+  ]
+  depends_on = [
+    module.auth_dataset
+  ]
 }

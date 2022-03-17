@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,4 +22,9 @@ output "authorized_views" {
 output "authorized_roles" {
   value       = google_bigquery_dataset_access.access_role
   description = "Authorized roles for the dataset"
+}
+
+output "authorized_dataset" {
+  value       = google_bigquery_dataset_access.authorized_dataset
+  description = "Authorized datasets for the BQ dataset"
 }

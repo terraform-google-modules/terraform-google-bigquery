@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,8 +40,8 @@ resource "google_service_account_key" "int_test" {
 }
 
 resource "google_project_iam_member" "bq_encryption_account" {
-  depends_on = [module.initialize_encryption_account] #waits for account initialization
+  depends_on = [data.google_bigquery_default_service_account.initialize_encryption_account] #waits for account initialization
   project    = module.project.project_id
   role       = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member     = format("serviceAccount:bq-%s@bigquery-encryption.iam.gserviceaccount.com", module.project.project_number)
+  member     = "serviceAccount:${data.google_bigquery_default_service_account.initialize_encryption_account.email}"
 }

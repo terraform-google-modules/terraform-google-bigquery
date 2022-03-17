@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,6 @@ resource "google_bigquery_table" "main" {
   expiration_time     = each.value["expiration_time"]
   project             = var.project_id
   deletion_protection = var.deletion_protection
-
 
   dynamic "materialized_view" {
     for_each = each.value["materialized_view"] != null ? [each.value["materialized_view"]] : []

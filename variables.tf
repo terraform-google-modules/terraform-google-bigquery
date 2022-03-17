@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,7 +89,7 @@ variable "access" {
 }
 
 variable "tables" {
-  description = "A list of objects which include table_id, schema, clustering, time_partitioning, materialized view, range_partitioning, expiration_time and labels."
+  description = "A list of objects which include table_id, schema, clustering, time_partitioning, materialized_view, range_partitioning, expiration_time and labels."
   default     = []
   type = list(object({
     table_id   = string,
