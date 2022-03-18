@@ -129,8 +129,32 @@ resource "google_bigquery_table" "materialized_view" {
   friendly_name       = each.key
   table_id            = each.key
   labels              = each.value["labels"]
+  clustering          = each.value["clustering"]
+  expiration_time     = each.value["expiration_time"]
   project             = var.project_id
   deletion_protection = false
+
+  dynamic "time_partitioning" {
+    for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
+    content {
+      type                     = time_partitioning.value["type"]
+      expiration_ms            = time_partitioning.value["expiration_ms"]
+      field                    = time_partitioning.value["field"]
+      require_partition_filter = time_partitioning.value["require_partition_filter"]
+    }
+  }
+
+  dynamic "range_partitioning" {
+    for_each = each.value["range_partitioning"] != null ? [each.value["range_partitioning"]] : []
+    content {
+      field = range_partitioning.value["field"]
+      range {
+        start    = range_partitioning.value["range"].start
+        end      = range_partitioning.value["range"].end
+        interval = range_partitioning.value["range"].interval
+      }
+    }
+  }
 
   materialized_view {
     query               = each.value["query"]
