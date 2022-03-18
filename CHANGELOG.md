@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.4.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v5.3.0...v5.4.0) (2022-03-18)
+
+
+### Features
+
+* Add submodule for creating scheduled queries ([#140](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/140)) ([b961094](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/b961094f000e22a4ebf1f67324175fdf36ede720))
+* add support for authorized datasets in authorization submodule ([#142](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/142)) ([b93ba86](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/b93ba867eebea52a0b7ec0fa80c336b398eff4f4))
+* Add support for materialized_views ([#139](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/139)) ([e663c25](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/e663c2513016ed85024bc546673c74624ea83205))
+
 ## [5.3.0](https://www.github.com/terraform-google-modules/terraform-google-bigquery/compare/v5.2.0...v5.3.0) (2021-12-23)
 
 
