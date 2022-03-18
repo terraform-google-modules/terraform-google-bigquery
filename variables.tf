@@ -115,13 +115,41 @@ variable "tables" {
 }
 
 variable "views" {
-  description = "A list of objects which include table_id, which is view id, and view query"
+  description = "A list of objects which include view_id and view query"
   default     = []
   type = list(object({
     view_id        = string,
     query          = string,
     use_legacy_sql = bool,
     labels         = map(string),
+  }))
+}
+
+variable "materialized_views" {
+  description = "A list of objects which includes view_id, view_query, clustering, time_partitioning, range_partitioning, expiration_time and labels"
+  default     = []
+  type = list(object({
+    view_id             = string,
+    query               = string,
+    enable_refresh      = bool,
+    refresh_interval_ms = string,
+    clustering          = list(string),
+    time_partitioning = object({
+      expiration_ms            = string,
+      field                    = string,
+      type                     = string,
+      require_partition_filter = bool,
+    }),
+    range_partitioning = object({
+      field = string,
+      range = object({
+        start    = string,
+        end      = string,
+        interval = string,
+      }),
+    }),
+    expiration_time = string,
+    labels          = map(string),
   }))
 }
 
