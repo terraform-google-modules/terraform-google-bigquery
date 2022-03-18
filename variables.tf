@@ -149,7 +149,7 @@ variable "materialized_views" {
       }),
     }),
     expiration_time = string,
-    labels              = map(string),
+    labels          = map(string),
   }))
 }
 
