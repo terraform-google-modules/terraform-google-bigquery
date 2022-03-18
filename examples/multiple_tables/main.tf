@@ -34,7 +34,6 @@ module "bigquery" {
         expiration_ms            = null,
       },
       range_partitioning = null,
-      materialized_view  = null,
       expiration_time    = null,
       clustering         = ["fullVisitorId", "visitId"],
       labels = {
@@ -47,7 +46,6 @@ module "bigquery" {
       table_id          = "bar",
       schema            = file("sample_bq_schema.json"),
       time_partitioning = null,
-      materialized_view = null,
       range_partitioning = {
         field = "visitNumber",
         range = {

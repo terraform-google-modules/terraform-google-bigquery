@@ -89,7 +89,7 @@ variable "access" {
 }
 
 variable "tables" {
-  description = "A list of objects which include table_id, schema, clustering, time_partitioning, materialized_view, range_partitioning, expiration_time and labels."
+  description = "A list of objects which include table_id, schema, clustering, time_partitioning, range_partitioning, expiration_time and labels."
   default     = []
   type = list(object({
     table_id   = string,
@@ -109,24 +109,31 @@ variable "tables" {
         interval = string,
       }),
     }),
-    materialized_view = object({
-      query               = string,
-      enable_refresh      = bool,
-      refresh_interval_ms = string,
-    }),
     expiration_time = string,
     labels          = map(string),
   }))
 }
 
 variable "views" {
-  description = "A list of objects which include table_id, which is view id, and view query"
+  description = "A list of objects which include view_id and view query"
   default     = []
   type = list(object({
     view_id        = string,
     query          = string,
     use_legacy_sql = bool,
     labels         = map(string),
+  }))
+}
+
+variable "materialized_views" {
+  description = "A list of objects which includes view_id, and view query"
+  default     = []
+  type = list(object({
+    view_id             = string,
+    query               = string,
+    enable_refresh      = bool,
+    refresh_interval_ms = string,
+    labels              = map(string),
   }))
 }
 

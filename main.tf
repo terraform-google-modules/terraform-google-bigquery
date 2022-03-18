@@ -15,10 +15,11 @@
  */
 
 locals {
-  tables          = { for table in var.tables : table["table_id"] => table }
-  views           = { for view in var.views : view["view_id"] => view }
-  external_tables = { for external_table in var.external_tables : external_table["table_id"] => external_table }
-  routines        = { for routine in var.routines : routine["routine_id"] => routine }
+  tables             = { for table in var.tables : table["table_id"] => table }
+  views              = { for view in var.views : view["view_id"] => view }
+  materialized_views = { for mat_view in var.materialized_views : mat_view["view_id"] => mat_view }
+  external_tables    = { for external_table in var.external_tables : external_table["table_id"] => external_table }
+  routines           = { for routine in var.routines : routine["routine_id"] => routine }
 
   iam_to_primitive = {
     "roles/bigquery.dataOwner" : "OWNER"
@@ -72,15 +73,6 @@ resource "google_bigquery_table" "main" {
   project             = var.project_id
   deletion_protection = var.deletion_protection
 
-  dynamic "materialized_view" {
-    for_each = each.value["materialized_view"] != null ? [each.value["materialized_view"]] : []
-    content {
-      query               = lookup(materialized_view.value, "query", null)
-      enable_refresh      = lookup(materialized_view.value, "enable_refresh", null)
-      refresh_interval_ms = lookup(materialized_view.value, "refresh_interval_ms", null)
-    }
-  }
-
   dynamic "time_partitioning" {
     for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
     content {
@@ -122,6 +114,28 @@ resource "google_bigquery_table" "view" {
   view {
     query          = each.value["query"]
     use_legacy_sql = each.value["use_legacy_sql"]
+  }
+
+  lifecycle {
+    ignore_changes = [
+      encryption_configuration # managed by google_bigquery_dataset.main.default_encryption_configuration
+    ]
+  }
+}
+
+resource "google_bigquery_table" "materialized_view" {
+  for_each            = local.materialized_views
+  dataset_id          = google_bigquery_dataset.main.dataset_id
+  friendly_name       = each.key
+  table_id            = each.key
+  labels              = each.value["labels"]
+  project             = var.project_id
+  deletion_protection = false
+
+  materialized_view {
+    query               = each.value["query"]
+    enable_refresh      = each.value["enable_refresh"]
+    refresh_interval_ms = each.value["refresh_interval_ms"]
   }
 
   lifecycle {

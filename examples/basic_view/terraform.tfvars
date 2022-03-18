@@ -24,7 +24,6 @@ tables = [
       billable = "true"
       owner    = "joedoe"
     },
-    materialized_view = null,
   }
 ]
 
