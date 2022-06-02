@@ -59,7 +59,12 @@ resource "google_bigquery_dataset" "main" {
       special_group  = lookup(access.value, "special_group", null)
     }
   }
+
+  lifecycle {
+    ignore_changes = var.dataset_ignore_changes
+  }
 }
+
 
 resource "google_bigquery_table" "main" {
   for_each            = local.tables
