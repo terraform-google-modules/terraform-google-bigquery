@@ -206,8 +206,3 @@ variable "routines" {
   }))
 }
 
-variable "dataset_ignore_changes" {
-  description = "A list of dataset properties to be ignored."
-  default     = []
-  type        = list(string)
-}
