@@ -129,6 +129,7 @@ variable "tables" {
     }),
     expiration_time = string,
     labels          = map(string),
+    description     = string,
   }))
 }
 
@@ -141,6 +142,7 @@ variable "views" {
     query          = string,
     use_legacy_sql = bool,
     labels         = map(string),
+    description    = string,
   }))
 }
 

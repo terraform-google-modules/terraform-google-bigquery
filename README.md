@@ -54,6 +54,7 @@ module "bigquery" {
       billable = "true"
       owner    = "joedoe"
     },
+    description = "foo entities",
   },
   {
     table_id           = "bar",
@@ -73,7 +74,8 @@ module "bigquery" {
       env      = "devops"
       billable = "true"
       owner    = "joedoe"
-    }
+    },
+    description = "bar entities",
   }
   ],
 
@@ -135,6 +137,7 @@ The `tables` variable should be provided as a list of object with the following 
       env      = "dev"
       billable = "true"
     }
+  description = "A long description"          # Text describing the contents or purpose of the table.
 }
 ```
 
@@ -150,6 +153,7 @@ The `views` variable should be provided as a list of object with the following k
       env      = "dev"
       billable = "true"
   }
+  description = "A long description"                                 # Text describing the contents or purpose of the view.
 }
 ```
 
@@ -200,8 +204,13 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | max\_time\_travel\_hours | Defines the time travel window in hours | `number` | `null` | no |
 | project\_id | Project where the dataset and table are created | `string` | n/a | yes |
 | routines | A list of objects which include routine\_id, routine\_type, routine\_language, definition\_body, return\_type, routine\_description and arguments. | <pre>list(object({<br>    routine_id      = string,<br>    routine_type    = string,<br>    language        = string,<br>    definition_body = string,<br>    return_type     = string,<br>    description     = string,<br>    arguments = list(object({<br>      name          = string,<br>      data_type     = string,<br>      argument_kind = string,<br>      mode          = string,<br>    })),<br>  }))</pre> | `[]` | no |
+<<<<<<< HEAD
 | tables | A list of objects which include table\_id, table\_name, schema, clustering, time\_partitioning, range\_partitioning, expiration\_time and labels. | <pre>list(object({<br>    table_id    = string,<br>    description = optional(string),<br>    table_name  = optional(string),<br>    schema      = string,<br>    clustering  = list(string),<br>    time_partitioning = object({<br>      expiration_ms            = string,<br>      field                    = string,<br>      type                     = string,<br>      require_partition_filter = bool,<br>    }),<br>    range_partitioning = object({<br>      field = string,<br>      range = object({<br>        start    = string,<br>        end      = string,<br>        interval = string,<br>      }),<br>    }),<br>    expiration_time = string,<br>    labels          = map(string),<br>  }))</pre> | `[]` | no |
 | views | A list of objects which include view\_id and view query | <pre>list(object({<br>    view_id        = string,<br>    description    = optional(string),<br>    query          = string,<br>    use_legacy_sql = bool,<br>    labels         = map(string),<br>  }))</pre> | `[]` | no |
+=======
+| tables | A list of objects which include table\_id, schema, clustering, time\_partitioning, range\_partitioning, expiration\_time labels, and description. | <pre>list(object({<br>    table_id   = string,<br>    schema     = string,<br>    clustering = list(string),<br>    time_partitioning = object({<br>      expiration_ms            = string,<br>      field                    = string,<br>      type                     = string,<br>      require_partition_filter = bool,<br>    }),<br>    range_partitioning = object({<br>      field = string,<br>      range = object({<br>        start    = string,<br>        end      = string,<br>        interval = string,<br>      }),<br>    }),<br>    expiration_time = string,<br>    labels          = map(string),<br>  }))</pre> | `[]` | no |
+| views | A list of objects which include table\_id, which is view id, and view query | <pre>list(object({<br>    view_id        = string,<br>    query          = string,<br>    use_legacy_sql = bool,<br>    labels         = map(string),<br>    description    = string,<br>  }))</pre> | `[]` | no |
+>>>>>>> 197b855 (Add description attribute for tables and views (#4))
 
 ## Outputs
 
