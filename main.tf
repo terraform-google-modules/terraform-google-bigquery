@@ -61,7 +61,7 @@ resource "google_bigquery_dataset" "main" {
   }
 
   lifecycle {
-    ignore_changes = ["description", "access", "friendly_name"]
+    ignore_changes = [description, access, friendly_name]
   }
 }
 
