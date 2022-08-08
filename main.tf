@@ -126,8 +126,9 @@ resource "google_bigquery_table" "view" {
   for_each            = local.views
   dataset_id          = google_bigquery_dataset.main.dataset_id
   friendly_name       = each.key
-  table_id            = each.key
   description         = each.value["description"]
+  schema              = each.value["schema"]
+  table_id            = each.key
   labels              = each.value["labels"]
   project             = var.project_id
   deletion_protection = false
