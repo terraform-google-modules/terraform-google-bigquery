@@ -29,6 +29,7 @@ module "bigquery" {
       time_partitioning  = null,
       range_partitioning = null,
       expiration_time    = 2524604400000, # 2050/01/01
+      description        = "some description"
       clustering         = [],
       labels = {
         env      = "devops"

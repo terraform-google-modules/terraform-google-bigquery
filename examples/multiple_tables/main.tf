@@ -33,6 +33,7 @@ module "bigquery" {
         require_partition_filter = false,
         expiration_ms            = null,
       },
+      description        = "some description",
       range_partitioning = null,
       expiration_time    = null,
       clustering         = ["fullVisitorId", "visitId"],
@@ -73,6 +74,7 @@ module "bigquery" {
       source_format         = "CSV"
       schema                = null
       expiration_time       = 2524604400000 # 2050/01/01
+      description           = ""
       labels = {
         env      = "devops"
         billable = "true"
@@ -101,6 +103,7 @@ module "bigquery" {
       source_format         = "CSV"
       schema                = null
       expiration_time       = 2524604400000 # 2050/01/01
+      description           = ""
       labels = {
         env      = "devops"
         billable = "true"
@@ -129,6 +132,7 @@ module "bigquery" {
       source_format         = "GOOGLE_SHEETS"
       schema                = null
       expiration_time       = 2524604400000 # 2050/01/01
+      description           = ""
       labels = {
         env      = "devops"
         billable = "true"

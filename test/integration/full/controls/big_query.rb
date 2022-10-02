@@ -32,12 +32,14 @@ describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_nam
   it { should exist }
   its('friendly_name') { should eq "#{tables[:foo][:friendly_name]}" }
   its('time_partitioning.type') { should eq 'DAY' }
+  its('description') { should eq "#{tables[:foo][:description]}" }
   its('clustering') { should_not be nil }
 end
 
 describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{tables[:bar][:friendly_name]}") do
   it { should exist }
   its('friendly_name') { should eq "#{tables[:bar][:friendly_name]}" }
+  its('description') { should eq "#{tables[:bar][:description]}" }
   its('time_partitioning.type') { should be nil }
   its('clustering') { should be nil }
 end
@@ -45,6 +47,7 @@ end
 describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{external_tables[:csv_example][:friendly_name]}") do
   it { should exist }
   its('friendly_name') { should eq "#{external_tables[:csv_example][:friendly_name]}" }
+  its('description') { should eq "#{tables[:csv_example][:description]}" }
   its('time_partitioning.type') { should be nil }
   its('clustering') { should be nil }
   its('type') { should eq "EXTERNAL" }

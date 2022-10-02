@@ -70,6 +70,7 @@ resource "google_bigquery_table" "main" {
   schema              = each.value["schema"]
   clustering          = each.value["clustering"]
   expiration_time     = each.value["expiration_time"]
+  description         = each.value["description"]
   project             = var.project_id
   deletion_protection = var.deletion_protection
 
@@ -108,6 +109,7 @@ resource "google_bigquery_table" "view" {
   friendly_name       = each.key
   table_id            = each.key
   labels              = each.value["labels"]
+  description         = each.value["description"]
   project             = var.project_id
   deletion_protection = false
 
@@ -131,6 +133,7 @@ resource "google_bigquery_table" "materialized_view" {
   labels              = each.value["labels"]
   clustering          = each.value["clustering"]
   expiration_time     = each.value["expiration_time"]
+  description         = each.value["description"]
   project             = var.project_id
   deletion_protection = false
 
@@ -176,6 +179,7 @@ resource "google_bigquery_table" "external_table" {
   table_id            = each.key
   labels              = each.value["labels"]
   expiration_time     = each.value["expiration_time"]
+  description         = each.value["description"]
   project             = var.project_id
   deletion_protection = var.deletion_protection
 

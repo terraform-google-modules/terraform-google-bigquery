@@ -70,9 +70,10 @@ module "authorization" {
   authorized_views = [
     for view in var.views :
     {
-      project_id = var.view_project_id,
-      dataset_id = module.bigquery_views_without_pii.bigquery_dataset.dataset_id,
-      table_id   = view.view_id
+      project_id  = var.view_project_id,
+      dataset_id  = module.bigquery_views_without_pii.bigquery_dataset.dataset_id,
+      table_id    = view.view_id,
+      description = view.description
     }
   ]
 }
