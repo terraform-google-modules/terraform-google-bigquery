@@ -53,10 +53,12 @@ resource "google_bigquery_dataset" "main" {
       # Thus, do the conversion between IAM to primitive role here to prevent the diff.
       role = lookup(local.iam_to_primitive, access.value.role, access.value.role)
 
-      domain         = lookup(access.value, "domain", null)
-      group_by_email = lookup(access.value, "group_by_email", null)
-      user_by_email  = lookup(access.value, "user_by_email", null)
-      special_group  = lookup(access.value, "special_group", null)
+      # Additionally, using null as a default value would lead to a permanant diff
+      # See https://github.com/hashicorp/terraform-provider-google/issues/4085#issuecomment-516923872
+      domain         = lookup(access.value, "domain", "")
+      group_by_email = lookup(access.value, "group_by_email", "")
+      user_by_email  = lookup(access.value, "user_by_email", "")
+      special_group  = lookup(access.value, "special_group", "")
     }
   }
 }
