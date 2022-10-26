@@ -21,6 +21,20 @@ locals {
   external_tables    = { for external_table in var.external_tables : external_table["table_id"] => external_table }
   routines           = { for routine in var.routines : routine["routine_id"] => routine }
 
+  auth_role_keys = [
+    for role in var.access :
+    join("_", compact([
+      role["role"],
+      lookup(role, "domain", null),
+      lookup(role, "group_by_email", null),
+      lookup(role, "user_by_email", null),
+      lookup(role, "special_group", null)
+    ]))
+  ]
+  auth_roles    = zipmap(local.auth_role_keys, var.access)
+  auth_views    = { for view in var.authorized_views : "${view["project_id"]}_${view["dataset_id"]}_${view["table_id"]}" => view }
+  auth_datasets = { for dataset in var.authorized_datasets : "${dataset["project_id"]}_${dataset["dataset_id"]}" => dataset }
+
   iam_to_primitive = {
     "roles/bigquery.dataOwner" : "OWNER"
     "roles/bigquery.dataEditor" : "WRITER"
@@ -47,7 +61,7 @@ resource "google_bigquery_dataset" "main" {
   }
 
   dynamic "access" {
-    for_each = var.access
+    for_each = local.auth_roles
     content {
       # BigQuery API converts IAM to primitive roles in its backend.
       # This causes Terraform to show a diff on every plan that uses IAM equivalent roles.
@@ -64,7 +78,7 @@ resource "google_bigquery_dataset" "main" {
   }
 
   dynamic "access" {
-    for_each = var.authorized_views
+    for_each = local.auth_views
     content {
       role           = ""
       group_by_email = ""
@@ -75,6 +89,24 @@ resource "google_bigquery_dataset" "main" {
         project_id = access.value.project_id
         dataset_id = access.value.dataset_id
         table_id   = access.value.table_id
+      }
+    }
+  }
+
+  dynamic "access" {
+    for_each = local.auth_datasets
+    content {
+      role           = ""
+      group_by_email = ""
+      user_by_email  = ""
+      special_group  = ""
+      domain         = ""
+      dataset {
+        dataset {
+          project_id = access.value.project_id
+          dataset_id = access.value.dataset_id
+        }
+        target_types = ["VIEWS"]
       }
     }
   }
