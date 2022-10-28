@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.4.2](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v5.4.1...v5.4.2) (2022-10-28)
+
+
+### Bug Fixes
+
+* Workaround issue causing permanent diff in access list ([#157](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/157)) ([cfa0c8c](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/cfa0c8cc37bf7a418b185fc128edaf7ce27def14))
+
 ## [5.4.1](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v5.4.0...v5.4.1) (2022-06-03)
 
 
