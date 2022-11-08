@@ -18,7 +18,7 @@ module "dataset" {
 
 module "add_udfs" {
   source = "terraform-google-modules/bigquery/google//modules/udf"
-  version = "~> 4.0"
+  version = "~> 5.4"
 
   dataset_id = module.dataset.bigquery_dataset.dataset_id
   project_id = module.dataset.bigquery_dataset.project
