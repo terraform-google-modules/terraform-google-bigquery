@@ -16,7 +16,7 @@
 
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0"
+  version = "~> 14.0"
 
   name              = "ci-bigquery"
   random_project_id = "true"
@@ -35,7 +35,7 @@ module "project" {
 
 module "kms_keyring" {
   source  = "terraform-google-modules/kms/google"
-  version = "~> 1.2"
+  version = "~> 2.0"
 
   project_id      = module.project.project_id
   location        = "us"
