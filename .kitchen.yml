@@ -31,3 +31,5 @@ suites:
       name: terraform
       command_timeout: 1800
       root_module_directory: test/fixtures/full
+      # setting version verification to false since it requires TF to be less than v1.1
+      verify_version: false
