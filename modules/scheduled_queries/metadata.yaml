@@ -1,0 +1,61 @@
+# Copyright 2022 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: blueprints.cloud.google.com/v1alpha1
+kind: BlueprintMetadata
+metadata:
+  name: terraform-google-bigquery
+  annotations:
+    config.kubernetes.io/local-config: "true"
+spec:
+  title: BigQuery Scheduled Queries
+  source:
+    repo: https://github.com/terraform-google-modules/terraform-google-bigquery
+    sourceType: git
+  version: 5.4.2
+  actuationTool:
+    type: Terraform
+    version: '>= 0.13'
+  examples:
+  - name: basic_bq
+    location: examples/basic_bq
+  - name: basic_view
+    location: examples/basic_view
+  - name: multiple_tables
+    location: examples/multiple_tables
+  - name: scheduled_queries
+    location: examples/scheduled_queries
+  variables:
+  - name: project_id
+    description: The project where scheduled queries are created
+    type: string
+    required: true
+  - name: queries
+    description: Data transfer configuration for creating scheduled queries
+    type: list(any)
+    required: true
+  outputs:
+  - name: query_names
+    description: The resource names of the transfer config
+  roles:
+  - level: Project
+    roles:
+    - roles/bigquery.admin
+    - roles/cloudkms.cryptoKeyEncrypterDecrypter
+  services:
+  - cloudkms.googleapis.com
+  - cloudresourcemanager.googleapis.com
+  - bigquery.googleapis.com
+  - bigquerystorage.googleapis.com
+  - serviceusage.googleapis.com

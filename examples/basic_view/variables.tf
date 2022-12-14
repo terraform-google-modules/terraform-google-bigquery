@@ -20,11 +20,6 @@ variable "delete_contents_on_destroy" {
   default     = null
 }
 
-variable "default_table_expiration_ms" {
-  description = "Default TTL of tables using the dataset in MS."
-  default     = null
-}
-
 variable "table_project_id" {
   description = "Project where the dataset and table are created."
 }

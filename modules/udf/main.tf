@@ -15,7 +15,8 @@
  */
 
 module "bq_find_in_set" {
-  source  = "github.com/terraform-google-modules/terraform-google-gcloud"
+  source  = "terraform-google-modules/gcloud/google"
+  version = "~> 3.0"
   enabled = var.add_udfs
 
   platform              = "linux"
@@ -44,7 +45,8 @@ EOT
 }
 
 module "bq_check_protocol" {
-  source  = "github.com/terraform-google-modules/terraform-google-gcloud"
+  source  = "terraform-google-modules/gcloud/google"
+  version = "~> 3.0"
   enabled = var.add_udfs
 
   platform              = "linux"
@@ -67,7 +69,8 @@ EOT
 }
 
 module "bq_parse_url" {
-  source  = "github.com/terraform-google-modules/terraform-google-gcloud"
+  source  = "terraform-google-modules/gcloud/google"
+  version = "~> 3.0"
   enabled = module.bq_check_protocol.wait != "" && var.add_udfs
 
   platform              = "linux"
@@ -95,7 +98,8 @@ EOT
 }
 
 module "bq_csv_to_struct" {
-  source  = "github.com/terraform-google-modules/terraform-google-gcloud"
+  source  = "terraform-google-modules/gcloud/google"
+  version = "~> 3.0"
   enabled = var.add_udfs
 
   platform              = "linux"
