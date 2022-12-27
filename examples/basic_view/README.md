@@ -8,7 +8,6 @@ This is a common practice for providing limited data in a different dataset.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| default\_table\_expiration\_ms | Default TTL of tables using the dataset in MS. | `any` | `null` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `null` | no |
 | table\_dataset\_labels | A mapping of labels to assign to the table. | `map(string)` | n/a | yes |
 | table\_project\_id | Project where the dataset and table are created. | `any` | n/a | yes |
