@@ -188,6 +188,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | dataset\_labels | Key value pairs in a map for dataset labels | `map(string)` | `{}` | no |
 | dataset\_name | Friendly name for the dataset being provisioned. | `string` | `null` | no |
 | default\_table\_expiration\_ms | TTL of tables using the dataset in MS | `number` | `null` | no |
+| max_time\_travel\_hours | Defines the time travel window in hours | `number` | `168` | no |
 | delete\_contents\_on\_destroy | (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present. | `bool` | `null` | no |
 | deletion\_protection | Whether or not to allow Terraform to destroy the instance. Unless this field is set to false in Terraform state, a terraform destroy or terraform apply that would delete the instance will fail | `bool` | `false` | no |
 | description | Dataset description. | `string` | `null` | no |
