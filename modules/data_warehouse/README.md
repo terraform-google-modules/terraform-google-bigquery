@@ -10,7 +10,7 @@ The resources/services/activations/deletions that this module will create/trigge
 
 - Creates a BQ Dataset
 - Creates a BQ Table
-- Creates a GCS bucket 
+- Creates a GCS bucket
 - Loads the GCS bucket with data from https://pantheon.corp.google.com/marketplace/product/city-of-new-york/nyc-tlc-trips
 - Provides SQL examples
 - Creates and inferences with a BigQuery ML model
@@ -41,8 +41,8 @@ Functional examples are included in the
 
 | Name | Description |
 |------|-------------|
-| ds\_friendly\_name | n/a |
-| function\_uri | n/a |
+| ds\_friendly\_name | Dataset name |
+| function\_uri | Function URI |
 | lookerstudio\_report\_url | The URL to create a new Looker Studio report displays a sample dashboard for the taxi data analysis |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

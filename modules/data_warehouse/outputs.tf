@@ -15,11 +15,13 @@
  */
 
 output "ds_friendly_name" {
-  value = google_bigquery_dataset.ds_edw.friendly_name
+  value       = google_bigquery_dataset.ds_edw.friendly_name
+  description = "Dataset name"
 }
 
 output "function_uri" {
-  value = google_cloudfunctions2_function.function.service_config[0].uri
+  value       = google_cloudfunctions2_function.function.service_config[0].uri
+  description = "Function URI"
 }
 
 output "lookerstudio_report_url" {

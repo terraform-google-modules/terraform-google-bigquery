@@ -105,6 +105,7 @@ resource "google_bigquery_dataset" "ds_edw" {
   friendly_name = "My EDW Dataset"
   description   = "My EDW Dataset with tables"
   location      = var.region
+  labels        = var.labels
 }
 
 # # Create a BigQuery connection

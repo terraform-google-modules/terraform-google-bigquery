@@ -12,17 +12,17 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-CREATE OR REPLACE TABLE `${project_id}.ds_edw.vendor` 
+CREATE OR REPLACE TABLE `${project_id}.ds_edw.vendor`
     (
         Vendor_Id INTEGER,
         Vendor_Description STRING
     )
-AS 
+AS
 SELECT 1, 'Creative Mobile Technologies, LLC'
 UNION ALL
 SELECT 2, 'VeriFone Inc.';
 
-CREATE OR REPLACE TABLE `${project_id}.ds_edw.payment_type` 
+CREATE OR REPLACE TABLE `${project_id}.ds_edw.payment_type`
     (
         Payment_Type_Id INTEGER,
         Payment_Type_Description STRING

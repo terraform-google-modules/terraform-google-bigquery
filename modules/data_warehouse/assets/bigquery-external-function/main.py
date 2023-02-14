@@ -23,7 +23,6 @@ import os
 def bq_sp_transform(cloud_event):
     tic = time.perf_counter()
 
-    data = cloud_event.data
     PROJECT_ID = os.environ.get("PROJECT_ID")
 
     from google.cloud import bigquery
@@ -58,14 +57,12 @@ def bq_sp_transform(cloud_event):
 #     )
 #     uri = f"gs://{BUCKET_ID}/{data['name']}"
 
-#     load_job = client.load_table_from_uri(uri, table_id, job_config=job_config)  
+#     load_job = client.load_table_from_uri(uri,
+#        table_id, job_config=job_config)
 
 #     load_job.result()
 #     toc = time.perf_counter()
 
 #     destination_table = client.get_table(table_id)
-#     print(f"Loaded {destination_table.num_rows} rows:\n ") 
+#     print(f"Loaded {destination_table.num_rows} rows:\n ")
 #     print(f"In {toc - tic:0.4f} seconds")
-    
-    
-    

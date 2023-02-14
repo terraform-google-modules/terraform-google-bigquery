@@ -16,7 +16,7 @@
 Use Cases:
     - BigQuery supports full SQL syntax and many analytic functions that make complex queries of lots of data easy
 
-Description: 
+Description:
     - Show joins, date functions, rank, partition, pivot
 
 Reference:
@@ -29,7 +29,7 @@ Clean up / Reset script:
 
 --Rank, Pivot, Json
 
--- Query: Get trips over $50 for each day of the week for 6 months.  
+-- Query: Get trips over $50 for each day of the week for 6 months.
 -- Shows: Date Functions, Joins, Group By, Having, Ordinal Group/Having
 SELECT FORMAT_DATE("%w", Pickup_DateTime) AS WeekdayNumber,
        FORMAT_DATE("%A", Pickup_DateTime) AS WeekdayName,
@@ -37,9 +37,9 @@ SELECT FORMAT_DATE("%w", Pickup_DateTime) AS WeekdayNumber,
        payment_type.Payment_Type_Description,
        SUM(taxi_trips.Total_Amount) AS high_value_trips
   FROM `${project_id}.ds_edw.taxi_trips` AS taxi_trips
-       INNER JOIN `${project_id}.ds_edw.vendor` AS vendor 
+       INNER JOIN `${project_id}.ds_edw.vendor` AS vendor
                ON taxi_trips.Vendor_Id = vendor.Vendor_Id
-              AND taxi_trips.Pickup_DateTime BETWEEN '2020-01-01' AND '2020-06-01' 
+              AND taxi_trips.Pickup_DateTime BETWEEN '2020-01-01' AND '2020-06-01'
         LEFT JOIN `${project_id}.ds_edw.payment_type` AS payment_type
                ON taxi_trips.Payment_Type_Id = payment_type.Payment_Type_Id
 GROUP BY 1, 2, 3, 4
@@ -56,10 +56,10 @@ SELECT CAST(Pickup_DateTime AS DATE) AS Pickup_Date,
        taxi_trips.Total_Amount,
        RANK() OVER (PARTITION BY CAST(Pickup_DateTime AS DATE),
                                  taxi_trips.Payment_Type_Id
-                        ORDER BY taxi_trips.Passenger_Count DESC, 
+                        ORDER BY taxi_trips.Passenger_Count DESC,
                                  taxi_trips.Total_Amount DESC) AS Ranking
   FROM `${project_id}.ds_edw.taxi_trips` AS taxi_trips
- WHERE taxi_trips.Pickup_DateTime BETWEEN '2020-01-01' AND '2020-06-01' 
+ WHERE taxi_trips.Pickup_DateTime BETWEEN '2020-01-01' AND '2020-06-01'
    AND taxi_trips.Payment_Type_Id IN (1,2)
 )
 SELECT Pickup_Date,
@@ -86,7 +86,7 @@ SELECT FORMAT_DATE("%B", taxi_trips.Pickup_DateTime) AS MonthName,
        taxi_trips.Passenger_Count,
        taxi_trips.Total_Amount
   FROM `${project_id}.ds_edw.taxi_trips` AS taxi_trips
- WHERE taxi_trips.Pickup_DateTime BETWEEN '2020-01-01' AND '2020-06-01' 
+ WHERE taxi_trips.Pickup_DateTime BETWEEN '2020-01-01' AND '2020-06-01'
    AND Passenger_Count IS NOT NULL
    AND Payment_Type_Id IN (1,2,3,4)
 )
@@ -113,10 +113,10 @@ SELECT FORMAT_DATE("%B", taxi_trips.Pickup_DateTime) AS MonthName,
          END AS PaymentDescription,
        SUM(taxi_trips.Total_Amount) AS Total_Amount
   FROM `${project_id}.ds_edw.taxi_trips` AS taxi_trips
- WHERE taxi_trips.Pickup_DateTime BETWEEN '2020-01-01' AND '2020-12-31' 
+ WHERE taxi_trips.Pickup_DateTime BETWEEN '2020-01-01' AND '2020-12-31'
    AND Passenger_Count IS NOT NULL
    AND Payment_Type_Id IN (1,2,3,4)
- GROUP BY 1, 2, 3   
+ GROUP BY 1, 2, 3
 )
 SELECT MonthName,
        FORMAT("%'d", CAST(Credit   AS INTEGER)) AS Credit,
@@ -136,7 +136,7 @@ SELECT FORMAT_DATE("%B", Pickup_DateTime) AS MonthName,
        FORMAT_DATE("%A", Pickup_DateTime) AS WeekdayName,
        SUM(taxi_trips.Total_Amount) AS Total_Amount
   FROM `${project_id}.ds_edw.taxi_trips` AS taxi_trips
- WHERE taxi_trips.Pickup_DateTime BETWEEN '2020-01-01' AND '2020-12-31' 
+ WHERE taxi_trips.Pickup_DateTime BETWEEN '2020-01-01' AND '2020-12-31'
    AND Payment_Type_Id IN (1,2,3,4)
  GROUP BY 1, 2, 3
 )
