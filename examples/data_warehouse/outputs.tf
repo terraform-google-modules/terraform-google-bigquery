@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-output "bucket_name" {
-  description = "The name of the bucket."
-  value       = module.ssw.bucket_name
+output "ds_friendly_name" {
+  description = "The name of the dataset."
+  value       = module.data_warehouse.ds_friendly_name
 }
