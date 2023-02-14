@@ -25,7 +25,11 @@ module "project-services" {
     "storage.googleapis.com",
     "storage-api.googleapis.com",
     "run.googleapis.com",
-    "pubsub.googleapis.com"
+    "pubsub.googleapis.com",
+    "bigqueryconnection.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "bigquerydatatransfer.googleapis.com",
+    "artifactregistry.googleapis.com",
   ]
 }
 
@@ -109,11 +113,11 @@ resource "google_project_iam_member" "bq_connection_iam_object_viewer" {
 
 # # Upload files
 resource "google_storage_bucket_object" "parquet_files" {
-  for_each = fileset("assets/parquet/", "*")
+  for_each = fileset("${path.module}/assets/parquet/", "*")
 
   bucket = google_storage_bucket.raw_bucket.name
   name   = each.value
-  source = "assets/parquet/${each.value}"
+  source = "${path.module}/assets/parquet/${each.value}"
 
 }
 
@@ -142,7 +146,7 @@ resource "google_bigquery_table" "tbl_edw_taxi" {
 # Load Queries for Stored Procedure Execution
 # # Load Lookup Data Tables
 data "template_file" "sp_provision_lookup_tables" {
-  template = "${file("assets/sql/sp_provision_lookup_tables.sql")}"
+  template = "${file("${path.module}/assets/sql/sp_provision_lookup_tables.sql")}"
   vars = {
     project_id = var.project_id
   }  
@@ -164,7 +168,7 @@ resource "google_bigquery_routine" "sp_provision_lookup_tables" {
 
 # # Add Looker Studio Data Report Procedure
 data "template_file" "sp_lookerstudio_report" {
-  template = "${file("assets/sql/sp_lookerstudio_report.sql")}"
+  template = "${file("${path.module}/assets/sql/sp_lookerstudio_report.sql")}"
   vars = {
     project_id = var.project_id
   }  
@@ -185,7 +189,7 @@ resource "google_bigquery_routine" "sproc_sp_demo_datastudio_report" {
 
 # # Add Sample Queries
 data "template_file" "sp_sample_queries" {
-  template = "${file("assets/sql/sp_sample_queries.sql")}"
+  template = "${file("${path.module}/assets/sql/sp_sample_queries.sql")}"
   vars = {
     project_id = var.project_id
   }  
@@ -207,7 +211,7 @@ resource "google_bigquery_routine" "sp_sample_queries" {
 
 # # Add Bigquery ML Model
 data "template_file" "sp_bigqueryml_model" {
-  template = "${file("assets/sql/sp_bigqueryml_model.sql")}"
+  template = "${file("${path.module}/assets/sql/sp_bigqueryml_model.sql")}"
   vars = {
     project_id = var.project_id
   }  
@@ -228,7 +232,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_model" {
 
 # # Add Translation Scripts
 data "template_file" "sp_sample_translation_queries" {
-  template = "${file("assets/sql/sp_sample_translation_queries.sql")}"
+  template = "${file("${path.module}/assets/sql/sp_sample_translation_queries.sql")}"
   vars = {
     project_id = var.project_id
   }  
@@ -249,16 +253,22 @@ resource "google_bigquery_routine" "sp_sample_translation_queries" {
 
 # Add Scheduled Query
 # # Set up DTS permissions
+resource "google_project_service_identity" "bigquery_data_transfer_sa" {
+  provider = google-beta
+  project  = var.project_id
+  service  = "bigquerydatatransfer.googleapis.com"
+}
+
 resource "google_project_iam_member" "dts_permissions_token" {
   project = data.google_project.project.project_id
   role   = "roles/iam.serviceAccountTokenCreator"
-  member = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-bigquerydatatransfer.iam.gserviceaccount.com"
+  member = "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
 }
 
 resource "google_project_iam_member" "dts_permissions_agent" {
   project = data.google_project.project.project_id
   role   = "roles/bigquerydatatransfer.serviceAgent"
-  member = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-bigquerydatatransfer.iam.gserviceaccount.com"
+  member = "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
 }
 
 # Set up scheduled query
@@ -284,8 +294,8 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
 # # Zip the function file
 data "archive_file" "bigquery_external_function_zip" {
   type        = "zip"
-  source_dir  = "assets/bigquery-external-function" 
-  output_path = "assets/bigquery-external-function.zip"
+  source_dir  = "${path.module}/assets/bigquery-external-function" 
+  output_path = "${path.module}/assets/bigquery-external-function.zip"
 
   depends_on = [ 
     google_storage_bucket.provisioning_bucket
@@ -351,12 +361,16 @@ resource "google_cloudfunctions2_function" "function" {
   ]
 } 
 
-
+resource "google_project_iam_member" "workflow_event_receiver" {
+  project = var.project_id
+  role    = "roles/eventarc.eventReceiver"
+  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
+}
 
 resource "google_storage_bucket_object" "startfile" {
   bucket = google_storage_bucket.raw_bucket.name
   name   = "startfile"
-  source = "assets/startfile"
+  source = "${path.module}/assets/startfile"
 
   depends_on = [
     google_cloudfunctions2_function.function

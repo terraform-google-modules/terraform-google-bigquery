@@ -18,5 +18,5 @@ module "data_warehouse" {
   source = "../../modules/data_warehouse"
 
   project_id  = var.project_id
-  region = var.region
+  region = "us-central1"
 }

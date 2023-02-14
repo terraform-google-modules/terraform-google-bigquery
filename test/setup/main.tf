@@ -29,7 +29,8 @@ module "project" {
     "cloudresourcemanager.googleapis.com",
     "bigquery.googleapis.com",
     "bigquerystorage.googleapis.com",
-    "serviceusage.googleapis.com"
+    "serviceusage.googleapis.com",
+    "iam.googleapis.com",
   ]
 }
 
