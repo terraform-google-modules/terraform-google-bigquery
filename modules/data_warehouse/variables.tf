@@ -2,20 +2,15 @@
 # VARIABLES
 # Set these before applying the configuration
 # --------------------------------------------------
-variable project_id {
+variable "project_id" {
   type        = string
   description = "Google Cloud Project ID"
 }
 
-variable region {
+variable "region" {
   type        = string
   description = "Google Cloud Region"
 }
-
-# variable zone {
-#   type        = string
-#   description = "Google Cloud Zone"
-# }
 
 variable "labels" {
   type        = map(string)
