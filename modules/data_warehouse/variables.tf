@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-# --------------------------------------------------
-# VARIABLES
-# Set these before applying the configuration
-# --------------------------------------------------
 variable "project_id" {
   type        = string
   description = "Google Cloud Project ID"
