@@ -32,14 +32,18 @@ Functional examples are included in the
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| bucket\_name | The name of the bucket to create | `string` | n/a | yes |
-| project\_id | The project ID to deploy to | `string` | n/a | yes |
+| enable\_apis | Whether or not to enable underlying apis in this solution. . | `string` | `true` | no |
+| labels | A map of labels to apply to contained resources. | `map(string)` | <pre>{<br>  "edw-bigquery": true<br>}</pre> | no |
+| project\_id | Google Cloud Project ID | `string` | n/a | yes |
+| region | Google Cloud Region | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| bucket\_name | Name of the bucket |
+| ds\_friendly\_name | n/a |
+| function\_uri | n/a |
+| lookerstudio\_report\_url | The URL to create a new Looker Studio report displays a sample dashboard for the taxi data analysis |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
