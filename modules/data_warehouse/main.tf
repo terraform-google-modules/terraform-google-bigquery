@@ -72,16 +72,25 @@ resource "google_project_iam_member" "cloud_function_service_account_editor_role
   ]
 }
 
-# TODO: Add scheduled load job
-
 # Set up Storage Buckets
+# # Set up the export storage bucket
+resource "google_storage_bucket" "export_bucket" {
+  name          = "ds-edw-export-${random_id.id.hex}"
+  project     = var.project_id
+  location      = "us-central1"
+  uniform_bucket_level_access = true
+  force_destroy = var.force_destroy
+
+  # public_access_prevention = "enforced" # need to validate if this is a hard requirement
+}
+
 # # Set up the raw storage bucket
 resource "google_storage_bucket" "raw_bucket" {
   name                        = "ds-edw-raw-${random_id.id.hex}"
   project                     = var.project_id
   location                    = var.region
   uniform_bucket_level_access = true
-  force_destroy               = true
+  force_destroy               = var.force_destroy
 
   # public_access_prevention = "enforced" # need to validate if this is a hard requirement
 }
@@ -92,7 +101,7 @@ resource "google_storage_bucket" "provisioning_bucket" {
   project                     = var.project_id
   location                    = var.region
   uniform_bucket_level_access = true
-  force_destroy               = true
+  force_destroy               = var.force_destroy
 
   # public_access_prevention = "enforced"
 }
@@ -128,22 +137,12 @@ resource "google_project_iam_member" "bq_connection_iam_object_viewer" {
   ]
 }
 
-# # Upload files
-resource "google_storage_bucket_object" "parquet_files" {
-  for_each = fileset("${path.module}/assets/parquet/", "*")
-
-  bucket = google_storage_bucket.raw_bucket.name
-  name   = each.value
-  source = "${path.module}/assets/parquet/${each.value}"
-
-}
-
 # # Create a BigQuery external table
 resource "google_bigquery_table" "tbl_edw_taxi" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "taxi_trips"
   project             = var.project_id
-  deletion_protection = false
+  deletion_protection = var.deletion_protection
 
   external_data_configuration {
     autodetect    = true
@@ -155,8 +154,7 @@ resource "google_bigquery_table" "tbl_edw_taxi" {
 
   depends_on = [
     google_bigquery_connection.ds_connection,
-    google_storage_bucket.raw_bucket,
-    google_storage_bucket_object.parquet_files
+    google_storage_bucket.raw_bucket
   ]
 }
 
@@ -224,7 +222,6 @@ resource "google_bigquery_routine" "sp_sample_queries" {
     data.template_file.sp_sample_queries
   ]
 }
-
 
 # # Add Bigquery ML Model
 data "template_file" "sp_bigqueryml_model" {
@@ -357,6 +354,7 @@ resource "google_cloudfunctions2_function" "function" {
     environment_variables = {
       PROJECT_ID = var.project_id
       BUCKET_ID  = google_storage_bucket.raw_bucket.name
+      EXPORT_BUCKET_ID = google_storage_bucket.export_bucket.name
     }
     service_account_email = google_service_account.cloud_function_service_account.email
   }
@@ -366,7 +364,7 @@ resource "google_cloudfunctions2_function" "function" {
     event_type     = "google.cloud.storage.object.v1.finalized"
     event_filters {
       attribute = "bucket"
-      value     = google_storage_bucket.raw_bucket.name
+      value     = google_storage_bucket.provisioning_bucket.name
     }
     retry_policy = "RETRY_POLICY_RETRY"
   }
@@ -385,7 +383,7 @@ resource "google_project_iam_member" "workflow_event_receiver" {
 }
 
 resource "google_storage_bucket_object" "startfile" {
-  bucket = google_storage_bucket.raw_bucket.name
+  bucket = google_storage_bucket.provisioning_bucket.name
   name   = "startfile"
   source = "${path.module}/assets/startfile"
 

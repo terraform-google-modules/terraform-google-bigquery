@@ -13,7 +13,7 @@ This example illustrates how to use the `data_warehouse` module.
 
 | Name | Description |
 |------|-------------|
-| ds\_friendly\_name | The name of the dataset. |
+| lookerstudio_report_url | The URL of the Looker Studio report to open. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

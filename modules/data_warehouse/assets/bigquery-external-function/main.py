@@ -14,14 +14,23 @@
 
 # [START functions_cloudevent_storage]
 import functions_framework
-import time
 import os
 
 
 # Triggered by a change in a storage bucket
 @functions_framework.cloud_event
 def bq_sp_transform(cloud_event):
-    tic = time.perf_counter()
+
+    data = cloud_event.data
+    
+    gcs_export_bq()
+
+    gcs_copy()
+    
+    bq_one_time_sp()
+
+
+def bq_one_time_sp():
 
     PROJECT_ID = os.environ.get("PROJECT_ID")
 
@@ -37,32 +46,52 @@ def bq_sp_transform(cloud_event):
     query_job = client.query(query_string)
 
     query_job.result()
-    toc = time.perf_counter()
 
-    print(f"In {toc - tic:0.4f} seconds")
 
-# def gcs_load_bq(cloud_event):
-#     tic = time.perf_counter()
+def gcs_export_bq():
 
-#     data = cloud_event.data
-#     PROJECT_ID = os.environ.get("PROJECT_ID")
-#     BUCKET_ID = os.environ.get("BUCKET_ID")
+    from google.cloud import bigquery
+    client = bigquery.Client()
+    EXPORT_BUCKET_ID = os.environ.get("EXPORT_BUCKET_ID")
+    PROJECT_ID = os.environ.get("PROJECT_ID")
 
-#     from google.cloud import bigquery
+    destination_uri = "gs://{}/{}".format(EXPORT_BUCKET_ID, "taxi-*.Parquet")
+    job_config = bigquery.job.ExtractJobConfig()
+    job_config.compression = bigquery.Compression.GZIP
+    job_config.destination_format = "PARQUET"
 
-#     client = bigquery.Client()
-#     table_id = f"{PROJECT_ID}.ds_edw.taxi_trips"
-#     job_config = bigquery.LoadJobConfig(
-#         source_format=bigquery.SourceFormat.PARQUET,
-#     )
-#     uri = f"gs://{BUCKET_ID}/{data['name']}"
+    extract_job = client.extract_table(
+       'bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2022',
+        destination_uri,
+        # Location must match that of the source table.
+        location="US",
+        job_config=job_config,
+    )  # API request
+    extract_job.result()  # Waits for job to complete.
 
-#     load_job = client.load_table_from_uri(uri,
-#        table_id, job_config=job_config)
+def gcs_copy():
 
-#     load_job.result()
-#     toc = time.perf_counter()
+    EXPORT_BUCKET_ID = os.environ.get("EXPORT_BUCKET_ID")
+    BUCKET_ID = os.environ.get("BUCKET_ID")
 
-#     destination_table = client.get_table(table_id)
-#     print(f"Loaded {destination_table.num_rows} rows:\n ")
-#     print(f"In {toc - tic:0.4f} seconds")
+    from google.cloud import storage
+
+    storage_client = storage.Client()
+
+    source_bucket = storage_client.bucket(EXPORT_BUCKET_ID)
+    destination_bucket = storage_client.bucket(BUCKET_ID)
+
+    blobs = storage_client.list_blobs(EXPORT_BUCKET_ID)
+
+    blob_list = []
+    # Note: The call returns a response only when the iterator is consumed.
+    for blob in blobs:
+        blob_list.append(blob.name)
+        print(blob.name)
+
+    for blob in blob_list:
+        source_blob = source_bucket.blob(blob)
+
+        blob_copy = source_bucket.copy_blob(
+            source_blob, destination_bucket, blob,
+        )

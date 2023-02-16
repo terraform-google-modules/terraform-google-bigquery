@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-output "ds_friendly_name" {
+output "lookerstudio_report_url" {
   description = "The name of the dataset."
-  value       = module.data_warehouse.ds_friendly_name
+  value       = module.data_warehouse.lookerstudio_report_url
+}
+
+output "bigquery_editor_url" {
+  description = "The name of the dataset."
+  value       = module.data_warehouse.bigquery_editor_url
 }
