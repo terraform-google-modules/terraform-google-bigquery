@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ locals {
   roles    = zipmap(local.role_keys, var.roles)
   views    = { for view in var.authorized_views : "${view["project_id"]}_${view["dataset_id"]}_${view["table_id"]}" => view }
   datasets = { for dataset in var.authorized_datasets : "${dataset["project_id"]}_${dataset["dataset_id"]}" => dataset }
+  routines = { for routine in var.authorized_routines : "${routine["project_id"]}_${routine["dataset_id"]}_${routine["routine_id"]}" => routine }
 
   iam_to_primitive = {
     "roles/bigquery.dataOwner" : "OWNER"
@@ -71,5 +72,16 @@ resource "google_bigquery_dataset_access" "authorized_dataset" {
       dataset_id = each.value.dataset_id
     }
     target_types = ["VIEWS"]
+  }
+}
+
+resource "google_bigquery_dataset_access" "authorized_routine" {
+  for_each   = local.routines
+  dataset_id = var.dataset_id
+  project    = var.project_id
+  routine {
+    project_id = each.value.project_id
+    dataset_id = each.value.dataset_id
+    routine_id = each.value.routine_id
   }
 }
