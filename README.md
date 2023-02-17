@@ -75,7 +75,7 @@ module "bigquery" {
       owner    = "joedoe"
     }
   }
-  ],
+  ]
 
   views = [
     {
