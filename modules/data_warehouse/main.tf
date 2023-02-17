@@ -75,11 +75,11 @@ resource "google_project_iam_member" "cloud_function_service_account_editor_role
 # Set up Storage Buckets
 # # Set up the export storage bucket
 resource "google_storage_bucket" "export_bucket" {
-  name          = "ds-edw-export-${random_id.id.hex}"
-  project     = var.project_id
-  location      = "us-central1"
+  name                        = "ds-edw-export-${random_id.id.hex}"
+  project                     = var.project_id
+  location                    = "us-central1"
   uniform_bucket_level_access = true
-  force_destroy = var.force_destroy
+  force_destroy               = var.force_destroy
 
   # public_access_prevention = "enforced" # need to validate if this is a hard requirement
 }
@@ -348,13 +348,13 @@ resource "google_cloudfunctions2_function" "function" {
   }
 
   service_config {
-    max_instance_count = 1
-    available_memory   = "256M"
-    timeout_seconds    = 540
+    max_instance_count  = 1
+    available_memory    = "256M"
+    timeout_seconds     = 540
     environment_variables = {
-      PROJECT_ID = var.project_id
-      BUCKET_ID  = google_storage_bucket.raw_bucket.name
-      EXPORT_BUCKET_ID = google_storage_bucket.export_bucket.name
+      PROJECT_ID        = var.project_id
+      BUCKET_ID         = google_storage_bucket.raw_bucket.name
+      EXPORT_BUCKET_ID  = google_storage_bucket.export_bucket.name
     }
     service_account_email = google_service_account.cloud_function_service_account.email
   }

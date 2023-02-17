@@ -13,12 +13,12 @@
 -- limitations under the License.
 
 /* To use the Migration Service, in the top pane, go to More --> Enable SQL translation.
-The queries below are examples of non-BigQuery SQL syntax that can be used with the 
+The queries below are examples of non-BigQuery SQL syntax that can be used with the
 interactive translator to see before and after changes performed.
 
 The sample queries below use PostgreSQL syntax.*/
 
-/* Query 1 
+/* Query 1
 -------------
 CREATE TABLE taxi_trips (payment_type VARCHAR, Vendor_Id VARCHAR);
 
@@ -39,7 +39,7 @@ ORDER BY WeekdayNumber, 3, 4;
 */
 
 
-/* Query 2 
+/* Query 2
 -------------
 CREATE TABLE taxi_trips (payment_type VARCHAR, Vendor_Id VARCHAR);
 

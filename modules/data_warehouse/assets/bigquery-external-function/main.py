@@ -21,12 +21,10 @@ import os
 @functions_framework.cloud_event
 def bq_sp_transform(cloud_event):
 
-    data = cloud_event.data
-    
     gcs_export_bq()
 
     gcs_copy()
-    
+
     bq_one_time_sp()
 
 
@@ -53,7 +51,6 @@ def gcs_export_bq():
     from google.cloud import bigquery
     client = bigquery.Client()
     EXPORT_BUCKET_ID = os.environ.get("EXPORT_BUCKET_ID")
-    PROJECT_ID = os.environ.get("PROJECT_ID")
 
     destination_uri = "gs://{}/{}".format(EXPORT_BUCKET_ID, "taxi-*.Parquet")
     job_config = bigquery.job.ExtractJobConfig()
@@ -61,13 +58,14 @@ def gcs_export_bq():
     job_config.destination_format = "PARQUET"
 
     extract_job = client.extract_table(
-       'bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2022',
+        'bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2022',
         destination_uri,
         # Location must match that of the source table.
         location="US",
         job_config=job_config,
-    )  # API request
+        )  # API request
     extract_job.result()  # Waits for job to complete.
+
 
 def gcs_copy():
 
@@ -92,6 +90,6 @@ def gcs_copy():
     for blob in blob_list:
         source_blob = source_bucket.blob(blob)
 
-        blob_copy = source_bucket.copy_blob(
+        source_bucket.copy_blob(
             source_blob, destination_bucket, blob,
         )

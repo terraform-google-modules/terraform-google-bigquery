@@ -12,11 +12,11 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-/* Run a query to see the prediction results of the model 
+/* Run a query to see the prediction results of the model
 --
-select * from ML.PREDICT(MODEL ds_edw.model_taxi_estimate, 
+select * from ML.PREDICT(MODEL ds_edw.model_taxi_estimate,
   TABLE ds_edw.taxi_trips)
-  limit 1000;  */ 
+  limit 1000;  */
 
 --Model Example
 CREATE OR REPLACE MODEL
