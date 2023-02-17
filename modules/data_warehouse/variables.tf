@@ -32,19 +32,19 @@ variable "labels" {
 
 variable "enable_apis" {
   type        = string
-  description = "Whether or not to enable underlying apis in this solution. ."
+  description = "Whether or not to enable underlying apis in this solution."
   default     = true
 }
 
 variable "force_destroy" {
   type        = string
-  description = "Whether or not to enable underlying apis in this solution. ."
+  description = "Whether or not to protect BigQuery resources from deletion when solution is modified or changed."
   default     = false
 }
 
 variable "deletion_protection" {
   type        = string
-  description = "Whether or not to enable underlying apis in this solution. ."
+  description = "Whether or not to protect GCS resources from deletion when solution is modified or changed."
   default     = true
 }
 
