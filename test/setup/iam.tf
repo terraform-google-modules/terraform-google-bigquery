@@ -17,7 +17,8 @@
 locals {
   int_required_roles = [
     "roles/bigquery.admin",
-    "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+    "roles/cloudkms.cryptoKeyEncrypterDecrypter",
+    "roles/owner" // TODO: Descope
   ]
 }
 
