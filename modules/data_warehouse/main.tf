@@ -348,13 +348,13 @@ resource "google_cloudfunctions2_function" "function" {
   }
 
   service_config {
-    max_instance_count  = 1
-    available_memory    = "256M"
-    timeout_seconds     = 540
+    max_instance_count    = 1
+    available_memory      = "256M"
+    timeout_seconds       = 540
     environment_variables = {
-      PROJECT_ID        = var.project_id
-      BUCKET_ID         = google_storage_bucket.raw_bucket.name
-      EXPORT_BUCKET_ID  = google_storage_bucket.export_bucket.name
+      PROJECT_ID          = var.project_id
+      BUCKET_ID           = google_storage_bucket.raw_bucket.name
+      EXPORT_BUCKET_ID    = google_storage_bucket.export_bucket.name
     }
     service_account_email = google_service_account.cloud_function_service_account.email
   }

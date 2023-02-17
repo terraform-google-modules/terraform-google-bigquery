@@ -32,7 +32,9 @@ Functional examples are included in the
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| deletion\_protection | Whether or not to protect GCS resources from deletion when solution is modified or changed. | `string` | `true` | no |
 | enable\_apis | Whether or not to enable underlying apis in this solution. . | `string` | `true` | no |
+| force\_destroy | Whether or not to protect BigQuery resources from deletion when solution is modified or changed. | `string` | `false` | no |
 | labels | A map of labels to apply to contained resources. | `map(string)` | <pre>{<br>  "edw-bigquery": true<br>}</pre> | no |
 | project\_id | Google Cloud Project ID | `string` | n/a | yes |
 | region | Google Cloud Region | `string` | n/a | yes |
@@ -44,6 +46,7 @@ Functional examples are included in the
 | ds\_friendly\_name | Dataset name |
 | function\_uri | Function URI |
 | lookerstudio\_report\_url | The URL to create a new Looker Studio report displays a sample dashboard for the taxi data analysis |
+| bigquery\_editor\_url | The URL to directly open BigQuery Editor with sample queries open |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
