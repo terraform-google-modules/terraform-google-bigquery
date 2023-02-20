@@ -58,7 +58,7 @@ variable "default_table_expiration_ms" {
 variable "max_time_travel_hours" {
   description = "Defines the time travel window in hours"
   type        = number
-  default     = 168
+  default     = null
 }
 
 variable "project_id" {
