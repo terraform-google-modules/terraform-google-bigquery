@@ -43,10 +43,11 @@ Functional examples are included in the
 
 | Name | Description |
 |------|-------------|
+| bigquery\_editor\_url | The URL to launch the BigQuery editor with the sample query procedure opened |
 | ds\_friendly\_name | Dataset name |
 | function\_uri | Function URI |
 | lookerstudio\_report\_url | The URL to create a new Looker Studio report displays a sample dashboard for the taxi data analysis |
-| bigquery\_editor\_url | The URL to launch the BigQuery editor with the sample query procedure opened |
+| raw\_bucket | Raw bucket name |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
