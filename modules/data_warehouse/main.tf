@@ -447,6 +447,19 @@ resource "google_storage_bucket_object" "cloud_function_zip_upload" {
   ]
 }
 
+data "google_storage_project_service_account" "gcs_account" {
+  project = var.project_id
+}
+
+// GCS CloudEvent triggers, the GCS service account requires the Pub/Sub Publisher
+resource "google_project_iam_member" "pubsub" {
+  project = var.project_id
+
+  role   = "roles/pubsub.publisher"
+  member = "serviceAccount:${data.google_storage_project_service_account.gcs_account.email_address}"
+}
+
+
 # # Create the function
 resource "google_cloudfunctions2_function" "function" {
   #provider = google-beta
@@ -491,7 +504,8 @@ resource "google_cloudfunctions2_function" "function" {
   depends_on = [
     google_storage_bucket.provisioning_bucket,
     google_storage_bucket.raw_bucket,
-    google_project_iam_member.cloud_function_service_account_editor_role
+    google_project_iam_member.cloud_function_service_account_editor_role,
+    google_project_iam_member.pubsub,
   ]
 }
 

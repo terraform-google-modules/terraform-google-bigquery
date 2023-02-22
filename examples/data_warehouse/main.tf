@@ -17,6 +17,7 @@
 module "data_warehouse" {
   source = "../../modules/data_warehouse"
 
-  project_id = var.project_id
-  region     = "us-central1"
+  project_id          = var.project_id
+  region              = "us-central1"
+  deletion_protection = false
 }

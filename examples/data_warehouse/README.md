@@ -13,7 +13,9 @@ This example illustrates how to use the `data_warehouse` module.
 
 | Name | Description |
 |------|-------------|
-| lookerstudio_report_url | The URL of the Looker Studio report to open. |
+| bigquery\_editor\_url | BQ editor URL |
+| lookerstudio\_report\_url | Looker studio URL |
+| raw\_bucket | Raw bucket name |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

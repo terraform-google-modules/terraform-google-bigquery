@@ -19,6 +19,11 @@ output "ds_friendly_name" {
   description = "Dataset name"
 }
 
+output "raw_bucket" {
+  value       = google_storage_bucket.raw_bucket.name
+  description = "Raw bucket name"
+}
+
 output "function_uri" {
   value       = google_cloudfunctions2_function.function.service_config[0].uri
   description = "Function URI"
