@@ -35,6 +35,7 @@ resource "google_bigquery_dataset" "main" {
   location                    = var.location
   delete_contents_on_destroy  = var.delete_contents_on_destroy
   default_table_expiration_ms = var.default_table_expiration_ms
+  max_time_travel_hours       = var.max_time_travel_hours
   project                     = var.project_id
   labels                      = var.dataset_labels
 

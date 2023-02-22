@@ -55,6 +55,12 @@ variable "default_table_expiration_ms" {
   default     = null
 }
 
+variable "max_time_travel_hours" {
+  description = "Defines the time travel window in hours"
+  type        = number
+  default     = null
+}
+
 variable "project_id" {
   description = "Project where the dataset and table are created"
   type        = string
