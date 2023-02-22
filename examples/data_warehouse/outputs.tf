@@ -15,7 +15,7 @@
  */
 
 output "lookerstudio_report_url" {
-  description = "Looker studio URL"
+  description = "Looker Studio URL"
   value       = module.data_warehouse.lookerstudio_report_url
 }
 
