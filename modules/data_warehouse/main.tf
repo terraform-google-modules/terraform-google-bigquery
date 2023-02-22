@@ -109,12 +109,13 @@ resource "google_storage_bucket" "provisioning_bucket" {
 # Set up BigQuery resources
 # # Create the BigQuery dataset
 resource "google_bigquery_dataset" "ds_edw" {
-  project       = module.project-services.project_id
-  dataset_id    = "ds_edw"
-  friendly_name = "My EDW Dataset"
-  description   = "My EDW Dataset with tables"
-  location      = var.region
-  labels        = var.labels
+  project                    = module.project-services.project_id
+  dataset_id                 = "ds_edw"
+  friendly_name              = "My EDW Dataset"
+  description                = "My EDW Dataset with tables"
+  location                   = var.region
+  labels                     = var.labels
+  delete_contents_on_destroy = var.force_destroy
 }
 
 # # Create a BigQuery connection
