@@ -16,14 +16,21 @@ package multiple_buckets
 
 import (
 	"testing"
+	"time"
 
 	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/gcloud"
 	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/tft"
 	"github.com/stretchr/testify/assert"
 )
 
+// Retry if these errors are encountered.
+var retryErrors = map[string]string{
+	// IAM for Eventarc service agent is eventually consistent
+	".*Permission denied while using the Eventarc Service Agent.*": "Eventarc Service Agent IAM is eventually consistent",
+}
+
 func TestDataWarehouse(t *testing.T) {
-	dwh := tft.NewTFBlueprintTest(t)
+	dwh := tft.NewTFBlueprintTest(t, tft.WithRetryableTerraformErrors(retryErrors, 10, time.Minute))
 
 	dwh.DefineVerify(func(assert *assert.Assertions) {
 		dwh.DefaultVerify(assert)
