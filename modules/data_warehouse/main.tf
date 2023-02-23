@@ -56,14 +56,14 @@ resource "random_id" "id" {
 
 # Set up service account for the Cloud Function to execute as
 resource "google_service_account" "cloud_function_service_account" {
-  project      = var.project_id
+  project      = module.project-services.project_id
   account_id   = "cloud-function-sa-${random_id.id.hex}"
   display_name = "Service Account for Cloud Function Execution"
 }
 
 # TODO: scope this down
 resource "google_project_iam_member" "cloud_function_service_account_editor_role" {
-  project = var.project_id
+  project = module.project-services.project_id
   role    = "roles/editor"
   member  = "serviceAccount:${google_service_account.cloud_function_service_account.email}"
 
@@ -76,7 +76,7 @@ resource "google_project_iam_member" "cloud_function_service_account_editor_role
 # # Set up the export storage bucket
 resource "google_storage_bucket" "export_bucket" {
   name                        = "ds-edw-export-${random_id.id.hex}"
-  project                     = var.project_id
+  project                     = module.project-services.project_id
   location                    = "us-central1"
   uniform_bucket_level_access = true
   force_destroy               = var.force_destroy
@@ -87,7 +87,7 @@ resource "google_storage_bucket" "export_bucket" {
 # # Set up the raw storage bucket
 resource "google_storage_bucket" "raw_bucket" {
   name                        = "ds-edw-raw-${random_id.id.hex}"
-  project                     = var.project_id
+  project                     = module.project-services.project_id
   location                    = var.region
   uniform_bucket_level_access = true
   force_destroy               = var.force_destroy
@@ -98,7 +98,7 @@ resource "google_storage_bucket" "raw_bucket" {
 # # Set up the provisioning bucketstorage bucket
 resource "google_storage_bucket" "provisioning_bucket" {
   name                        = "ds-edw-provisioner-${random_id.id.hex}"
-  project                     = var.project_id
+  project                     = module.project-services.project_id
   location                    = var.region
   uniform_bucket_level_access = true
   force_destroy               = var.force_destroy
@@ -109,17 +109,18 @@ resource "google_storage_bucket" "provisioning_bucket" {
 # Set up BigQuery resources
 # # Create the BigQuery dataset
 resource "google_bigquery_dataset" "ds_edw" {
-  project       = var.project_id
-  dataset_id    = "ds_edw"
-  friendly_name = "My EDW Dataset"
-  description   = "My EDW Dataset with tables"
-  location      = var.region
-  labels        = var.labels
+  project                    = module.project-services.project_id
+  dataset_id                 = "ds_edw"
+  friendly_name              = "My EDW Dataset"
+  description                = "My EDW Dataset with tables"
+  location                   = var.region
+  labels                     = var.labels
+  delete_contents_on_destroy = var.force_destroy
 }
 
 # # Create a BigQuery connection
 resource "google_bigquery_connection" "ds_connection" {
-  project       = var.project_id
+  project       = module.project-services.project_id
   connection_id = "ds_connection"
   location      = var.region
   friendly_name = "Storage Bucket Connection"
@@ -128,7 +129,7 @@ resource "google_bigquery_connection" "ds_connection" {
 
 # # Grant IAM access to the BigQuery Connection account for Cloud Storage
 resource "google_project_iam_member" "bq_connection_iam_object_viewer" {
-  project = var.project_id
+  project = module.project-services.project_id
   role    = "roles/storage.objectViewer"
   member  = "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}"
 
@@ -141,12 +142,12 @@ resource "google_project_iam_member" "bq_connection_iam_object_viewer" {
 resource "google_bigquery_table" "tbl_edw_taxi" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "taxi_trips"
-  project             = var.project_id
+  project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
 
   external_data_configuration {
     autodetect    = true
-    connection_id = "${var.project_id}.${var.region}.ds_connection"
+    connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/taxi-*.Parquet"]
 
@@ -282,11 +283,11 @@ EOF
 data "template_file" "sp_provision_lookup_tables" {
   template = file("${path.module}/assets/sql/sp_provision_lookup_tables.sql")
   vars = {
-    project_id = var.project_id
+    project_id = module.project-services.project_id
   }
 }
 resource "google_bigquery_routine" "sp_provision_lookup_tables" {
-  project         = var.project_id
+  project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_provision_lookup_tables"
   routine_type    = "PROCEDURE"
@@ -304,11 +305,11 @@ resource "google_bigquery_routine" "sp_provision_lookup_tables" {
 data "template_file" "sp_lookerstudio_report" {
   template = file("${path.module}/assets/sql/sp_lookerstudio_report.sql")
   vars = {
-    project_id = var.project_id
+    project_id = module.project-services.project_id
   }
 }
 resource "google_bigquery_routine" "sproc_sp_demo_datastudio_report" {
-  project         = var.project_id
+  project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_lookerstudio_report"
   routine_type    = "PROCEDURE"
@@ -325,11 +326,11 @@ resource "google_bigquery_routine" "sproc_sp_demo_datastudio_report" {
 data "template_file" "sp_sample_queries" {
   template = file("${path.module}/assets/sql/sp_sample_queries.sql")
   vars = {
-    project_id = var.project_id
+    project_id = module.project-services.project_id
   }
 }
 resource "google_bigquery_routine" "sp_sample_queries" {
-  project         = var.project_id
+  project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_sample_queries"
   routine_type    = "PROCEDURE"
@@ -346,11 +347,11 @@ resource "google_bigquery_routine" "sp_sample_queries" {
 data "template_file" "sp_bigqueryml_model" {
   template = file("${path.module}/assets/sql/sp_bigqueryml_model.sql")
   vars = {
-    project_id = var.project_id
+    project_id = module.project-services.project_id
   }
 }
 resource "google_bigquery_routine" "sp_bigqueryml_model" {
-  project         = var.project_id
+  project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_bigqueryml_model"
   routine_type    = "PROCEDURE"
@@ -367,11 +368,11 @@ resource "google_bigquery_routine" "sp_bigqueryml_model" {
 data "template_file" "sp_sample_translation_queries" {
   template = file("${path.module}/assets/sql/sp_sample_translation_queries.sql")
   vars = {
-    project_id = var.project_id
+    project_id = module.project-services.project_id
   }
 }
 resource "google_bigquery_routine" "sp_sample_translation_queries" {
-  project         = var.project_id
+  project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_sample_translation_queries"
   routine_type    = "PROCEDURE"
@@ -388,7 +389,7 @@ resource "google_bigquery_routine" "sp_sample_translation_queries" {
 # # Set up DTS permissions
 resource "google_project_service_identity" "bigquery_data_transfer_sa" {
   provider = google-beta
-  project  = var.project_id
+  project  = module.project-services.project_id
   service  = "bigquerydatatransfer.googleapis.com"
 }
 
@@ -408,12 +409,12 @@ resource "google_project_iam_member" "dts_permissions_agent" {
 resource "google_bigquery_data_transfer_config" "dts_config" {
 
   display_name   = "nightlyloadquery"
-  project        = var.project_id
+  project        = module.project-services.project_id
   location       = var.region
   data_source_id = "scheduled_query"
   schedule       = "every day 00:00"
   params = {
-    query = "CALL `${var.project_id}.ds_edw.sp_lookerstudio_report`()"
+    query = "CALL `${module.project-services.project_id}.ds_edw.sp_lookerstudio_report`()"
   }
 
   depends_on = [
@@ -447,10 +448,23 @@ resource "google_storage_bucket_object" "cloud_function_zip_upload" {
   ]
 }
 
+data "google_storage_project_service_account" "gcs_account" {
+  project = module.project-services.project_id
+}
+
+// GCS CloudEvent triggers, the GCS service account requires the Pub/Sub Publisher
+resource "google_project_iam_member" "pubsub" {
+  project = module.project-services.project_id
+
+  role   = "roles/pubsub.publisher"
+  member = "serviceAccount:${data.google_storage_project_service_account.gcs_account.email_address}"
+}
+
+
 # # Create the function
 resource "google_cloudfunctions2_function" "function" {
   #provider = google-beta
-  project     = var.project_id
+  project     = module.project-services.project_id
   name        = "bq-sp-transform-${random_id.id.hex}"
   location    = var.region
   description = "gcs-load-bq"
@@ -471,7 +485,7 @@ resource "google_cloudfunctions2_function" "function" {
     available_memory   = "256M"
     timeout_seconds    = 540
     environment_variables = {
-      PROJECT_ID       = var.project_id
+      PROJECT_ID       = module.project-services.project_id
       BUCKET_ID        = google_storage_bucket.raw_bucket.name
       EXPORT_BUCKET_ID = google_storage_bucket.export_bucket.name
     }
@@ -491,12 +505,13 @@ resource "google_cloudfunctions2_function" "function" {
   depends_on = [
     google_storage_bucket.provisioning_bucket,
     google_storage_bucket.raw_bucket,
-    google_project_iam_member.cloud_function_service_account_editor_role
+    google_project_iam_member.cloud_function_service_account_editor_role,
+    google_project_iam_member.pubsub,
   ]
 }
 
 resource "google_project_iam_member" "workflow_event_receiver" {
-  project = var.project_id
+  project = module.project-services.project_id
   role    = "roles/eventarc.eventReceiver"
   member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
 }
