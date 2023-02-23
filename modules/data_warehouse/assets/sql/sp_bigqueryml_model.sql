@@ -32,8 +32,7 @@ SELECT
   IFNULL(rate_code,'') rate_code,
   IFNULL(payment_type,'') payment_type,
   IFNULL(fare_amount,0) label,
-  IFNULL(pickup_location_id,'') pickup_location_id,
-  IFNULL(dropoff_location_id,'')dropoff_location_id
+  IFNULL(pickup_location_id,'') pickup_location_id
 FROM
   `${project_id}.ds_edw.taxi_trips`
 WHERE
