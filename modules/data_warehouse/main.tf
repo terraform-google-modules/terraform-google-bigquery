@@ -46,6 +46,7 @@ module "project-services" {
     "cloudfunctions.googleapis.com",
     "bigquerydatatransfer.googleapis.com",
     "artifactregistry.googleapis.com",
+    "config.googleapis.com",
   ]
 }
 
@@ -460,6 +461,17 @@ resource "google_project_iam_member" "pubsub" {
   member = "serviceAccount:${data.google_storage_project_service_account.gcs_account.email_address}"
 }
 
+# # Sleep for a few minutes to let Eventarc sync up
+resource "time_sleep" "wait_for_eventarc" {
+  create_duration = "180s"
+  depends_on = [
+    google_storage_bucket.provisioning_bucket,
+    google_storage_bucket.raw_bucket,
+    google_project_iam_member.cloud_function_service_account_editor_role,
+    google_project_iam_member.pubsub,
+  ]
+}
+
 
 # # Create the function
 resource "google_cloudfunctions2_function" "function" {
@@ -503,10 +515,7 @@ resource "google_cloudfunctions2_function" "function" {
   }
 
   depends_on = [
-    google_storage_bucket.provisioning_bucket,
-    google_storage_bucket.raw_bucket,
-    google_project_iam_member.cloud_function_service_account_editor_role,
-    google_project_iam_member.pubsub,
+    time_sleep.wait_for_eventarc
   ]
 }
 
