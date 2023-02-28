@@ -67,7 +67,7 @@ resource "google_bigquery_dataset" "main" {
 resource "google_bigquery_table" "main" {
   for_each            = local.tables
   dataset_id          = google_bigquery_dataset.main.dataset_id
-  friendly_name       = each.value["table_name"] != null ? [each.value["table_name"]] : each.key
+  friendly_name       = each.value["table_name"] != null ? each.value["table_name"] : each.key
   table_id            = each.key
   labels              = each.value["labels"]
   schema              = each.value["schema"]
