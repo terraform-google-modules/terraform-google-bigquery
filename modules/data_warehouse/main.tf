@@ -55,21 +55,74 @@ resource "random_id" "id" {
   byte_length = 4
 }
 
-# Set up service account for the Cloud Function to execute as
+# Set up Functions service account for the Cloud Function to execute as
+# # Set up the Functions service account
 resource "google_service_account" "cloud_function_service_account" {
   project      = module.project-services.project_id
   account_id   = "cloud-function-sa-${random_id.id.hex}"
   display_name = "Service Account for Cloud Function Execution"
 }
 
-# TODO: scope this down
-resource "google_project_iam_member" "cloud_function_service_account_editor_role" {
+# # Grant the Functions service account Object Create / Delete access
+resource "google_project_iam_member" "cloud_function_service_account_storage_role" {
   project = module.project-services.project_id
-  role    = "roles/editor"
+  role    = "roles/storage.objectAdmin"
   member  = "serviceAccount:${google_service_account.cloud_function_service_account.email}"
 
   depends_on = [
     google_service_account.cloud_function_service_account
+  ]
+}
+
+# # Grant the Functions service account BQ Connection Access
+resource "google_project_iam_member" "cloud_function_service_account_bq_connection_role" {
+  project = module.project-services.project_id
+  role    = "roles/bigquery.connectionUser"
+  member  = "serviceAccount:${google_service_account.cloud_function_service_account.email}"
+
+  depends_on = [
+    google_service_account.cloud_function_service_account
+  ]
+}
+
+# # Grant the Functions service account BQ Jobs Access
+resource "google_project_iam_member" "cloud_function_service_account_bq_job_role" {
+  project = module.project-services.project_id
+  role    = "roles/bigquery.jobUser"
+  member  = "serviceAccount:${google_service_account.cloud_function_service_account.email}"
+
+  depends_on = [
+    google_service_account.cloud_function_service_account
+  ]
+}
+
+# Set up Functions Trigger service account for the Cloud Function to execute as
+# # Set up the Functions service account
+resource "google_service_account" "cloud_function_trigger_service_account" {
+  project      = module.project-services.project_id
+  account_id   = "cloud-trigger-sa-${random_id.id.hex}"
+  display_name = "Service Account for Cloud Function Trigger"
+}
+
+# # Grant the Functions service account Functions Invoker Access
+resource "google_project_iam_member" "cloud_function_trigger_service_account_invoke_role" {
+  project = module.project-services.project_id
+  role    = "roles/cloudfunctions.invoker"
+  member  = "serviceAccount:${google_service_account.cloud_function_trigger_service_account.email}"
+
+  depends_on = [
+    google_service_account.cloud_function_trigger_service_account
+  ]
+}
+
+# # Grant the Functions service account Functions Invoker Access
+resource "google_project_iam_member" "cloud_function_trigger_service_account_ea_receiver_role" {
+  project = module.project-services.project_id
+  role    = "roles/eventarc.eventReceiver"
+  member  = "serviceAccount:${google_service_account.cloud_function_trigger_service_account.email}"
+
+  depends_on = [
+    google_service_account.cloud_function_trigger_service_account
   ]
 }
 
@@ -463,7 +516,7 @@ resource "google_project_iam_member" "pubsub" {
 
 # # Sleep for a few minutes to let Eventarc sync up
 resource "time_sleep" "wait_for_eventarc" {
-  create_duration = "180s"
+  create_duration = "10s"
   depends_on = [
     google_storage_bucket.provisioning_bucket,
     google_storage_bucket.raw_bucket,
@@ -512,6 +565,7 @@ resource "google_cloudfunctions2_function" "function" {
       value     = google_storage_bucket.provisioning_bucket.name
     }
     retry_policy = "RETRY_POLICY_RETRY"
+    service_account_email = google_service_account.cloud_function_trigger_service_account.email
   }
 
   depends_on = [
@@ -519,11 +573,11 @@ resource "google_cloudfunctions2_function" "function" {
   ]
 }
 
-resource "google_project_iam_member" "workflow_event_receiver" {
-  project = module.project-services.project_id
-  role    = "roles/eventarc.eventReceiver"
-  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
-}
+# resource "google_project_iam_member" "workflow_event_receiver" {
+#   project = module.project-services.project_id
+#   role    = "roles/eventarc.eventReceiver"
+#   member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
+# }
 
 resource "google_storage_bucket_object" "startfile" {
   bucket = google_storage_bucket.provisioning_bucket.name
