@@ -520,7 +520,7 @@ resource "time_sleep" "wait_for_eventarc" {
   depends_on = [
     google_storage_bucket.provisioning_bucket,
     google_storage_bucket.raw_bucket,
-    google_project_iam_member.cloud_function_service_account_editor_role,
+    google_project_iam_member.cloud_function_service_account_bq_connection_role,
     google_project_iam_member.pubsub,
   ]
 }
