@@ -107,44 +107,44 @@ resource "google_project_iam_member" "cloud_function_service_account_bq_data_rol
   ]
 }
 
-# Set up Functions Trigger service account for the Cloud Function to execute as
+# Set up Eventarc service account for trigger execution
 # # Set up the Functions service account
-resource "google_service_account" "cloud_function_trigger_service_account" {
+resource "google_service_account" "trigger_service_account" {
   project      = module.project-services.project_id
   account_id   = "cloud-trigger-sa-${random_id.id.hex}"
   display_name = "Service Account for Cloud Function Trigger"
 }
 
 # # Grant the Functions service account Functions Invoker Access
-resource "google_project_iam_member" "cloud_function_trigger_service_account_invoke_role" {
+resource "google_project_iam_member" "trigger_service_account_invoke_role" {
   project = module.project-services.project_id
   role    = "roles/cloudfunctions.invoker"
-  member  = "serviceAccount:${google_service_account.cloud_function_trigger_service_account.email}"
+  member  = "serviceAccount:${google_service_account.trigger_service_account.email}"
 
   depends_on = [
-    google_service_account.cloud_function_trigger_service_account
+    google_service_account.trigger_service_account
   ]
 }
 
 # # Grant the Functions service account Functions Admin Access
-resource "google_project_iam_member" "cloud_function_trigger_service_account_admin_role" {
+resource "google_project_iam_member" "trigger_service_account_admin_role" {
   project = module.project-services.project_id
   role    = "roles/cloudfunctions.admin"
-  member  = "serviceAccount:${google_service_account.cloud_function_trigger_service_account.email}"
+  member  = "serviceAccount:${google_service_account.trigger_service_account.email}"
 
   depends_on = [
-    google_service_account.cloud_function_trigger_service_account
+    google_service_account.trigger_service_account
   ]
 }
 
 # # Grant the Functions service account Functions Invoker Access
-resource "google_project_iam_member" "cloud_function_trigger_service_account_ea_receiver_role" {
+resource "google_project_iam_member" "trigger_service_account_ea_receiver_role" {
   project = module.project-services.project_id
   role    = "roles/eventarc.eventReceiver"
-  member  = "serviceAccount:${google_service_account.cloud_function_trigger_service_account.email}"
+  member  = "serviceAccount:${google_service_account.trigger_service_account.email}"
 
   depends_on = [
-    google_service_account.cloud_function_trigger_service_account
+    google_service_account.trigger_service_account
   ]
 }
 
@@ -356,20 +356,14 @@ EOF
 
 # Load Queries for Stored Procedure Execution
 # # Load Lookup Data Tables
-# data "template_file" "sp_provision_lookup_tables" {
-#   template = file("${path.module}/assets/sql/sp_provision_lookup_tables.sql")
-#   vars = {
-#     project_id = module.project-services.project_id
-#   }
-# }
 resource "google_bigquery_routine" "sp_provision_lookup_tables" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_provision_lookup_tables"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/assets/sql/sp_provision_lookup_tables.sql", { project_id = module.project-services.project_id } )
-  
+  definition_body = templatefile("${path.module}/assets/sql/sp_provision_lookup_tables.sql", { project_id = module.project-services.project_id })
+
   depends_on = [
     google_bigquery_dataset.ds_edw,
   ]
@@ -377,19 +371,13 @@ resource "google_bigquery_routine" "sp_provision_lookup_tables" {
 
 
 # # Add Looker Studio Data Report Procedure
-# data "template_file" "sp_lookerstudio_report" {
-#   template = file("${path.module}/assets/sql/sp_lookerstudio_report.sql")
-#   vars = {
-#     project_id = module.project-services.project_id
-#   }
-# }
 resource "google_bigquery_routine" "sproc_sp_demo_datastudio_report" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_lookerstudio_report"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/assets/sql/sp_lookerstudio_report.sql", { project_id = module.project-services.project_id } ) # data.template_file.sp_lookerstudio_report.rendered
+  definition_body = templatefile("${path.module}/assets/sql/sp_lookerstudio_report.sql", { project_id = module.project-services.project_id })
 
   depends_on = [
     google_bigquery_table.tbl_edw_taxi,
@@ -397,19 +385,13 @@ resource "google_bigquery_routine" "sproc_sp_demo_datastudio_report" {
 }
 
 # # Add Sample Queries
-# data "template_file" "sp_sample_queries" {
-#   template = file("${path.module}/assets/sql/sp_sample_queries.sql")
-#   vars = {
-#     project_id = module.project-services.project_id
-#   }
-# }
 resource "google_bigquery_routine" "sp_sample_queries" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_sample_queries"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/assets/sql/sp_sample_queries.sql", { project_id = module.project-services.project_id }) #data.template_file.sp_sample_queries.rendered
+  definition_body = templatefile("${path.module}/assets/sql/sp_sample_queries.sql", { project_id = module.project-services.project_id })
 
   depends_on = [
     google_bigquery_table.tbl_edw_taxi,
@@ -417,19 +399,13 @@ resource "google_bigquery_routine" "sp_sample_queries" {
 }
 
 # # Add Bigquery ML Model
-# data "template_file" "sp_bigqueryml_model" {
-#   template = file("${path.module}/assets/sql/sp_bigqueryml_model.sql")
-#   vars = {
-#     project_id = module.project-services.project_id
-#   }
-# }
 resource "google_bigquery_routine" "sp_bigqueryml_model" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_bigqueryml_model"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/assets/sql/sp_bigqueryml_model.sql", { project_id = module.project-services.project_id }) # data.template_file.sp_bigqueryml_model.rendered
+  definition_body = templatefile("${path.module}/assets/sql/sp_bigqueryml_model.sql", { project_id = module.project-services.project_id })
 
   depends_on = [
     google_bigquery_table.tbl_edw_taxi,
@@ -437,12 +413,6 @@ resource "google_bigquery_routine" "sp_bigqueryml_model" {
 }
 
 # # Add Translation Scripts
-# data "template_file" "sp_sample_translation_queries" {
-#   template = file("${path.module}/assets/sql/sp_sample_translation_queries.sql")
-#   vars = {
-#     project_id = module.project-services.project_id
-#   }
-# }
 resource "google_bigquery_routine" "sp_sample_translation_queries" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
@@ -519,41 +489,17 @@ resource "google_storage_bucket_object" "cloud_function_zip_upload" {
   ]
 }
 
-data "google_storage_project_service_account" "gcs_account" {
-  project = module.project-services.project_id
-}
-
-// GCS CloudEvent triggers, the GCS service account requires the Pub/Sub Publisher
-resource "google_project_iam_member" "pubsub" {
-  project = module.project-services.project_id
-
-  role   = "roles/pubsub.publisher"
-  member = "serviceAccount:${data.google_storage_project_service_account.gcs_account.email_address}"
-}
-
-# # Sleep for a few minutes to let Eventarc sync up
-resource "time_sleep" "wait_for_eventarc" {
-  create_duration = "10s"
-  depends_on = [
-    google_storage_bucket.provisioning_bucket,
-    google_storage_bucket.raw_bucket,
-    google_project_iam_member.cloud_function_service_account_bq_connection_role,
-    google_project_iam_member.pubsub,
-  ]
-}
-
-
 # # Create the function
 resource "google_cloudfunctions2_function" "function" {
   #provider = google-beta
   project     = module.project-services.project_id
-  name        = "bq-sp-transform-${random_id.id.hex}"
+  name        = "workflow-initial-${random_id.id.hex}"
   location    = var.region
   description = "gcs-load-bq"
 
   build_config {
     runtime     = "python310"
-    entry_point = "bq_sp_transform"
+    entry_point = ""
     source {
       storage_source {
         bucket = google_storage_bucket.provisioning_bucket.name
@@ -574,27 +520,58 @@ resource "google_cloudfunctions2_function" "function" {
     service_account_email = google_service_account.cloud_function_service_account.email
   }
 
-  event_trigger {
-    trigger_region = var.region
-    event_type     = "google.cloud.storage.object.v1.finalized"
-    event_filters {
-      attribute = "bucket"
-      value     = google_storage_bucket.provisioning_bucket.name
-    }
-    retry_policy          = "RETRY_POLICY_RETRY"
-    service_account_email = google_service_account.cloud_function_trigger_service_account.email
-  }
-
   depends_on = [
-    time_sleep.wait_for_eventarc
+    google_storage_bucket.provisioning_bucket,
+    google_storage_bucket.raw_bucket,
+    google_project_iam_member.cloud_function_service_account_bq_connection_role,
   ]
 }
 
-# resource "google_project_iam_member" "workflow_event_receiver" {
-#   project = module.project-services.project_id
-#   role    = "roles/eventarc.eventReceiver"
-#   member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
-# }
+# Set up Workflows service account
+# # Set up the Workflows service account
+resource "google_service_account" "workflow_service_account" {
+  project      = module.project-services.project_id
+  account_id   = "cloud-workflow-sa-${random_id.id.hex}"
+  display_name = "Service Account for Cloud Workflows"
+}
+
+# # Grant the Workflow service account Workflows Admin
+resource "google_project_iam_member" "workflow_service_account_invoke_role" {
+  project = module.project-services.project_id
+  role    = "roles/workflows.admin"
+  member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
+
+  depends_on = [
+    google_service_account.workflow_service_account
+  ]
+}
+
+# # Grant the Workflow service account Cloud Run Invoke
+resource "google_project_iam_member" "workflow_service_account_bqrole" {
+  project = module.project-services.project_id
+  role    = "roles/run.invoker"
+  member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
+
+  depends_on = [
+    google_service_account.workflow_service_account
+  ]
+}
+
+# # Create the workflow
+resource "google_workflows_workflow" "workflow" {
+  name            = "initial-workflow"
+  project         = module.project-services.project_id
+  region          = var.region
+  description     = "Runs post Terraform setup steps for Solution in Console"
+  service_account = google_service_account.workflow_service_account.id
+  source_contents = templatefile("${path.module}/workflow.yaml", { cloud_function_url = google_cloudfunctions2_function.function.service_config[0].uri })
+
+  depends_on = [
+    google_project_iam_member.workflow_service_account,
+    google_cloudfunctions2_function.function,
+  ]
+}
+
 
 resource "google_storage_bucket_object" "startfile" {
   bucket = google_storage_bucket.provisioning_bucket.name
@@ -605,4 +582,79 @@ resource "google_storage_bucket_object" "startfile" {
     google_cloudfunctions2_function.function
   ]
 
+}
+
+# Create Eventarc Trigger
+// Create a Pub/Sub topic.
+resource "google_pubsub_topic" "topic" {
+  name    = "provisioning-topic"
+  project = module.project-services.project_id
+}
+
+resource "google_pubsub_topic_iam_binding" "binding" {
+  project = module.project-services.project_id
+  topic   = google_pubsub_topic.topic.id
+  role    = "roles/pubsub.publisher"
+  members = ["serviceAccount:${data.google_storage_project_service_account.gcs_account.email_address}"]
+}
+
+# # Get the GCS service account to trigger the pub/sub notification
+data "google_storage_project_service_account" "gcs_account" {
+  project = module.project-services.project_id
+}
+
+# # Create the Storage trigger
+resource "google_storage_notification" "notification" {
+  provider       = google
+  bucket         = google_storage_bucket.provisioning_bucket.name
+  payload_format = "JSON_API_V1"
+  topic          = google_pubsub_topic.topic.id
+  depends_on     = [google_pubsub_topic_iam_binding.binding]
+}
+
+# # Create the Eventarc trigger
+resource "google_eventarc_trigger" "trigger_pubsub_tf" {
+  project  = module.project-services.project_id
+  name     = "trigger-pubsub-tf"
+  location = var.region
+  matching_criteria {
+    attribute = "type"
+    value     = "google.cloud.pubsub.topic.v1.messagePublished"
+
+
+  }
+  destination {
+    workflow = google_workflows_workflow.workflow.id
+  }
+
+  transport {
+    pubsub {
+      topic = google_pubsub_topic.topic.id
+    }
+  }
+  service_account = google_service_account.eventarc_service_account.email
+
+  depends_on = [
+    google_workflows_workflow.workflow,
+    google_project_iam_member.eventarc_service_account_invoke_role
+  ]
+}
+
+# Set up Eventarc service account for the Cloud Function to execute as
+# # Set up the Eventarc service account
+resource "google_service_account" "eventarc_service_account" {
+  project      = module.project-services.project_id
+  account_id   = "eventarc-sa-${random_id.id.hex}"
+  display_name = "Service Account for Cloud Eventarc"
+}
+
+# # Grant the Eventar service account Workflow Invoker Access
+resource "google_project_iam_member" "eventarc_service_account_invoke_role" {
+  project = module.project-services.project_id
+  role    = "roles/workflows.invoker"
+  member  = "serviceAccount:${google_service_account.eventarc_service_account.email}"
+
+  depends_on = [
+    google_service_account.eventarc_service_account
+  ]
 }

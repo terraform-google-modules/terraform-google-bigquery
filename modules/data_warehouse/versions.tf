@@ -32,10 +32,6 @@ terraform {
       source  = "hashicorp/archive"
       version = ">= 2"
     }
-    # template = {
-    #   source  = "hashicorp/template"
-    #   version = ">= 2"
-    # }
     time = {
       source  = "hashicorp/time"
       version = ">= 0.9.1"
