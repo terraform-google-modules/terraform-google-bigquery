@@ -96,6 +96,17 @@ resource "google_project_iam_member" "cloud_function_service_account_bq_job_role
   ]
 }
 
+# # Grant the Functions service account BQ Jobs Access
+resource "google_project_iam_member" "cloud_function_service_account_bq_data_role" {
+  project = module.project-services.project_id
+  role    = "roles/bigquery.dataEditor"
+  member  = "serviceAccount:${google_service_account.cloud_function_service_account.email}"
+
+  depends_on = [
+    google_service_account.cloud_function_service_account
+  ]
+}
+
 # Set up Functions Trigger service account for the Cloud Function to execute as
 # # Set up the Functions service account
 resource "google_service_account" "cloud_function_trigger_service_account" {
@@ -108,6 +119,17 @@ resource "google_service_account" "cloud_function_trigger_service_account" {
 resource "google_project_iam_member" "cloud_function_trigger_service_account_invoke_role" {
   project = module.project-services.project_id
   role    = "roles/cloudfunctions.invoker"
+  member  = "serviceAccount:${google_service_account.cloud_function_trigger_service_account.email}"
+
+  depends_on = [
+    google_service_account.cloud_function_trigger_service_account
+  ]
+}
+
+# # Grant the Functions service account Functions Admin Access
+resource "google_project_iam_member" "cloud_function_trigger_service_account_admin_role" {
+  project = module.project-services.project_id
+  role    = "roles/cloudfunctions.admin"
   member  = "serviceAccount:${google_service_account.cloud_function_trigger_service_account.email}"
 
   depends_on = [
@@ -334,108 +356,103 @@ EOF
 
 # Load Queries for Stored Procedure Execution
 # # Load Lookup Data Tables
-data "template_file" "sp_provision_lookup_tables" {
-  template = file("${path.module}/assets/sql/sp_provision_lookup_tables.sql")
-  vars = {
-    project_id = module.project-services.project_id
-  }
-}
+# data "template_file" "sp_provision_lookup_tables" {
+#   template = file("${path.module}/assets/sql/sp_provision_lookup_tables.sql")
+#   vars = {
+#     project_id = module.project-services.project_id
+#   }
+# }
 resource "google_bigquery_routine" "sp_provision_lookup_tables" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_provision_lookup_tables"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = data.template_file.sp_provision_lookup_tables.rendered
-
+  definition_body = templatefile("${path.module}/assets/sql/sp_provision_lookup_tables.sql", { project_id = module.project-services.project_id } )
+  
   depends_on = [
     google_bigquery_dataset.ds_edw,
-    data.template_file.sp_provision_lookup_tables
   ]
 }
 
 
 # # Add Looker Studio Data Report Procedure
-data "template_file" "sp_lookerstudio_report" {
-  template = file("${path.module}/assets/sql/sp_lookerstudio_report.sql")
-  vars = {
-    project_id = module.project-services.project_id
-  }
-}
+# data "template_file" "sp_lookerstudio_report" {
+#   template = file("${path.module}/assets/sql/sp_lookerstudio_report.sql")
+#   vars = {
+#     project_id = module.project-services.project_id
+#   }
+# }
 resource "google_bigquery_routine" "sproc_sp_demo_datastudio_report" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_lookerstudio_report"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = data.template_file.sp_lookerstudio_report.rendered
+  definition_body = templatefile("${path.module}/assets/sql/sp_lookerstudio_report.sql", { project_id = module.project-services.project_id } ) # data.template_file.sp_lookerstudio_report.rendered
 
   depends_on = [
     google_bigquery_table.tbl_edw_taxi,
-    data.template_file.sp_lookerstudio_report
   ]
 }
 
 # # Add Sample Queries
-data "template_file" "sp_sample_queries" {
-  template = file("${path.module}/assets/sql/sp_sample_queries.sql")
-  vars = {
-    project_id = module.project-services.project_id
-  }
-}
+# data "template_file" "sp_sample_queries" {
+#   template = file("${path.module}/assets/sql/sp_sample_queries.sql")
+#   vars = {
+#     project_id = module.project-services.project_id
+#   }
+# }
 resource "google_bigquery_routine" "sp_sample_queries" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_sample_queries"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = data.template_file.sp_sample_queries.rendered
+  definition_body = templatefile("${path.module}/assets/sql/sp_sample_queries.sql", { project_id = module.project-services.project_id }) #data.template_file.sp_sample_queries.rendered
 
   depends_on = [
     google_bigquery_table.tbl_edw_taxi,
-    data.template_file.sp_sample_queries
   ]
 }
 
 # # Add Bigquery ML Model
-data "template_file" "sp_bigqueryml_model" {
-  template = file("${path.module}/assets/sql/sp_bigqueryml_model.sql")
-  vars = {
-    project_id = module.project-services.project_id
-  }
-}
+# data "template_file" "sp_bigqueryml_model" {
+#   template = file("${path.module}/assets/sql/sp_bigqueryml_model.sql")
+#   vars = {
+#     project_id = module.project-services.project_id
+#   }
+# }
 resource "google_bigquery_routine" "sp_bigqueryml_model" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_bigqueryml_model"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = data.template_file.sp_bigqueryml_model.rendered
+  definition_body = templatefile("${path.module}/assets/sql/sp_bigqueryml_model.sql", { project_id = module.project-services.project_id }) # data.template_file.sp_bigqueryml_model.rendered
 
   depends_on = [
     google_bigquery_table.tbl_edw_taxi,
-    data.template_file.sp_bigqueryml_model
   ]
 }
 
 # # Add Translation Scripts
-data "template_file" "sp_sample_translation_queries" {
-  template = file("${path.module}/assets/sql/sp_sample_translation_queries.sql")
-  vars = {
-    project_id = module.project-services.project_id
-  }
-}
+# data "template_file" "sp_sample_translation_queries" {
+#   template = file("${path.module}/assets/sql/sp_sample_translation_queries.sql")
+#   vars = {
+#     project_id = module.project-services.project_id
+#   }
+# }
 resource "google_bigquery_routine" "sp_sample_translation_queries" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_sample_translation_queries"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = data.template_file.sp_sample_translation_queries.rendered
+  definition_body = templatefile("${path.module}/assets/sql/sp_sample_translation_queries.sql", { project_id = module.project-services.project_id }) # data.template_file.sp_sample_translation_queries.rendered
 
   depends_on = [
     google_bigquery_table.tbl_edw_taxi,
-    data.template_file.sp_sample_translation_queries
   ]
 }
 
@@ -564,7 +581,7 @@ resource "google_cloudfunctions2_function" "function" {
       attribute = "bucket"
       value     = google_storage_bucket.provisioning_bucket.name
     }
-    retry_policy = "RETRY_POLICY_RETRY"
+    retry_policy          = "RETRY_POLICY_RETRY"
     service_account_email = google_service_account.cloud_function_trigger_service_account.email
   }
 
