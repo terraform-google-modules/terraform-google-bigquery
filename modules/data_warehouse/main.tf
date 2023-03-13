@@ -564,7 +564,9 @@ resource "google_workflows_workflow" "workflow" {
   region          = var.region
   description     = "Runs post Terraform setup steps for Solution in Console"
   service_account = google_service_account.workflow_service_account.id
-  source_contents = templatefile("${path.module}/workflow.yaml", { cloud_function_url = google_cloudfunctions2_function.function.service_config[0].uri })
+  source_contents = templatefile("${path.module}/workflow.yaml", {
+    cloud_function_url = google_cloudfunctions2_function.function.service_config[0].uri
+  })
 
   depends_on = [
     google_project_iam_member.workflow_service_account,
@@ -579,7 +581,9 @@ resource "google_storage_bucket_object" "startfile" {
   source = "${path.module}/assets/startfile"
 
   depends_on = [
-    google_cloudfunctions2_function.function
+    google_cloudfunctions2_function.function,
+    google_storage_notification.notification,
+    google_eventarc_trigger.trigger_pubsub_tf,
   ]
 
 }
@@ -636,7 +640,7 @@ resource "google_eventarc_trigger" "trigger_pubsub_tf" {
 
   depends_on = [
     google_workflows_workflow.workflow,
-    google_project_iam_member.eventarc_service_account_invoke_role
+    google_project_iam_member.eventarc_service_account_invoke_role,
   ]
 }
 

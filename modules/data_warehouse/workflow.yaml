@@ -1,7 +1,7 @@
 # Run the Cloud Function from Workflows
 
 main:
-    params: [args]
+    params: [event]
     steps:
     - assign_values:
         assign:
@@ -13,8 +13,6 @@ main:
             query:
             auth:
                 type: OIDC
-                # audience: "${cloud_function_url}"
- 
         result: Response
 
 
