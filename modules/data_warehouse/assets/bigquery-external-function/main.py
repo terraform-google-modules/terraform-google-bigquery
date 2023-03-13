@@ -27,6 +27,8 @@ def bq_sp_transform(cloud_event):
 
     bq_one_time_sp()
 
+    return "Complete"
+
 
 def bq_one_time_sp():
 

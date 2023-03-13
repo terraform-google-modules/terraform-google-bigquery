@@ -47,6 +47,7 @@ module "project-services" {
     "bigquerydatatransfer.googleapis.com",
     "artifactregistry.googleapis.com",
     "config.googleapis.com",
+    "workflows.googleapis.com"
   ]
 }
 
@@ -107,44 +108,14 @@ resource "google_project_iam_member" "cloud_function_service_account_bq_data_rol
   ]
 }
 
-# Set up Eventarc service account for trigger execution
-# # Set up the Functions service account
-resource "google_service_account" "trigger_service_account" {
-  project      = module.project-services.project_id
-  account_id   = "cloud-trigger-sa-${random_id.id.hex}"
-  display_name = "Service Account for Cloud Function Trigger"
-}
-
-# # Grant the Functions service account Functions Invoker Access
-resource "google_project_iam_member" "trigger_service_account_invoke_role" {
+# # Grant the Functions service account access to Artifact Registry
+resource "google_project_iam_member" "cloud_function_service_account_artifact_registry_role" {
   project = module.project-services.project_id
-  role    = "roles/cloudfunctions.invoker"
-  member  = "serviceAccount:${google_service_account.trigger_service_account.email}"
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:${google_service_account.cloud_function_service_account.email}"
 
   depends_on = [
-    google_service_account.trigger_service_account
-  ]
-}
-
-# # Grant the Functions service account Functions Admin Access
-resource "google_project_iam_member" "trigger_service_account_admin_role" {
-  project = module.project-services.project_id
-  role    = "roles/cloudfunctions.admin"
-  member  = "serviceAccount:${google_service_account.trigger_service_account.email}"
-
-  depends_on = [
-    google_service_account.trigger_service_account
-  ]
-}
-
-# # Grant the Functions service account Functions Invoker Access
-resource "google_project_iam_member" "trigger_service_account_ea_receiver_role" {
-  project = module.project-services.project_id
-  role    = "roles/eventarc.eventReceiver"
-  member  = "serviceAccount:${google_service_account.trigger_service_account.email}"
-
-  depends_on = [
-    google_service_account.trigger_service_account
+    google_service_account.cloud_function_service_account
   ]
 }
 
@@ -489,6 +460,17 @@ resource "google_storage_bucket_object" "cloud_function_zip_upload" {
   ]
 }
 
+# # Sleep for 30 seconds to wait for prior roles to sync up
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [
+    google_storage_bucket.provisioning_bucket,
+    google_storage_bucket.raw_bucket,
+    google_project_iam_member.cloud_function_service_account_bq_connection_role,
+  ]
+
+  create_duration = "30s"
+}
+
 # # Create the function
 resource "google_cloudfunctions2_function" "function" {
   #provider = google-beta
@@ -499,7 +481,7 @@ resource "google_cloudfunctions2_function" "function" {
 
   build_config {
     runtime     = "python310"
-    entry_point = ""
+    entry_point = "bq_sp_transform"
     source {
       storage_source {
         bucket = google_storage_bucket.provisioning_bucket.name
@@ -521,9 +503,7 @@ resource "google_cloudfunctions2_function" "function" {
   }
 
   depends_on = [
-    google_storage_bucket.provisioning_bucket,
-    google_storage_bucket.raw_bucket,
-    google_project_iam_member.cloud_function_service_account_bq_connection_role,
+    time_sleep.wait_30_seconds
   ]
 }
 
@@ -536,7 +516,7 @@ resource "google_service_account" "workflow_service_account" {
 }
 
 # # Grant the Workflow service account Workflows Admin
-resource "google_project_iam_member" "workflow_service_account_invoke_role" {
+resource "google_project_iam_member" "workflow_service_account_admin_role" {
   project = module.project-services.project_id
   role    = "roles/workflows.admin"
   member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
@@ -547,9 +527,20 @@ resource "google_project_iam_member" "workflow_service_account_invoke_role" {
 }
 
 # # Grant the Workflow service account Cloud Run Invoke
-resource "google_project_iam_member" "workflow_service_account_bqrole" {
+resource "google_project_iam_member" "workflow_service_account_invoke_role" {
   project = module.project-services.project_id
   role    = "roles/run.invoker"
+  member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
+
+  depends_on = [
+    google_service_account.workflow_service_account
+  ]
+}
+
+# # Grant the Workflow service account ability to run as other account
+resource "google_project_iam_member" "workflow_service_account_act_as_role" {
+  project = module.project-services.project_id
+  role    = "roles/iam.serviceAccountTokenCreator"
   member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
 
   depends_on = [
@@ -564,16 +555,27 @@ resource "google_workflows_workflow" "workflow" {
   region          = var.region
   description     = "Runs post Terraform setup steps for Solution in Console"
   service_account = google_service_account.workflow_service_account.id
-  source_contents = templatefile("${path.module}/workflow.yaml", {
+  source_contents = templatefile("${path.module}/assets/workflows/workflow.yaml", {
     cloud_function_url = google_cloudfunctions2_function.function.service_config[0].uri
   })
 
   depends_on = [
-    google_project_iam_member.workflow_service_account,
+    google_project_iam_member.workflow_service_account_invoke_role,
+    google_project_iam_member.workflow_service_account_act_as_role,
     google_cloudfunctions2_function.function,
   ]
 }
 
+# # Sleep for 60 seconds to drop start file
+resource "time_sleep" "wait_60_seconds_to_startfile" {
+  depends_on = [
+    google_cloudfunctions2_function.function,
+    google_storage_notification.notification,
+    google_eventarc_trigger.trigger_pubsub_tf,
+  ]
+
+  create_duration = "60s"
+}
 
 resource "google_storage_bucket_object" "startfile" {
   bucket = google_storage_bucket.provisioning_bucket.name
@@ -581,9 +583,7 @@ resource "google_storage_bucket_object" "startfile" {
   source = "${path.module}/assets/startfile"
 
   depends_on = [
-    google_cloudfunctions2_function.function,
-    google_storage_notification.notification,
-    google_eventarc_trigger.trigger_pubsub_tf,
+    time_sleep.wait_60_seconds_to_startfile
   ]
 
 }
