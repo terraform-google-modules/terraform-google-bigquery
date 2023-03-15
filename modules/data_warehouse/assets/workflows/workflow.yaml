@@ -1,0 +1,20 @@
+# Run the Cloud Function from Workflows
+
+main:
+    params: [event]
+    steps:
+    - assign_values:
+        assign:
+            - cloud_function_url: ${cloud_function_url} 
+    - call_cloud_function:
+        call: http.get
+        args:
+            url: "${cloud_function_url}"
+            query:
+            auth:
+                type: OIDC
+        result: Response
+
+
+    - returnOutput:
+        return: Response

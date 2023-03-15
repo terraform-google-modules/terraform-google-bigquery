@@ -18,7 +18,7 @@ import os
 
 
 # Triggered by a change in a storage bucket
-@functions_framework.cloud_event
+@functions_framework.http
 def bq_sp_transform(cloud_event):
 
     gcs_export_bq()
@@ -26,6 +26,8 @@ def bq_sp_transform(cloud_event):
     gcs_copy()
 
     bq_one_time_sp()
+
+    return "Complete"
 
 
 def bq_one_time_sp():
