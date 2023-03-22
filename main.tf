@@ -190,6 +190,7 @@ resource "google_bigquery_table" "external_table" {
     schema                = each.value["schema"]
     source_format         = each.value["source_format"]
     source_uris           = each.value["source_uris"]
+    connection_id         = each.value["connection_id"]
 
     dynamic "csv_options" {
       for_each = each.value["csv_options"] != null ? [each.value["csv_options"]] : []

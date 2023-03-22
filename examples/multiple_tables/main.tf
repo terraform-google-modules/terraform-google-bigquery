@@ -73,6 +73,7 @@ module "bigquery" {
       source_format         = "CSV"
       schema                = null
       expiration_time       = 2524604400000 # 2050/01/01
+      connection_id         = null
       labels = {
         env      = "devops"
         billable = "true"
@@ -101,6 +102,7 @@ module "bigquery" {
       source_format         = "CSV"
       schema                = null
       expiration_time       = 2524604400000 # 2050/01/01
+      connection_id         = null
       labels = {
         env      = "devops"
         billable = "true"
@@ -129,6 +131,7 @@ module "bigquery" {
       source_format         = "GOOGLE_SHEETS"
       schema                = null
       expiration_time       = 2524604400000 # 2050/01/01
+      connection_id         = null
       labels = {
         env      = "devops"
         billable = "true"

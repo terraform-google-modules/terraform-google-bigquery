@@ -172,6 +172,7 @@ variable "external_tables" {
     schema                = string,
     source_format         = string,
     source_uris           = list(string),
+    connection_id         = string,
     csv_options = object({
       quote                 = string,
       allow_jagged_rows     = bool,
