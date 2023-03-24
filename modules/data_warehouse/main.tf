@@ -668,5 +668,5 @@ resource "google_project_iam_member" "eventarc_service_account_invoke_role" {
 resource "google_project_iam_member" "pub_sub_permissions_token" {
   project = module.project-services.project_id
   role    = "roles/iam.serviceAccountTokenCreator"
-  member  = "serviceAccount:service-${data.google_project.project.number}-@gcp-sa-pubsub.iam.gserviceaccount.com"
+  member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-pubsub.iam.gserviceaccount.com"
 }
