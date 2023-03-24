@@ -48,4 +48,3 @@ output "neos_tutorial_url" {
   value       = "https://cloud.google.com/"
   description = "The URL to launch the in-console tutorial for the EDW solution"
 }
-
