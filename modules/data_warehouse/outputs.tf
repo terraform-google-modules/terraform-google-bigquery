@@ -38,3 +38,14 @@ output "bigquery_editor_url" {
   value       = "https://console.cloud.google.com/bigquery?project=${var.project_id}&ws=!1m5!1m4!6m3!1s${var.project_id}!2sds_edw!3ssp_sample_queries"
   description = "The URL to launch the BigQuery editor with the sample query procedure opened"
 }
+
+output "solution_guide_url" {
+  value       = "https://cloud.google.com/"
+  description = "The URL to Solution Guide for the EDW solution"
+}
+
+output "neos_tutorial_url" {
+  value       = "https://cloud.google.com/"
+  description = "The URL to launch the in-console tutorial for the EDW solution"
+}
+
