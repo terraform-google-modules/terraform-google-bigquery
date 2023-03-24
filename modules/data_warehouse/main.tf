@@ -652,7 +652,7 @@ resource "google_service_account" "eventarc_service_account" {
   display_name = "Service Account for Cloud Eventarc"
 }
 
-# # Grant the Eventar service account Workflow Invoker Access
+# # Grant the Eventarc service account Workflow Invoker Access
 resource "google_project_iam_member" "eventarc_service_account_invoke_role" {
   project = module.project-services.project_id
   role    = "roles/workflows.invoker"
@@ -661,4 +661,12 @@ resource "google_project_iam_member" "eventarc_service_account_invoke_role" {
   depends_on = [
     google_service_account.eventarc_service_account
   ]
+}
+
+# # Get the Pub/Sub service account to trigger the pub/sub notification
+# # TODO: File bug for this to be a pickable service account
+resource "google_project_iam_member" "pub_sub_permissions_token" {
+  project = module.project-services.project_id
+  role    = "roles/iam.serviceAccountTokenCreator"
+  member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-pubsub.iam.gserviceaccount.com"
 }
