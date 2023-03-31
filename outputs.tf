@@ -29,6 +29,11 @@ output "bigquery_views" {
   description = "Map of bigquery view resources being provisioned."
 }
 
+output "bigquery_materialized_views" {
+  value       = google_bigquery_table.materialized_view
+  description = "Map of bigquery materialized view resources being provisioned."
+}
+
 output "bigquery_external_tables" {
   value       = google_bigquery_table.external_table
   description = "Map of BigQuery external table resources being provisioned."
@@ -61,6 +66,14 @@ output "view_ids" {
     view.table_id
   ]
   description = "Unique id for the view being provisioned"
+}
+
+output "materialized_view_ids" {
+  value = [
+    for view in google_bigquery_table.materialized_view :
+    view.table_id
+  ]
+  description = "Unique id for the materialized view being provisioned"
 }
 
 output "view_names" {
