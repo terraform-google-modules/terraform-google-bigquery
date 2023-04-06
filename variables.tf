@@ -99,6 +99,7 @@ variable "tables" {
   default     = []
   type = list(object({
     table_id   = string,
+    description = optional(string),
     table_name = optional(string),
     schema     = string,
     clustering = list(string),
@@ -126,6 +127,7 @@ variable "views" {
   default     = []
   type = list(object({
     view_id        = string,
+    description    = optional(string),
     query          = string,
     use_legacy_sql = bool,
     labels         = map(string),
@@ -137,6 +139,7 @@ variable "materialized_views" {
   default     = []
   type = list(object({
     view_id             = string,
+    description         = optional(string),
     query               = string,
     enable_refresh      = bool,
     refresh_interval_ms = string,
@@ -165,6 +168,7 @@ variable "external_tables" {
   default     = []
   type = list(object({
     table_id              = string,
+    description           = optional(string),
     autodetect            = bool,
     compression           = string,
     ignore_unknown_values = bool,
