@@ -98,10 +98,11 @@ variable "tables" {
   description = "A list of objects which include table_id, table_name, schema, clustering, time_partitioning, range_partitioning, expiration_time and labels."
   default     = []
   type = list(object({
-    table_id   = string,
-    table_name = optional(string),
-    schema     = string,
-    clustering = list(string),
+    table_id    = string,
+    description = optional(string),
+    table_name  = optional(string),
+    schema      = string,
+    clustering  = list(string),
     time_partitioning = object({
       expiration_ms            = string,
       field                    = string,
@@ -126,6 +127,7 @@ variable "views" {
   default     = []
   type = list(object({
     view_id        = string,
+    description    = optional(string),
     query          = string,
     use_legacy_sql = bool,
     labels         = map(string),
@@ -137,6 +139,7 @@ variable "materialized_views" {
   default     = []
   type = list(object({
     view_id             = string,
+    description         = optional(string),
     query               = string,
     enable_refresh      = bool,
     refresh_interval_ms = string,
@@ -165,6 +168,7 @@ variable "external_tables" {
   default     = []
   type = list(object({
     table_id              = string,
+    description           = optional(string),
     autodetect            = bool,
     compression           = string,
     ignore_unknown_values = bool,

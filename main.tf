@@ -69,6 +69,7 @@ resource "google_bigquery_table" "main" {
   dataset_id          = google_bigquery_dataset.main.dataset_id
   friendly_name       = each.value["table_name"] != null ? each.value["table_name"] : each.key
   table_id            = each.key
+  description         = each.value["description"]
   labels              = each.value["labels"]
   schema              = each.value["schema"]
   clustering          = each.value["clustering"]
@@ -110,6 +111,7 @@ resource "google_bigquery_table" "view" {
   dataset_id          = google_bigquery_dataset.main.dataset_id
   friendly_name       = each.key
   table_id            = each.key
+  description         = each.value["description"]
   labels              = each.value["labels"]
   project             = var.project_id
   deletion_protection = false
@@ -131,6 +133,7 @@ resource "google_bigquery_table" "materialized_view" {
   dataset_id          = google_bigquery_dataset.main.dataset_id
   friendly_name       = each.key
   table_id            = each.key
+  description         = each.value["description"]
   labels              = each.value["labels"]
   clustering          = each.value["clustering"]
   expiration_time     = each.value["expiration_time"]
@@ -177,6 +180,7 @@ resource "google_bigquery_table" "external_table" {
   dataset_id          = google_bigquery_dataset.main.dataset_id
   friendly_name       = each.key
   table_id            = each.key
+  description         = each.value["description"]
   labels              = each.value["labels"]
   expiration_time     = each.value["expiration_time"]
   project             = var.project_id
