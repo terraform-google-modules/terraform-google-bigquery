@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.0.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v5.4.3...v6.0.0) (2023-04-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* add max_time_travel_hours attribute ([#176](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/176))
+* Add BQ authorized routine (function) in authorization sub-module ([#180](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/180))
+
+### Features
+
+* Add BigQuery data warehouse example ([#179](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/179)) ([ad3c347](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/ad3c3472b644fe79c37ae1416b28faf5e0cbe271))
+* Add BQ authorized routine (function) in authorization sub-module ([#180](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/180)) ([d4f61d3](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/d4f61d3ee2427d8d42cab767c0326074c56d2c17))
+* add max_time_travel_hours attribute ([#176](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/176)) ([706e540](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/706e540abfb727d75b51ef493af7cf49cc3081cf))
+* add optional table_name attr ([#196](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/196)) ([03f01ed](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/03f01ed940244e1dff52f49df04ca7f46e30e83d))
+* added optional description parameter ([#213](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/213)) ([59a73e5](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/59a73e5f474a0f9e59fdb37806bf9a18440987e5))
+
+
+### Bug Fixes
+
+* **deps:** update dependency google-cloud-storage to v2.8.0 ([#211](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/211)) ([a41234c](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/a41234c2f38524d37bea0919263df9eb204701ea))
+* **deps:** update terraform terraform-google-modules/project-factory/google to v14 ([#186](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/186)) ([88d5fa4](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/88d5fa4a9fd8696566ef544a49e927e2a4c29a2e))
+* Eventarc post deploy process ([#200](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/200)) ([ef34309](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/ef343096883bf6daaaea016ae561f089fab4539c))
+* Fix sql and eventarc trigger ([#193](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/193)) ([3f77838](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/3f77838646470b6f42d9f4f47278e5f378143068))
+* looker URL tableId ([#201](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/201)) ([6fd3339](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/6fd3339311a46cfbd98651ec5237f73b41a8d15f))
+* pubsub sa grant ([#204](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/204)) ([9e795e4](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/9e795e42f78b757e0a92100d368e6bd297a97418))
+* update neos link, remove solution guide url ([b64874a](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/b64874a31ca8078e735785669ae6e26f62100467))
+
 ## [5.4.3](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v5.4.2...v5.4.3) (2022-12-29)
 
 
