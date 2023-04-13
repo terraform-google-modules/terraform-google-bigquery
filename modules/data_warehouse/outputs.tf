@@ -39,12 +39,7 @@ output "bigquery_editor_url" {
   description = "The URL to launch the BigQuery editor with the sample query procedure opened"
 }
 
-output "solution_guide_url" {
-  value       = "https://cloud.google.com/"
-  description = "The URL to Solution Guide for the EDW solution"
-}
-
 output "neos_tutorial_url" {
-  value       = "https://cloud.google.com/"
+  value       = "https://console.cloud.google.com/welcome?walkthrough_id=data-warehouse_tour&project=${var.project_id}"
   description = "The URL to launch the in-console tutorial for the EDW solution"
 }
