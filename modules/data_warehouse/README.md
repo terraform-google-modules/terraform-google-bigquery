@@ -47,6 +47,7 @@ Functional examples are included in the
 | ds\_friendly\_name | Dataset name |
 | function\_uri | Function URI |
 | lookerstudio\_report\_url | The URL to create a new Looker Studio report displays a sample dashboard for the taxi data analysis |
+| neos\_tutorial\_url | The URL to launch the in-console tutorial for the EDW solution |
 | raw\_bucket | Raw bucket name |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
