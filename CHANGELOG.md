@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ⚠ BREAKING CHANGES
 
+* Increased minimum Google Provider version to 4.42 for root module ([#176](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/176)) and 4.44 for authorization sub-module ([#180](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/180))
 * add max_time_travel_hours attribute ([#176](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/176))
 * Add BQ authorized routine (function) in authorization sub-module ([#180](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/180))
 
