@@ -40,6 +40,6 @@ output "bigquery_editor_url" {
 }
 
 output "neos_tutorial_url" {
-  value       = "https://console.cloud.google.com/welcome?walkthrough_id=data-warehouse_tour&project=${var.project_id}"
+  value       = "https://console.cloud.google.com/products/solutions/deployments?walkthrough_id=data-warehouse_tour&project=${var.project_id}"
   description = "The URL to launch the in-console tutorial for the EDW solution"
 }
