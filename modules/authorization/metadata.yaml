@@ -19,70 +19,88 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 spec:
-  title: BigQuery Authorized Views
-  source:
-    repo: https://github.com/terraform-google-modules/terraform-google-bigquery
-    sourceType: git
-  version: 5.4.2
-  actuationTool:
-    type: Terraform
-    version: '>= 0.13'
-  examples:
-  - name: basic_bq
-    location: examples/basic_bq
-  - name: basic_view
-    location: examples/basic_view
-  - name: multiple_tables
-    location: examples/multiple_tables
-  - name: scheduled_queries
-    location: examples/scheduled_queries
-  variables:
-  - name: authorized_datasets
-    description: An array of datasets to be authorized on the dataset
-    type: |-
-      list(object({
-          dataset_id = string,
-          project_id = string,
-        }))
-    default: []
-    required: false
-  - name: authorized_views
-    description: An array of views to give authorize for the dataset
-    type: |-
-      list(object({
-          dataset_id = string,
-          project_id = string,
-          table_id   = string # this is the view id, but we keep table_id to stay consistent as the resource
-        }))
-    required: true
-  - name: dataset_id
-    description: Unique ID for the dataset being provisioned.
-    type: string
-    required: true
-  - name: project_id
-    description: Project where the dataset and table are created
-    type: string
-    required: true
-  - name: roles
-    description: An array of objects that define dataset access for one or more entities.
-    type: any
-    default: []
-    required: false
-  outputs:
-  - name: authorized_dataset
-    description: Authorized datasets for the BQ dataset
-  - name: authorized_roles
-    description: Authorized roles for the dataset
-  - name: authorized_views
-    description: Authorized views for the dataset
-  roles:
-  - level: Project
+  info:
+    title: BigQuery Authorized Datasets, Views and Routines
+    source:
+      repo: https://github.com/terraform-google-modules/terraform-google-bigquery
+      sourceType: git
+      dir: authorization
+    version: 6.0.0
+    actuationTool:
+      flavor: Terraform
+      version: '>= 0.13'
+    description: {}
+  content:
+    examples:
+    - name: basic_bq
+      location: examples/basic_bq
+    - name: basic_view
+      location: examples/basic_view
+    - name: data_warehouse
+      location: examples/data_warehouse
+    - name: multiple_tables
+      location: examples/multiple_tables
+    - name: scheduled_queries
+      location: examples/scheduled_queries
+  interfaces:
+    variables:
+    - name: authorized_datasets
+      description: An array of datasets to be authorized on the dataset
+      varType: |-
+        list(object({
+            dataset_id = string,
+            project_id = string,
+          }))
+      defaultValue: []
+    - name: authorized_routines
+      description: An array of authorized routine to be authorized on the dataset
+      varType: |-
+        list(object({
+            project_id = string,
+            dataset_id = string,
+            routine_id = string
+          }))
+      defaultValue: []
+    - name: authorized_views
+      description: An array of views to give authorize for the dataset
+      varType: |-
+        list(object({
+            dataset_id = string,
+            project_id = string,
+            table_id   = string # this is the view id, but we keep table_id to stay consistent as the resource
+          }))
+      defaultValue: []
+    - name: dataset_id
+      description: Unique ID for the dataset being provisioned.
+      varType: string
+      required: true
+    - name: project_id
+      description: Project where the dataset and table are created
+      varType: string
+      required: true
+    - name: roles
+      description: An array of objects that define dataset access for one or more entities.
+      varType: any
+      defaultValue: []
+    outputs:
+    - name: authorized_dataset
+      description: Authorized datasets for the BQ dataset
+    - name: authorized_roles
+      description: Authorized roles for the dataset
+    - name: authorized_views
+      description: Authorized views for the dataset
+  requirements:
     roles:
-    - roles/bigquery.admin
-    - roles/cloudkms.cryptoKeyEncrypterDecrypter
-  services:
-  - cloudkms.googleapis.com
-  - cloudresourcemanager.googleapis.com
-  - bigquery.googleapis.com
-  - bigquerystorage.googleapis.com
-  - serviceusage.googleapis.com
+    - level: Project
+      roles:
+      - roles/bigquery.admin
+      - roles/cloudkms.cryptoKeyEncrypterDecrypter
+      - roles/owner
+    services:
+    - cloudkms.googleapis.com
+    - cloudresourcemanager.googleapis.com
+    - bigquery.googleapis.com
+    - bigquerystorage.googleapis.com
+    - bigqueryconnection.googleapis.com
+    - serviceusage.googleapis.com
+    - iam.googleapis.com
