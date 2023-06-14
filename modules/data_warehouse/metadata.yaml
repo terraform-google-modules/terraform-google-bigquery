@@ -15,22 +15,25 @@
 apiVersion: blueprints.cloud.google.com/v1alpha1
 kind: BlueprintMetadata
 metadata:
-  name: terraform-google-bigquery-udf
+  name: terraform-google-bigquery-data-warehouse
   annotations:
     config.kubernetes.io/local-config: "true"
 spec:
   info:
-    title: BigQuery Persistent UDFs
+    title: terraform-google-ssw
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-bigquery
       sourceType: git
-      dir: /modules/udf
+      dir: /modules/data_warehouse
     version: 6.0.0
     actuationTool:
       flavor: Terraform
       version: '>= 0.13'
     description: {}
   content:
+    documentation:
+    - title: Hosting a Static Website
+      url: https://cloud.google.com/storage/docs/hosting-static-website
     examples:
     - name: basic_bq
       location: examples/basic_bq
@@ -44,21 +47,44 @@ spec:
       location: examples/scheduled_queries
   interfaces:
     variables:
-    - name: add_udfs
-      description: Whether or not this module should be enabled.
+    - name: deletion_protection
+      description: Whether or not to protect GCS resources from deletion when solution is modified or changed.
+      varType: string
+      defaultValue: true
+    - name: enable_apis
+      description: Whether or not to enable underlying apis in this solution.
+      varType: string
+      defaultValue: true
+    - name: force_destroy
+      description: Whether or not to protect BigQuery resources from deletion when solution is modified or changed.
       varType: string
       defaultValue: false
-    - name: dataset_id
-      description: Dataset id
+    - name: labels
+      description: A map of labels to apply to contained resources.
+      varType: map(string)
+      defaultValue:
+        edw-bigquery: true
+    - name: project_id
+      description: Google Cloud Project ID
       varType: string
       required: true
-    - name: project_id
-      description: Project ID that contains the dataset
+    - name: region
+      description: Google Cloud Region
       varType: string
       required: true
     outputs:
-    - name: added_udfs
-      description: List of UDFs utility functions added.
+    - name: bigquery_editor_url
+      description: The URL to launch the BigQuery editor with the sample query procedure opened
+    - name: ds_friendly_name
+      description: Dataset name
+    - name: function_uri
+      description: Function URI
+    - name: lookerstudio_report_url
+      description: The URL to create a new Looker Studio report displays a sample dashboard for the taxi data analysis
+    - name: neos_tutorial_url
+      description: The URL to launch the in-console tutorial for the EDW solution
+    - name: raw_bucket
+      description: Raw bucket name
   requirements:
     roles:
     - level: Project
