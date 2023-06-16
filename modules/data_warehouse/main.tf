@@ -333,7 +333,7 @@ resource "google_bigquery_routine" "sp_provision_lookup_tables" {
   routine_id      = "sp_provision_lookup_tables"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/assets/sql/sp_provision_lookup_tables.sql", { project_id = module.project-services.project_id })
+  definition_body = templatefile("${path.module}/src/sql/sp_provision_lookup_tables.sql", { project_id = module.project-services.project_id })
 
   depends_on = [
     google_bigquery_dataset.ds_edw,
@@ -348,7 +348,7 @@ resource "google_bigquery_routine" "sproc_sp_demo_datastudio_report" {
   routine_id      = "sp_lookerstudio_report"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/assets/sql/sp_lookerstudio_report.sql", { project_id = module.project-services.project_id })
+  definition_body = templatefile("${path.module}/src/sql/sp_lookerstudio_report.sql", { project_id = module.project-services.project_id })
 
   depends_on = [
     google_bigquery_table.tbl_edw_taxi,
@@ -362,7 +362,7 @@ resource "google_bigquery_routine" "sp_sample_queries" {
   routine_id      = "sp_sample_queries"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/assets/sql/sp_sample_queries.sql", { project_id = module.project-services.project_id })
+  definition_body = templatefile("${path.module}/src/sql/sp_sample_queries.sql", { project_id = module.project-services.project_id })
 
   depends_on = [
     google_bigquery_table.tbl_edw_taxi,
@@ -376,7 +376,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_model" {
   routine_id      = "sp_bigqueryml_model"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/assets/sql/sp_bigqueryml_model.sql", { project_id = module.project-services.project_id })
+  definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_model.sql", { project_id = module.project-services.project_id })
 
   depends_on = [
     google_bigquery_table.tbl_edw_taxi,
@@ -390,7 +390,7 @@ resource "google_bigquery_routine" "sp_sample_translation_queries" {
   routine_id      = "sp_sample_translation_queries"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/assets/sql/sp_sample_translation_queries.sql", { project_id = module.project-services.project_id }) # data.template_file.sp_sample_translation_queries.rendered
+  definition_body = templatefile("${path.module}/src/sql/sp_sample_translation_queries.sql", { project_id = module.project-services.project_id }) # data.template_file.sp_sample_translation_queries.rendered
 
   depends_on = [
     google_bigquery_table.tbl_edw_taxi,
@@ -440,8 +440,8 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
 # # Zip the function file
 data "archive_file" "bigquery_external_function_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/assets/bigquery-external-function"
-  output_path = "${path.module}/assets/bigquery-external-function.zip"
+  source_dir  = "${path.module}/src/bigquery-external-function"
+  output_path = "${path.module}/src/bigquery-external-function.zip"
 
   depends_on = [
     google_storage_bucket.provisioning_bucket
@@ -450,7 +450,7 @@ data "archive_file" "bigquery_external_function_zip" {
 
 # # Place the function file on Cloud Storage
 resource "google_storage_bucket_object" "cloud_function_zip_upload" {
-  name   = "assets/bigquery-external-function.zip"
+  name   = "src/bigquery-external-function.zip"
   bucket = google_storage_bucket.provisioning_bucket.name
   source = data.archive_file.bigquery_external_function_zip.output_path
 
@@ -485,7 +485,7 @@ resource "google_cloudfunctions2_function" "function" {
     source {
       storage_source {
         bucket = google_storage_bucket.provisioning_bucket.name
-        object = "assets/bigquery-external-function.zip"
+        object = "src/bigquery-external-function.zip"
       }
     }
   }
@@ -555,7 +555,7 @@ resource "google_workflows_workflow" "workflow" {
   region          = var.region
   description     = "Runs post Terraform setup steps for Solution in Console"
   service_account = google_service_account.workflow_service_account.id
-  source_contents = templatefile("${path.module}/assets/workflows/workflow.yaml", {
+  source_contents = templatefile("${path.module}/src/workflows/workflow.yaml", {
     cloud_function_url = google_cloudfunctions2_function.function.service_config[0].uri
   })
 
@@ -580,7 +580,7 @@ resource "time_sleep" "wait_60_seconds_to_startfile" {
 resource "google_storage_bucket_object" "startfile" {
   bucket = google_storage_bucket.provisioning_bucket.name
   name   = "startfile"
-  source = "${path.module}/assets/startfile"
+  source = "${path.module}/src/startfile"
 
   depends_on = [
     time_sleep.wait_60_seconds_to_startfile
