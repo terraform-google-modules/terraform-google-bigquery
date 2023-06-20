@@ -507,65 +507,6 @@ resource "google_cloudfunctions2_function" "function" {
   ]
 }
 
-# Set up Workflows service account
-# # Set up the Workflows service account
-resource "google_service_account" "workflow_service_account" {
-  project      = module.project-services.project_id
-  account_id   = "cloud-workflow-sa-${random_id.id.hex}"
-  display_name = "Service Account for Cloud Workflows"
-}
-
-# # Grant the Workflow service account Workflows Admin
-resource "google_project_iam_member" "workflow_service_account_admin_role" {
-  project = module.project-services.project_id
-  role    = "roles/workflows.admin"
-  member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
-
-  depends_on = [
-    google_service_account.workflow_service_account
-  ]
-}
-
-# # Grant the Workflow service account Cloud Run Invoke
-resource "google_project_iam_member" "workflow_service_account_invoke_role" {
-  project = module.project-services.project_id
-  role    = "roles/run.invoker"
-  member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
-
-  depends_on = [
-    google_service_account.workflow_service_account
-  ]
-}
-
-# # Grant the Workflow service account ability to run as other account
-resource "google_project_iam_member" "workflow_service_account_act_as_role" {
-  project = module.project-services.project_id
-  role    = "roles/iam.serviceAccountTokenCreator"
-  member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
-
-  depends_on = [
-    google_service_account.workflow_service_account
-  ]
-}
-
-# # Create the workflow
-resource "google_workflows_workflow" "workflow" {
-  name            = "initial-workflow"
-  project         = module.project-services.project_id
-  region          = var.region
-  description     = "Runs post Terraform setup steps for Solution in Console"
-  service_account = google_service_account.workflow_service_account.id
-  source_contents = templatefile("${path.module}/src/workflows/workflow.yaml", {
-    cloud_function_url = google_cloudfunctions2_function.function.service_config[0].uri
-  })
-
-  depends_on = [
-    google_project_iam_member.workflow_service_account_invoke_role,
-    google_project_iam_member.workflow_service_account_act_as_role,
-    google_cloudfunctions2_function.function,
-  ]
-}
-
 # # Sleep for 60 seconds to drop start file
 resource "time_sleep" "wait_60_seconds_to_startfile" {
   depends_on = [
