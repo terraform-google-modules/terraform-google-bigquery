@@ -53,7 +53,7 @@ resource "google_workflows_workflow" "workflow" {
   region          = var.region
   description     = "Runs post Terraform setup steps for Solution in Console"
   service_account = google_service_account.workflow_service_account.id
-  
+
   source_contents = templatefile("${path.module}/src/workflows/workflow.yaml", {
     cloud_function_url = google_cloudfunctions2_function.function.service_config[0].uri
   })
