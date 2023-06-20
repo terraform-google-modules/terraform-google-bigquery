@@ -38,6 +38,10 @@ resource "google_project_iam_member" "workflow_service_account_roles" {
     "roles/workflows.admin",
     "roles/run.invoker",
     "roles/iam.serviceAccountTokenCreator",
+    "roles/storage.objectAdmin",
+    "roles/bigquery.connectionUser",
+    "roles/bigquery.jobUser",
+    "roles/bigquery.dataEditor",
   ])
 
   project = module.project-services.project_id
@@ -55,12 +59,11 @@ resource "google_workflows_workflow" "workflow" {
   service_account = google_service_account.workflow_service_account.id
 
   source_contents = templatefile("${path.module}/src/workflows/workflow.yaml", {
-    cloud_function_url = google_cloudfunctions2_function.function.service_config[0].uri
+    raw_bucket = google_storage_bucket.raw_bucket.name
   })
 
   depends_on = [
     google_project_iam_member.workflow_service_account_roles,
-    google_cloudfunctions2_function.function,
     google_project_service_identity.workflows,
   ]
 }

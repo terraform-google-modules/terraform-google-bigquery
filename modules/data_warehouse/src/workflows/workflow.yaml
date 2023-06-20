@@ -12,23 +12,94 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Run the Cloud Function from Workflows
+# Runs the setup steps for the data warehouse setup:
+# 1. Copies data from the public bucket into the staging buckets
+# 2. Executes a set of stored procedures to stage the remaining data needed
 
 main:
-    params: [event]
+    params: []
     steps:
-    - assign_values:
-        assign:
-            - cloud_function_url: ${cloud_function_url}
-    - call_cloud_function:
-        call: http.get
-        args:
-            url: "${cloud_function_url}"
-            query:
-            auth:
-                type: OIDC
-        result: Response
+    - sub_copy_objects:
+        call: copy_objects
+        result: output
+    - sub_create_tables:
+        call: create_tables
+        result: output1
 
+# Subworkflow to copy initial objects
+copy_objects:
+    steps:
+        - init:
+            assign:
+                - source_bucket: "data-analytics-demos"
+                - dest_bucket: ${raw_bucket}
+                - copied_objects: []
+        - list_objects:
+            call: googleapis.storage.v1.objects.list
+            args:
+                bucket: $${source_bucket}
+                prefix: "new-york-taxi-trips/tlc-yellow-trips-2022"
+            result: list_result
+        - start_counter:
+            assign:
+                - copied_objects: 0
+        - copy_objects:
+                for:
+                    value: object
+                    index: i
+                    in: $${list_result.items}
+                    steps:
+                      - step1:
+                            try:
+                                steps:
+                                  - copy_object:
+                                      call: googleapis.storage.v1.objects.copy
+                                      args:
+                                          sourceBucket: $${source_bucket}
+                                          sourceObject: $${text.url_encode(object.name)}
+                                          destinationBucket: $${dest_bucket}
+                                          destinationObject: $${text.url_encode(object.name)}
+                                      result: copy_result
+                                  - save_result:
+                                      assign:
+                                          - copied_objects: $${copied_objects + 1}
+                            except:
+                                as: e
+                                raise:
+                                    exception: $${e}
+                                    sourceBucket: $${source_bucket}
+                                    sourceObject: $${object.name}
+                                    destinationBucket: $${dest_bucket}
+        - finish:
+            return: $${copied_objects + " objects copied"}
 
-    - returnOutput:
-        return: Response
+# Subworkflow to create BigLake tables
+create_tables:
+    steps:
+        - assignStepTables:
+            assign:
+                - results: {}
+                - project_id: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+                - map:
+                    sp_provision_lookup_tables: $${"CALL `"+project_id+".ds_edw.sp_provision_lookup_tables`();"}
+                    sp_lookerstudio_report: $${"CALL `"+project_id+".ds_edw.sp_lookerstudio_report`();"}
+                    sp_bigqueryml_model: $${"CALL `"+project_id+".ds_edw.sp_bigqueryml_model`();"}
+        - loopStepTables:
+            for:
+                value: key
+                in: $${keys(map)}
+                steps:
+                    - runQuery:
+                        call: googleapis.bigquery.v2.jobs.query
+                        args:
+                            projectId: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+                            body:
+                                useLegacySql: false
+                                useQueryCache: false
+                                location: $${sys.get_env("GOOGLE_CLOUD_LOCATION")}
+                                timeoutMs: 600000
+                                query: $${map[key]}
+                        result: queryResult
+                    - sumStep:
+                        assign:
+                            - results[key]: $${queryResult}
