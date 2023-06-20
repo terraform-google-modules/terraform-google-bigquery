@@ -103,7 +103,7 @@ resource "google_bigquery_connection" "ds_connection" {
 # # Grant IAM access to the BigQuery Connection account for Cloud Storage
 resource "google_storage_bucket_iam_binding" "bq_connection_iam_object_viewer" {
   bucket = google_storage_bucket.raw_bucket.name
-  role = "roles/storage.objectViewer"
+  role   = "roles/storage.objectViewer"
   members = [
     "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}",
   ]
