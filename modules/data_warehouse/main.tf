@@ -65,7 +65,7 @@ resource "google_storage_bucket" "raw_bucket" {
   uniform_bucket_level_access = true
   force_destroy               = var.force_destroy
 
-  # public_access_prevention = "enforced" # need to validate if this is a hard requirement
+  public_access_prevention = "enforced"
 }
 
 # # Set up the provisioning bucketstorage bucket
@@ -76,7 +76,7 @@ resource "google_storage_bucket" "provisioning_bucket" {
   uniform_bucket_level_access = true
   force_destroy               = var.force_destroy
 
-  # public_access_prevention = "enforced"
+  public_access_prevention = "enforced"
 }
 
 # Set up BigQuery resources
