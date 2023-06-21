@@ -40,15 +40,14 @@ module "project-services" {
     "bigquery.googleapis.com",
     "storage.googleapis.com",
     "storage-api.googleapis.com",
-    "run.googleapis.com",
     "pubsub.googleapis.com",
     "bigqueryconnection.googleapis.com",
-    "cloudfunctions.googleapis.com",
     "bigquerydatatransfer.googleapis.com",
-    "artifactregistry.googleapis.com",
     "config.googleapis.com",
-    "workflows.googleapis.com"
+    "workflows.googleapis.com",
+    "serviceusage.googleapis.com",
   ]
+
 }
 
 #random id
@@ -56,80 +55,7 @@ resource "random_id" "id" {
   byte_length = 4
 }
 
-# Set up Functions service account for the Cloud Function to execute as
-# # Set up the Functions service account
-resource "google_service_account" "cloud_function_service_account" {
-  project      = module.project-services.project_id
-  account_id   = "cloud-function-sa-${random_id.id.hex}"
-  display_name = "Service Account for Cloud Function Execution"
-}
-
-# # Grant the Functions service account Object Create / Delete access
-resource "google_project_iam_member" "cloud_function_service_account_storage_role" {
-  project = module.project-services.project_id
-  role    = "roles/storage.objectAdmin"
-  member  = "serviceAccount:${google_service_account.cloud_function_service_account.email}"
-
-  depends_on = [
-    google_service_account.cloud_function_service_account
-  ]
-}
-
-# # Grant the Functions service account BQ Connection Access
-resource "google_project_iam_member" "cloud_function_service_account_bq_connection_role" {
-  project = module.project-services.project_id
-  role    = "roles/bigquery.connectionUser"
-  member  = "serviceAccount:${google_service_account.cloud_function_service_account.email}"
-
-  depends_on = [
-    google_service_account.cloud_function_service_account
-  ]
-}
-
-# # Grant the Functions service account BQ Jobs Access
-resource "google_project_iam_member" "cloud_function_service_account_bq_job_role" {
-  project = module.project-services.project_id
-  role    = "roles/bigquery.jobUser"
-  member  = "serviceAccount:${google_service_account.cloud_function_service_account.email}"
-
-  depends_on = [
-    google_service_account.cloud_function_service_account
-  ]
-}
-
-# # Grant the Functions service account BQ Jobs Access
-resource "google_project_iam_member" "cloud_function_service_account_bq_data_role" {
-  project = module.project-services.project_id
-  role    = "roles/bigquery.dataEditor"
-  member  = "serviceAccount:${google_service_account.cloud_function_service_account.email}"
-
-  depends_on = [
-    google_service_account.cloud_function_service_account
-  ]
-}
-
-# # Grant the Functions service account access to Artifact Registry
-resource "google_project_iam_member" "cloud_function_service_account_artifact_registry_role" {
-  project = module.project-services.project_id
-  role    = "roles/artifactregistry.reader"
-  member  = "serviceAccount:${google_service_account.cloud_function_service_account.email}"
-
-  depends_on = [
-    google_service_account.cloud_function_service_account
-  ]
-}
-
 # Set up Storage Buckets
-# # Set up the export storage bucket
-resource "google_storage_bucket" "export_bucket" {
-  name                        = "ds-edw-export-${random_id.id.hex}"
-  project                     = module.project-services.project_id
-  location                    = "us-central1"
-  uniform_bucket_level_access = true
-  force_destroy               = var.force_destroy
-
-  # public_access_prevention = "enforced" # need to validate if this is a hard requirement
-}
 
 # # Set up the raw storage bucket
 resource "google_storage_bucket" "raw_bucket" {
@@ -175,13 +101,15 @@ resource "google_bigquery_connection" "ds_connection" {
 }
 
 # # Grant IAM access to the BigQuery Connection account for Cloud Storage
-resource "google_project_iam_member" "bq_connection_iam_object_viewer" {
-  project = module.project-services.project_id
-  role    = "roles/storage.objectViewer"
-  member  = "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}"
+resource "google_storage_bucket_iam_binding" "bq_connection_iam_object_viewer" {
+  bucket = google_storage_bucket.raw_bucket.name
+  role   = "roles/storage.objectViewer"
+  members = [
+    "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}",
+  ]
 
   depends_on = [
-    google_bigquery_connection.ds_connection
+    google_bigquery_connection.ds_connection,
   ]
 }
 
@@ -196,7 +124,7 @@ resource "google_bigquery_table" "tbl_edw_taxi" {
     autodetect    = true
     connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
     source_format = "PARQUET"
-    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/taxi-*.Parquet"]
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/new-york-taxi-trips/tlc-yellow-trips-2022/taxi-*.Parquet"]
 
   }
 
@@ -321,7 +249,7 @@ EOF
 
   depends_on = [
     google_bigquery_connection.ds_connection,
-    google_storage_bucket.raw_bucket
+    google_storage_bucket.raw_bucket,
   ]
 }
 
@@ -390,7 +318,7 @@ resource "google_bigquery_routine" "sp_sample_translation_queries" {
   routine_id      = "sp_sample_translation_queries"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_sample_translation_queries.sql", { project_id = module.project-services.project_id }) # data.template_file.sp_sample_translation_queries.rendered
+  definition_body = templatefile("${path.module}/src/sql/sp_sample_translation_queries.sql", { project_id = module.project-services.project_id })
 
   depends_on = [
     google_bigquery_table.tbl_edw_taxi,
@@ -405,15 +333,17 @@ resource "google_project_service_identity" "bigquery_data_transfer_sa" {
   service  = "bigquerydatatransfer.googleapis.com"
 }
 
-resource "google_project_iam_member" "dts_permissions_token" {
-  project = data.google_project.project.project_id
-  role    = "roles/iam.serviceAccountTokenCreator"
-  member  = "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
-}
+# # Grant the DTS service account access
+resource "google_project_iam_member" "dts_service_account_roles" {
+  for_each = toset([
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/bigquerydatatransfer.serviceAgent",
+    "roles/bigquery.user",
+    "roles/bigquery.dataEditor",
+  ])
 
-resource "google_project_iam_member" "dts_permissions_agent" {
-  project = data.google_project.project.project_id
-  role    = "roles/bigquerydatatransfer.serviceAgent"
+  project = module.project-services.project_id
+  role    = each.key
   member  = "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
 }
 
@@ -430,92 +360,19 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
   }
 
   depends_on = [
-    google_project_iam_member.dts_permissions_token,
-    google_project_iam_member.dts_permissions_agent,
-    google_bigquery_dataset.ds_edw
-  ]
-}
-
-# Create a Cloud Function resource
-# # Zip the function file
-data "archive_file" "bigquery_external_function_zip" {
-  type        = "zip"
-  source_dir  = "${path.module}/src/bigquery-external-function"
-  output_path = "${path.module}/src/bigquery-external-function.zip"
-
-  depends_on = [
-    google_storage_bucket.provisioning_bucket
-  ]
-}
-
-# # Place the function file on Cloud Storage
-resource "google_storage_bucket_object" "cloud_function_zip_upload" {
-  name   = "src/bigquery-external-function.zip"
-  bucket = google_storage_bucket.provisioning_bucket.name
-  source = data.archive_file.bigquery_external_function_zip.output_path
-
-  depends_on = [
-    google_storage_bucket.provisioning_bucket,
-    data.archive_file.bigquery_external_function_zip
-  ]
-}
-
-# # Sleep for 30 seconds to wait for prior roles to sync up
-resource "time_sleep" "wait_30_seconds" {
-  depends_on = [
-    google_storage_bucket.provisioning_bucket,
-    google_storage_bucket.raw_bucket,
-    google_project_iam_member.cloud_function_service_account_bq_connection_role,
-  ]
-
-  create_duration = "30s"
-}
-
-# # Create the function
-resource "google_cloudfunctions2_function" "function" {
-  #provider = google-beta
-  project     = module.project-services.project_id
-  name        = "workflow-initial-${random_id.id.hex}"
-  location    = var.region
-  description = "gcs-load-bq"
-
-  build_config {
-    runtime     = "python310"
-    entry_point = "bq_sp_transform"
-    source {
-      storage_source {
-        bucket = google_storage_bucket.provisioning_bucket.name
-        object = "src/bigquery-external-function.zip"
-      }
-    }
-  }
-
-  service_config {
-    max_instance_count = 1
-    available_memory   = "256M"
-    timeout_seconds    = 540
-    environment_variables = {
-      PROJECT_ID       = module.project-services.project_id
-      BUCKET_ID        = google_storage_bucket.raw_bucket.name
-      EXPORT_BUCKET_ID = google_storage_bucket.export_bucket.name
-    }
-    service_account_email = google_service_account.cloud_function_service_account.email
-  }
-
-  depends_on = [
-    time_sleep.wait_30_seconds
+    google_project_iam_member.dts_service_account_roles,
+    google_bigquery_dataset.ds_edw,
   ]
 }
 
 # # Sleep for 60 seconds to drop start file
-resource "time_sleep" "wait_60_seconds_to_startfile" {
+resource "time_sleep" "wait_30_seconds_to_startfile" {
   depends_on = [
-    google_cloudfunctions2_function.function,
     google_storage_notification.notification,
     google_eventarc_trigger.trigger_pubsub_tf,
   ]
 
-  create_duration = "60s"
+  create_duration = "30s"
 }
 
 resource "google_storage_bucket_object" "startfile" {
@@ -524,7 +381,7 @@ resource "google_storage_bucket_object" "startfile" {
   source = "${path.module}/src/startfile"
 
   depends_on = [
-    time_sleep.wait_60_seconds_to_startfile
+    time_sleep.wait_30_seconds_to_startfile
   ]
 
 }
@@ -585,7 +442,7 @@ resource "google_eventarc_trigger" "trigger_pubsub_tf" {
   ]
 }
 
-# Set up Eventarc service account for the Cloud Function to execute as
+# Set up Eventarc service account for the Trigger to execute as
 # # Set up the Eventarc service account
 resource "google_service_account" "eventarc_service_account" {
   project      = module.project-services.project_id
