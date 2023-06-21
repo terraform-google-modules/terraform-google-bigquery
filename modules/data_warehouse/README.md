@@ -10,7 +10,7 @@ The resources/services/activations/deletions that this module will create/trigge
 - Creates a BigQuery Dataset
 - Creates a BigQuery Table
 - Creates a Google Cloud Storage bucket
-- Loads the Google Cloud Storage bucket with data from https://pantheon.corp.google.com/marketplace/product/city-of-new-york/nyc-tlc-trips
+- Loads the Google Cloud Storage bucket with data from https://console.cloud.google.com/marketplace/product/city-of-new-york/nyc-tlc-trips
 - Provides SQL examples
 - Creates and inferences with a BigQuery ML model
 - Creates a Looker Studio report
