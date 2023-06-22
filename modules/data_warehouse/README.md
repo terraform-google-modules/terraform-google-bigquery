@@ -1,26 +1,28 @@
-# terraform-google-ssw
+# terraform-google-bigquery-data-warehouse
 
 ## Description
 ### tagline
-This is an auto-generated module.
+
+This module provides an example of a data warehouse deployed using Google Cloud and BigQuery.
 
 ### detailed
 
 The resources/services/activations/deletions that this module will create/trigger are:
 
-- Creates a BQ Dataset
-- Creates a BQ Table
-- Creates a GCS bucket
-- Loads the GCS bucket with data from https://pantheon.corp.google.com/marketplace/product/city-of-new-york/nyc-tlc-trips
+- Creates a BigQuery Dataset
+- Creates a BigQuery Table
+- Creates a Google Cloud Storage bucket
+- Loads the Google Cloud Storage bucket with data from https://console.cloud.google.com/marketplace/product/city-of-new-york/nyc-tlc-trips
 - Provides SQL examples
 - Creates and inferences with a BigQuery ML model
-- Creates a datastudio report
+- Creates a Looker Studio report
 
 ### preDeploy
 To deploy this blueprint you must have an active billing account and billing permissions.
 
 ## Documentation
-- [Hosting a Static Website](https://cloud.google.com/storage/docs/hosting-static-website)
+- [Create a Data Warehouse](https://cloud.google.com/architecture/big-data-analytics/data-warehouse)
+- [Learn about BigQuery](https://cloud.google.com/bigquery/docs/introduction)
 
 ## Usage
 
@@ -68,6 +70,11 @@ A service account with the following roles must be used to provision
 the resources of this module:
 
 - Storage Admin: `roles/storage.admin`
+- BigQuery Admin: `roles/bigquery.admin`
+- Workflows Admin: `roles/workflows.admin`
+- Eventarc Admin: `roles/eventarc.admin`
+- Pub/Sub Admin: `roles/pubsub.admin`
+- Dataplex Admin: `roles/dataplex.admin`
 
 The [Project Factory module][project-factory-module] and the
 [IAM module][iam-module] may be used in combination to provision a
@@ -78,7 +85,20 @@ service account with the necessary roles applied.
 A project with the following APIs enabled must be used to host the
 resources of this module:
 
+- BigQuery API: `bigquery.googleapis.com`
+- BigQuery Migration API: `bigquerymigration.googleapis.com`
+- BigQuery Storage API: `bigquerystorage.googleapis.com`
+- BigQuery Connection API: `bigqueryconnection.googleapis.com`
+- BigQuery Reservations API: `bigqueryreservation.googleapis.com`
+- BigQuery Data Transfer Service API: `bigquerydatatransfer.googleapis.com`
+- Data Catalog API: `datacatalog.googleapis.com`
+- Data Lineage API: `datalineage.googleapis.com`
+- Eventarc API: `eventarc.googleapis.com`
+- Google Cloud Pub/Sub API: `pubsub.googleapis.com`
+- Service Usage API: `serviceusage.googleapis.com`
+- Google Cloud Storage API: `storage.googleapis.com`
 - Google Cloud Storage JSON API: `storage-api.googleapis.com`
+- Google Cloud Workflows API: `workflows.googleapis.com`
 
 The [Project Factory module][project-factory-module] can be used to
 provision a project with the necessary APIs enabled.

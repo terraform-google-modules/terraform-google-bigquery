@@ -41,7 +41,6 @@ module "project-services" {
     "storage.googleapis.com",
     "storage-api.googleapis.com",
     "pubsub.googleapis.com",
-    "bigqueryconnection.googleapis.com",
     "bigquerydatatransfer.googleapis.com",
     "config.googleapis.com",
     "workflows.googleapis.com",
