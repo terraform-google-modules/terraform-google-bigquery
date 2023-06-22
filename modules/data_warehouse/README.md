@@ -1,9 +1,9 @@
 # terraform-google-bigquery-data-warehouse
 
-## Description
+## tagline
 This module provides an example of a data warehouse deployed using Google Cloud and BigQuery.
 
-### Details
+### detailed
 
 The resources/services/activations/deletions that this module will create/trigger are:
 
