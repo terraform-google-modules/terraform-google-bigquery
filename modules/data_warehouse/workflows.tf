@@ -24,6 +24,12 @@ resource "google_project_service_identity" "workflows" {
   ]
 }
 
+resource "google_project_iam_member" "workflow_service_identity_role" {
+  project = data.google_project.project.project_id
+  role    = "roles/workflows.viewer"
+  member  = "serviceAccount:${google_project_service_identity.workflows.email}"
+}
+
 # Set up Workflows service account
 # # Set up the Workflows service account
 resource "google_service_account" "workflow_service_account" {
