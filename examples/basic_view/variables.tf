@@ -73,6 +73,7 @@ variable "views" {
   type = list(object({
     view_id        = string,
     query          = string,
+    schema         = string,
     use_legacy_sql = bool,
     labels         = map(string),
   }))

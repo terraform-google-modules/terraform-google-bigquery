@@ -110,6 +110,40 @@ resource "google_bigquery_dataset" "main" {
       }
     }
   }
+
+  dynamic "access" {
+    for_each = local.auth_views
+    content {
+      role           = ""
+      group_by_email = ""
+      user_by_email  = ""
+      special_group  = ""
+      domain         = ""
+      view {
+        project_id = access.value.project_id
+        dataset_id = access.value.dataset_id
+        table_id   = access.value.table_id
+      }
+    }
+  }
+
+  dynamic "access" {
+    for_each = local.auth_datasets
+    content {
+      role           = ""
+      group_by_email = ""
+      user_by_email  = ""
+      special_group  = ""
+      domain         = ""
+      dataset {
+        dataset {
+          project_id = access.value.project_id
+          dataset_id = access.value.dataset_id
+        }
+        target_types = ["VIEWS"]
+      }
+    }
+  }
 }
 
 resource "google_bigquery_table" "main" {
