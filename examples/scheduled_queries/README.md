@@ -22,3 +22,16 @@ Run the following commands within this directory:
 - `terraform plan` to see the infrastructure plan
 - `terraform apply` to apply the infrastructure build
 - `terraform destroy` to destroy the built infrastructure
+
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Inputs
+
+No inputs.
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| query\_names | The resource names of the transfer config |
+
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

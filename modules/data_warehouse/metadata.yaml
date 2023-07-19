@@ -20,20 +20,22 @@ metadata:
     config.kubernetes.io/local-config: "true"
 spec:
   info:
-    title: terraform-google-ssw
+    title: terraform-google-bigquery-data-warehouse
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-bigquery
       sourceType: git
       dir: /modules/data_warehouse
-    version: 6.0.0
+    version: 6.1.0
     actuationTool:
       flavor: Terraform
       version: '>= 0.13'
     description: {}
   content:
     documentation:
-    - title: Hosting a Static Website
-      url: https://cloud.google.com/storage/docs/hosting-static-website
+    - title: Create a Data Warehouse
+      url: https://cloud.google.com/architecture/big-data-analytics/data-warehouse
+    - title: Learn about BigQuery
+      url: https://cloud.google.com/bigquery/docs/introduction
     examples:
     - name: basic_bq
       location: examples/basic_bq
@@ -77,8 +79,6 @@ spec:
       description: The URL to launch the BigQuery editor with the sample query procedure opened
     - name: ds_friendly_name
       description: Dataset name
-    - name: function_uri
-      description: Function URI
     - name: lookerstudio_report_url
       description: The URL to create a new Looker Studio report displays a sample dashboard for the taxi data analysis
     - name: neos_tutorial_url
