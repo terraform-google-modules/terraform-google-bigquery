@@ -63,7 +63,7 @@ resource "google_bigquery_table" "tbl_edw_taxi" {
 
   }
 
-  schema = file("${path.module}/schema/taxi_trips_schema.json")
+  schema = file("${path.module}/src/taxi_trips_schema.json")
 
   depends_on = [
     google_bigquery_connection.ds_connection,
