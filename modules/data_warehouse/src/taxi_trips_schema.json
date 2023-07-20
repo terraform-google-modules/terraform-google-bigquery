@@ -1,0 +1,117 @@
+[
+    {
+      "name": "vendor_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "pickup_datetime",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "dropoff_datetime",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "passenger_count",
+      "type": "INTEGER",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "trip_distance",
+      "type": "NUMERIC",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "rate_code",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "store_and_fwd_flag",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "payment_type",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "fare_amount",
+      "type": "NUMERIC",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "extra",
+      "type": "NUMERIC",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "mta_tax",
+      "type": "NUMERIC",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "tip_amount",
+      "type": "NUMERIC",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "tolls_amount",
+      "type": "NUMERIC",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "imp_surcharge",
+      "type": "NUMERIC",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "airport_fee",
+      "type": "NUMERIC",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "total_amount",
+      "type": "NUMERIC",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "pickup_location_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "data_file_year",
+      "type": "INTEGER",
+      "mode": "NULLABLE",
+      "description": ""
+    },
+    {
+      "name": "data_file_month",
+      "type": "INTEGER",
+      "mode": "NULLABLE",
+      "description": ""
+    }
+  ]
+  
