@@ -24,6 +24,18 @@ resource "google_project_service_identity" "workflows" {
   ]
 }
 
+# # Grant the Workflow service account access
+resource "google_project_iam_member" "workflow_identity_roles" {
+  for_each = toset([
+    "roles/workflows.viewer",
+  ])
+
+  project = module.project-services.project_id
+  role    = each.key
+  member  = "serviceAccount:${google_project_service_identity.workflows.email}"
+
+}
+
 # Set up Workflows service account
 # # Set up the Workflows service account
 resource "google_service_account" "workflow_service_account" {
@@ -58,7 +70,7 @@ resource "google_workflows_workflow" "workflow" {
   description     = "Runs post Terraform setup steps for Solution in Console"
   service_account = google_service_account.workflow_service_account.id
 
-  source_contents = templatefile("${path.module}/src/workflows/workflow.yaml", {
+  source_contents = templatefile("${path.module}/templates/workflow.tftpl", {
     raw_bucket = google_storage_bucket.raw_bucket.name
   })
 
