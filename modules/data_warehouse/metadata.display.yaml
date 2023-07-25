@@ -20,7 +20,7 @@ metadata:
     config.kubernetes.io/local-config: "true"
 spec:
   info:
-    title: terraform-google-ssw
+    title: terraform-google-bigquery-data-warehouse
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-bigquery
       sourceType: git

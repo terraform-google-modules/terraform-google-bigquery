@@ -24,3 +24,20 @@ module "add_udfs" {
   project_id = module.dataset.bigquery_dataset.project
 }
 ```
+
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| add\_udfs | Whether or not this module should be enabled. | `string` | `false` | no |
+| dataset\_id | Dataset id | `string` | n/a | yes |
+| project\_id | Project ID that contains the dataset | `string` | n/a | yes |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| added\_udfs | List of UDFs utility functions added. |
+
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
