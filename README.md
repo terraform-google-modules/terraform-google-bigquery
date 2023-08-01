@@ -251,7 +251,7 @@ A helper script for configuring a Service Account is located at (./helpers/setup
 A project with the following APIs enabled must be used to host the
 resources of this module:
 
-- BigQuery JSON API: `bigquery-json.googleapis.com`
+- BigQuery JSON API: `bigquery.googleapis.com`
 
 The [Project Factory module][project-factory-module] can be used to
 provision a project with the necessary APIs enabled.
