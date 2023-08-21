@@ -38,7 +38,7 @@ copy_objects:
             call: googleapis.storage.v1.objects.list
             args:
                 bucket: $${source_bucket}
-                prefix: "new-york-taxi-trips/tlc-yellow-trips-2022"
+                prefix: "thelook-ecommerce"
             result: list_result
         - start_counter:
             assign:

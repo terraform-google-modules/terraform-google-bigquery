@@ -48,22 +48,96 @@ resource "google_storage_bucket_iam_binding" "bq_connection_iam_object_viewer" {
   ]
 }
 
-# # Create a BigQuery external table
-resource "google_bigquery_table" "tbl_edw_taxi" {
+# # Create a BigQuery native table for events
+resource "google_bigquery_table" "tbl_edw_events" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
-  table_id            = "taxi_trips"
+  table_id            = "events"
   project             = module.project-services.project_id
+  deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/events_schema.json")
+
+  depends_on = [
+    google_bigquery_connection.ds_connection,
+    google_storage_bucket.raw_bucket,
+  ]
+}
+
+# # Create a BigQuery native table for inventory_items
+resource "google_bigquery_table" "tbl_edw_inventory_items" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "inventory_items"
+  project             = module.project-services.project
+  deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/inventory_items_schema.json")
+
+  depends_on = [
+    google_bigquery_connection.ds_connection,
+    google_storage_bucket.raw_bucket,
+  ]
+}
+
+# # Create a BigQuery external table with metadata caching for order_items
+resource "google_bigquery_table" "tbl_edw_order_items" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "order_items"
+  project             = module.project-services.project
   deletion_protection = var.deletion_protection
 
   external_data_configuration {
     autodetect    = true
     connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
     source_format = "PARQUET"
-    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/new-york-taxi-trips/tlc-yellow-trips-2022/taxi-*.Parquet"]
-
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/order_items*.Parquet"]
+    metadata_cache_mode = "Automatic"
   }
 
-  schema = file("${path.module}/src/taxi_trips_schema.json")
+  schema = file("${path.module}/src/schema/order_items_schema.json")
+  depends_on = [
+    google_bigquery_connection.ds_connection,
+    google_storage_bucket.raw_bucket,
+  ]
+}
+
+# # Create a BigQuery native table for orders
+resource "google_bigquery_table" "tbl_edw_orders" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "orders"
+  project             = module.project-services.project_id
+  deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/orders_schema.json")
+
+  depends_on = [
+    google_bigquery_connection.ds_connection,
+    google_storage_bucket.raw_bucket,
+  ]
+}
+
+# # Create a BigQuery native table for products
+resource "google_bigquery_table" "tbl_edw_products" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "products"
+  project             = module.project-services.project
+  deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/products_schema.json")
+
+  depends_on = [
+    google_bigquery_connection.ds_connection,
+    google_storage_bucket.raw_bucket,
+  ]
+}
+
+# # Create a BigQuery native table for users
+resource "google_bigquery_table" "tbl_edw_users" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "users"
+  project             = module.project-services.project
+  deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/users_schema.json")
 
   depends_on = [
     google_bigquery_connection.ds_connection,
@@ -72,7 +146,7 @@ resource "google_bigquery_table" "tbl_edw_taxi" {
 }
 
 # Load Queries for Stored Procedure Execution
-# # Load Lookup Data Tables
+# # Load Distribution Center Lookup Data Tables
 resource "google_bigquery_routine" "sp_provision_lookup_tables" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
@@ -86,9 +160,8 @@ resource "google_bigquery_routine" "sp_provision_lookup_tables" {
   ]
 }
 
-
-# # Add Looker Studio Data Report Procedure
-resource "google_bigquery_routine" "sproc_sp_demo_datastudio_report" {
+# Add Looker Studio Data Report Procedure
+resource "google_bigquery_routine" "sproc_sp_demo_lookerstudio_report" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_lookerstudio_report"
@@ -97,7 +170,7 @@ resource "google_bigquery_routine" "sproc_sp_demo_datastudio_report" {
   definition_body = templatefile("${path.module}/src/sql/sp_lookerstudio_report.sql", { project_id = module.project-services.project_id })
 
   depends_on = [
-    google_bigquery_table.tbl_edw_taxi,
+    google_bigquery_table.tbl_edw_inventory_items,
   ]
 }
 
@@ -111,11 +184,12 @@ resource "google_bigquery_routine" "sp_sample_queries" {
   definition_body = templatefile("${path.module}/src/sql/sp_sample_queries.sql", { project_id = module.project-services.project_id })
 
   depends_on = [
-    google_bigquery_table.tbl_edw_taxi,
+    google_bigquery_table.tbl_edw_inventory_items,
   ]
 }
 
-# # Add Bigquery ML Model
+
+# Add Bigquery ML Model
 resource "google_bigquery_routine" "sp_bigqueryml_model" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
@@ -125,21 +199,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_model" {
   definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_model.sql", { project_id = module.project-services.project_id })
 
   depends_on = [
-    google_bigquery_table.tbl_edw_taxi,
-  ]
-}
-
-# # Add Translation Scripts
-resource "google_bigquery_routine" "sp_sample_translation_queries" {
-  project         = module.project-services.project_id
-  dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id      = "sp_sample_translation_queries"
-  routine_type    = "PROCEDURE"
-  language        = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_sample_translation_queries.sql", { project_id = module.project-services.project_id })
-
-  depends_on = [
-    google_bigquery_table.tbl_edw_taxi,
+    google_bigquery_table.tbl_edw_inventory_items,
   ]
 }
 

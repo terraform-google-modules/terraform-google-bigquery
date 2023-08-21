@@ -67,7 +67,7 @@ resource "google_storage_bucket" "raw_bucket" {
   public_access_prevention = "enforced"
 }
 
-# # Set up the provisioning bucketstorage bucket
+# # Set up the provisioning storage bucket
 resource "google_storage_bucket" "provisioning_bucket" {
   name                        = "ds-edw-provisioner-${random_id.id.hex}"
   project                     = module.project-services.project_id

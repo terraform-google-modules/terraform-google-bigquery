@@ -24,11 +24,13 @@ resource "google_project_service_identity" "workflows" {
   ]
 }
 
+# Set up Workflows service account
 # # Grant the Workflow service account access
 resource "google_project_iam_member" "workflow_identity_roles" {
   for_each = toset([
     "roles/workflows.viewer",
-  ])
+    ]
+  )
 
   project = module.project-services.project_id
   role    = each.key
@@ -36,7 +38,6 @@ resource "google_project_iam_member" "workflow_identity_roles" {
 
 }
 
-# Set up Workflows service account
 # # Set up the Workflows service account
 resource "google_service_account" "workflow_service_account" {
   project      = module.project-services.project_id
@@ -54,8 +55,8 @@ resource "google_project_iam_member" "workflow_service_account_roles" {
     "roles/bigquery.connectionUser",
     "roles/bigquery.jobUser",
     "roles/bigquery.dataEditor",
-  ])
-
+    ]
+  )
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_service_account.workflow_service_account.email}"

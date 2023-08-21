@@ -29,118 +29,105 @@ Clean up / Reset script:
 
 --Rank, Pivot, Json
 
--- Query: Get trips over $50 for each day of the week.
--- Shows: Date Functions, Joins, Group By, Having, Ordinal Group/Having
-SELECT FORMAT_DATE("%w", Pickup_DateTime) AS WeekdayNumber,
-       FORMAT_DATE("%A", Pickup_DateTime) AS WeekdayName,
-       vendor.Vendor_Description,
-       payment_type.Payment_Type_Description,
-       SUM(taxi_trips.Total_Amount) AS high_value_trips
-  FROM `${project_id}.ds_edw.taxi_trips` AS taxi_trips
-       INNER JOIN `${project_id}.ds_edw.vendor` AS vendor
-               ON cast(taxi_trips.Vendor_Id as INT64) = vendor.Vendor_Id
-              AND taxi_trips.Pickup_DateTime BETWEEN '2022-01-01' AND '2022-02-01'
-        LEFT JOIN `${project_id}.ds_edw.payment_type` AS payment_type
-               ON cast(taxi_trips.payment_type as INT64) = payment_type.Payment_Type_Id
-GROUP BY 1, 2, 3, 4
-HAVING SUM(taxi_trips.Total_Amount) > 50
-ORDER BY WeekdayNumber, 3, 4;
+-- Query: See the order price quartiles for each day of the week.
+-- Shows: Date Functions, Joins, Group By, Having, Ordinal Group/Having, Quantiles
+SELECT
+    FORMAT_DATE("%w", created_at) AS WeekdayNumber,
+    FORMAT_DATE("%A", created_at) AS WeekdayName,
+    APPROX_QUANTILES(order_price, 4) AS quartiles
+  FROM (
+    SELECT
+      created_at,
+      SUM(sale_price) AS order_price
+    FROM
+      `${project_id}.ds_edw.order_items`
+    GROUP BY
+      order_id, 1
+    HAVING SUM(sale_price) > 10)
+  GROUP BY
+    1, 2
+  ORDER BY
+    expression WeekdayNumber, 3;
 
+-- Query: Items with less than 30 days of inventory remaining
+WITH Orders AS (
+  SELECT
+    order_items.product_id AS product_id,
+    COUNT(order_items.id) AS count_sold_30d
+  FROM
+    `${project_id}.ds_edw.order_items` AS order_items
+  WHERE
+    order_items.created_at > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 30 DAY)
+  GROUP BY
+    product_id
+),
 
--- Query: amounts (Cash/Credit) by passenger type
-WITH TaxiDataRanking AS
-(
-SELECT CAST(Pickup_DateTime AS DATE) AS Pickup_Date,
-       cast(taxi_trips.payment_type as INT64) as Payment_Type_Id,
-       taxi_trips.Passenger_Count,
-       taxi_trips.Total_Amount,
-       RANK() OVER (PARTITION BY CAST(Pickup_DateTime AS DATE),
-                                 taxi_trips.payment_type
-                        ORDER BY taxi_trips.Passenger_Count DESC,
-                                 taxi_trips.Total_Amount DESC) AS Ranking
-  FROM `${project_id}.ds_edw.taxi_trips` AS taxi_trips
- WHERE taxi_trips.Pickup_DateTime BETWEEN '2022-01-01' AND '2022-02-01'
-   AND cast(taxi_trips.payment_type as INT64) IN (1,2)
+OnHand AS (
+  SELECT
+    inventory.product_id AS product_id,
+    inventory.product_name AS product_name,
+    COUNT(inventory.id) AS count_in_stock
+  FROM
+    `${project_id}.ds_edw.inventory_items` AS inventory
+  WHERE
+    inventory.sold_at IS NULL
+  GROUP BY
+    product_id,
+    product_name
+  ORDER BY
+    count_in_stock DESC
 )
-SELECT Pickup_Date,
-       Payment_Type_Description,
-       Passenger_Count,
-       Total_Amount
-  FROM TaxiDataRanking
-       INNER JOIN `${project_id}.ds_edw.payment_type` AS payment_type
-               ON TaxiDataRanking.Payment_Type_Id = payment_type.Payment_Type_Id
-WHERE Ranking = 1
-ORDER BY Pickup_Date, Payment_Type_Description;
+
+SELECT
+  OnHand.*,
+  Orders.count_sold_30d,
+  count_in_stock - count_sold_30d AS expected_inventory_30d
+FROM
+  OnHand
+INNER JOIN
+  Orders USING (product_id)
+ORDER BY
+  expected_inventory_30d
 
 
--- Query: data summed by payment type and passenger count, then pivoted based upon payment type
-WITH MonthlyData AS
-(
-SELECT FORMAT_DATE("%B", taxi_trips.Pickup_DateTime) AS MonthName,
-       FORMAT_DATE("%m", taxi_trips.Pickup_DateTime) AS MonthNumber,
-       CASE WHEN cast(taxi_trips.payment_type as INT64) = 1 THEN 'Credit'
-            WHEN cast(taxi_trips.payment_type as INT64) = 2 THEN 'Cash'
-            WHEN cast(taxi_trips.payment_type as INT64) = 3 THEN 'NoCharge'
-            WHEN cast(taxi_trips.payment_type as INT64) = 4 THEN 'Dispute'
-         END AS PaymentDescription,
-       taxi_trips.Passenger_Count,
-       taxi_trips.Total_Amount
-  FROM `${project_id}.ds_edw.taxi_trips` AS taxi_trips
- WHERE taxi_trips.Pickup_DateTime BETWEEN '2022-01-01' AND '2022-02-01'
-   AND Passenger_Count IS NOT NULL
-   AND cast(payment_type as INT64) IN (1,2,3,4)
+-- Query: data summed by month, then pivoted by department
+with MonthlyData AS(
+  SELECT
+    sold_at,
+    FORMAT_DATE("%B", inventory.sold_at) AS month_name,
+    FORMAT_DATE("%m", inventory.sold_at) AS month_number,
+    SAFE_SUBTRACT(inventory.product_retail_price, inventory.cost) AS profit,
+    inventory.product_department AS product_department
+  FROM
+    `${project_id}.ds_edw.inventory_items` AS inventory
+  WHERE
+   sold_at IS NOT NULL
 )
-SELECT MonthName,
-       Passenger_Count,
-       FORMAT("%'d", CAST(Credit   AS INTEGER)) AS Credit,
-       FORMAT("%'d", CAST(Cash     AS INTEGER)) AS Cash,
-       FORMAT("%'d", CAST(NoCharge AS INTEGER)) AS NoCharge,
-       FORMAT("%'d", CAST(Dispute  AS INTEGER)) AS Dispute
-  FROM MonthlyData
- PIVOT(SUM(Total_Amount) FOR PaymentDescription IN ('Credit', 'Cash', 'NoCharge', 'Dispute'))
-ORDER BY MonthNumber, Passenger_Count;
 
+SELECT
+  month_name,
+  FORMAT("%'d", CAST(Profit_Men AS INTEGER)) AS Profit_Men,
+  FORMAT("%'d", CAST(Profit_Women AS INTEGER)) AS Profit_Women
+FROM
+  MonthlyData
+PIVOT
+  (SUM(profit) AS Profit FOR product_department IN ("Men", "Women"))
+ORDER BY month_number ASC;
 
--- Query: data pivoted by payment type
-WITH MonthlyData AS
-(
-SELECT FORMAT_DATE("%B", taxi_trips.Pickup_DateTime) AS MonthName,
-       FORMAT_DATE("%m", taxi_trips.Pickup_DateTime) AS MonthNumber,
-       CASE WHEN cast(taxi_trips.payment_type as INT64) = 1 THEN 'Credit'
-            WHEN cast(taxi_trips.payment_type as INT64) = 2 THEN 'Cash'
-            WHEN cast(taxi_trips.payment_type as INT64) = 3 THEN 'NoCharge'
-            WHEN cast(taxi_trips.payment_type as INT64) = 4 THEN 'Dispute'
-         END AS PaymentDescription,
-       SUM(taxi_trips.Total_Amount) AS Total_Amount
-  FROM `${project_id}.ds_edw.taxi_trips` AS taxi_trips
- WHERE taxi_trips.Pickup_DateTime BETWEEN '2022-01-01' AND '2022-02-01'
-   AND Passenger_Count IS NOT NULL
-   AND cast(taxi_trips.payment_type as INT64) IN (1,2,3,4)
+-- Query: See what day of the week in each month has the greatest amount of sales(that's the month/day to work)
+WITH WeekdayData AS (
+  SELECT
+    FORMAT_DATE("%B", inventory.sold_at) AS month_name,
+    FORMAT_DATE("%m", inventory.sold_at) AS month_number,
+    FORMAT_DATE("%A", inventory.sold_at) AS weekday_name,
+    SUM(inventory.product_retail_price) AS revenue
+  FROM
+    `${project_id}.ds_edw.inventory_items` AS inventory
+  WHERE
+    inventory.sold_at IS NOT NULL
  GROUP BY 1, 2, 3
 )
-SELECT MonthName,
-       FORMAT("%'d", CAST(Credit   AS INTEGER)) AS Credit,
-       FORMAT("%'d", CAST(Cash     AS INTEGER)) AS Cash,
-       FORMAT("%'d", CAST(NoCharge AS INTEGER)) AS NoCharge,
-       FORMAT("%'d", CAST(Dispute  AS INTEGER)) AS Dispute
-  FROM MonthlyData
- PIVOT(SUM(Total_Amount) FOR PaymentDescription IN ('Credit', 'Cash', 'NoCharge', 'Dispute'))
-ORDER BY MonthNumber;
-
-
--- Query: See what day of the week in each month has the greatest amount (that's the month/day to work)
-WITH WeekdayData AS
-(
-SELECT FORMAT_DATE("%B", Pickup_DateTime) AS MonthName,
-       FORMAT_DATE("%m", Pickup_DateTime) AS MonthNumber,
-       FORMAT_DATE("%A", Pickup_DateTime) AS WeekdayName,
-       SUM(taxi_trips.Total_Amount) AS Total_Amount
-  FROM `${project_id}.ds_edw.taxi_trips` AS taxi_trips
- WHERE taxi_trips.Pickup_DateTime BETWEEN '2022-01-01' AND '2022-02-01'
-   AND cast(taxi_trips.payment_type as INT64) IN (1,2,3,4)
- GROUP BY 1, 2, 3
-)
-SELECT MonthName,
+SELECT month_name,
        FORMAT("%'d", CAST(Sunday    AS INTEGER)) AS Sunday,
        FORMAT("%'d", CAST(Monday    AS INTEGER)) AS Monday,
        FORMAT("%'d", CAST(Tuesday   AS INTEGER)) AS Tuesday,
@@ -149,5 +136,47 @@ SELECT MonthName,
        FORMAT("%'d", CAST(Friday    AS INTEGER)) AS Friday,
        FORMAT("%'d", CAST(Saturday  AS INTEGER)) AS Saturday,
   FROM WeekdayData
- PIVOT(SUM(Total_Amount) FOR WeekdayName IN ('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'))
-ORDER BY MonthNumber;
+ PIVOT(SUM(revenue) FOR weekday_name IN ('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'))
+ORDER BY month_number;
+
+-- Query: Revenue pivoted by category name for each month.
+-- This query dynamically generates the pivot column names based on the distinct values in the product_category column
+EXECUTE IMMEDIATE FORMAT("""
+  with Subset AS(
+    SELECT
+      EXTRACT(MONTH FROM inventory.sold_at) AS month_number,
+      inventory.product_category,
+      inventory.product_retail_price
+    FROM
+      `${project_id}.ds_edw.inventory_items` AS inventory
+    WHERE
+      inventory.sold_at IS NOT NULL)
+
+  SELECT
+    CASE
+      WHEN month_number = 1 THEN 'January'
+      WHEN month_number = 2 THEN 'February'
+      WHEN month_number = 3 THEN 'March'
+      WHEN month_number = 4 THEN 'April'
+      WHEN month_number = 5 THEN 'May'
+      WHEN month_number = 6 THEN 'June'
+      WHEN month_number = 7 THEN 'July'
+      WHEN month_number = 8 THEN 'August'
+      WHEN month_number = 9 THEN 'September'
+      WHEN month_number = 10 THEN 'October'
+      WHEN month_number = 11 THEN 'November'
+      WHEN month_number = 12 THEN 'December'
+    END AS month_name,
+    * EXCEPT (month_number)
+  FROM
+    Subset
+  PIVOT (SUM(Subset.product_retail_price) as Revenue FOR product_category IN %s)
+  ORDER BY month_number;
+  """,
+    (
+    SELECT
+      CONCAT("(", STRING_AGG(DISTINCT CONCAT("'", product_category, "'"), ','), ")")
+    FROM
+      `${project_id}.ds_edw.inventory_items`
+    )
+)

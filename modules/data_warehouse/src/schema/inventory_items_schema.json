@@ -1,0 +1,62 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "product_id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "sold_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "cost",
+    "type": "FLOAT"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "product_category",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "product_name",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "product_brand",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "product_retail_price",
+    "type": "FLOAT"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "product_department",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "product_sku",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "product_distribution_center_id",
+    "type": "INTEGER"
+  }
+]
