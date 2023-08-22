@@ -76,19 +76,29 @@ OnHand AS (
     product_name
   ORDER BY
     count_in_stock DESC
+),
+
+End30dInventory AS (
+  SELECT
+    OnHand.*,
+    Orders.count_sold_30d,
+    count_in_stock - count_sold_30d AS expected_inventory_30d
+  FROM
+    OnHand
+  INNER JOIN
+    Orders USING (product_id)
 )
 
 SELECT
-  OnHand.*,
-  Orders.count_sold_30d,
-  count_in_stock - count_sold_30d AS expected_inventory_30d
+  RANK() OVER (ORDER BY expected_inventory_30d ASC) AS rank,
+  End30dInventory.product_name,
+  End30dInventory.expected_inventory_30d,
+  End30dInventory.count_in_stock AS current_stock,
+  End30dInventory.count_sold_30d
 FROM
-  OnHand
-INNER JOIN
-  Orders USING (product_id)
+  End30dInventory
 ORDER BY
-  expected_inventory_30d
-
+  rank ASC, current_stock DESC
 
 -- Query: data summed by month, then pivoted by department
 with MonthlyData AS(
