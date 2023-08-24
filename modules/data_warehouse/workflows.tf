@@ -19,9 +19,8 @@ resource "google_project_service_identity" "workflows" {
   project  = module.project-services.project_id
   service  = "workflows.googleapis.com"
 
-  depends_on = [
-    module.project-services
-  ]
+
+  depends_on = [ time_sleep.wait_after_apis  ]
 }
 
 # Set up Workflows service account
@@ -35,6 +34,8 @@ resource "google_project_iam_member" "workflow_identity_roles" {
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_project_service_identity.workflows.email}"
+
+  depends_on = [ time_sleep.wait_after_apis  ]
 
 }
 
@@ -61,6 +62,8 @@ resource "google_project_iam_member" "workflow_service_account_roles" {
   role    = each.key
   member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
 
+
+  depends_on = [ google_service_account.workflow_service_account  ]
 }
 
 # # Create the workflow

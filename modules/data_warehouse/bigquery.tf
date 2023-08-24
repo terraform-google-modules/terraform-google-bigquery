@@ -24,6 +24,8 @@ resource "google_bigquery_dataset" "ds_edw" {
   location                   = var.region
   labels                     = var.labels
   delete_contents_on_destroy = var.force_destroy
+
+  depends_on = [ time_sleep.wait_after_apis  ]
 }
 
 # # Create a BigQuery connection
@@ -33,6 +35,7 @@ resource "google_bigquery_connection" "ds_connection" {
   location      = var.region
   friendly_name = "Storage Bucket Connection"
   cloud_resource {}
+  depends_on = [ time_sleep.wait_after_apis  ]
 }
 
 # # Grant IAM access to the BigQuery Connection account for Cloud Storage
@@ -209,6 +212,8 @@ resource "google_project_service_identity" "bigquery_data_transfer_sa" {
   provider = google-beta
   project  = module.project-services.project_id
   service  = "bigquerydatatransfer.googleapis.com"
+
+  depends_on = [ time_sleep.wait_after_apis  ]
 }
 
 # # Grant the DTS service account access
@@ -220,6 +225,8 @@ resource "google_project_iam_member" "dts_service_account_roles" {
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
+
+  depends_on = [ time_sleep.wait_after_apis  ]
 }
 
 # Create specific service account for DTS Run
@@ -240,6 +247,8 @@ resource "google_project_iam_member" "dts_roles" {
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_service_account.dts.email}"
+
+  depends_on = [ google_service_account.dts  ]
 }
 
 # # Grant the DTS specific service account Token Creator to the DTS Service Identity
@@ -252,6 +261,8 @@ resource "google_service_account_iam_binding" "dts_token_creator" {
 
   depends_on = [
     google_project_iam_member.dts_service_account_roles,
+    google_service_account.dts,
+    google_project_service_identity.bigquery_data_transfer_sa
   ]
 }
 
