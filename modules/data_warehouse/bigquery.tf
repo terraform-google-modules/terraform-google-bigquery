@@ -51,7 +51,7 @@ resource "google_storage_bucket_iam_binding" "bq_connection_iam_object_viewer" {
   ]
 }
 
-# # Create a BigQuery native table for events
+# # Create a Biglake table for events with metadata caching
 resource "google_bigquery_table" "tbl_edw_events" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "events"
@@ -60,13 +60,21 @@ resource "google_bigquery_table" "tbl_edw_events" {
 
   schema = file("${path.module}/src/schema/events_schema.json")
 
+  external_data_configuration {
+    autodetect    = true
+    connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
+    source_format = "PARQUET"
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/events*.Parquet"]
+    metadata_cache_mode = "Automatic"
+  }
+
   depends_on = [
     google_bigquery_connection.ds_connection,
     google_storage_bucket.raw_bucket,
   ]
 }
 
-# # Create a BigQuery native table for inventory_items
+# # Create a Biglake table for inventory_items
 resource "google_bigquery_table" "tbl_edw_inventory_items" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "inventory_items"
@@ -75,18 +83,28 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
 
   schema = file("${path.module}/src/schema/inventory_items_schema.json")
 
+  external_data_configuration {
+    autodetect    = true
+    connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
+    source_format = "PARQUET"
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/inventory_items*.Parquet"]
+    metadata_cache_mode = "Automatic"
+  }
+
   depends_on = [
     google_bigquery_connection.ds_connection,
     google_storage_bucket.raw_bucket,
   ]
 }
 
-# # Create a BigQuery external table with metadata caching for order_items
+# # Create a Biglake table with metadata caching for order_items
 resource "google_bigquery_table" "tbl_edw_order_items" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "order_items"
   project             = module.project-services.project
   deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/order_items_schema.json")
 
   external_data_configuration {
     autodetect    = true
@@ -96,14 +114,13 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
     metadata_cache_mode = "Automatic"
   }
 
-  schema = file("${path.module}/src/schema/order_items_schema.json")
   depends_on = [
     google_bigquery_connection.ds_connection,
     google_storage_bucket.raw_bucket,
   ]
 }
 
-# # Create a BigQuery native table for orders
+# # Create a Biglake table for orders
 resource "google_bigquery_table" "tbl_edw_orders" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "orders"
@@ -112,13 +129,21 @@ resource "google_bigquery_table" "tbl_edw_orders" {
 
   schema = file("${path.module}/src/schema/orders_schema.json")
 
+  external_data_configuration {
+    autodetect    = true
+    connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
+    source_format = "PARQUET"
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/orders*.Parquet"]
+    metadata_cache_mode = "Automatic"
+  }
+
   depends_on = [
     google_bigquery_connection.ds_connection,
     google_storage_bucket.raw_bucket,
   ]
 }
 
-# # Create a BigQuery native table for products
+# # Create a Biglake table for products
 resource "google_bigquery_table" "tbl_edw_products" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "products"
@@ -126,6 +151,14 @@ resource "google_bigquery_table" "tbl_edw_products" {
   deletion_protection = var.deletion_protection
 
   schema = file("${path.module}/src/schema/products_schema.json")
+
+  external_data_configuration {
+    autodetect    = true
+    connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
+    source_format = "PARQUET"
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/products*.Parquet"]
+    metadata_cache_mode = "Automatic"
+  }
 
   depends_on = [
     google_bigquery_connection.ds_connection,
@@ -141,6 +174,14 @@ resource "google_bigquery_table" "tbl_edw_users" {
   deletion_protection = var.deletion_protection
 
   schema = file("${path.module}/src/schema/users_schema.json")
+
+  external_data_configuration {
+      autodetect    = true
+      connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
+      source_format = "PARQUET"
+      source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/users*.Parquet"]
+      metadata_cache_mode = "Automatic"
+    }
 
   depends_on = [
     google_bigquery_connection.ds_connection,
