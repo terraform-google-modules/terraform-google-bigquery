@@ -57,6 +57,7 @@ resource "google_bigquery_table" "tbl_edw_events" {
   table_id            = "events"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
+  max_staleness = "INTERVAL 1 HOUR"
 
   schema = file("${path.module}/src/schema/events_schema.json")
 
@@ -66,7 +67,6 @@ resource "google_bigquery_table" "tbl_edw_events" {
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/events*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
-    max_staleness = "INTERVAL 1 HOUR"
   }
 
   depends_on = [
@@ -81,6 +81,7 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
   table_id            = "inventory_items"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
+  max_staleness = "INTERVAL 1 HOUR"
 
   schema = file("${path.module}/src/schema/inventory_items_schema.json")
 
@@ -90,7 +91,6 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/inventory_items*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
-    max_staleness = "INTERVAL 1 HOUR"
   }
 
   depends_on = [
@@ -105,6 +105,7 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
   table_id            = "order_items"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
+  max_staleness = "INTERVAL 1 HOUR"
 
   schema = file("${path.module}/src/schema/order_items_schema.json")
 
@@ -114,7 +115,6 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/order_items*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
-    max_staleness = "INTERVAL 1 HOUR"
   }
 
   depends_on = [
@@ -129,6 +129,7 @@ resource "google_bigquery_table" "tbl_edw_orders" {
   table_id            = "orders"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
+  max_staleness = "INTERVAL 1 HOUR"
 
   schema = file("${path.module}/src/schema/orders_schema.json")
 
@@ -138,7 +139,6 @@ resource "google_bigquery_table" "tbl_edw_orders" {
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/orders*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
-    max_staleness = "INTERVAL 1 HOUR"
   }
 
   depends_on = [
@@ -153,6 +153,7 @@ resource "google_bigquery_table" "tbl_edw_products" {
   table_id            = "products"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
+  max_staleness = "INTERVAL 1 HOUR"
 
   schema = file("${path.module}/src/schema/products_schema.json")
 
@@ -162,7 +163,6 @@ resource "google_bigquery_table" "tbl_edw_products" {
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/products*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
-    max_staleness = "INTERVAL 1 HOUR"
   }
 
   depends_on = [
@@ -177,6 +177,7 @@ resource "google_bigquery_table" "tbl_edw_users" {
   table_id            = "users"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
+  max_staleness = "INTERVAL 1 HOUR"
 
   schema = file("${path.module}/src/schema/users_schema.json")
 
@@ -186,7 +187,6 @@ resource "google_bigquery_table" "tbl_edw_users" {
       source_format = "PARQUET"
       source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/users*.Parquet"]
       metadata_cache_mode = "AUTOMATIC"
-    max_staleness = "INTERVAL 1 HOUR"
     }
 
   depends_on = [
