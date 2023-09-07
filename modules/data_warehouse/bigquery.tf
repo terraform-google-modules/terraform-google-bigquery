@@ -66,6 +66,7 @@ resource "google_bigquery_table" "tbl_edw_events" {
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/events*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
+    max_staleness = "INTERVAL 1 HOUR"
   }
 
   depends_on = [
@@ -89,6 +90,7 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/inventory_items*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
+    max_staleness = "INTERVAL 1 HOUR"
   }
 
   depends_on = [
@@ -112,6 +114,7 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/order_items*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
+    max_staleness = "INTERVAL 1 HOUR"
   }
 
   depends_on = [
@@ -135,6 +138,7 @@ resource "google_bigquery_table" "tbl_edw_orders" {
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/orders*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
+    max_staleness = "INTERVAL 1 HOUR"
   }
 
   depends_on = [
@@ -158,6 +162,7 @@ resource "google_bigquery_table" "tbl_edw_products" {
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/products*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
+    max_staleness = "INTERVAL 1 HOUR"
   }
 
   depends_on = [
@@ -181,6 +186,7 @@ resource "google_bigquery_table" "tbl_edw_users" {
       source_format = "PARQUET"
       source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/users*.Parquet"]
       metadata_cache_mode = "AUTOMATIC"
+    max_staleness = "INTERVAL 1 HOUR"
     }
 
   depends_on = [
