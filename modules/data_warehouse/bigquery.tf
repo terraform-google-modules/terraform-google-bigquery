@@ -65,7 +65,7 @@ resource "google_bigquery_table" "tbl_edw_events" {
     connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/events*.Parquet"]
-    metadata_cache_mode = AUTOMATIC
+    metadata_cache_mode = "AUTOMATIC"
   }
 
   depends_on = [
@@ -88,7 +88,7 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
     connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/inventory_items*.Parquet"]
-    metadata_cache_mode = AUTOMATIC
+    metadata_cache_mode = "AUTOMATIC"
   }
 
   depends_on = [
@@ -111,7 +111,7 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
     connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/order_items*.Parquet"]
-    metadata_cache_mode = AUTOMATIC
+    metadata_cache_mode = "AUTOMATIC"
   }
 
   depends_on = [
@@ -134,7 +134,7 @@ resource "google_bigquery_table" "tbl_edw_orders" {
     connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/orders*.Parquet"]
-    metadata_cache_mode = AUTOMATIC
+    metadata_cache_mode = "AUTOMATIC"
   }
 
   depends_on = [
@@ -157,7 +157,7 @@ resource "google_bigquery_table" "tbl_edw_products" {
     connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/products*.Parquet"]
-    metadata_cache_mode = AUTOMATIC
+    metadata_cache_mode = "AUTOMATIC"
   }
 
   depends_on = [
@@ -180,7 +180,7 @@ resource "google_bigquery_table" "tbl_edw_users" {
       connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
       source_format = "PARQUET"
       source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/users*.Parquet"]
-      metadata_cache_mode = AUTOMATIC
+      metadata_cache_mode = "AUTOMATIC"
     }
 
   depends_on = [
