@@ -78,7 +78,7 @@ resource "google_bigquery_table" "tbl_edw_events" {
 resource "google_bigquery_table" "tbl_edw_inventory_items" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "inventory_items"
-  project             = module.project-services.project
+  project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
 
   schema = file("${path.module}/src/schema/inventory_items_schema.json")
@@ -101,7 +101,7 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
 resource "google_bigquery_table" "tbl_edw_order_items" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "order_items"
-  project             = module.project-services.project
+  project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
 
   schema = file("${path.module}/src/schema/order_items_schema.json")
@@ -147,7 +147,7 @@ resource "google_bigquery_table" "tbl_edw_orders" {
 resource "google_bigquery_table" "tbl_edw_products" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "products"
-  project             = module.project-services.project
+  project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
 
   schema = file("${path.module}/src/schema/products_schema.json")
@@ -170,7 +170,7 @@ resource "google_bigquery_table" "tbl_edw_products" {
 resource "google_bigquery_table" "tbl_edw_users" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "users"
-  project             = module.project-services.project
+  project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
 
   schema = file("${path.module}/src/schema/users_schema.json")
