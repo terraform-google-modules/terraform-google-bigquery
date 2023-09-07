@@ -81,7 +81,7 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
   table_id            = "inventory_items"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-    max_staleness =  "1 HOUR"
+  max_staleness =  "1 HOUR"
 
   schema = file("${path.module}/src/schema/inventory_items_schema.json")
 
