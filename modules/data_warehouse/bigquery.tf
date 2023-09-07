@@ -57,7 +57,7 @@ resource "google_bigquery_table" "tbl_edw_events" {
   table_id            = "events"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness = "INTERVAL 1 HOUR"
+  max_staleness = "1 HOUR"
 
   schema = file("${path.module}/src/schema/events_schema.json")
 
@@ -81,7 +81,7 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
   table_id            = "inventory_items"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness = "INTERVAL 1 HOUR"
+  max_staleness = "1 HOUR"
 
   schema = file("${path.module}/src/schema/inventory_items_schema.json")
 
@@ -105,7 +105,7 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
   table_id            = "order_items"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness = "INTERVAL 1 HOUR"
+  max_staleness = "1 HOUR"
 
   schema = file("${path.module}/src/schema/order_items_schema.json")
 
@@ -129,7 +129,7 @@ resource "google_bigquery_table" "tbl_edw_orders" {
   table_id            = "orders"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness = "INTERVAL 1 HOUR"
+  max_staleness = "1 HOUR"
 
   schema = file("${path.module}/src/schema/orders_schema.json")
 
@@ -153,7 +153,7 @@ resource "google_bigquery_table" "tbl_edw_products" {
   table_id            = "products"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness = "INTERVAL 1 HOUR"
+  max_staleness = "1 HOUR"
 
   schema = file("${path.module}/src/schema/products_schema.json")
 
@@ -177,7 +177,7 @@ resource "google_bigquery_table" "tbl_edw_users" {
   table_id            = "users"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness = "INTERVAL 1 HOUR"
+  max_staleness = "1 HOUR"
 
   schema = file("${path.module}/src/schema/users_schema.json")
 
