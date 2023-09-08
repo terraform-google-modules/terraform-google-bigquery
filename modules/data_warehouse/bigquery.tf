@@ -57,7 +57,7 @@ resource "google_bigquery_table" "tbl_edw_events" {
   table_id            = "events"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness =  "INTERVAL 01:00:00 HOUR"
+  max_staleness =  "INTERVAL '0-0 0 01:00:00' YEAR TO MINUTE"
 
   schema = file("${path.module}/src/schema/events_schema.json")
 
@@ -81,7 +81,7 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
   table_id            = "inventory_items"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness =  "INTERVAL '01:00:00' HOUR TO SECOND"
+  max_staleness =  "INTERVAL 90 MINUTE"
 
   schema = file("${path.module}/src/schema/inventory_items_schema.json")
 
@@ -105,7 +105,7 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
   table_id            = "order_items"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-    max_staleness =  "INTERVAL 01:00:00 HOUR"
+    max_staleness =  "INTERVAL 1 HOUR"
 
   schema = file("${path.module}/src/schema/order_items_schema.json")
 
