@@ -57,7 +57,7 @@ resource "google_bigquery_table" "tbl_edw_events" {
   table_id            = "events"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness =  "INTERVAL '0-0 0 01:00:00' YEAR TO MINUTE"
+  max_staleness =  "INTERVAL '1 HOUR'"
 
   schema = file("${path.module}/src/schema/events_schema.json")
 
