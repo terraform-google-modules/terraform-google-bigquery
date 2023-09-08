@@ -63,7 +63,7 @@ resource "google_bigquery_table" "tbl_edw_events" {
 
   external_data_configuration {
     autodetect    = true
-    connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
+    connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/events*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
@@ -87,7 +87,7 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
 
   external_data_configuration {
     autodetect    = true
-    connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
+    connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/inventory_items*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
@@ -111,7 +111,7 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
 
   external_data_configuration {
     autodetect    = true
-    connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
+    connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/order_items*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
@@ -135,7 +135,7 @@ resource "google_bigquery_table" "tbl_edw_orders" {
 
   external_data_configuration {
     autodetect    = true
-    connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
+    connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/orders*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
@@ -159,7 +159,7 @@ resource "google_bigquery_table" "tbl_edw_products" {
 
   external_data_configuration {
     autodetect    = true
-    connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
+    connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/products*.Parquet"]
     metadata_cache_mode = "AUTOMATIC"
@@ -183,7 +183,7 @@ resource "google_bigquery_table" "tbl_edw_users" {
 
   external_data_configuration {
       autodetect    = true
-      connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
+      connection_id = google_bigquery_connection.ds_connection.name
       source_format = "PARQUET"
       source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook_ecommerce/users*.Parquet"]
       metadata_cache_mode = "AUTOMATIC"
