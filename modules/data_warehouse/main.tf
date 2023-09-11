@@ -20,7 +20,7 @@ data "google_project" "project" {
 
 module "project-services" {
   source                      = "terraform-google-modules/project-factory/google//modules/project_services"
-  version                     = "14.2"
+  version                     = "14.3"
   disable_services_on_destroy = false
 
   project_id  = var.project_id

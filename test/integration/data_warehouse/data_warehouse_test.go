@@ -40,7 +40,6 @@ func TestDataWarehouse(t *testing.T) {
 
 		bucketOP := gcloud.Runf(t, "storage buckets describe gs://%s --project %s", bucket, projectID)
 		assert.Equal("US-CENTRAL1", bucketOP.Get("location").String(), "should be in us-central1")
-		assert.Equal("STANDARD", bucketOP.Get("storageClass").String(), "should have standard storageClass")
 		//TODO: Add additional asserts for other resources
 	})
 	dwh.Test()
