@@ -73,7 +73,7 @@ copy_objects:
         - finish:
             return: $${copied_objects + " objects copied"}
 
-# Subworkflow to create BigLake tables
+# Subworkflow to create BigQuery tables
 create_tables:
     steps:
         - assignStepTables:
