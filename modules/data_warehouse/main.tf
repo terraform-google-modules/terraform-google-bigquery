@@ -47,6 +47,20 @@ module "project-services" {
     "workflows.googleapis.com",
   ]
 
+  activate_api_identities = [
+    {
+      api = "pubsub.googleapis.com"
+      roles = [
+        "roles/iam.serviceAccountTokenCreator",
+      ]
+    },
+    {
+      api = "workflows.googleapis.com"
+      roles = [
+        "roles/workflows.viewer"
+      ]
+    }
+  ]
 }
 
 // Create random ID to be used for deployment uniqueness
@@ -151,14 +165,6 @@ resource "google_project_iam_member" "eventarc_service_account_invoke_role" {
   depends_on = [
     google_service_account.eventarc_service_account
   ]
-}
-
-# # Get the Pub/Sub service account to trigger the pub/sub notification
-# # TODO: File bug for this to be a pickable service account
-resource "google_project_iam_member" "pub_sub_permissions_token" {
-  project = module.project-services.project_id
-  role    = "roles/iam.serviceAccountTokenCreator"
-  member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-pubsub.iam.gserviceaccount.com"
 }
 
 // Sleep for 60 seconds to drop start file
