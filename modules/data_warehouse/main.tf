@@ -26,6 +26,7 @@ module "project-services" {
     "bigquery.googleapis.com",
     "bigqueryconnection.googleapis.com",
     "bigquerydatatransfer.googleapis.com",
+    "bigquerydatapolicy.googleapis.com",
     "bigquerymigration.googleapis.com",
     "bigqueryreservation.googleapis.com",
     "bigquerystorage.googleapis.com",
