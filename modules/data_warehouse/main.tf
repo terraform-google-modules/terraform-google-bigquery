@@ -75,6 +75,8 @@ resource "google_storage_bucket" "raw_bucket" {
   force_destroy               = var.force_destroy
 
   public_access_prevention = "enforced"
+
+  labels = var.labels
 }
 
 # # Set up the provisioning bucketstorage bucket
@@ -86,6 +88,8 @@ resource "google_storage_bucket" "provisioning_bucket" {
   force_destroy               = var.force_destroy
 
   public_access_prevention = "enforced"
+
+  labels = var.labels
 }
 
 // Create Eventarc Trigger
@@ -93,6 +97,8 @@ resource "google_storage_bucket" "provisioning_bucket" {
 resource "google_pubsub_topic" "topic" {
   name    = "provisioning-topic"
   project = module.project-services.project_id
+
+  labels = var.labels
 }
 
 resource "google_pubsub_topic_iam_binding" "binding" {
@@ -137,6 +143,8 @@ resource "google_eventarc_trigger" "trigger_pubsub_tf" {
     }
   }
   service_account = google_service_account.eventarc_service_account.email
+
+  labels = var.labels
 
   depends_on = [
     google_workflows_workflow.workflow,

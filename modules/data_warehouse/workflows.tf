@@ -52,6 +52,8 @@ resource "google_workflows_workflow" "workflow" {
     raw_bucket = google_storage_bucket.raw_bucket.name
   })
 
+  labels = var.labels
+
   depends_on = [
     google_project_iam_member.workflow_service_account_roles,
   ]
