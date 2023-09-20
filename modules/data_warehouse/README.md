@@ -86,6 +86,7 @@ A project with the following APIs enabled must be used to host the
 resources of this module:
 
 - BigQuery API: `bigquery.googleapis.com`
+- BigQuery Data Policy API: `bigquerydatapolicy.googleapis.com`
 - BigQuery Migration API: `bigquerymigration.googleapis.com`
 - BigQuery Storage API: `bigquerystorage.googleapis.com`
 - BigQuery Connection API: `bigqueryconnection.googleapis.com`
