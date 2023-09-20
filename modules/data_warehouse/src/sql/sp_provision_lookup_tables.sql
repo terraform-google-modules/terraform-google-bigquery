@@ -17,6 +17,9 @@ CREATE OR REPLACE TABLE `${project_id}.ds_edw.vendor`
         Vendor_Id INTEGER,
         Vendor_Description STRING
     )
+OPTIONS(
+    labels=[("data-warehouse","true")]
+)
 AS
 SELECT 1, 'Creative Mobile Technologies, LLC'
 UNION ALL
@@ -27,6 +30,9 @@ CREATE OR REPLACE TABLE `${project_id}.ds_edw.payment_type`
         Payment_Type_Id INTEGER,
         Payment_Type_Description STRING
     )
+OPTIONS(
+    labels=[("data-warehouse","true")]
+)
 AS
 SELECT 1, 'Credit card'
 UNION ALL

@@ -13,6 +13,9 @@
 -- limitations under the License.
 
 CREATE OR REPLACE TABLE `${project_id}.ds_edw.lookerstudio_report`
+OPTIONS(
+    labels=[("data-warehouse","true")]
+)
 AS
 WITH TaxiData AS
 (
