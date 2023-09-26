@@ -47,7 +47,8 @@ SELECT
   GROUP BY
     1, 2
   ORDER BY
-    WeekdayNumber, 3;
+    WeekdayNumber, 3
+;
 
 -- Query: Items with less than 30 days of inventory remaining
 WITH Orders AS (
@@ -99,6 +100,7 @@ FROM
   End30dInventory
 ORDER BY
   rank ASC, current_stock DESC
+;
 
 -- Query: data summed by month, then pivoted by department
 with MonthlyData AS(
@@ -122,7 +124,8 @@ FROM
   MonthlyData
 PIVOT
   (SUM(profit) AS Profit FOR product_department IN ("Men", "Women"))
-ORDER BY month_number ASC;
+ORDER BY month_number ASC
+;
 
 -- Query: See what day of the week in each month has the greatest amount of sales(that's the month/day to work)
 WITH WeekdayData AS (
@@ -147,7 +150,8 @@ SELECT month_name,
        FORMAT("%'d", CAST(Saturday  AS INTEGER)) AS Saturday,
   FROM WeekdayData
  PIVOT(SUM(revenue) FOR weekday_name IN ('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'))
-ORDER BY month_number;
+ORDER BY month_number
+;
 
 -- Query: Revenue pivoted by category name for each month.
 -- This query dynamically generates the pivot column names based on the distinct values in the product_category column
@@ -190,3 +194,4 @@ EXECUTE IMMEDIATE FORMAT("""
       `${project_id}.ds_edw.inventory_items`
     )
 )
+;
