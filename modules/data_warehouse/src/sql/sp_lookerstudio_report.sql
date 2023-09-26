@@ -119,7 +119,7 @@ with SubsetInventory AS(
   SELECT
     SUM(ROUND(product_retail_price,2)) AS revenue_total,
     SUM(ROUND(cost,2)) AS cost_total,
-    SUM(ROUND(product_retail_price-cost, 2)) AS profit_total
+    SUM(ROUND(product_retail_price-cost, 2)) AS profit_total,
     CONCAT(product_department, " - ", product_category) AS product_dept_cat,
     EXTRACT(DATE from sold_at) AS sold_at_day
   FROM
