@@ -47,7 +47,7 @@ SELECT
   GROUP BY
     1, 2
   ORDER BY
-    expression WeekdayNumber, 3;
+    WeekdayNumber, 3;
 
 -- Query: Items with less than 30 days of inventory remaining
 WITH Orders AS (
