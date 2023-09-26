@@ -57,7 +57,7 @@ resource "google_bigquery_table" "tbl_edw_events" {
   table_id            = "events"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness =  "1:0:0"
+  # max_staleness =  "1:0:0"
 
   schema = file("${path.module}/src/schema/events_schema.json")
 
@@ -66,7 +66,7 @@ resource "google_bigquery_table" "tbl_edw_events" {
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/events.parquet"]
-    metadata_cache_mode = "AUTOMATIC"
+    # metadata_cache_mode = "AUTOMATIC"
   }
 
   depends_on = [
@@ -105,7 +105,7 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
   table_id            = "order_items"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness =  "1:0:0"
+  # max_staleness =  "1:0:0"
 
   schema = file("${path.module}/src/schema/order_items_schema.json")
 
@@ -114,7 +114,7 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/order_items.parquet"]
-    metadata_cache_mode = "AUTOMATIC"
+    # metadata_cache_mode = "AUTOMATIC"
   }
 
   depends_on = [
@@ -129,7 +129,7 @@ resource "google_bigquery_table" "tbl_edw_orders" {
   table_id            = "orders"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness =  "1:0:0"
+  # max_staleness =  "1:0:0"
 
   schema = file("${path.module}/src/schema/orders_schema.json")
 
@@ -138,7 +138,7 @@ resource "google_bigquery_table" "tbl_edw_orders" {
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/orders.parquet"]
-    metadata_cache_mode = "AUTOMATIC"
+    # metadata_cache_mode = "AUTOMATIC"
   }
 
   depends_on = [
@@ -153,7 +153,7 @@ resource "google_bigquery_table" "tbl_edw_products" {
   table_id            = "products"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness =  "1:0:0"
+  # max_staleness =  "1:0:0"
 
   schema = file("${path.module}/src/schema/products_schema.json")
 
@@ -162,7 +162,7 @@ resource "google_bigquery_table" "tbl_edw_products" {
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/products.parquet"]
-    metadata_cache_mode = "AUTOMATIC"
+    # metadata_cache_mode = "AUTOMATIC"
   }
 
   depends_on = [
@@ -177,7 +177,7 @@ resource "google_bigquery_table" "tbl_edw_users" {
   table_id            = "users"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  max_staleness =  "1:0:0"
+  # max_staleness =  "1:0:0"
 
   schema = file("${path.module}/src/schema/users_schema.json")
 
@@ -186,7 +186,7 @@ resource "google_bigquery_table" "tbl_edw_users" {
       connection_id = google_bigquery_connection.ds_connection.name
       source_format = "PARQUET"
       source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/users.parquet"]
-      metadata_cache_mode = "AUTOMATIC"
+      # metadata_cache_mode = "AUTOMATIC"
     }
 
   depends_on = [
