@@ -42,8 +42,6 @@ WITH OrdersData AS
   WHERE
     order_items.created_at IS NOT NULL
     AND order_items.created_at <= CURRENT_TIMESTAMP()
-    AND shipped_at IS NOT NULL
-    AND shipped_at <= CURRENT_TIMESTAMP()
   GROUP BY 1, 2, 3, 4, 5, 6
 )
 , LagPercents AS
