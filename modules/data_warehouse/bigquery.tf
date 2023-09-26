@@ -65,7 +65,7 @@ resource "google_bigquery_table" "tbl_edw_events" {
     autodetect    = true
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
-    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/events*.Parquet"]
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/events.parquet"]
     metadata_cache_mode = "AUTOMATIC"
   }
 
@@ -89,7 +89,7 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
     autodetect    = true
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
-    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/inventory_items*.Parquet"]
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/inventory_items.parquet"]
     metadata_cache_mode = "AUTOMATIC"
   }
 
@@ -113,7 +113,7 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
     autodetect    = true
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
-    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/order_items*.Parquet"]
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/order_items.parquet"]
     metadata_cache_mode = "AUTOMATIC"
   }
 
@@ -137,7 +137,7 @@ resource "google_bigquery_table" "tbl_edw_orders" {
     autodetect    = true
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
-    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/orders*.Parquet"]
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/orders.parquet"]
     metadata_cache_mode = "AUTOMATIC"
   }
 
@@ -161,7 +161,7 @@ resource "google_bigquery_table" "tbl_edw_products" {
     autodetect    = true
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
-    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/products*.Parquet"]
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/products.parquet"]
     metadata_cache_mode = "AUTOMATIC"
   }
 
@@ -185,7 +185,7 @@ resource "google_bigquery_table" "tbl_edw_users" {
       autodetect    = true
       connection_id = google_bigquery_connection.ds_connection.name
       source_format = "PARQUET"
-      source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/users*.Parquet"]
+      source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/users.parquet"]
       metadata_cache_mode = "AUTOMATIC"
     }
 
