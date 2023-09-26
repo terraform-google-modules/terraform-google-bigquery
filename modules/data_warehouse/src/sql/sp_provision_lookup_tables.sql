@@ -16,8 +16,8 @@ CREATE OR REPLACE TABLE `${project_id}.ds_edw.distribution_centers`
     (
         id INTEGER,
         name STRING,
-        latitude FLOAT,
-        longitude FLOAT,
+        latitude FLOAT64,
+        longitude FLOAT64,
         distribution_center_geom GEOGRAPHY
     )
 AS
