@@ -24,7 +24,6 @@ resource "google_bigquery_dataset" "ds_edw" {
   location                   = var.region
   labels                     = var.labels
   delete_contents_on_destroy = var.force_destroy
-  deletion_protection        = var.deletion_protection
 
   depends_on = [ time_sleep.wait_after_apis  ]
 }
