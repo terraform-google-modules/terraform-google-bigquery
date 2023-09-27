@@ -1,64 +1,105 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
+    "config:recommended",
     ":semanticCommits",
     ":preserveSemverRanges",
     ":rebaseStalePrs"
   ],
-  "stabilityDays":7,
+  "minimumReleaseAge": "7 days",
   "ignorePaths": [],
-  "labels": ["dependencies"],
-    "vulnerabilityAlerts":{
-     "labels":[
-       "type:security"
-     ],
-     "stabilityDays":0
+  "labels": [
+    "dependencies"
+  ],
+  "vulnerabilityAlerts": {
+    "labels": [
+      "type:security"
+    ],
+    "minimumReleaseAge": null
   },
-  "separateMajorMinor":false,
   "constraints": {
     "go": "1.20"
   },
   "packageRules": [
     {
-      "matchPaths": ["examples/**", "test/**", ".github/**"],
-      "extends": [":semanticCommitTypeAll(chore)"]
+      "matchFileNames": [
+        "examples/**",
+        "test/**",
+        ".github/**"
+      ],
+      "extends": [
+        ":semanticCommitTypeAll(chore)"
+      ]
     },
     {
-      "matchPaths": ["*", "modules/**"],
-      "extends": [":semanticCommitTypeAll(fix)"]
+      "matchFileNames": [
+        "*",
+        "modules/**"
+      ],
+      "extends": [
+        ":semanticCommitTypeAll(fix)"
+      ]
     },
     {
-      "matchDepTypes": ["module"],
+      "matchFileNames": [
+        "*",
+        "modules/**"
+      ],
+      "matchUpdateTypes": "major",
+      "commitMessagePrefix": "fix(deps)!:"
+    },
+    {
+      "matchDepTypes": [
+        "module"
+      ],
       "groupName": "TF modules"
     },
     {
-      "matchDepTypes": ["require"],
+      "matchDepTypes": [
+        "require"
+      ],
       "groupName": "GO modules",
-      "postUpdateOptions": ["gomodTidy"]
+      "postUpdateOptions": [
+        "gomodTidy"
+      ]
     },
     {
-      "matchDatasources": ["golang-version"],
+      "matchDatasources": [
+        "golang-version"
+      ],
       "rangeStrategy": "bump",
       "allowedVersions": "<1.21.0",
-      "postUpdateOptions": ["gomodTidy"]
+      "postUpdateOptions": [
+        "gomodTidy"
+      ]
     },
     {
-      "matchPackageNames": ["google", "google-beta"],
-      "groupName": "terraform googles"
+      "matchPackageNames": [
+        "google",
+        "google-beta"
+      ],
+      "groupName": "Terraform Google Provider"
     }
   ],
   "regexManagers": [
     {
-      "fileMatch": ["(^|/)Makefile$"],
-      "matchStrings": ["DOCKER_TAG_VERSION_DEVELOPER_TOOLS := (?<currentValue>.*?)\\n"],
+      "fileMatch": [
+        "(^|/)Makefile$"
+      ],
+      "matchStrings": [
+        "DOCKER_TAG_VERSION_DEVELOPER_TOOLS := (?<currentValue>.*?)\\n"
+      ],
       "datasourceTemplate": "docker",
       "registryUrlTemplate": "https://gcr.io/cloud-foundation-cicd",
       "depNameTemplate": "cft/developer-tools"
     },
     {
-      "fileMatch": ["(^|/)build/(int|lint)\\.cloudbuild\\.yaml$"],
-      "matchStrings": ["  _DOCKER_TAG_VERSION_DEVELOPER_TOOLS: '(?<currentValue>.*?)'\\n"],
+      "fileMatch": [
+        "(^|/)build/(int|lint)\\.cloudbuild\\.yaml$"
+      ],
+      "matchStrings": [
+        "  _DOCKER_TAG_VERSION_DEVELOPER_TOOLS: '(?<currentValue>.*?)'\\n"
+      ],
       "datasourceTemplate": "docker",
       "registryUrlTemplate": "https://gcr.io/cloud-foundation-cicd",
       "depNameTemplate": "cft/developer-tools"
