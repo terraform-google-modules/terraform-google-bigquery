@@ -14,32 +14,7 @@
  * limitations under the License.
  */
 
-resource "google_project_service_identity" "workflows" {
-  provider = google-beta
-  project  = module.project-services.project_id
-  service  = "workflows.googleapis.com"
-
-
-  depends_on = [ time_sleep.wait_after_apis  ]
-}
-
-# Set up Workflows service account
-# # Grant the Workflow service account access
-resource "google_project_iam_member" "workflow_identity_roles" {
-  for_each = toset([
-    "roles/workflows.viewer",
-    ]
-  )
-
-  project = module.project-services.project_id
-  role    = each.key
-  member  = "serviceAccount:${google_project_service_identity.workflows.email}"
-
-  depends_on = [ time_sleep.wait_after_apis  ]
-
-}
-
-# # Set up the Workflows service account
+# Set up the Workflows service account
 resource "google_service_account" "workflow_service_account" {
   project      = module.project-services.project_id
   account_id   = "cloud-workflow-sa-${random_id.id.hex}"
@@ -78,8 +53,9 @@ resource "google_workflows_workflow" "workflow" {
     raw_bucket = google_storage_bucket.raw_bucket.name
   })
 
+  labels = var.labels
+
   depends_on = [
     google_project_iam_member.workflow_service_account_roles,
-    google_project_service_identity.workflows,
   ]
 }

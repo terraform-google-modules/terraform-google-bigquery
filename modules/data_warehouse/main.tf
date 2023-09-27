@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-data "google_project" "project" {
-  project_id = var.project_id
-}
-
 module "project-services" {
   source                      = "terraform-google-modules/project-factory/google//modules/project_services"
-  version                     = "14.2"
+  version                     = "14.3"
   disable_services_on_destroy = false
 
   project_id  = var.project_id
@@ -30,6 +26,7 @@ module "project-services" {
     "bigquery.googleapis.com",
     "bigqueryconnection.googleapis.com",
     "bigquerydatatransfer.googleapis.com",
+    "bigquerydatapolicy.googleapis.com",
     "bigquerymigration.googleapis.com",
     "bigqueryreservation.googleapis.com",
     "bigquerystorage.googleapis.com",
@@ -47,6 +44,20 @@ module "project-services" {
     "workflows.googleapis.com",
   ]
 
+  activate_api_identities = [
+    {
+      api = "pubsub.googleapis.com"
+      roles = [
+        "roles/iam.serviceAccountTokenCreator",
+      ]
+    },
+    {
+      api = "workflows.googleapis.com"
+      roles = [
+        "roles/workflows.viewer"
+      ]
+    }
+  ]
 }
 
 resource "time_sleep" "wait_after_apis" {
@@ -174,17 +185,7 @@ resource "google_project_iam_member" "eventarc_service_account_invoke_role" {
   ]
 }
 
-# # Get the Pub/Sub service account to trigger the pub/sub notification
-# # TODO: File bug for this to be a pickable service account
-resource "google_project_iam_member" "pub_sub_permissions_token" {
-  project = module.project-services.project_id
-  role    = "roles/iam.serviceAccountTokenCreator"
-  member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-pubsub.iam.gserviceaccount.com"
-
-  depends_on = [ time_sleep.wait_after_apis  ]
-}
-
-// Sleep for 60 seconds to drop start file
+// Sleep for 120 seconds to drop start file
 resource "time_sleep" "wait_to_startfile" {
   depends_on = [
     google_storage_notification.notification,

@@ -69,6 +69,8 @@ resource "google_bigquery_table" "tbl_edw_events" {
     # metadata_cache_mode = "AUTOMATIC"
   }
 
+  labels = var.labels
+
   depends_on = [
     google_bigquery_connection.ds_connection,
     google_storage_bucket.raw_bucket,
@@ -92,6 +94,8 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/inventory_items.parquet"]
     # metadata_cache_mode = "AUTOMATIC"
   }
+
+  labels = var.labels
 
   depends_on = [
     google_bigquery_connection.ds_connection,
@@ -117,6 +121,8 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
     # metadata_cache_mode = "AUTOMATIC"
   }
 
+  labels = var.labels
+
   depends_on = [
     google_bigquery_connection.ds_connection,
     google_storage_bucket.raw_bucket,
@@ -140,6 +146,8 @@ resource "google_bigquery_table" "tbl_edw_orders" {
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/orders.parquet"]
     # metadata_cache_mode = "AUTOMATIC"
   }
+
+  labels = var.labels
 
   depends_on = [
     google_bigquery_connection.ds_connection,
@@ -165,13 +173,15 @@ resource "google_bigquery_table" "tbl_edw_products" {
     # metadata_cache_mode = "AUTOMATIC"
   }
 
+  labels = var.labels
+
   depends_on = [
     google_bigquery_connection.ds_connection,
     google_storage_bucket.raw_bucket,
   ]
 }
 
-# # Create a BigQuery native table for users
+# # Create a Biglake table for products
 resource "google_bigquery_table" "tbl_edw_users" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "users"
@@ -188,6 +198,8 @@ resource "google_bigquery_table" "tbl_edw_users" {
       source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/users.parquet"]
       # metadata_cache_mode = "AUTOMATIC"
     }
+
+  labels = var.labels
 
   depends_on = [
     google_bigquery_connection.ds_connection,
