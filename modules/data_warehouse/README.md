@@ -12,7 +12,7 @@ The resources/services/activations/deletions that this module will create/trigge
 - Creates a BigQuery Dataset
 - Creates a BigQuery Table
 - Creates a Google Cloud Storage bucket
-- Loads the Google Cloud Storage bucket with data from https://console.cloud.google.com/marketplace/product/city-of-new-york/nyc-tlc-trips
+- Loads the Google Cloud Storage bucket with data from [TheLook eCommerce Public Dataset](https://console.cloud.google.com/marketplace/product/bigquery-public-data/thelook-ecommerce)
 - Provides SQL examples
 - Creates and inferences with a BigQuery ML model
 - Creates a Looker Studio report
@@ -37,7 +37,7 @@ Functional examples are included in the
 | deletion\_protection | Whether or not to protect GCS resources from deletion when solution is modified or changed. | `string` | `true` | no |
 | enable\_apis | Whether or not to enable underlying apis in this solution. | `string` | `true` | no |
 | force\_destroy | Whether or not to protect BigQuery resources from deletion when solution is modified or changed. | `string` | `false` | no |
-| labels | A map of labels to apply to contained resources. | `map(string)` | <pre>{<br>  "edw-bigquery": true<br>}</pre> | no |
+| labels | A map of labels to apply to contained resources. | `map(string)` | <pre>{<br>  "data-warehouse": true<br>}</pre> | no |
 | project\_id | Google Cloud Project ID | `string` | n/a | yes |
 | region | Google Cloud Region | `string` | n/a | yes |
 
@@ -86,6 +86,7 @@ A project with the following APIs enabled must be used to host the
 resources of this module:
 
 - BigQuery API: `bigquery.googleapis.com`
+- BigQuery Data Policy API: `bigquerydatapolicy.googleapis.com`
 - BigQuery Migration API: `bigquerymigration.googleapis.com`
 - BigQuery Storage API: `bigquerystorage.googleapis.com`
 - BigQuery Connection API: `bigqueryconnection.googleapis.com`
