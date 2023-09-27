@@ -37,7 +37,7 @@ terraform {
       version = ">= 0.9.1"
     }
   }
-  required_version = ">= 1.5.5"
+required_version = ">= 0.13, <= 1.2.3"
 
   provider_meta "google" {
     module_name = "blueprints/terraform/terraform-google-bigquery:data_warehouse/v6.1.1"
