@@ -13,6 +13,7 @@
 -- limitations under the License.
 
 CREATE OR REPLACE TABLE `${project_id}.ds_edw.distribution_centers`
+
     (
         id INTEGER,
         name STRING,
@@ -20,6 +21,9 @@ CREATE OR REPLACE TABLE `${project_id}.ds_edw.distribution_centers`
         latitude FLOAT64,
         distribution_center_geom GEOGRAPHY
     )
+  OPTIONS(
+      labels=[("data-warehouse","true")]
+  )
 AS
 SELECT 1, 'Memphis TN', -89.9711, 35.1174, ST_GEOGPOINT(-89.9711, 35.1174)
 UNION ALL
