@@ -49,6 +49,11 @@ module "project-services" {
 
 }
 
+resource "time_sleep" "wait_after_apis" {
+    create_duration = "120s"
+    depends_on = [ module.project-services ]
+}
+
 // Create random ID to be used for deployment uniqueness
 resource "random_id" "id" {
   byte_length = 4
@@ -65,6 +70,8 @@ resource "google_storage_bucket" "raw_bucket" {
   force_destroy               = var.force_destroy
 
   public_access_prevention = "enforced"
+
+  depends_on = [ time_sleep.wait_after_apis  ]
 }
 
 # # Set up the provisioning storage bucket
@@ -76,6 +83,8 @@ resource "google_storage_bucket" "provisioning_bucket" {
   force_destroy               = var.force_destroy
 
   public_access_prevention = "enforced"
+
+  depends_on = [ time_sleep.wait_after_apis  ]
 }
 
 // Create Eventarc Trigger
@@ -83,6 +92,8 @@ resource "google_storage_bucket" "provisioning_bucket" {
 resource "google_pubsub_topic" "topic" {
   name    = "provisioning-topic"
   project = module.project-services.project_id
+
+  depends_on = [ time_sleep.wait_after_apis  ]
 }
 
 resource "google_pubsub_topic_iam_binding" "binding" {
@@ -90,11 +101,15 @@ resource "google_pubsub_topic_iam_binding" "binding" {
   topic   = google_pubsub_topic.topic.id
   role    = "roles/pubsub.publisher"
   members = ["serviceAccount:${data.google_storage_project_service_account.gcs_account.email_address}"]
+
+  depends_on = [ google_pubsub_topic.topic  ]
 }
 
 # # Get the GCS service account to trigger the pub/sub notification
 data "google_storage_project_service_account" "gcs_account" {
   project = module.project-services.project_id
+
+  depends_on = [ time_sleep.wait_after_apis  ]
 }
 
 # # Create the Storage trigger
@@ -103,7 +118,10 @@ resource "google_storage_notification" "notification" {
   bucket         = google_storage_bucket.provisioning_bucket.name
   payload_format = "JSON_API_V1"
   topic          = google_pubsub_topic.topic.id
-  depends_on     = [google_pubsub_topic_iam_binding.binding]
+  depends_on     = [
+    google_pubsub_topic_iam_binding.binding,
+    google_storage_bucket.provisioning_bucket
+  ]
 }
 
 # # Create the Eventarc trigger
@@ -131,6 +149,7 @@ resource "google_eventarc_trigger" "trigger_pubsub_tf" {
   depends_on = [
     google_workflows_workflow.workflow,
     google_project_iam_member.eventarc_service_account_invoke_role,
+    google_pubsub_topic.topic
   ]
 }
 
@@ -140,6 +159,8 @@ resource "google_service_account" "eventarc_service_account" {
   project      = module.project-services.project_id
   account_id   = "eventarc-sa-${random_id.id.hex}"
   display_name = "Service Account for Cloud Eventarc"
+
+  depends_on = [ time_sleep.wait_after_apis  ]
 }
 
 # # Grant the Eventarc service account Workflow Invoker Access
@@ -159,6 +180,8 @@ resource "google_project_iam_member" "pub_sub_permissions_token" {
   project = module.project-services.project_id
   role    = "roles/iam.serviceAccountTokenCreator"
   member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-pubsub.iam.gserviceaccount.com"
+
+  depends_on = [ time_sleep.wait_after_apis  ]
 }
 
 // Sleep for 60 seconds to drop start file
@@ -169,7 +192,7 @@ resource "time_sleep" "wait_to_startfile" {
     google_workflows_workflow.workflow
   ]
 
-  create_duration = "60s"
+  create_duration = "120s"
 }
 
 // Drop start file for workflow to execute
