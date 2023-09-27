@@ -7,7 +7,10 @@
     ":rebaseStalePrs"
   ],
   "minimumReleaseAge": "7 days",
-  "ignorePaths": [],
+  "ignorePaths": [
+    ".github/workflows/lint.yaml",
+    ".github/workflows/stale.yml"
+  ],
   "labels": [
     "dependencies"
   ],
@@ -27,18 +30,14 @@
         "test/**",
         ".github/**"
       ],
-      "extends": [
-        ":semanticCommitTypeAll(chore)"
-      ]
+      "commitMessagePrefix": "chore(deps):"
     },
     {
       "matchFileNames": [
         "*",
         "modules/**"
       ],
-      "extends": [
-        ":semanticCommitTypeAll(fix)"
-      ]
+      "commitMessagePrefix": "fix(deps):"
     },
     {
       "matchFileNames": [
@@ -74,7 +73,7 @@
       ]
     },
     {
-      "matchPackageNames": [
+      "matchDepNames": [
         "google",
         "google-beta"
       ],
