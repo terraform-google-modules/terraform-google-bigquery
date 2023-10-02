@@ -200,8 +200,7 @@ resource "google_bigquery_table" "tbl_edw_users" {
   }
 
   labels = var.labels
-
-  depends_on = [
+    depends_on = [
     google_bigquery_connection.ds_connection,
     google_storage_bucket.raw_bucket,
   ]

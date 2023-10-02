@@ -7,52 +7,28 @@
     ":rebaseStalePrs"
   ],
   "minimumReleaseAge": "7 days",
-  "ignorePaths": [
-    ".github/workflows/lint.yaml",
-    ".github/workflows/stale.yml"
-  ],
-  "labels": [
-    "dependencies"
-  ],
+  "ignorePaths": [".github/workflows/lint.yaml", ".github/workflows/stale.yml"],
+  "labels": ["dependencies"],
   "vulnerabilityAlerts": {
-    "labels": [
-      "type:security"
-    ],
+    "labels": ["type:security"],
     "minimumReleaseAge": null
   },
-  "constraints": {
-    "go": "1.20"
-  },
+  "constraints": {"go": "1.20"},
   "packageRules": [
     {
-      "matchFileNames": [
-        "examples/**",
-        "test/**",
-        ".github/**"
-      ],
+      "matchFileNames": ["examples/**", "test/**", ".github/**"],
       "commitMessagePrefix": "chore(deps):"
     },
     {
-      "matchFileNames": [
-        "*",
-        "modules/**"
-      ],
+      "matchFileNames": ["*", "modules/**"],
       "commitMessagePrefix": "fix(deps):"
     },
     {
-      "matchFileNames": [
-        "*",
-        "modules/**"
-      ],
+      "matchFileNames": ["*", "modules/**"],
       "matchUpdateTypes": "major",
       "commitMessagePrefix": "fix(deps)!:"
     },
-    {
-      "matchDepTypes": [
-        "module"
-      ],
-      "groupName": "TF modules"
-    },
+    {"matchDepTypes": ["module"], "groupName": "TF modules"},
     {
       "matchDepTypes": [
         "require"
@@ -73,18 +49,13 @@
       ]
     },
     {
-      "matchDepNames": [
-        "google",
-        "google-beta"
-      ],
+      "matchDepNames": ["google", "google-beta"],
       "groupName": "Terraform Google Provider"
     }
   ],
   "regexManagers": [
     {
-      "fileMatch": [
-        "(^|/)Makefile$"
-      ],
+      "fileMatch": ["(^|/)Makefile$"],
       "matchStrings": [
         "DOCKER_TAG_VERSION_DEVELOPER_TOOLS := (?<currentValue>.*?)\\n"
       ],
@@ -93,9 +64,7 @@
       "depNameTemplate": "cft/developer-tools"
     },
     {
-      "fileMatch": [
-        "(^|/)build/(int|lint)\\.cloudbuild\\.yaml$"
-      ],
+      "fileMatch": ["(^|/)build/(int|lint)\\.cloudbuild\\.yaml$"],
       "matchStrings": [
         "  _DOCKER_TAG_VERSION_DEVELOPER_TOOLS: '(?<currentValue>.*?)'\\n"
       ],

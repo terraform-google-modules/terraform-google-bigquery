@@ -13,6 +13,9 @@
 -- limitations under the License.
 
 CREATE OR REPLACE VIEW `${project_id}.ds_edw.lookerstudio_report_distribution_centers`
+OPTIONS(
+    labels=[("data-warehouse","true")]
+)
 AS
 WITH OrdersData AS
 (
@@ -114,6 +117,9 @@ FROM PercentChange
 ORDER BY GroupPartition;
 
 CREATE OR REPLACE VIEW `${project_id}.ds_edw.lookerstudio_report_profit`
+OPTIONS(
+    labels=[("data-warehouse","true")]
+)
 AS
 with SubsetInventory AS(
   SELECT
