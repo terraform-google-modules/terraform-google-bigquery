@@ -51,7 +51,7 @@ CREATE OR REPLACE MODEL
       SELECT
         user_id,
         DATE_DIFF(CURRENT_DATE(), CAST(MAX(order_created_date) as DATE), day) as days_since_order, ---RECENCY
-        COUNT(order_id) as count_orders, --FREQUENCY
+        COUNT(DISTINCT order_id) as count_orders, --FREQUENCY
         AVG(sale_price) as avg_spend --MONETARY
       FROM (
         SELECT
