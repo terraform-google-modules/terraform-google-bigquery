@@ -45,10 +45,6 @@ resource "google_storage_bucket_iam_binding" "bq_connection_iam_object_viewer" {
   members = [
     "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}",
   ]
-
-  depends_on = [
-    google_bigquery_connection.ds_connection,
-  ]
 }
 
 # # Create a Biglake table for events with metadata caching
@@ -57,7 +53,6 @@ resource "google_bigquery_table" "tbl_edw_events" {
   table_id            = "events"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  # max_staleness =  "1:0:0"
 
   schema = file("${path.module}/src/schema/events_schema.json")
 
@@ -66,15 +61,9 @@ resource "google_bigquery_table" "tbl_edw_events" {
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/events.parquet"]
-    # metadata_cache_mode = "AUTOMATIC"
   }
 
   labels = var.labels
-
-  depends_on = [
-    google_bigquery_connection.ds_connection,
-    google_storage_bucket.raw_bucket,
-  ]
 }
 
 # # Create a Biglake table for inventory_items
@@ -83,7 +72,6 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
   table_id            = "inventory_items"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  # max_staleness =  "1:0:0"
 
   schema = file("${path.module}/src/schema/inventory_items_schema.json")
 
@@ -92,15 +80,9 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/inventory_items.parquet"]
-    # metadata_cache_mode = "AUTOMATIC"
   }
 
   labels = var.labels
-
-  depends_on = [
-    google_bigquery_connection.ds_connection,
-    google_storage_bucket.raw_bucket,
-  ]
 }
 
 # # Create a Biglake table with metadata caching for order_items
@@ -109,7 +91,6 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
   table_id            = "order_items"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  # max_staleness =  "1:0:0"
 
   schema = file("${path.module}/src/schema/order_items_schema.json")
 
@@ -118,15 +99,9 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/order_items.parquet"]
-    # metadata_cache_mode = "AUTOMATIC"
   }
 
   labels = var.labels
-
-  depends_on = [
-    google_bigquery_connection.ds_connection,
-    google_storage_bucket.raw_bucket,
-  ]
 }
 
 # # Create a Biglake table for orders
@@ -135,7 +110,6 @@ resource "google_bigquery_table" "tbl_edw_orders" {
   table_id            = "orders"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  # max_staleness =  "1:0:0"
 
   schema = file("${path.module}/src/schema/orders_schema.json")
 
@@ -144,15 +118,9 @@ resource "google_bigquery_table" "tbl_edw_orders" {
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/orders.parquet"]
-    # metadata_cache_mode = "AUTOMATIC"
   }
 
   labels = var.labels
-
-  depends_on = [
-    google_bigquery_connection.ds_connection,
-    google_storage_bucket.raw_bucket,
-  ]
 }
 
 # # Create a Biglake table for products
@@ -161,7 +129,6 @@ resource "google_bigquery_table" "tbl_edw_products" {
   table_id            = "products"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  # max_staleness =  "1:0:0"
 
   schema = file("${path.module}/src/schema/products_schema.json")
 
@@ -170,15 +137,9 @@ resource "google_bigquery_table" "tbl_edw_products" {
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/products.parquet"]
-    # metadata_cache_mode = "AUTOMATIC"
   }
 
   labels = var.labels
-
-  depends_on = [
-    google_bigquery_connection.ds_connection,
-    google_storage_bucket.raw_bucket,
-  ]
 }
 
 # # Create a Biglake table for products
@@ -187,7 +148,6 @@ resource "google_bigquery_table" "tbl_edw_users" {
   table_id            = "users"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
-  # max_staleness =  "1:0:0"
 
   schema = file("${path.module}/src/schema/users_schema.json")
 
@@ -196,15 +156,9 @@ resource "google_bigquery_table" "tbl_edw_users" {
     connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
     source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/users.parquet"]
-    # metadata_cache_mode = "AUTOMATIC"
   }
 
   labels = var.labels
-
-  depends_on = [
-    google_bigquery_connection.ds_connection,
-    google_storage_bucket.raw_bucket,
-  ]
 }
 
 # Load Queries for Stored Procedure Execution
@@ -216,10 +170,6 @@ resource "google_bigquery_routine" "sp_provision_lookup_tables" {
   routine_type    = "PROCEDURE"
   language        = "SQL"
   definition_body = templatefile("${path.module}/src/sql/sp_provision_lookup_tables.sql", { project_id = module.project-services.project_id })
-
-  depends_on = [
-    google_bigquery_dataset.ds_edw,
-  ]
 }
 
 # Add Looker Studio Data Report Procedure
@@ -233,6 +183,8 @@ resource "google_bigquery_routine" "sproc_sp_demo_lookerstudio_report" {
 
   depends_on = [
     google_bigquery_table.tbl_edw_inventory_items,
+    google_bigquery_table.tbl_edw_order_items,
+    google_bigquery_routine.sp_provision_lookup_tables,
   ]
 }
 
@@ -247,6 +199,7 @@ resource "google_bigquery_routine" "sp_sample_queries" {
 
   depends_on = [
     google_bigquery_table.tbl_edw_inventory_items,
+    google_bigquery_table.tbl_edw_order_items,
   ]
 }
 
@@ -261,7 +214,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_model" {
   definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_model.sql", { project_id = module.project-services.project_id })
 
   depends_on = [
-    google_bigquery_table.tbl_edw_inventory_items,
+    google_bigquery_table.tbl_edw_order_items,
   ]
 }
 
@@ -306,8 +259,6 @@ resource "google_project_iam_member" "dts_roles" {
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_service_account.dts.email}"
-
-  depends_on = [google_service_account.dts]
 }
 
 # # Grant the DTS specific service account Token Creator to the DTS Service Identity
@@ -320,8 +271,6 @@ resource "google_service_account_iam_binding" "dts_token_creator" {
 
   depends_on = [
     google_project_iam_member.dts_service_account_roles,
-    google_service_account.dts,
-    google_project_service_identity.bigquery_data_transfer_sa
   ]
 }
 

@@ -39,13 +39,13 @@ variable "enable_apis" {
 variable "force_destroy" {
   type        = string
   description = "Whether or not to protect BigQuery resources from deletion when solution is modified or changed."
-  default     = true
+  default     = false
 }
 
 variable "deletion_protection" {
   type        = string
   description = "Whether or not to protect GCS resources from deletion when solution is modified or changed."
-  default     = false
+  default     = true
 }
 
 
