@@ -118,8 +118,6 @@ resource "google_pubsub_topic_iam_binding" "binding" {
   topic   = google_pubsub_topic.topic.id
   role    = "roles/pubsub.publisher"
   members = ["serviceAccount:${data.google_storage_project_service_account.gcs_account.email_address}"]
-
-  depends_on = [google_pubsub_topic.topic]
 }
 
 # # Get the GCS service account to trigger the pub/sub notification
@@ -137,7 +135,6 @@ resource "google_storage_notification" "notification" {
   topic          = google_pubsub_topic.topic.id
   depends_on = [
     google_pubsub_topic_iam_binding.binding,
-    google_storage_bucket.provisioning_bucket
   ]
 }
 
@@ -149,7 +146,6 @@ resource "google_eventarc_trigger" "trigger_pubsub_tf" {
   matching_criteria {
     attribute = "type"
     value     = "google.cloud.pubsub.topic.v1.messagePublished"
-
 
   }
   destination {
@@ -166,9 +162,7 @@ resource "google_eventarc_trigger" "trigger_pubsub_tf" {
   labels = var.labels
 
   depends_on = [
-    google_workflows_workflow.workflow,
     google_project_iam_member.eventarc_service_account_invoke_role,
-    google_pubsub_topic.topic
   ]
 }
 
@@ -187,10 +181,6 @@ resource "google_project_iam_member" "eventarc_service_account_invoke_role" {
   project = module.project-services.project_id
   role    = "roles/workflows.invoker"
   member  = "serviceAccount:${google_service_account.eventarc_service_account.email}"
-
-  depends_on = [
-    google_service_account.eventarc_service_account
-  ]
 }
 
 // Sleep for 120 seconds to drop start file

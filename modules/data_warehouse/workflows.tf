@@ -36,9 +36,6 @@ resource "google_project_iam_member" "workflow_service_account_roles" {
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
-
-
-  depends_on = [google_service_account.workflow_service_account]
 }
 
 # # Create the workflow
