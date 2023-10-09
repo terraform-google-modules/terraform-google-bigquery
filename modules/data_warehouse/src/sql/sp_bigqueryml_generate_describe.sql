@@ -12,6 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+/*
 SELECT *
 FROM ML.GENERATE_TEXT(
   MODEL `${project_id}.${dataset_id}.${model_name}`,
@@ -48,3 +49,4 @@ FROM ML.GENERATE_TEXT(
   )
 )
 ;
+*/
