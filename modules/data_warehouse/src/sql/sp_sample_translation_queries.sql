@@ -16,56 +16,27 @@
 The queries below are examples of non-BigQuery SQL syntax that can be used with the
 interactive translator to see before and after changes performed.
 
-The sample queries below use PostgreSQL syntax.*/
+The sample query below uses PostgreSQL syntax.*/
 
 /* Query 1
 -------------
-CREATE TABLE taxi_trips (payment_type VARCHAR, Vendor_Id VARCHAR);
 
-SELECT FORMAT_DATE("%w", Pickup_DateTime) AS WeekdayNumber,
-      FORMAT_DATE("%A", Pickup_DateTime) AS WeekdayName,
-      vendor.Vendor_Description,
-      payment_type.Payment_Type_Description,
-      SUM(taxi_trips.Total_Amount) AS high_value_trips
- FROM ds_edw.taxi_trips AS taxi_trips
-      INNER JOIN ds_edw.vendor AS vendor
-              ON cast(taxi_trips.Vendor_Id as int) = vendor.Vendor_Id
-             AND taxi_trips.Pickup_DateTime BETWEEN '2022-01-01' AND '2022-02-01'
-       LEFT JOIN ds_edw.payment_type AS payment_type
-              ON taxi_trips.payment_type::int = payment_type.Payment_Type_Id
-GROUP BY 1, 2, 3, 4
-HAVING SUM(taxi_trips.Total_Amount) > 50
-ORDER BY WeekdayNumber, 3, 4;
+CREATE TABLE ${project_id}.${dataset_id}.inventory_items (id VARCHAR, product_id VARCHAR, created_at TIMESTAMP, sold_at TIMESTAMP, cost NUMERIC, product_category VARCHAR, product_name VARCHAR, product_brand VARCHAR, product_retail_price NUMERIC, product_department VARCHAR, product_sku VARCHAR, product_distribution_center_id VARCHAR);
+CREATE TABLE ${project_id}.${dataset_id}.order_items (id INTEGER, order_id INTEGER, user_id INTEGER, product_id INTEGER, inventory_item_id INTEGER, status VARCHAR, created_at TIMESTAMP, shipped_at TIMESTAMP, delivered_at TIMESTAMP, returned_at TIMESTAMP, sale_price NUMERIC);
+
+SELECT
+  EXTRACT(dow from order_items.created_at) AS WeekdayNumber,
+  TO_CHAR(order_items.created_at, 'DAY') AS WeekdayName,
+  inventory.product_category AS product_category,
+  COUNT(DISTINCT order_items.order_id) AS num_high_value_orders
+FROM ${project_id}.${dataset_id}.inventory_items AS inventory
+  INNER JOIN ${project_id}.${dataset_id}.order_items AS order_items
+    ON inventory.id::int = order_items.inventory_item_id
+    AND cast(inventory.product_id as int) = order_items.product_id
+    AND order_items.created_at BETWEEN TO_TIMESTAMP('2022-01-01','YYYY-MM-DD') AND TO_TIMESTAMP('2022-12-31','YYYY-MM-DD')
+GROUP BY 1, 2, 3
+HAVING AVG(order_items.sale_price) > 85;
 */
 
-
-/* Query 2
--------------
-CREATE TABLE taxi_trips (payment_type VARCHAR, Vendor_Id VARCHAR);
-
-WITH TaxiDataRanking AS
-(
-SELECT CAST(Pickup_DateTime AS DATE) AS Pickup_Date,
-      taxi_trips.payment_type as Payment_Type_Id,
-      taxi_trips.Passenger_Count,
-      taxi_trips.Total_Amount,
-      RANK() OVER (PARTITION BY CAST(Pickup_DateTime AS DATE),
-                                taxi_trips.payment_type
-                       ORDER BY taxi_trips.Passenger_Count DESC,
-                                taxi_trips.Total_Amount DESC) AS Ranking
- FROM ds_edw.taxi_trips AS taxi_trips
-WHERE taxi_trips.Pickup_DateTime BETWEEN '2022-01-01' AND '2022-02-01'
-  AND taxi_trips.payment_type::int IN (1,2)
-)
-SELECT Pickup_Date,
-      Payment_Type_Description,
-      Passenger_Count,
-      Total_Amount
- FROM TaxiDataRanking
-      INNER JOIN ds_edw.payment_type AS payment_type
-              ON TaxiDataRanking.Payment_Type_Id = payment_type.Payment_Type_Id
-WHERE Ranking = 1
-ORDER BY Pickup_Date, Payment_Type_Description;
-*/
 
 SELECT 'OPEN THE STORED PROCEDURE FOR MORE DETAILS TO USE THE TRANSLATION SERVICE' as sql_text;
