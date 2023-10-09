@@ -40,7 +40,7 @@ SELECT
       created_at,
       SUM(sale_price) AS order_price
     FROM
-      `${project_id}.thelook.order_items`
+      `${project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.order_items`
     GROUP BY
       order_id, 1
     HAVING SUM(sale_price) > 10)
@@ -56,7 +56,7 @@ WITH Orders AS (
     order_items.product_id AS product_id,
     COUNT(order_items.id) AS count_sold_30d
   FROM
-    `${project_id}.thelook.order_items` AS order_items
+    `${project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.order_items` AS order_items
   WHERE
     order_items.created_at > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 30 DAY)
   GROUP BY
@@ -69,7 +69,7 @@ OnHand AS (
     inventory.product_name AS product_name,
     COUNT(inventory.id) AS count_in_stock
   FROM
-    `${project_id}.thelook.inventory_items` AS inventory
+    `${project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.inventory_items` AS inventory
   WHERE
     inventory.sold_at IS NULL
   GROUP BY
@@ -111,7 +111,7 @@ with MonthlyData AS(
     SAFE_SUBTRACT(inventory.product_retail_price, inventory.cost) AS profit,
     inventory.product_department AS product_department
   FROM
-    `${project_id}.thelook.inventory_items` AS inventory
+    `${project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.inventory_items` AS inventory
   WHERE
    sold_at IS NOT NULL
 )
@@ -135,7 +135,7 @@ WITH WeekdayData AS (
     FORMAT_DATE("%A", inventory.sold_at) AS weekday_name,
     SUM(inventory.product_retail_price) AS revenue
   FROM
-    `${project_id}.thelook.inventory_items` AS inventory
+    `${project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.inventory_items` AS inventory
   WHERE
     inventory.sold_at IS NOT NULL
  GROUP BY 1, 2, 3
@@ -162,7 +162,7 @@ EXECUTE IMMEDIATE FORMAT("""
       inventory.product_category,
       inventory.product_retail_price
     FROM
-      `${project_id}.thelook.inventory_items` AS inventory
+      `${project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.inventory_items` AS inventory
     WHERE
       inventory.sold_at IS NOT NULL)
 
@@ -191,7 +191,7 @@ EXECUTE IMMEDIATE FORMAT("""
     SELECT
       CONCAT("(", STRING_AGG(DISTINCT CONCAT("'", product_category, "'"), ','), ")")
     FROM
-      `${project_id}.thelook.inventory_items`
+      `${project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.inventory_items`
     )
 )
 ;
