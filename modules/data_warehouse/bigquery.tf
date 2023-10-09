@@ -58,18 +58,16 @@ resource "google_bigquery_connection" "vertex_ai_connection" {
 }
 
 # # Grant IAM access to the BigQuery Connection account for Vertex AI
-resource "google_storage_bucket_iam_binding" "bq_connection_iam_vertex_ai" {
-  bucket = google_storage_bucket.raw_bucket.name
+resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
   for_each = toset([
     "roles/aiplatform.user",
     "roles/bigquery.connectionUser",
     "roles/serviceusage.serviceUsageConsumer",
     ]
   )
-  role = each.key
-  members = [
-    "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}",
-  ]
+  project = module.project-services.project_id
+  role    = each.key
+  member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}",
 }
 
 # # Create a Biglake table for events with metadata caching
