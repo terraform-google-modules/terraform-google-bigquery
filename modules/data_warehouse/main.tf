@@ -23,6 +23,7 @@ module "project-services" {
   enable_apis = var.enable_apis
 
   activate_apis = [
+    "aiplatform.googleapis.com",
     "bigquery.googleapis.com",
     "bigqueryconnection.googleapis.com",
     "bigquerydatatransfer.googleapis.com",
