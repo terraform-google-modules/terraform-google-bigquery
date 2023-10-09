@@ -62,7 +62,7 @@ module "project-services" {
 }
 
 resource "time_sleep" "wait_after_apis" {
-  create_duration = "120s"
+  create_duration = "90s"
   depends_on      = [module.project-services]
 }
 

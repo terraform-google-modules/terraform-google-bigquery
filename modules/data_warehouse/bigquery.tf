@@ -50,7 +50,7 @@ resource "google_storage_bucket_iam_binding" "bq_connection_iam_object_viewer" {
 # # Create a BigQuery connection for Vertex AI to support GenerativeAI use cases
 resource "google_bigquery_connection" "vertex_ai_connection" {
   project       = module.project-services.project_id
-  connection_id = "bqml_connection"
+  connection_id = "genai_connection"
   location      = var.region
   friendly_name = "BigQuery ML Connection"
   cloud_resource {}
