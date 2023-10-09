@@ -67,7 +67,7 @@ resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
   )
   project = module.project-services.project_id
   role    = each.key
-  member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}",
+  member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}"
 }
 
 # # Create a Biglake table for events with metadata caching
