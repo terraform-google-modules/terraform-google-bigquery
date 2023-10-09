@@ -258,8 +258,8 @@ resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
   definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_generate_create.sql", {
     project_id = module.project-services.project_id,
     dataset_id = google_bigquery_dataset.ds_edw.dataset_id,
-    connection_name = google_bigquery_connection.vertex_ai_connection.name
-    model_name = var.text_generation_model_name
+    connection_name = google_bigquery_connection.vertex_ai_connection.name,
+    model_name = var.text_generation_model_name,
     region = var.region
     }
   )
