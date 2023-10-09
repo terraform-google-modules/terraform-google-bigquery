@@ -213,11 +213,11 @@ resource "google_bigquery_routine" "sproc_sp_demo_lookerstudio_report" {
 
 # # Add Sample Queries
 resource "google_bigquery_routine" "sp_sample_queries" {
-  project         = module.project-services.project_id
-  dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id      = "sp_sample_queries"
-  routine_type    = "PROCEDURE"
-  language        = "SQL"
+  project      = module.project-services.project_id
+  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id   = "sp_sample_queries"
+  routine_type = "PROCEDURE"
+  language     = "SQL"
   definition_body = templatefile("${path.module}/src/sql/sp_sample_queries.sql", {
     project_id = module.project-services.project_id,
     dataset_id = google_bigquery_dataset.ds_edw.dataset_id
@@ -233,11 +233,11 @@ resource "google_bigquery_routine" "sp_sample_queries" {
 
 # Add Bigquery ML Model for clustering
 resource "google_bigquery_routine" "sp_bigqueryml_model" {
-  project         = module.project-services.project_id
-  dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id      = "sp_bigqueryml_model"
-  routine_type    = "PROCEDURE"
-  language        = "SQL"
+  project      = module.project-services.project_id
+  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id   = "sp_bigqueryml_model"
+  routine_type = "PROCEDURE"
+  language     = "SQL"
   definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_model.sql", {
     project_id = module.project-services.project_id,
     dataset_id = google_bigquery_dataset.ds_edw.dataset_id
@@ -250,28 +250,28 @@ resource "google_bigquery_routine" "sp_bigqueryml_model" {
 
 # Create Bigquery ML Model for using text generation
 resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
-  project         = module.project-services.project_id
-  dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id      = "sp_bigqueryml_generate_create"
-  routine_type    = "PROCEDURE"
-  language        = "SQL"
+  project      = module.project-services.project_id
+  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id   = "sp_bigqueryml_generate_create"
+  routine_type = "PROCEDURE"
+  language     = "SQL"
   definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_generate_create.sql", {
-    project_id = module.project-services.project_id,
-    dataset_id = google_bigquery_dataset.ds_edw.dataset_id,
+    project_id      = module.project-services.project_id,
+    dataset_id      = google_bigquery_dataset.ds_edw.dataset_id,
     connection_name = google_bigquery_connection.vertex_ai_connection.name,
-    model_name = var.text_generation_model_name,
-    region = var.region
+    model_name      = var.text_generation_model_name,
+    region          = var.region
     }
   )
 }
 
 # Query Bigquery ML Model for describing customer clusters
 resource "google_bigquery_routine" "sp_bigqueryml_generate_describe" {
-  project         = module.project-services.project_id
-  dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id      = "sp_bigqueryml_generate_describe"
-  routine_type    = "PROCEDURE"
-  language        = "SQL"
+  project      = module.project-services.project_id
+  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id   = "sp_bigqueryml_generate_describe"
+  routine_type = "PROCEDURE"
+  language     = "SQL"
   definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_generate_describe.sql", {
     project_id = module.project-services.project_id,
     dataset_id = google_bigquery_dataset.ds_edw.dataset_id,
@@ -287,11 +287,11 @@ resource "google_bigquery_routine" "sp_bigqueryml_generate_describe" {
 
 # # Add Translation Scripts
 resource "google_bigquery_routine" "sp_sample_translation_queries" {
-  project         = module.project-services.project_id
-  dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id      = "sp_sample_translation_queries"
-  routine_type    = "PROCEDURE"
-  language        = "SQL"
+  project      = module.project-services.project_id
+  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id   = "sp_sample_translation_queries"
+  routine_type = "PROCEDURE"
+  language     = "SQL"
   definition_body = templatefile("${path.module}/src/sql/sp_sample_translation_queries.sql", {
     project_id = module.project-services.project_id,
     dataset_id = google_bigquery_dataset.ds_edw.dataset_id
