@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.1.1](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v6.1.0...v6.1.1) (2023-07-20)
+
+
+### Bug Fixes
+
+* data_warehouse DTS SA, reorganization, fix workflow order ([88fe3ef](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/88fe3efe439af72121f9707639271c68d19e9041))
+
+## [6.1.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v6.0.0...v6.1.0) (2023-06-22)
+
+
+### Features
+
+* adds metadata generation for the blueprint ([#220](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/220)) ([38b21b2](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/38b21b24fe69475e9855cc02a4209dc46ab9cfc9))
+* data_warehouse enables public access prevention on buckets ([d33fddc](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/d33fddcab6dbf1702ebd61c8f1bb95cca4aa72e6))
+* data_warehouse remove Cloud Function and replace with Workflows ([4fe1504](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/4fe1504b542281cb394a5014a980db058a01d1a6))
+
+
+### Bug Fixes
+
+* data_warehouse move workflows to file, add workflows identity ([b11e5f3](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/b11e5f32101e030d2cd3545db4d718cd1f98d3c0))
+* data_warehouse update neos toc url ([75cce16](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/75cce16058770358e8a400512343e7e1dd142a97))
+* **deps:** update data_warehouse dependency google-cloud-bigquery to v3.11.0 ([f270329](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/f2703293f3c746bf6336d6ebc3c2831bf4900b5e))
+* **deps:** update data_warehouse dependency google-cloud-storage to v2.9.0 ([331145a](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/331145ab444c2b7fb7f65d46ad4543f537553a8a))
+* **deps:** update data_warehouse terraform terraform-google-modules/project-factory/google to 14.2 ([6660e59](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/6660e59d8ab73b1ada846845045c881e1bd938e4))
+* update dw neos tutorial link ([#215](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/215)) ([645e382](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/645e382bfe830c3111f5fa6cbe7bae8f87e691f4))
+
 ## [6.0.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v5.4.3...v6.0.0) (2023-04-13)
 
 

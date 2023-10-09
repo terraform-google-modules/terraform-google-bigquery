@@ -7,7 +7,7 @@ Example:
 ```hcl
 module "dataset" {
   source = "terraform-google-modules/bigquery/google"
-  version = "~> 6.0"
+  version = "~> 6.1"
 
   dataset_id                  = "example_dataset"
   dataset_name                = "example_dataset"
@@ -37,3 +37,19 @@ module "scheduled_queries" {
   ]
 }
 ```
+
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| project\_id | The project where scheduled queries are created | `string` | n/a | yes |
+| queries | Data transfer configuration for creating scheduled queries | `list(any)` | n/a | yes |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| query\_names | The resource names of the transfer config |
+
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

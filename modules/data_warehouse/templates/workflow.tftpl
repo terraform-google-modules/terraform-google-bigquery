@@ -73,7 +73,7 @@ copy_objects:
         - finish:
             return: $${copied_objects + " objects copied"}
 
-# Subworkflow to create BigLake tables
+# Subworkflow to create BigQuery tables
 create_tables:
     steps:
         - assignStepTables:
@@ -81,9 +81,8 @@ create_tables:
                 - results: {}
                 - project_id: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
                 - map:
-                    sp_provision_lookup_tables: $${"CALL `"+project_id+".ds_edw.sp_provision_lookup_tables`();"}
-                    sp_lookerstudio_report: $${"CALL `"+project_id+".ds_edw.sp_lookerstudio_report`();"}
-                    sp_bigqueryml_model: $${"CALL `"+project_id+".ds_edw.sp_bigqueryml_model`();"}
+                    1: $${"CALL `"+project_id+".ds_edw.sp_provision_lookup_tables`();"}
+                    2: $${"CALL `"+project_id+".ds_edw.sp_lookerstudio_report`();"}
         - loopStepTables:
             for:
                 value: key

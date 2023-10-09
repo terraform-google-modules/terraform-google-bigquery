@@ -40,6 +40,6 @@ terraform {
   required_version = ">= 0.13"
 
   provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-bigquery:data_warehouse/v6.0.0"
+    module_name = "blueprints/terraform/terraform-google-bigquery:data_warehouse/v6.1.1"
   }
 }

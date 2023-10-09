@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-resource "google_project_service_identity" "workflows" {
-  provider = google-beta
-  project  = module.project-services.project_id
-  service  = "workflows.googleapis.com"
-
-  depends_on = [
-    module.project-services
-  ]
-}
-
 # Set up Workflows service account
 # # Set up the Workflows service account
 resource "google_service_account" "workflow_service_account" {
@@ -58,12 +48,13 @@ resource "google_workflows_workflow" "workflow" {
   description     = "Runs post Terraform setup steps for Solution in Console"
   service_account = google_service_account.workflow_service_account.id
 
-  source_contents = templatefile("${path.module}/src/workflows/workflow.yaml", {
+  source_contents = templatefile("${path.module}/templates/workflow.tftpl", {
     raw_bucket = google_storage_bucket.raw_bucket.name
   })
 
+  labels = var.labels
+
   depends_on = [
     google_project_iam_member.workflow_service_account_roles,
-    google_project_service_identity.workflows,
   ]
 }

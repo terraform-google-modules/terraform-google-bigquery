@@ -20,7 +20,8 @@ select * from ML.PREDICT(MODEL ds_edw.model_taxi_estimate,
 
 --Model Example
 CREATE OR REPLACE MODEL
-  `${project_id}.ds_edw.model_taxi_estimate` OPTIONS ( MODEL_TYPE='LINEAR_REG',
+  `${project_id}.ds_edw.model_taxi_estimate`
+OPTIONS ( MODEL_TYPE='LINEAR_REG',
     LS_INIT_LEARN_RATE=0.15,
     L1_REG=1,
     MAX_ITERATIONS=5 ) AS
