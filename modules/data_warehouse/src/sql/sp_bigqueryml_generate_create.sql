@@ -13,5 +13,5 @@
 -- limitations under the License.
 
 CREATE OR REPLACE MODEL `${project_id}.${dataset_id}.${model_name}`
-REMOTE WITH CONNECTION `${project_id}.${var.region}.${connection_name}`
+REMOTE WITH CONNECTION `${project_id}.${region}.${connection_name}`
 OPTIONS (REMOTE_SERVICE_TYPE = 'CLOUD_AI_LARGE_LANGUAGE_MODEL_V1');
