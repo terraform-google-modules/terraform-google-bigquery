@@ -26,12 +26,12 @@ output "raw_bucket" {
 
 #TODO Create new Looker Studio Template
 output "lookerstudio_report_url" {
-  value       = "https://lookerstudio.google.com/reporting/create?c.reportId=8a6517b8-8fcd-47a2-a953-9d4fb9ae4794&ds.ds_profit.datasourceName=lookerstudio_report_profit&ds.ds_profit.projectId=${var.project_id}&ds.ds_profit.type=TABLE&ds.ds_profit.datasetId=ds_edw&ds.ds_profit.tableId=lookerstudio_report_profit&ds.ds_dc.datasourceName=lookerstudio_report_distribution_centers&ds.ds_dc.projectId=${var.project_id}&ds.ds_dc.type=TABLE&ds.ds_dc.datasetId=ds_edw&ds.ds_dc.tableId=lookerstudio_report_distribution_centers"
+  value       = "https://lookerstudio.google.com/reporting/create?c.reportId=8a6517b8-8fcd-47a2-a953-9d4fb9ae4794&ds.ds_profit.datasourceName=lookerstudio_report_profit&ds.ds_profit.projectId=${var.project_id}&ds.ds_profit.type=TABLE&ds.ds_profit.datasetId=thelook&ds.ds_profit.tableId=lookerstudio_report_profit&ds.ds_dc.datasourceName=lookerstudio_report_distribution_centers&ds.ds_dc.projectId=${var.project_id}&ds.ds_dc.type=TABLE&ds.ds_dc.datasetId=thelook&ds.ds_dc.tableId=lookerstudio_report_distribution_centers"
   description = "The URL to create a new Looker Studio report displays a sample dashboard for the e-commerce data analysis"
 }
 
 output "bigquery_editor_url" {
-  value       = "https://console.cloud.google.com/bigquery?project=${var.project_id}&ws=!1m5!1m4!6m3!1s${var.project_id}!2sds_edw!3ssp_sample_queries"
+  value       = "https://console.cloud.google.com/bigquery?project=${var.project_id}&ws=!1m5!1m4!6m3!1s${var.project_id}!2sthelook!3ssp_sample_queries"
   description = "The URL to launch the BigQuery editor with the sample query procedure opened"
 }
 

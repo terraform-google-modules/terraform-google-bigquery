@@ -18,7 +18,7 @@
 # # Create the BigQuery dataset
 resource "google_bigquery_dataset" "ds_edw" {
   project                    = module.project-services.project_id
-  dataset_id                 = "ds_edw"
+  dataset_id                 = "thelook"
   friendly_name              = "My EDW Dataset"
   description                = "My EDW Dataset with tables"
   location                   = var.region
@@ -218,6 +218,20 @@ resource "google_bigquery_routine" "sp_bigqueryml_model" {
   ]
 }
 
+# # Add Translation Scripts
+resource "google_bigquery_routine" "sp_sample_translation_queries" {
+  project         = module.project-services.project_id
+  dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id      = "sp_sample_translation_queries"
+  routine_type    = "PROCEDURE"
+  language        = "SQL"
+  definition_body = templatefile("${path.module}/src/sql/sp_sample_translation_queries.sql", { project_id = module.project-services.project_id })
+
+  depends_on = [
+    google_bigquery_table.tbl_edw_inventory_items,
+  ]
+}
+
 # Add Scheduled Query
 # # Set up DTS permissions
 resource "google_project_service_identity" "bigquery_data_transfer_sa" {
@@ -283,7 +297,7 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
   data_source_id = "scheduled_query"
   schedule       = "every day 00:00"
   params = {
-    query = "CALL `${module.project-services.project_id}.ds_edw.sp_bigqueryml_model`()"
+    query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_bigqueryml_model`()"
   }
   service_account_name = google_service_account.dts.email
 

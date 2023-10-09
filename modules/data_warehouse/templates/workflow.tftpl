@@ -81,8 +81,8 @@ create_tables:
                 - results: {}
                 - project_id: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
                 - map:
-                    1: $${"CALL `"+project_id+".ds_edw.sp_provision_lookup_tables`();"}
-                    2: $${"CALL `"+project_id+".ds_edw.sp_lookerstudio_report`();"}
+                    1: $${"CALL `"+project_id+".thelook.sp_provision_lookup_tables`();"}
+                    2: $${"CALL `"+project_id+".thelook.sp_lookerstudio_report`();"}
         - loopStepTables:
             for:
                 value: key

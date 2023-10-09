@@ -12,7 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-CREATE OR REPLACE VIEW `${project_id}.ds_edw.lookerstudio_report_distribution_centers`
+CREATE OR REPLACE VIEW `${project_id}.thelook.lookerstudio_report_distribution_centers`
 OPTIONS(
     labels=[("data-warehouse","true")]
 )
@@ -37,11 +37,11 @@ WITH OrdersData AS
           AVG(TIMESTAMP_DIFF(shipped_at, order_items.created_at, HOUR)) AS processing_hours,
           AVG(TIMESTAMP_DIFF(delivered_at, order_items.created_at, HOUR)) AS order_to_delivery_hours
   FROM
-    `${project_id}.ds_edw.order_items` AS order_items
+    `${project_id}.thelook.order_items` AS order_items
   JOIN
-    `${project_id}.ds_edw.inventory_items` AS inventory_items ON order_items.product_id = inventory_items.product_id AND order_items.inventory_item_id = inventory_items.id
+    `${project_id}.thelook.inventory_items` AS inventory_items ON order_items.product_id = inventory_items.product_id AND order_items.inventory_item_id = inventory_items.id
   JOIN
-    `${project_id}.ds_edw.distribution_centers` AS dc ON inventory_items.product_distribution_center_id = dc.id
+    `${project_id}.thelook.distribution_centers` AS dc ON inventory_items.product_distribution_center_id = dc.id
   WHERE
     order_items.created_at IS NOT NULL
     AND order_items.created_at <= CURRENT_TIMESTAMP()
@@ -116,7 +116,7 @@ SELECT *
 FROM PercentChange
 ORDER BY GroupPartition;
 
-CREATE OR REPLACE VIEW `${project_id}.ds_edw.lookerstudio_report_profit`
+CREATE OR REPLACE VIEW `${project_id}.thelook.lookerstudio_report_profit`
 OPTIONS(
     labels=[("data-warehouse","true")]
 )
@@ -129,7 +129,7 @@ with SubsetInventory AS(
     CONCAT(product_department, " - ", product_category) AS product_dept_cat,
     EXTRACT(DATE from sold_at) AS sold_at_day
   FROM
-    `${project_id}.ds_edw.inventory_items`
+    `${project_id}.thelook.inventory_items`
   WHERE
     sold_at <= CURRENT_TIMESTAMP()
   GROUP BY

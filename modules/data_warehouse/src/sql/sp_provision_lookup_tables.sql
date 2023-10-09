@@ -12,7 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-CREATE OR REPLACE TABLE `${project_id}.ds_edw.distribution_centers`
+CREATE OR REPLACE TABLE `${project_id}.thelook.distribution_centers`
 
     (
         id INTEGER,

@@ -26,7 +26,7 @@ FROM (
     feature,
     ROUND(numerical_value, 2) as value
   FROM
-    ML.CENTROIDS(MODEL `ds_edw.customer_segment_clustering`)
+    ML.CENTROIDS(MODEL `thelook.customer_segment_clustering`)
 )
 PIVOT (
   SUM(value)
@@ -37,7 +37,7 @@ ORDER BY centroid_id
 
 --Model Example
 CREATE OR REPLACE MODEL
-  `${project_id}.ds_edw.customer_segment_clustering`
+  `${project_id}.thelook.customer_segment_clustering`
   OPTIONS(
     MODEL_TYPE = 'KMEANS', -- model name
     NUM_CLUSTERS = 5, -- how many clusters to create
@@ -60,7 +60,7 @@ CREATE OR REPLACE MODEL
           sale_price,
           created_at as order_created_date
         FROM
-          `${project_id}.ds_edw.order_items`
+          `${project_id}.thelook.order_items`
         WHERE
           created_at BETWEEN TIMESTAMP('2020-07-31 00:00:00')
           AND TIMESTAMP('2023-07-31 00:00:00')
