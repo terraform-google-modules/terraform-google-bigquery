@@ -26,7 +26,7 @@ FROM (
     feature,
     ROUND(numerical_value, 2) as value
   FROM
-    ML.CENTROIDS(MODEL `${google_bigquery_dataset.ds_edw.dataset_id}.customer_segment_clustering`)
+    ML.CENTROIDS(MODEL `${dataset_id}.customer_segment_clustering`)
 )
 PIVOT (
   SUM(value)
@@ -37,7 +37,7 @@ ORDER BY centroid_id
 
 --Model Example
 CREATE OR REPLACE MODEL
-  `${project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.customer_segment_clustering`
+  `${project_id}.${dataset_id}.customer_segment_clustering`
   OPTIONS(
     MODEL_TYPE = 'KMEANS', -- model name
     NUM_CLUSTERS = 5, -- how many clusters to create
@@ -60,7 +60,7 @@ CREATE OR REPLACE MODEL
           sale_price,
           created_at as order_created_date
         FROM
-          `${project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.order_items`
+          `${project_id}.${dataset_id}.order_items`
         WHERE
           created_at BETWEEN TIMESTAMP('2020-07-31 00:00:00')
           AND TIMESTAMP('2023-07-31 00:00:00')
