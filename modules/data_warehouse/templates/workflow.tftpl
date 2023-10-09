@@ -33,12 +33,13 @@ copy_objects:
             assign:
                 - source_bucket: "data-analytics-demos"
                 - dest_bucket: ${raw_bucket}
+                - dataset_id: ${dataset_id}
                 - copied_objects: []
         - list_objects:
             call: googleapis.storage.v1.objects.list
             args:
                 bucket: $${source_bucket}
-                prefix: "new-york-taxi-trips/tlc-yellow-trips-2022"
+                prefix: "thelook-ecommerce"
             result: list_result
         - start_counter:
             assign:
@@ -81,8 +82,8 @@ create_tables:
                 - results: {}
                 - project_id: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
                 - map:
-                    1: $${"CALL `"+project_id+".ds_edw.sp_provision_lookup_tables`();"}
-                    2: $${"CALL `"+project_id+".ds_edw.sp_lookerstudio_report`();"}
+                    1: $${"CALL `"+project_id+".dataset_id.sp_provision_lookup_tables`();"}
+                    2: $${"CALL `"+project_id+".dataset_id.sp_lookerstudio_report`();"}
         - loopStepTables:
             for:
                 value: key

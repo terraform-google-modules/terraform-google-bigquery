@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-# Set up Workflows service account
-# # Set up the Workflows service account
+# Set up the Workflows service account
 resource "google_service_account" "workflow_service_account" {
   project      = module.project-services.project_id
   account_id   = "cloud-workflow-sa-${random_id.id.hex}"
@@ -32,12 +31,11 @@ resource "google_project_iam_member" "workflow_service_account_roles" {
     "roles/bigquery.connectionUser",
     "roles/bigquery.jobUser",
     "roles/bigquery.dataEditor",
-  ])
-
+    ]
+  )
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
-
 }
 
 # # Create the workflow
@@ -49,7 +47,8 @@ resource "google_workflows_workflow" "workflow" {
   service_account = google_service_account.workflow_service_account.id
 
   source_contents = templatefile("${path.module}/templates/workflow.tftpl", {
-    raw_bucket = google_storage_bucket.raw_bucket.name
+    raw_bucket = google_storage_bucket.raw_bucket.name,
+    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
   })
 
   labels = var.labels

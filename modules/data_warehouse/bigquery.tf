@@ -18,12 +18,14 @@
 # # Create the BigQuery dataset
 resource "google_bigquery_dataset" "ds_edw" {
   project                    = module.project-services.project_id
-  dataset_id                 = "ds_edw"
+  dataset_id                 = "thelook"
   friendly_name              = "My EDW Dataset"
   description                = "My EDW Dataset with tables"
   location                   = var.region
   labels                     = var.labels
   delete_contents_on_destroy = var.force_destroy
+
+  depends_on = [time_sleep.wait_after_apis]
 }
 
 # # Create a BigQuery connection
@@ -33,6 +35,7 @@ resource "google_bigquery_connection" "ds_connection" {
   location      = var.region
   friendly_name = "Storage Bucket Connection"
   cloud_resource {}
+  depends_on = [time_sleep.wait_after_apis]
 }
 
 # # Grant IAM access to the BigQuery Connection account for Cloud Storage
@@ -42,64 +45,146 @@ resource "google_storage_bucket_iam_binding" "bq_connection_iam_object_viewer" {
   members = [
     "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}",
   ]
-
-  depends_on = [
-    google_bigquery_connection.ds_connection,
-  ]
 }
 
-# # Create a BigQuery external table
-resource "google_bigquery_table" "tbl_edw_taxi" {
+# # Create a Biglake table for events with metadata caching
+resource "google_bigquery_table" "tbl_edw_events" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
-  table_id            = "taxi_trips"
+  table_id            = "events"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
 
+  schema = file("${path.module}/src/schema/events_schema.json")
+
   external_data_configuration {
     autodetect    = true
-    connection_id = "${module.project-services.project_id}.${var.region}.ds_connection"
+    connection_id = google_bigquery_connection.ds_connection.name
     source_format = "PARQUET"
-    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/new-york-taxi-trips/tlc-yellow-trips-2022/taxi-*.Parquet"]
-
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/events.parquet"]
   }
 
-  schema = file("${path.module}/src/taxi_trips_schema.json")
+  labels = var.labels
+}
+
+# # Create a Biglake table for inventory_items
+resource "google_bigquery_table" "tbl_edw_inventory_items" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "inventory_items"
+  project             = module.project-services.project_id
+  deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/inventory_items_schema.json")
+
+  external_data_configuration {
+    autodetect    = true
+    connection_id = google_bigquery_connection.ds_connection.name
+    source_format = "PARQUET"
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/inventory_items.parquet"]
+  }
 
   labels = var.labels
+}
 
-  depends_on = [
-    google_bigquery_connection.ds_connection,
-    google_storage_bucket.raw_bucket,
-  ]
+# # Create a Biglake table with metadata caching for order_items
+resource "google_bigquery_table" "tbl_edw_order_items" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "order_items"
+  project             = module.project-services.project_id
+  deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/order_items_schema.json")
+
+  external_data_configuration {
+    autodetect    = true
+    connection_id = google_bigquery_connection.ds_connection.name
+    source_format = "PARQUET"
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/order_items.parquet"]
+  }
+
+  labels = var.labels
+}
+
+# # Create a Biglake table for orders
+resource "google_bigquery_table" "tbl_edw_orders" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "orders"
+  project             = module.project-services.project_id
+  deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/orders_schema.json")
+
+  external_data_configuration {
+    autodetect    = true
+    connection_id = google_bigquery_connection.ds_connection.name
+    source_format = "PARQUET"
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/orders.parquet"]
+  }
+
+  labels = var.labels
+}
+
+# # Create a Biglake table for products
+resource "google_bigquery_table" "tbl_edw_products" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "products"
+  project             = module.project-services.project_id
+  deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/products_schema.json")
+
+  external_data_configuration {
+    autodetect    = true
+    connection_id = google_bigquery_connection.ds_connection.name
+    source_format = "PARQUET"
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/products.parquet"]
+  }
+
+  labels = var.labels
+}
+
+# # Create a Biglake table for products
+resource "google_bigquery_table" "tbl_edw_users" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "users"
+  project             = module.project-services.project_id
+  deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/users_schema.json")
+
+  external_data_configuration {
+    autodetect    = true
+    connection_id = google_bigquery_connection.ds_connection.name
+    source_format = "PARQUET"
+    source_uris   = ["gs://${google_storage_bucket.raw_bucket.name}/thelook-ecommerce/users.parquet"]
+  }
+
+  labels = var.labels
 }
 
 # Load Queries for Stored Procedure Execution
-# # Load Lookup Data Tables
+# # Load Distribution Center Lookup Data Tables
 resource "google_bigquery_routine" "sp_provision_lookup_tables" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_provision_lookup_tables"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_provision_lookup_tables.sql", { project_id = module.project-services.project_id })
-
-  depends_on = [
-    google_bigquery_dataset.ds_edw,
-  ]
+  definition_body = templatefile("${path.module}/src/sql/sp_provision_lookup_tables.sql", { project_id = module.project-services.project_id, dataset_id = google_bigquery_dataset.ds_edw.dataset_id })
 }
 
-
-# # Add Looker Studio Data Report Procedure
-resource "google_bigquery_routine" "sproc_sp_demo_datastudio_report" {
+# Add Looker Studio Data Report Procedure
+resource "google_bigquery_routine" "sproc_sp_demo_lookerstudio_report" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_lookerstudio_report"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_lookerstudio_report.sql", { project_id = module.project-services.project_id })
+  definition_body = templatefile("${path.module}/src/sql/sp_lookerstudio_report.sql", { project_id = module.project-services.project_id, dataset_id = google_bigquery_dataset.ds_edw.dataset_id })
 
   depends_on = [
-    google_bigquery_table.tbl_edw_taxi,
+    google_bigquery_table.tbl_edw_inventory_items,
+    google_bigquery_table.tbl_edw_order_items,
+    google_bigquery_routine.sp_provision_lookup_tables,
   ]
 }
 
@@ -110,24 +195,26 @@ resource "google_bigquery_routine" "sp_sample_queries" {
   routine_id      = "sp_sample_queries"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_sample_queries.sql", { project_id = module.project-services.project_id })
+  definition_body = templatefile("${path.module}/src/sql/sp_sample_queries.sql", { project_id = module.project-services.project_id, dataset_id = google_bigquery_dataset.ds_edw.dataset_id })
 
   depends_on = [
-    google_bigquery_table.tbl_edw_taxi,
+    google_bigquery_table.tbl_edw_inventory_items,
+    google_bigquery_table.tbl_edw_order_items,
   ]
 }
 
-# # Add Bigquery ML Model
+
+# Add Bigquery ML Model
 resource "google_bigquery_routine" "sp_bigqueryml_model" {
   project         = module.project-services.project_id
   dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
   routine_id      = "sp_bigqueryml_model"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_model.sql", { project_id = module.project-services.project_id })
+  definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_model.sql", { project_id = module.project-services.project_id, dataset_id = google_bigquery_dataset.ds_edw.dataset_id })
 
   depends_on = [
-    google_bigquery_table.tbl_edw_taxi,
+    google_bigquery_table.tbl_edw_order_items,
   ]
 }
 
@@ -138,10 +225,10 @@ resource "google_bigquery_routine" "sp_sample_translation_queries" {
   routine_id      = "sp_sample_translation_queries"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_sample_translation_queries.sql", { project_id = module.project-services.project_id })
+  definition_body = templatefile("${path.module}/src/sql/sp_sample_translation_queries.sql", { project_id = module.project-services.project_id, dataset_id = google_bigquery_dataset.ds_edw.dataset_id })
 
   depends_on = [
-    google_bigquery_table.tbl_edw_taxi,
+    google_bigquery_table.tbl_edw_inventory_items,
   ]
 }
 
@@ -151,6 +238,8 @@ resource "google_project_service_identity" "bigquery_data_transfer_sa" {
   provider = google-beta
   project  = module.project-services.project_id
   service  = "bigquerydatatransfer.googleapis.com"
+
+  depends_on = [time_sleep.wait_after_apis]
 }
 
 # # Grant the DTS service account access
@@ -162,6 +251,8 @@ resource "google_project_iam_member" "dts_service_account_roles" {
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
+
+  depends_on = [time_sleep.wait_after_apis]
 }
 
 # Create specific service account for DTS Run
@@ -206,7 +297,7 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
   data_source_id = "scheduled_query"
   schedule       = "every day 00:00"
   params = {
-    query = "CALL `${module.project-services.project_id}.ds_edw.sp_bigqueryml_model`()"
+    query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_bigqueryml_model`()"
   }
   service_account_name = google_service_account.dts.email
 

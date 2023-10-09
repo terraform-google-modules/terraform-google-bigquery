@@ -12,7 +12,7 @@ The resources/services/activations/deletions that this module will create/trigge
 - Creates a BigQuery Dataset
 - Creates a BigQuery Table
 - Creates a Google Cloud Storage bucket
-- Loads the Google Cloud Storage bucket with data from https://console.cloud.google.com/marketplace/product/city-of-new-york/nyc-tlc-trips
+- Loads the Google Cloud Storage bucket with data from [TheLook eCommerce Public Dataset](https://console.cloud.google.com/marketplace/product/bigquery-public-data/thelook-ecommerce)
 - Provides SQL examples
 - Creates and inferences with a BigQuery ML model
 - Creates a Looker Studio report
@@ -47,7 +47,7 @@ Functional examples are included in the
 |------|-------------|
 | bigquery\_editor\_url | The URL to launch the BigQuery editor with the sample query procedure opened |
 | ds\_friendly\_name | Dataset name |
-| lookerstudio\_report\_url | The URL to create a new Looker Studio report displays a sample dashboard for the taxi data analysis |
+| lookerstudio\_report\_url | The URL to create a new Looker Studio report displays a sample dashboard for the e-commerce data analysis |
 | neos\_tutorial\_url | The URL to launch the in-console tutorial for the EDW solution |
 | raw\_bucket | Raw bucket name |
 

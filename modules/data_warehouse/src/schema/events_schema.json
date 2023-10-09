@@ -1,0 +1,67 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "user_id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "sequence_number",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "session_id",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "ip_address",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "city",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "state",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "postal_code",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "browser",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "traffic_source",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "uri",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "event_type",
+    "type": "STRING"
+  }
+]
