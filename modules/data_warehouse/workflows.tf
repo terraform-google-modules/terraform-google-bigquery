@@ -47,7 +47,8 @@ resource "google_workflows_workflow" "workflow" {
   service_account = google_service_account.workflow_service_account.id
 
   source_contents = templatefile("${path.module}/templates/workflow.tftpl", {
-    raw_bucket = google_storage_bucket.raw_bucket.name
+    raw_bucket = google_storage_bucket.raw_bucket.name,
+    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
   })
 
   labels = var.labels

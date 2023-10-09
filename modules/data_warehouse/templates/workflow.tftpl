@@ -33,6 +33,7 @@ copy_objects:
             assign:
                 - source_bucket: "data-analytics-demos"
                 - dest_bucket: ${raw_bucket}
+                - dataset_id: ${dataset_id}
                 - copied_objects: []
         - list_objects:
             call: googleapis.storage.v1.objects.list
@@ -81,8 +82,8 @@ create_tables:
                 - results: {}
                 - project_id: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
                 - map:
-                    1: $${"CALL `"+project_id+".thelook.sp_provision_lookup_tables`();"}
-                    2: $${"CALL `"+project_id+".thelook.sp_lookerstudio_report`();"}
+                    1: $${"CALL `"+project_id+".dataset_id.sp_provision_lookup_tables`();"}
+                    2: $${"CALL `"+project_id+".dataset_id.sp_lookerstudio_report`();"}
         - loopStepTables:
             for:
                 value: key
