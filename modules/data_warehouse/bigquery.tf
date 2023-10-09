@@ -280,8 +280,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_generate_describe" {
   )
 
   depends_on = [
-    google_bigquery_routine.sp_bigqueryml_generate_create,
-    google_bigquery_routine.sp_bigqueryml_model
+    google_bigquery_routine.sp_bigqueryml_generate_create
   ]
 }
 
