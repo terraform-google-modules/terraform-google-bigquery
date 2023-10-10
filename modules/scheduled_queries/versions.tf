@@ -25,6 +25,6 @@ terraform {
   }
 
   provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-bigquery:scheduled_queries/v6.1.1"
+    module_name = "blueprints/terraform/terraform-google-bigquery:scheduled_queries/v7.0.0"
   }
 }
