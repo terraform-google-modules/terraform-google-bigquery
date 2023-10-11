@@ -28,7 +28,7 @@ resource "google_bigquery_dataset" "ds_edw" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
-# # Create a BigQuery connection
+# # Create a BigQuery connection for Cloud Storage to create BigLake tables
 resource "google_bigquery_connection" "ds_connection" {
   project       = module.project-services.project_id
   connection_id = "ds_connection"
@@ -45,6 +45,29 @@ resource "google_storage_bucket_iam_binding" "bq_connection_iam_object_viewer" {
   members = [
     "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}",
   ]
+}
+
+# # Create a BigQuery connection for Vertex AI to support GenerativeAI use cases
+resource "google_bigquery_connection" "vertex_ai_connection" {
+  project       = module.project-services.project_id
+  connection_id = "genai_connection"
+  location      = var.region
+  friendly_name = "BigQuery ML Connection"
+  cloud_resource {}
+  depends_on = [time_sleep.wait_after_apis]
+}
+
+# # Grant IAM access to the BigQuery Connection account for Vertex AI
+resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
+  for_each = toset([
+    "roles/aiplatform.user",
+    "roles/bigquery.connectionUser",
+    "roles/serviceusage.serviceUsageConsumer",
+    ]
+  )
+  project = module.project-services.project_id
+  role    = each.key
+  member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}"
 }
 
 # # Create a Biglake table for events with metadata caching
@@ -190,12 +213,16 @@ resource "google_bigquery_routine" "sproc_sp_demo_lookerstudio_report" {
 
 # # Add Sample Queries
 resource "google_bigquery_routine" "sp_sample_queries" {
-  project         = module.project-services.project_id
-  dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id      = "sp_sample_queries"
-  routine_type    = "PROCEDURE"
-  language        = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_sample_queries.sql", { project_id = module.project-services.project_id, dataset_id = google_bigquery_dataset.ds_edw.dataset_id })
+  project      = module.project-services.project_id
+  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id   = "sp_sample_queries"
+  routine_type = "PROCEDURE"
+  language     = "SQL"
+  definition_body = templatefile("${path.module}/src/sql/sp_sample_queries.sql", {
+    project_id = module.project-services.project_id,
+    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    }
+  )
 
   depends_on = [
     google_bigquery_table.tbl_edw_inventory_items,
@@ -204,29 +231,71 @@ resource "google_bigquery_routine" "sp_sample_queries" {
 }
 
 
-# Add Bigquery ML Model
+# Add Bigquery ML Model for clustering
 resource "google_bigquery_routine" "sp_bigqueryml_model" {
-  project         = module.project-services.project_id
-  dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id      = "sp_bigqueryml_model"
-  routine_type    = "PROCEDURE"
-  language        = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_model.sql", { project_id = module.project-services.project_id, dataset_id = google_bigquery_dataset.ds_edw.dataset_id })
-
+  project      = module.project-services.project_id
+  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id   = "sp_bigqueryml_model"
+  routine_type = "PROCEDURE"
+  language     = "SQL"
+  definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_model.sql", {
+    project_id = module.project-services.project_id,
+    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    }
+  )
   depends_on = [
     google_bigquery_table.tbl_edw_order_items,
   ]
 }
 
+# Create Bigquery ML Model for using text generation
+resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
+  project      = module.project-services.project_id
+  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id   = "sp_bigqueryml_generate_create"
+  routine_type = "PROCEDURE"
+  language     = "SQL"
+  definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_generate_create.sql", {
+    project_id      = module.project-services.project_id,
+    dataset_id      = google_bigquery_dataset.ds_edw.dataset_id,
+    connection_name = google_bigquery_connection.vertex_ai_connection.name,
+    model_name      = var.text_generation_model_name,
+    region          = var.region
+    }
+  )
+}
+
+# Query Bigquery ML Model for describing customer clusters
+resource "google_bigquery_routine" "sp_bigqueryml_generate_describe" {
+  project      = module.project-services.project_id
+  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id   = "sp_bigqueryml_generate_describe"
+  routine_type = "PROCEDURE"
+  language     = "SQL"
+  definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_generate_describe.sql", {
+    project_id = module.project-services.project_id,
+    dataset_id = google_bigquery_dataset.ds_edw.dataset_id,
+    model_name = var.text_generation_model_name
+    }
+  )
+
+  depends_on = [
+    google_bigquery_routine.sp_bigqueryml_generate_create
+  ]
+}
+
 # # Add Translation Scripts
 resource "google_bigquery_routine" "sp_sample_translation_queries" {
-  project         = module.project-services.project_id
-  dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id      = "sp_sample_translation_queries"
-  routine_type    = "PROCEDURE"
-  language        = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_sample_translation_queries.sql", { project_id = module.project-services.project_id, dataset_id = google_bigquery_dataset.ds_edw.dataset_id })
-
+  project      = module.project-services.project_id
+  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id   = "sp_sample_translation_queries"
+  routine_type = "PROCEDURE"
+  language     = "SQL"
+  definition_body = templatefile("${path.module}/src/sql/sp_sample_translation_queries.sql", {
+    project_id = module.project-services.project_id,
+    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    }
+  )
   depends_on = [
     google_bigquery_table.tbl_edw_inventory_items,
   ]

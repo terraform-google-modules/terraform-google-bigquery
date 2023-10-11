@@ -15,6 +15,7 @@ The resources/services/activations/deletions that this module will create/trigge
 - Loads the Google Cloud Storage bucket with data from [TheLook eCommerce Public Dataset](https://console.cloud.google.com/marketplace/product/bigquery-public-data/thelook-ecommerce)
 - Provides SQL examples
 - Creates and inferences with a BigQuery ML model
+- Creates a remote model and generates text with a BigQuery ML remote model
 - Creates a Looker Studio report
 
 ### preDeploy
@@ -40,6 +41,7 @@ Functional examples are included in the
 | labels | A map of labels to apply to contained resources. | `map(string)` | <pre>{<br>  "data-warehouse": true<br>}</pre> | no |
 | project\_id | Google Cloud Project ID | `string` | n/a | yes |
 | region | Google Cloud Region | `string` | n/a | yes |
+| text_generation_model_name  | Name of the BigQuery ML remote model used for text generation | `string` | `text_generate_model` | yes |
 
 ## Outputs
 
@@ -85,6 +87,7 @@ service account with the necessary roles applied.
 A project with the following APIs enabled must be used to host the
 resources of this module:
 
+- Vertex AI API: `aiplatform.googleapis.com`
 - BigQuery API: `bigquery.googleapis.com`
 - BigQuery Data Policy API: `bigquerydatapolicy.googleapis.com`
 - BigQuery Migration API: `bigquerymigration.googleapis.com`

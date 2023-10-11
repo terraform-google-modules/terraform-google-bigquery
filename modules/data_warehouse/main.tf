@@ -23,6 +23,7 @@ module "project-services" {
   enable_apis = var.enable_apis
 
   activate_apis = [
+    "aiplatform.googleapis.com",
     "bigquery.googleapis.com",
     "bigqueryconnection.googleapis.com",
     "bigquerydatatransfer.googleapis.com",
@@ -61,7 +62,7 @@ module "project-services" {
 }
 
 resource "time_sleep" "wait_after_apis" {
-  create_duration = "120s"
+  create_duration = "90s"
   depends_on      = [module.project-services]
 }
 
