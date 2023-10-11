@@ -187,11 +187,11 @@ resource "google_bigquery_table" "tbl_edw_users" {
 # Load Queries for Stored Procedure Execution
 # # Load Distribution Center Lookup Data Tables
 resource "google_bigquery_routine" "sp_provision_lookup_tables" {
-  project         = module.project-services.project_id
-  dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id      = "sp_provision_lookup_tables"
-  routine_type    = "PROCEDURE"
-  language        = "SQL"
+  project      = module.project-services.project_id
+  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id   = "sp_provision_lookup_tables"
+  routine_type = "PROCEDURE"
+  language     = "SQL"
   definition_body = templatefile("${path.module}/src/sql/sp_provision_lookup_tables.sql", {
     project_id = module.project-services.project_id,
     dataset_id = google_bigquery_dataset.ds_edw.dataset_id
@@ -201,11 +201,11 @@ resource "google_bigquery_routine" "sp_provision_lookup_tables" {
 
 # Add Looker Studio Data Report Procedure
 resource "google_bigquery_routine" "sproc_sp_demo_lookerstudio_report" {
-  project         = module.project-services.project_id
-  dataset_id      = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id      = "sp_lookerstudio_report"
-  routine_type    = "PROCEDURE"
-  language        = "SQL"
+  project      = module.project-services.project_id
+  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
+  routine_id   = "sp_lookerstudio_report"
+  routine_type = "PROCEDURE"
+  language     = "SQL"
   definition_body = templatefile("${path.module}/src/sql/sp_lookerstudio_report.sql", {
     project_id = module.project-services.project_id,
     dataset_id = google_bigquery_dataset.ds_edw.dataset_id
@@ -266,8 +266,8 @@ resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
   definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_generate_create.sql", {
     project_id      = module.project-services.project_id,
     dataset_id      = google_bigquery_dataset.ds_edw.dataset_id,
-    connection_name = google_bigquery_connection.vertex_ai_connection.id,
-    model_id      = var.text_generation_model_name,
+    connection_id = google_bigquery_connection.vertex_ai_connection.id,
+    model_id        = var.text_generation_model_name,
     region          = var.region
     }
   )
