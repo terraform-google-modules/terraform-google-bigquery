@@ -84,7 +84,8 @@ create_tables:
                 - map:
                     1: $${"CALL `"+project_id+".dataset_id.sp_provision_lookup_tables`();"}
                     2: $${"CALL `"+project_id+".dataset_id.sp_lookerstudio_report`();"}
-                    3: $${"CALL `"+project_id+".dataset_id.sp_bigqueryml_generate_create`();"}
+                    3: $${"CALL `"+project_id+".dataset_id.sp_bigqueryml_model`();"}
+                    4: $${"CALL `"+project_id+".dataset_id.sp_bigqueryml_generate_create`();"}
         - loopStepTables:
             for:
                 value: key
