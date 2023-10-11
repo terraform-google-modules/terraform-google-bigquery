@@ -13,6 +13,44 @@
 -- limitations under the License.
 
 /*
+This sample query demonstrates how you can use a remote model from Vertex AI to use Generative AI to help describe the results of your BigQuery Machine Learning model. This query requires the sp_bigqueryml_generate_create routine to run first, since that creates the model connection between BigQuery and Vertex AI so you can leverage Vertex's GenAI capabilities. This runs as part of the Workflow created in the Jump Start Solution Deployment, but may take some time to generate.
+
+It also requires the sp_bigqueryml_model routine to be run, since this query analyzes the output of the K-means model that clusters customers into buying patterns. You can verify if this routine has successfully run by running the following query that describes its output:
+
+/*
+Run a query to see the results of the model
+---------------------------------------------
+
+SELECT
+  CONCAT('cluster ', CAST(centroid_id as STRING)) as cluster,
+  avg_spend as average_spend,
+  count_orders as count_of_orders,
+  days_since_order
+FROM (
+  SELECT
+    centroid_id,
+    feature,
+    ROUND(numerical_value, 2) as value
+  FROM
+    ML.CENTROIDS(MODEL `${dataset_id}.customer_segment_clustering`)
+)
+PIVOT (
+  SUM(value)
+  FOR feature IN ('avg_spend',  'count_orders', 'days_since_order')
+)
+ORDER BY centroid_id
+*/
+
+/*
+If this query fails because the model doesn't yet exist, you can manually run this routine to create the K-means model with the query below:
+
+Call sp_bigqueryml_model routine
+-----------------------------------
+
+CALL `thelook.sp_bigqueryml_model`();
+*/
+
+/*
 SELECT *
 FROM ML.GENERATE_TEXT(
   MODEL `${project_id}.${dataset_id}.${model_name}`,
@@ -50,4 +88,4 @@ FROM ML.GENERATE_TEXT(
 );
 */
 
-
+SELECT 'OPEN THE STORED PROCEDURE FOR MORE DETAILS' as sql_text;
