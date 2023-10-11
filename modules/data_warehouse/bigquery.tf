@@ -192,7 +192,11 @@ resource "google_bigquery_routine" "sp_provision_lookup_tables" {
   routine_id      = "sp_provision_lookup_tables"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_provision_lookup_tables.sql", { project_id = module.project-services.project_id, dataset_id = google_bigquery_dataset.ds_edw.dataset_id })
+  definition_body = templatefile("${path.module}/src/sql/sp_provision_lookup_tables.sql", {
+    project_id = module.project-services.project_id,
+    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    }
+  )
 }
 
 # Add Looker Studio Data Report Procedure
@@ -202,7 +206,11 @@ resource "google_bigquery_routine" "sproc_sp_demo_lookerstudio_report" {
   routine_id      = "sp_lookerstudio_report"
   routine_type    = "PROCEDURE"
   language        = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_lookerstudio_report.sql", { project_id = module.project-services.project_id, dataset_id = google_bigquery_dataset.ds_edw.dataset_id })
+  definition_body = templatefile("${path.module}/src/sql/sp_lookerstudio_report.sql", {
+    project_id = module.project-services.project_id,
+    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    }
+  )
 
   depends_on = [
     google_bigquery_table.tbl_edw_inventory_items,
@@ -258,7 +266,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
   definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_generate_create.sql", {
     project_id      = module.project-services.project_id,
     dataset_id      = google_bigquery_dataset.ds_edw.dataset_id,
-    connection_name = google_bigquery_connection.vertex_ai_connection.name,
+    connection_name = google_bigquery_connection.vertex_ai_connection.id,
     model_name      = var.text_generation_model_name,
     region          = var.region
     }
