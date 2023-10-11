@@ -47,6 +47,7 @@ FROM ML.GENERATE_TEXT(
     0.8 AS top_p,
     TRUE AS flatten_json_output
   )
-)
-;
+);
 */
+
+
