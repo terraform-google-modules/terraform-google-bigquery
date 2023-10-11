@@ -80,12 +80,13 @@ FROM ML.GENERATE_TEXT(
   -- See the BigQuery "Generate Text" docs to better understand how changing these inputs will impact your results: https://cloud.google.com/bigquery/docs/generate-text#generate_text
   STRUCT(
     600 AS max_output_tokens,
-    0.3 AS temperature,
+    0.6 AS temperature,
     40 AS top_k,
     0.8 AS top_p,
     TRUE AS flatten_json_output
+    )
   )
-);
+;
 */
 
 SELECT 'OPEN THE STORED PROCEDURE FOR MORE DETAILS' as sql_text;
