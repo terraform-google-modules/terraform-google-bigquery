@@ -267,7 +267,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
     project_id      = module.project-services.project_id,
     dataset_id      = google_bigquery_dataset.ds_edw.dataset_id,
     connection_id = google_bigquery_connection.vertex_ai_connection.id,
-    model_id        = var.text_generation_model_name,
+    model_name        = var.text_generation_model_name,
     region          = var.region
     }
   )
