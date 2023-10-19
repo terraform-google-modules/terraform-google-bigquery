@@ -26,7 +26,7 @@ variable "region" {
 
 variable "text_generation_model_name" {
   type        = string
-  description = "Name of the BigQuery ML remote model used for text generation"
+  description = "Name of the BigQuery ML GenAI remote model used for text generation"
   default     = "text_generate_model"
 
 }
