@@ -25,7 +25,7 @@ spec:
       repo: https://github.com/terraform-google-modules/terraform-google-bigquery
       sourceType: git
       dir: /modules/data_warehouse
-    version: 6.1.0
+    version: 7.0.0
     actuationTool:
       flavor: Terraform
       version: '>= 0.13'
