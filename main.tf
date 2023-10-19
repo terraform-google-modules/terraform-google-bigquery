@@ -73,7 +73,7 @@ resource "google_bigquery_table" "main" {
   labels              = each.value["labels"]
   schema              = each.value["schema"]
   clustering          = each.value["clustering"]
-  expiration_time     = each.value["expiration_time"]
+  expiration_time     = each.value["expiration_time"] != null ? each.value["expiration_time"] : 0
   project             = var.project_id
   deletion_protection = var.deletion_protection
 
@@ -81,7 +81,7 @@ resource "google_bigquery_table" "main" {
     for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
     content {
       type                     = time_partitioning.value["type"]
-      expiration_ms            = time_partitioning.value["expiration_ms"]
+      expiration_ms            = time_partitioning.value["expiration_ms"] != null ? time_partitioning.value["expiration_ms"] : 0
       field                    = time_partitioning.value["field"]
       require_partition_filter = time_partitioning.value["require_partition_filter"]
     }
@@ -136,7 +136,7 @@ resource "google_bigquery_table" "materialized_view" {
   description         = each.value["description"]
   labels              = each.value["labels"]
   clustering          = each.value["clustering"]
-  expiration_time     = each.value["expiration_time"]
+  expiration_time     = each.value["expiration_time"] != null ? each.value["expiration_time"] : 0
   project             = var.project_id
   deletion_protection = false
 
@@ -144,7 +144,7 @@ resource "google_bigquery_table" "materialized_view" {
     for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
     content {
       type                     = time_partitioning.value["type"]
-      expiration_ms            = time_partitioning.value["expiration_ms"]
+      expiration_ms            = time_partitioning.value["expiration_ms"] != null ? time_partitioning.value["expiration_ms"] : 0
       field                    = time_partitioning.value["field"]
       require_partition_filter = time_partitioning.value["require_partition_filter"]
     }
@@ -182,7 +182,7 @@ resource "google_bigquery_table" "external_table" {
   table_id            = each.key
   description         = each.value["description"]
   labels              = each.value["labels"]
-  expiration_time     = each.value["expiration_time"]
+  expiration_time     = each.value["expiration_time"] != null ? each.value["expiration_time"] : 0
   project             = var.project_id
   deletion_protection = var.deletion_protection
 
