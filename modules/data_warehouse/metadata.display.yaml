@@ -49,4 +49,3 @@ spec:
         text_generation_model_name:
           name: text_generation_model_name
           title: Text Generation Model Name
-
