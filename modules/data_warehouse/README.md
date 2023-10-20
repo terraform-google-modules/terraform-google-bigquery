@@ -15,7 +15,7 @@ The resources/services/activations/deletions that this module will create/trigge
 - Loads the Google Cloud Storage bucket with data from [TheLook eCommerce Public Dataset](https://console.cloud.google.com/marketplace/product/bigquery-public-data/thelook-ecommerce)
 - Provides SQL examples
 - Creates and inferences with a BigQuery ML model
-- Creates a remote model and generates text with a BigQuery ML remote model
+- Creates a remote model and uses Generative AI to generate text through a BigQuery ML remote model
 - Creates a Looker Studio report
 
 ### preDeploy
@@ -28,7 +28,7 @@ To deploy this blueprint you must have an active billing account and billing per
 ## Usage
 
 Functional examples are included in the
-[examples](./examples/) directory.
+[examples](../../examples/data_warehouse/README.md) directory.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
@@ -41,7 +41,7 @@ Functional examples are included in the
 | labels | A map of labels to apply to contained resources. | `map(string)` | <pre>{<br>  "data-warehouse": true<br>}</pre> | no |
 | project\_id | Google Cloud Project ID | `string` | n/a | yes |
 | region | Google Cloud Region | `string` | n/a | yes |
-| text_generation_model_name  | Name of the BigQuery ML remote model used for text generation | `string` | `text_generate_model` | yes |
+| text_generation_model_name  | Name of the BigQuery ML remote model that connects to the LLM used for text generation | `string` | `text_generate_model` | yes |
 
 ## Outputs
 
@@ -63,8 +63,8 @@ These sections describe requirements for using this module.
 
 The following dependencies must be available:
 
-- [Terraform][terraform] v0.13
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin v3.0
+- [Terraform](https://github.com/hashicorp/terraform) v0.13
+- [Terraform Provider for GCP](https://github.com/hashicorp/terraform-provider-google) plugin v3.0
 
 ### Service Account
 
@@ -78,8 +78,8 @@ the resources of this module:
 - Pub/Sub Admin: `roles/pubsub.admin`
 - Dataplex Admin: `roles/dataplex.admin`
 
-The [Project Factory module][project-factory-module] and the
-[IAM module][iam-module] may be used in combination to provision a
+The [Project Factory module](./.terraform/modules/project-services/README.md) and the
+[IAM module](https://github.com/terraform-google-modules/terraform-google-iam) may be used in combination to provision a
 service account with the necessary roles applied.
 
 ### APIs
@@ -89,12 +89,16 @@ resources of this module:
 
 - Vertex AI API: `aiplatform.googleapis.com`
 - BigQuery API: `bigquery.googleapis.com`
-- BigQuery Data Policy API: `bigquerydatapolicy.googleapis.com`
-- BigQuery Migration API: `bigquerymigration.googleapis.com`
-- BigQuery Storage API: `bigquerystorage.googleapis.com`
 - BigQuery Connection API: `bigqueryconnection.googleapis.com`
-- BigQuery Reservations API: `bigqueryreservation.googleapis.com`
+- BigQuery Data Policy API: `bigquerydatapolicy.googleapis.com`
 - BigQuery Data Transfer Service API: `bigquerydatatransfer.googleapis.com`
+- BigQuery Migration API: `bigquerymigration.googleapis.com`
+- BigQuery Reservations API: `bigqueryreservation.googleapis.com`
+- BigQuery Storage API: `bigquerystorage.googleapis.com`
+- Google Cloud APIs: `cloudapis.googleapis.com`
+- Cloud Build API: `cloudbuild.googleapis.com`
+- Compute Engine API: `compute.googleapis.com`
+- Infrastructure Manager API: `config.googleapis.com`
 - Data Catalog API: `datacatalog.googleapis.com`
 - Data Lineage API: `datalineage.googleapis.com`
 - Eventarc API: `eventarc.googleapis.com`
@@ -104,10 +108,10 @@ resources of this module:
 - Google Cloud Storage JSON API: `storage-api.googleapis.com`
 - Google Cloud Workflows API: `workflows.googleapis.com`
 
-The [Project Factory module][project-factory-module] can be used to
+The [Project Factory module](./.terraform/modules/project-services/README.md) can be used to
 provision a project with the necessary APIs enabled.
 
 
 ## Security Disclosures
 
-Please see our [security disclosure process](./SECURITY.md).
+Please see our [security disclosure process](../../SECURITY.md).

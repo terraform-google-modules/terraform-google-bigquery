@@ -25,7 +25,7 @@ spec:
       repo: https://github.com/terraform-google-modules/terraform-google-bigquery
       sourceType: git
       dir: /modules/data_warehouse
-    version: 6.1.0
+    version: 7.1.0
     actuationTool:
       flavor: Terraform
       version: '>= 0.13'
@@ -74,13 +74,17 @@ spec:
       description: Google Cloud Region
       varType: string
       required: true
+    - name: text_generation_model_name
+      description: Name of the BigQuery ML GenAI remote model that connects to the LLM used for text generation
+      varType: string
+      defaultValue: text_generate_model
     outputs:
     - name: bigquery_editor_url
       description: The URL to launch the BigQuery editor with the sample query procedure opened
     - name: ds_friendly_name
       description: Dataset name
     - name: lookerstudio_report_url
-      description: The URL to create a new Looker Studio report displays a sample dashboard for the taxi data analysis
+      description: The URL to create a new Looker Studio report displays a sample dashboard for the e-commerce data analysis
     - name: neos_tutorial_url
       description: The URL to launch the in-console tutorial for the EDW solution
     - name: raw_bucket
