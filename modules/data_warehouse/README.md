@@ -41,7 +41,7 @@ Functional examples are included in the
 | labels | A map of labels to apply to contained resources. | `map(string)` | <pre>{<br>  "data-warehouse": true<br>}</pre> | no |
 | project\_id | Google Cloud Project ID | `string` | n/a | yes |
 | region | Google Cloud Region | `string` | n/a | yes |
-| text_generation_model_name  | Name of the BigQuery ML remote model that connects to the LLM used for text generation | `string` | `text_generate_model` | yes |
+| text\_generation\_model\_name | Name of the BigQuery ML GenAI remote model that connects to the LLM used for text generation | `string` | `"text_generate_model"` | no |
 
 ## Outputs
 
