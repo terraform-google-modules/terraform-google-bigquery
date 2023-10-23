@@ -24,6 +24,12 @@ variable "region" {
   description = "Google Cloud Region"
 }
 
+variable "text_generation_model_name" {
+  type        = string
+  description = "Name of the BigQuery ML GenAI remote model that connects to the LLM used for text generation"
+  default     = "text_generate_model"
+
+}
 variable "labels" {
   type        = map(string)
   description = "A map of labels to apply to contained resources."
