@@ -28,75 +28,81 @@ spec:
     version: 7.0.0
     actuationTool:
       flavor: Terraform
-      version: '>= 0.13'
+      version: ">= 0.13"
     description: {}
   content:
     documentation:
-    - title: Create a Data Warehouse
-      url: https://cloud.google.com/architecture/big-data-analytics/data-warehouse
-    - title: Learn about BigQuery
-      url: https://cloud.google.com/bigquery/docs/introduction
+      - title: Create a Data Warehouse
+        url: https://cloud.google.com/architecture/big-data-analytics/data-warehouse
+      - title: Learn about BigQuery
+        url: https://cloud.google.com/bigquery/docs/introduction
     examples:
-    - name: basic_bq
-      location: examples/basic_bq
-    - name: basic_view
-      location: examples/basic_view
-    - name: data_warehouse
-      location: examples/data_warehouse
-    - name: multiple_tables
-      location: examples/multiple_tables
-    - name: scheduled_queries
-      location: examples/scheduled_queries
+      - name: basic_bq
+        location: examples/basic_bq
+      - name: basic_view
+        location: examples/basic_view
+      - name: data_warehouse
+        location: examples/data_warehouse
+      - name: multiple_tables
+        location: examples/multiple_tables
+      - name: scheduled_queries
+        location: examples/scheduled_queries
   interfaces:
     variables:
-    - name: deletion_protection
-      description: Whether or not to protect GCS resources from deletion when solution is modified or changed.
-      varType: string
-      defaultValue: true
-    - name: enable_apis
-      description: Whether or not to enable underlying apis in this solution.
-      varType: string
-      defaultValue: true
-    - name: force_destroy
-      description: Whether or not to protect BigQuery resources from deletion when solution is modified or changed.
-      varType: string
-      defaultValue: false
-    - name: labels
-      description: A map of labels to apply to contained resources.
-      varType: map(string)
-      defaultValue:
-        edw-bigquery: true
-    - name: project_id
-      description: Google Cloud Project ID
-      varType: string
-      required: true
-    - name: region
-      description: Google Cloud Region
-      varType: string
-      required: true
+      - name: deletion_protection
+        description: Whether or not to protect GCS resources from deletion when solution is modified or changed.
+        varType: string
+        defaultValue: true
+      - name: enable_apis
+        description: Whether or not to enable underlying apis in this solution.
+        varType: string
+        defaultValue: true
+      - name: force_destroy
+        description: Whether or not to protect BigQuery resources from deletion when solution is modified or changed.
+        varType: string
+        defaultValue: false
+      - name: labels
+        description: A map of labels to apply to contained resources.
+        varType: map(string)
+        defaultValue:
+          data-warehouse: true
+      - name: project_id
+        description: Google Cloud Project ID
+        varType: string
+        defaultValue: null
+        required: true
+      - name: region
+        description: Google Cloud Region
+        varType: string
+        defaultValue: null
+        required: true
+      - name: text_generation_model_name
+        description: Name of the BigQuery ML GenAI remote model that connects to the LLM used for text generation
+        varType: string
+        defaultValue: text_generate_model
     outputs:
-    - name: bigquery_editor_url
-      description: The URL to launch the BigQuery editor with the sample query procedure opened
-    - name: ds_friendly_name
-      description: Dataset name
-    - name: lookerstudio_report_url
-      description: The URL to create a new Looker Studio report displays a sample dashboard for the taxi data analysis
-    - name: neos_tutorial_url
-      description: The URL to launch the in-console tutorial for the EDW solution
-    - name: raw_bucket
-      description: Raw bucket name
+      - name: bigquery_editor_url
+        description: The URL to launch the BigQuery editor with the sample query procedure opened
+      - name: ds_friendly_name
+        description: Dataset name
+      - name: lookerstudio_report_url
+        description: The URL to create a new Looker Studio report displays a sample dashboard for the e-commerce data analysis
+      - name: neos_tutorial_url
+        description: The URL to launch the in-console tutorial for the EDW solution
+      - name: raw_bucket
+        description: Raw bucket name
   requirements:
     roles:
-    - level: Project
-      roles:
-      - roles/bigquery.admin
-      - roles/cloudkms.cryptoKeyEncrypterDecrypter
-      - roles/owner
+      - level: Project
+        roles:
+          - roles/bigquery.admin
+          - roles/cloudkms.cryptoKeyEncrypterDecrypter
+          - roles/owner
     services:
-    - cloudkms.googleapis.com
-    - cloudresourcemanager.googleapis.com
-    - bigquery.googleapis.com
-    - bigquerystorage.googleapis.com
-    - bigqueryconnection.googleapis.com
-    - serviceusage.googleapis.com
-    - iam.googleapis.com
+      - cloudkms.googleapis.com
+      - cloudresourcemanager.googleapis.com
+      - bigquery.googleapis.com
+      - bigquerystorage.googleapis.com
+      - bigqueryconnection.googleapis.com
+      - serviceusage.googleapis.com
+      - iam.googleapis.com
