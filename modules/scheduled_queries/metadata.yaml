@@ -28,45 +28,47 @@ spec:
     version: 7.0.0
     actuationTool:
       flavor: Terraform
-      version: '>= 0.13'
+      version: ">= 0.13"
     description: {}
   content:
     examples:
-    - name: basic_bq
-      location: examples/basic_bq
-    - name: basic_view
-      location: examples/basic_view
-    - name: data_warehouse
-      location: examples/data_warehouse
-    - name: multiple_tables
-      location: examples/multiple_tables
-    - name: scheduled_queries
-      location: examples/scheduled_queries
+      - name: basic_bq
+        location: examples/basic_bq
+      - name: basic_view
+        location: examples/basic_view
+      - name: data_warehouse
+        location: examples/data_warehouse
+      - name: multiple_tables
+        location: examples/multiple_tables
+      - name: scheduled_queries
+        location: examples/scheduled_queries
   interfaces:
     variables:
-    - name: project_id
-      description: The project where scheduled queries are created
-      varType: string
-      required: true
-    - name: queries
-      description: Data transfer configuration for creating scheduled queries
-      varType: list(any)
-      required: true
+      - name: project_id
+        description: The project where scheduled queries are created
+        varType: string
+        defaultValue: null
+        required: true
+      - name: queries
+        description: Data transfer configuration for creating scheduled queries
+        varType: list(any)
+        defaultValue: null
+        required: true
     outputs:
-    - name: query_names
-      description: The resource names of the transfer config
+      - name: query_names
+        description: The resource names of the transfer config
   requirements:
     roles:
-    - level: Project
-      roles:
-      - roles/bigquery.admin
-      - roles/cloudkms.cryptoKeyEncrypterDecrypter
-      - roles/owner
+      - level: Project
+        roles:
+          - roles/bigquery.admin
+          - roles/cloudkms.cryptoKeyEncrypterDecrypter
+          - roles/owner
     services:
-    - cloudkms.googleapis.com
-    - cloudresourcemanager.googleapis.com
-    - bigquery.googleapis.com
-    - bigquerystorage.googleapis.com
-    - bigqueryconnection.googleapis.com
-    - serviceusage.googleapis.com
-    - iam.googleapis.com
+      - cloudkms.googleapis.com
+      - cloudresourcemanager.googleapis.com
+      - bigquery.googleapis.com
+      - bigquerystorage.googleapis.com
+      - bigqueryconnection.googleapis.com
+      - serviceusage.googleapis.com
+      - iam.googleapis.com

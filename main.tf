@@ -137,6 +137,7 @@ resource "google_bigquery_table" "materialized_view" {
   labels              = each.value["labels"]
   clustering          = each.value["clustering"]
   expiration_time     = each.value["expiration_time"] != null ? each.value["expiration_time"] : 0
+  max_staleness       = each.value["max_staleness"]
   project             = var.project_id
   deletion_protection = false
 
@@ -183,6 +184,7 @@ resource "google_bigquery_table" "external_table" {
   description         = each.value["description"]
   labels              = each.value["labels"]
   expiration_time     = each.value["expiration_time"] != null ? each.value["expiration_time"] : 0
+  max_staleness       = each.value["max_staleness"]
   project             = var.project_id
   deletion_protection = var.deletion_protection
 
