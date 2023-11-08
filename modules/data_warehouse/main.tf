@@ -103,16 +103,16 @@ resource "google_storage_bucket" "provisioning_bucket" {
   labels = var.labels
 }
 
-// Create Eventarc Trigger
-# # Create a Pub/Sub topic.
-resource "google_pubsub_topic" "topic" {
-  name    = "provisioning-topic"
-  project = module.project-services.project_id
+# // Create Eventarc Trigger
+# # # Create a Pub/Sub topic.
+# resource "google_pubsub_topic" "topic" {
+#   name    = "provisioning-topic"
+#   project = module.project-services.project_id
 
-  depends_on = [time_sleep.wait_after_apis]
+#   depends_on = [time_sleep.wait_after_apis]
 
-  labels = var.labels
-}
+#   labels = var.labels
+# }
 
 resource "google_pubsub_topic_iam_binding" "binding" {
   project = module.project-services.project_id
@@ -139,50 +139,50 @@ resource "google_storage_notification" "notification" {
   ]
 }
 
-# # Create the Eventarc trigger
-resource "google_eventarc_trigger" "trigger_pubsub_tf" {
-  project  = module.project-services.project_id
-  name     = "trigger-pubsub-tf"
-  location = var.region
-  matching_criteria {
-    attribute = "type"
-    value     = "google.cloud.pubsub.topic.v1.messagePublished"
+# # # Create the Eventarc trigger
+# resource "google_eventarc_trigger" "trigger_pubsub_tf" {
+#   project  = module.project-services.project_id
+#   name     = "trigger-pubsub-tf"
+#   location = var.region
+#   matching_criteria {
+#     attribute = "type"
+#     value     = "google.cloud.pubsub.topic.v1.messagePublished"
 
-  }
-  destination {
-    workflow = google_workflows_workflow.workflow.id
-  }
+#   }
+#   destination {
+#     workflow = google_workflows_workflow.workflow.id
+#   }
 
-  transport {
-    pubsub {
-      topic = google_pubsub_topic.topic.id
-    }
-  }
-  service_account = google_service_account.eventarc_service_account.email
+#   transport {
+#     pubsub {
+#       topic = google_pubsub_topic.topic.id
+#     }
+#   }
+#   service_account = google_service_account.eventarc_service_account.email
 
-  labels = var.labels
+#   labels = var.labels
 
-  depends_on = [
-    google_project_iam_member.eventarc_service_account_invoke_role,
-  ]
-}
+#   depends_on = [
+#     google_project_iam_member.eventarc_service_account_invoke_role,
+#   ]
+# }
 
-# Set up Eventarc service account for the Trigger to execute as
-# # Set up the Eventarc service account
-resource "google_service_account" "eventarc_service_account" {
-  project      = module.project-services.project_id
-  account_id   = "eventarc-sa-${random_id.id.hex}"
-  display_name = "Service Account for Cloud Eventarc"
+# # Set up Eventarc service account for the Trigger to execute as
+# # # Set up the Eventarc service account
+# resource "google_service_account" "eventarc_service_account" {
+#   project      = module.project-services.project_id
+#   account_id   = "eventarc-sa-${random_id.id.hex}"
+#   display_name = "Service Account for Cloud Eventarc"
 
-  depends_on = [time_sleep.wait_after_apis]
-}
+#   depends_on = [time_sleep.wait_after_apis]
+# }
 
-# # Grant the Eventarc service account Workflow Invoker Access
-resource "google_project_iam_member" "eventarc_service_account_invoke_role" {
-  project = module.project-services.project_id
-  role    = "roles/workflows.invoker"
-  member  = "serviceAccount:${google_service_account.eventarc_service_account.email}"
-}
+# # # Grant the Eventarc service account Workflow Invoker Access
+# resource "google_project_iam_member" "eventarc_service_account_invoke_role" {
+#   project = module.project-services.project_id
+#   role    = "roles/workflows.invoker"
+#   member  = "serviceAccount:${google_service_account.eventarc_service_account.email}"
+# }
 
 // Sleep for 120 seconds to drop start file
 resource "time_sleep" "wait_to_startfile" {
@@ -206,9 +206,9 @@ resource "google_storage_bucket_object" "startfile" {
   ]
 }
 
-resource "time_sleep" "wait_to_execute_workflow" {
-  depends_on = [
-    google_storage_bucket_object.startfile
-  ]
+resource "time_sleep" "wait_after_workflow_execution" {
   create_duration = "120s"
+  depends_on = [
+    data.http.call_workflows_setup,
+  ]
 }

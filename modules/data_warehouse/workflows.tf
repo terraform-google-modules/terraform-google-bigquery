@@ -57,3 +57,18 @@ resource "google_workflows_workflow" "workflow" {
     google_project_iam_member.workflow_service_account_roles,
   ]
 }
+
+data "google_client_config" "current" {
+}
+
+## execute the setup workflow
+data "http" "call_workflows_setup" {
+  url    = "https://workflowexecutions.googleapis.com/v1/projects/${module.project-services.project_id}/locations/${var.region}/workflows/${google_workflows_workflow.workflow.name}/executions"
+  method = "POST"
+  request_headers = {
+    Accept = "application/json"
+  Authorization = "Bearer ${data.google_client_config.current.access_token}" }
+  depends_on = [
+    google_storage_bucket_object.startfile
+  ]
+}
