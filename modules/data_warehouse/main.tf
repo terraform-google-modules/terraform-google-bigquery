@@ -37,8 +37,8 @@ module "project-services" {
     "config.googleapis.com",
     "datacatalog.googleapis.com",
     "datalineage.googleapis.com",
-    "eventarc.googleapis.com",
-    "pubsub.googleapis.com",
+    # "eventarc.googleapis.com",
+    # "pubsub.googleapis.com",
     "serviceusage.googleapis.com",
     "storage.googleapis.com",
     "storage-api.googleapis.com",
@@ -46,12 +46,12 @@ module "project-services" {
   ]
 
   activate_api_identities = [
-    {
-      api = "pubsub.googleapis.com"
-      roles = [
-        "roles/iam.serviceAccountTokenCreator",
-      ]
-    },
+    # {
+      # api = "pubsub.googleapis.com"
+      # roles = [
+      #   "roles/iam.serviceAccountTokenCreator",
+    #   ]
+    # },
     {
       api = "workflows.googleapis.com"
       roles = [
@@ -114,12 +114,12 @@ resource "google_storage_bucket" "provisioning_bucket" {
 #   labels = var.labels
 # }
 
-resource "google_pubsub_topic_iam_binding" "binding" {
-  project = module.project-services.project_id
-  topic   = google_pubsub_topic.topic.id
-  role    = "roles/pubsub.publisher"
-  members = ["serviceAccount:${data.google_storage_project_service_account.gcs_account.email_address}"]
-}
+# resource "google_pubsub_topic_iam_binding" "binding" {
+#   project = module.project-services.project_id
+#   topic   = google_pubsub_topic.topic.id
+#   role    = "roles/pubsub.publisher"
+#   members = ["serviceAccount:${data.google_storage_project_service_account.gcs_account.email_address}"]
+# }
 
 # # Get the GCS service account to trigger the pub/sub notification
 data "google_storage_project_service_account" "gcs_account" {
@@ -128,16 +128,16 @@ data "google_storage_project_service_account" "gcs_account" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
-# # Create the Storage trigger
-resource "google_storage_notification" "notification" {
-  provider       = google
-  bucket         = google_storage_bucket.provisioning_bucket.name
-  payload_format = "JSON_API_V1"
-  topic          = google_pubsub_topic.topic.id
-  depends_on = [
-    google_pubsub_topic_iam_binding.binding,
-  ]
-}
+# # # Create the Storage trigger
+# resource "google_storage_notification" "notification" {
+#   provider       = google
+#   bucket         = google_storage_bucket.provisioning_bucket.name
+#   payload_format = "JSON_API_V1"
+#   topic          = google_pubsub_topic.topic.id
+#   depends_on = [
+#     google_pubsub_topic_iam_binding.binding,
+#   ]
+# }
 
 # # # Create the Eventarc trigger
 # resource "google_eventarc_trigger" "trigger_pubsub_tf" {
@@ -188,7 +188,7 @@ resource "google_storage_notification" "notification" {
 resource "time_sleep" "wait_to_startfile" {
   depends_on = [
     google_storage_notification.notification,
-    google_eventarc_trigger.trigger_pubsub_tf,
+    # google_eventarc_trigger.trigger_pubsub_tf,
     google_workflows_workflow.workflow
   ]
 
