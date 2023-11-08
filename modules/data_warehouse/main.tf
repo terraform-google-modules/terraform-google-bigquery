@@ -205,3 +205,10 @@ resource "google_storage_bucket_object" "startfile" {
     time_sleep.wait_to_startfile
   ]
 }
+
+resource "time_sleep" "wait_to_execute_workflow" {
+  depends_on = [
+    google_storage_bucket_object.startfile
+  ]
+  create_duration = "120s"
+}
