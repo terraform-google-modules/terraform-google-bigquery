@@ -57,6 +57,9 @@ spec:
         external_tables:
           name: external_tables
           title: External Tables
+        iam_members:
+          name: iam_members
+          title: Iam Members
         location:
           name: location
           title: Location
