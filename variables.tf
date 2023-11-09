@@ -197,7 +197,6 @@ variable "external_tables" {
   }))
 }
 
-
 variable "routines" {
   description = "A list of objects which include routine_id, routine_type, routine_language, definition_body, return_type, routine_description and arguments."
   default     = []
@@ -215,4 +214,13 @@ variable "routines" {
       mode          = string,
     })),
   }))
+}
+
+variable "iam_members" {
+  description = "The list of IAM members to grant permissions on the dataset."
+  type = list(object({
+    role   = string
+    member = string
+  }))
+  default = []
 }

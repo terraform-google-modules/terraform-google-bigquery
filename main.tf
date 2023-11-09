@@ -253,3 +253,12 @@ resource "google_bigquery_routine" "routine" {
 
   return_type = each.value["return_type"]
 }
+
+resource "google_bigquery_dataset_iam_member" "members" {
+  for_each = {
+    for m in var.iam_members : "${m.role} ${m.member}" => m
+  }
+  dataset_id = google_bigquery_dataset.main.dataset_id
+  role   = each.value.role
+  member = each.value.member
+}
