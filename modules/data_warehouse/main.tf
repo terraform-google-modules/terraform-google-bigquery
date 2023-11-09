@@ -53,12 +53,13 @@ module "project-services" {
   ]
 }
 
+# Wait after APIs are enabled to give time for them to spin up
 resource "time_sleep" "wait_after_apis" {
   create_duration = "90s"
   depends_on      = [module.project-services]
 }
 
-## Create random ID to be used for deployment uniqueness
+# Create random ID to be used for deployment uniqueness
 resource "random_id" "id" {
   byte_length = 4
 }
@@ -79,47 +80,36 @@ resource "google_storage_bucket" "raw_bucket" {
   labels = var.labels
 }
 
-# # Set up the provisioning storage bucket
-resource "google_storage_bucket" "provisioning_bucket" {
-  name                        = "ds-edw-provisioner-${random_id.id.hex}"
-  project                     = module.project-services.project_id
-  location                    = var.region
-  uniform_bucket_level_access = true
-  force_destroy               = var.force_destroy
+# # # Set up the provisioning storage bucket
+# resource "google_storage_bucket" "provisioning_bucket" {
+#   name                        = "ds-edw-provisioner-${random_id.id.hex}"
+#   project                     = module.project-services.project_id
+#   location                    = var.region
+#   uniform_bucket_level_access = true
+#   force_destroy               = var.force_destroy
 
-  public_access_prevention = "enforced"
+#   public_access_prevention = "enforced"
 
-  depends_on = [time_sleep.wait_after_apis]
+#   depends_on = [time_sleep.wait_after_apis]
 
-  labels = var.labels
-}
+#   labels = var.labels
+# }
 
-# # Get the GCS service account to trigger the pub/sub notification
-data "google_storage_project_service_account" "gcs_account" {
-  project = module.project-services.project_id
+# # # Get the GCS service account to trigger the pub/sub notification
+# data "google_storage_project_service_account" "gcs_account" {
+#   project = module.project-services.project_id
 
-  depends_on = [time_sleep.wait_after_apis]
-}
+#   depends_on = [time_sleep.wait_after_apis]
+# }
 
-# Sleep for 120 seconds to drop start file
-resource "time_sleep" "wait_to_startfile" {
-  depends_on = [
-    google_workflows_workflow.workflow
-  ]
+# # Sleep for 120 seconds to drop start file
+# resource "time_sleep" "wait_to_startfile" {
+#   depends_on = [
+#     google_workflows_workflow.workflow
+#   ]
 
-  create_duration = "120s"
-}
-
-# Drop start file for workflow to execute
-resource "google_storage_bucket_object" "startfile" {
-  bucket = google_storage_bucket.provisioning_bucket.name
-  name   = "startfile"
-  source = "${path.module}/src/startfile"
-
-  depends_on = [
-    time_sleep.wait_to_startfile
-  ]
-}
+#   create_duration = "120s"
+# }
 
 # Sleep for 120 seconds to allow the workflow to execute and finish setup
 resource "time_sleep" "wait_after_workflow_execution" {
