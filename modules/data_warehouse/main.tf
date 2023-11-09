@@ -187,7 +187,7 @@ data "google_storage_project_service_account" "gcs_account" {
 // Sleep for 120 seconds to drop start file
 resource "time_sleep" "wait_to_startfile" {
   depends_on = [
-    google_storage_notification.notification,
+    # google_storage_notification.notification,
     # google_eventarc_trigger.trigger_pubsub_tf,
     google_workflows_workflow.workflow
   ]
