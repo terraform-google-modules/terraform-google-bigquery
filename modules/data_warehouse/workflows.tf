@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-# Set up the Workflows service account
+# Set up the Workflow
+# # Create the Workflows service account
 resource "google_service_account" "workflow_service_account" {
   project      = module.project-services.project_id
   account_id   = "cloud-workflow-sa-${random_id.id.hex}"
@@ -61,7 +62,7 @@ resource "google_workflows_workflow" "workflow" {
 data "google_client_config" "current" {
 }
 
-## execute the setup workflow
+# # Trigger the execution of the setup workflow
 data "http" "call_workflows_setup" {
   url    = "https://workflowexecutions.googleapis.com/v1/projects/${module.project-services.project_id}/locations/${var.region}/workflows/${google_workflows_workflow.workflow.name}/executions"
   method = "POST"

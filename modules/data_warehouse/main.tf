@@ -101,7 +101,7 @@ data "google_storage_project_service_account" "gcs_account" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
-// Sleep for 120 seconds to drop start file
+# Sleep for 120 seconds to drop start file
 resource "time_sleep" "wait_to_startfile" {
   depends_on = [
     google_workflows_workflow.workflow
@@ -110,7 +110,7 @@ resource "time_sleep" "wait_to_startfile" {
   create_duration = "120s"
 }
 
-// Drop start file for workflow to execute
+# Drop start file for workflow to execute
 resource "google_storage_bucket_object" "startfile" {
   bucket = google_storage_bucket.provisioning_bucket.name
   name   = "startfile"
@@ -121,6 +121,7 @@ resource "google_storage_bucket_object" "startfile" {
   ]
 }
 
+# Sleep for 120 seconds to allow the workflow to execute and finish setup
 resource "time_sleep" "wait_after_workflow_execution" {
   create_duration = "120s"
   depends_on = [

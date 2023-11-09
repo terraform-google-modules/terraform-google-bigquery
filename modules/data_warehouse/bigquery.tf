@@ -70,6 +70,7 @@ resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
   member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}"
 }
 
+# Create data tables in BigQuery
 # # Create a Biglake table for events with metadata caching
 resource "google_bigquery_table" "tbl_edw_events" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
@@ -199,7 +200,7 @@ resource "google_bigquery_routine" "sp_provision_lookup_tables" {
   )
 }
 
-# Add Looker Studio Data Report Procedure
+# # Add Looker Studio Data Report Procedure
 resource "google_bigquery_routine" "sproc_sp_demo_lookerstudio_report" {
   project      = module.project-services.project_id
   dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
@@ -239,7 +240,7 @@ resource "google_bigquery_routine" "sp_sample_queries" {
 }
 
 
-# Add Bigquery ML Model for clustering
+# # Add Bigquery ML Model for clustering
 resource "google_bigquery_routine" "sp_bigqueryml_model" {
   project      = module.project-services.project_id
   dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
@@ -256,7 +257,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_model" {
   ]
 }
 
-# Create Bigquery ML Model for using text generation
+# # Create Bigquery ML Model for using text generation
 resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
   project      = module.project-services.project_id
   dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
@@ -273,7 +274,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
   )
 }
 
-# Query Bigquery ML Model for describing customer clusters
+# # Query Bigquery ML Model for describing customer clusters
 resource "google_bigquery_routine" "sp_bigqueryml_generate_describe" {
   project      = module.project-services.project_id
   dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
