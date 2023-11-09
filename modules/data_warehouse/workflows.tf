@@ -73,7 +73,7 @@ data "http" "call_workflows_setup" {
     google_storage_bucket.raw_bucket,
     google_bigquery_routine.sp_bigqueryml_generate_create,
     google_bigquery_routine.sp_bigqueryml_model,
-    google_bigquery_routine.sp_lookerstudio_report,
+    google_bigquery_routine.sproc_sp_demo_lookerstudio_report,
     google_bigquery_routine.sp_provision_lookup_tables
   ]
 }
