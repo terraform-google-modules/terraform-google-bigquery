@@ -28,49 +28,51 @@ spec:
     version: 7.0.0
     actuationTool:
       flavor: Terraform
-      version: '>= 0.13'
+      version: ">= 0.13"
     description: {}
   content:
     examples:
-    - name: basic_bq
-      location: examples/basic_bq
-    - name: basic_view
-      location: examples/basic_view
-    - name: data_warehouse
-      location: examples/data_warehouse
-    - name: multiple_tables
-      location: examples/multiple_tables
-    - name: scheduled_queries
-      location: examples/scheduled_queries
+      - name: basic_bq
+        location: examples/basic_bq
+      - name: basic_view
+        location: examples/basic_view
+      - name: data_warehouse
+        location: examples/data_warehouse
+      - name: multiple_tables
+        location: examples/multiple_tables
+      - name: scheduled_queries
+        location: examples/scheduled_queries
   interfaces:
     variables:
-    - name: add_udfs
-      description: Whether or not this module should be enabled.
-      varType: string
-      defaultValue: false
-    - name: dataset_id
-      description: Dataset id
-      varType: string
-      required: true
-    - name: project_id
-      description: Project ID that contains the dataset
-      varType: string
-      required: true
+      - name: add_udfs
+        description: Whether or not this module should be enabled.
+        varType: string
+        defaultValue: false
+      - name: dataset_id
+        description: Dataset id
+        varType: string
+        defaultValue: null
+        required: true
+      - name: project_id
+        description: Project ID that contains the dataset
+        varType: string
+        defaultValue: null
+        required: true
     outputs:
-    - name: added_udfs
-      description: List of UDFs utility functions added.
+      - name: added_udfs
+        description: List of UDFs utility functions added.
   requirements:
     roles:
-    - level: Project
-      roles:
-      - roles/bigquery.admin
-      - roles/cloudkms.cryptoKeyEncrypterDecrypter
-      - roles/owner
+      - level: Project
+        roles:
+          - roles/bigquery.admin
+          - roles/cloudkms.cryptoKeyEncrypterDecrypter
+          - roles/owner
     services:
-    - cloudkms.googleapis.com
-    - cloudresourcemanager.googleapis.com
-    - bigquery.googleapis.com
-    - bigquerystorage.googleapis.com
-    - bigqueryconnection.googleapis.com
-    - serviceusage.googleapis.com
-    - iam.googleapis.com
+      - cloudkms.googleapis.com
+      - cloudresourcemanager.googleapis.com
+      - bigquery.googleapis.com
+      - bigquerystorage.googleapis.com
+      - bigqueryconnection.googleapis.com
+      - serviceusage.googleapis.com
+      - iam.googleapis.com

@@ -159,6 +159,7 @@ variable "materialized_views" {
       }),
     }),
     expiration_time = string,
+    max_staleness   = optional(string),
     labels          = map(string),
   }))
 }
@@ -193,6 +194,7 @@ variable "external_tables" {
       source_uri_prefix = string,
     }),
     expiration_time = string,
+    max_staleness   = optional(string),
     labels          = map(string),
   }))
 }
