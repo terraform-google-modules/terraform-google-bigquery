@@ -27,7 +27,7 @@ spec:
     version: 7.0.0
     actuationTool:
       flavor: Terraform
-      version: ">= 0.13"
+      version: ">= 1.3"
     description: {}
   content:
     subBlueprints:
@@ -101,7 +101,7 @@ spec:
               compression           = string,
               ignore_unknown_values = bool,
               max_bad_records       = number,
-              schema                = string,
+              schema                = optional(string),
               source_format         = string,
               source_uris           = list(string),
               csv_options = object({
