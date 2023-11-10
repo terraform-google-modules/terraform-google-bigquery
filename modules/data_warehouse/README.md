@@ -74,8 +74,6 @@ the resources of this module:
 - Storage Admin: `roles/storage.admin`
 - BigQuery Admin: `roles/bigquery.admin`
 - Workflows Admin: `roles/workflows.admin`
-- Eventarc Admin: `roles/eventarc.admin`
-- Pub/Sub Admin: `roles/pubsub.admin`
 - Dataplex Admin: `roles/dataplex.admin`
 
 The [Project Factory module](./.terraform/modules/project-services/README.md) and the
@@ -101,8 +99,6 @@ resources of this module:
 - Infrastructure Manager API: `config.googleapis.com`
 - Data Catalog API: `datacatalog.googleapis.com`
 - Data Lineage API: `datalineage.googleapis.com`
-- Eventarc API: `eventarc.googleapis.com`
-- Google Cloud Pub/Sub API: `pubsub.googleapis.com`
 - Service Usage API: `serviceusage.googleapis.com`
 - Google Cloud Storage API: `storage.googleapis.com`
 - Google Cloud Storage JSON API: `storage-api.googleapis.com`

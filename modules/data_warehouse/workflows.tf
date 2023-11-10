@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-# Set up the Workflows service account
+# Set up the Workflow
+# # Create the Workflows service account
 resource "google_service_account" "workflow_service_account" {
   project      = module.project-services.project_id
   account_id   = "cloud-workflow-sa-${random_id.id.hex}"
@@ -55,5 +56,24 @@ resource "google_workflows_workflow" "workflow" {
 
   depends_on = [
     google_project_iam_member.workflow_service_account_roles,
+  ]
+}
+
+data "google_client_config" "current" {
+}
+
+# # Trigger the execution of the setup workflow
+data "http" "call_workflows_setup" {
+  url    = "https://workflowexecutions.googleapis.com/v1/projects/${module.project-services.project_id}/locations/${var.region}/workflows/${google_workflows_workflow.workflow.name}/executions"
+  method = "POST"
+  request_headers = {
+    Accept = "application/json"
+  Authorization = "Bearer ${data.google_client_config.current.access_token}" }
+  depends_on = [
+    google_storage_bucket.raw_bucket,
+    google_bigquery_routine.sp_bigqueryml_generate_create,
+    google_bigquery_routine.sp_bigqueryml_model,
+    google_bigquery_routine.sproc_sp_demo_lookerstudio_report,
+    google_bigquery_routine.sp_provision_lookup_tables
   ]
 }
