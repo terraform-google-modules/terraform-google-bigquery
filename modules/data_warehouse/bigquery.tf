@@ -381,7 +381,7 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
 
   depends_on = [
     google_project_iam_member.dts_roles,
-    google_bigquery_dataset.ds_edw,
     google_service_account_iam_binding.dts_token_creator,
+    time_sleep.wait_after_workflow_execution
   ]
 }
