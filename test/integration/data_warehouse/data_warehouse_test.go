@@ -27,7 +27,6 @@ import (
 )
 
 // TODO: Remove because Eventarc is no longer in use
-// TODO: Remove because Eventarc is no longer in use
 // Retry if these errors are encountered.
 var retryErrors = map[string]string{
 	// IAM for Eventarc service agent is eventually consistent
@@ -85,6 +84,7 @@ func TestDataWarehouse(t *testing.T) {
 			assert.Greater(t, count, 0, fmt.Sprintf("Table `%s` is empty.", table))
 		}
 
+		// Assert BigQuery connection to Vertex GenAI was successfully created and works as expected
 		llm_query_template := "SELECT COUNT(*) AS count_rows FROM ML.GENERATE_TEXT(MODEL `%[1]s.thelook.text_generate_model`, (with clusters AS(SELECT CONCAT('cluster', CAST(centroid_id as STRING)) as centroid, avg_spend as average_spend, count_orders as count_of_orders, days_since_order FROM (SELECT centroid_id, feature, ROUND(numerical_value, 2) as value FROM ML.CENTROIDS(MODEL `%[1]s.thelook.customer_segment_clustering`)) PIVOT (SUM(value) FOR feature IN ('avg_spend', 'count_orders', 'days_since_order')) ORDER BY centroid_id) SELECT 'Pretend you are a creative strategist, given the following clusters come up with creative brand persona and title labels for each of these clusters, and explain step by step; what would be the next marketing step for these clusters' || ' ' || clusters.centroid || ', Average Spend $' || clusters.average_spend || ', Count of orders per person ' || clusters.count_of_orders || ', Days since last order ' || clusters.days_since_order AS prompt FROM clusters), STRUCT(800 AS max_output_tokens, 0.8 AS temperature, 40 AS top_k, 0.8 AS top_p, TRUE AS flatten_json_output));"
 		query := fmt.Sprintf(llm_query_template, projectID)
 		llm_op := bq.Runf(t, "--project_id=%[1]s query --nouse_legacy_sql %[2]s", projectID, query)
