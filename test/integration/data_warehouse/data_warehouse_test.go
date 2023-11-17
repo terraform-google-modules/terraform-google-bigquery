@@ -74,10 +74,13 @@ func TestDataWarehouse(t *testing.T) {
 		}
 
 		query_template := "SELECT COUNT(*) AS count_rows FROM `%[1]s.%[2]s`;"
-
+		test_query := func (){
+			bq.Runf(t, " --headless=true show `%s.thelook.distribution_centers", projectID)
+		}
+		test_query()
 		for _, table := range tables {
 			query := fmt.Sprintf(query_template, projectID, table)
-			op := bq.Runf(t, "--project_id=%[1]s query --nouse_legacy_sql %[2]s", projectID, query)
+			op := bq.Runf(t, "--project_id=%[1]s --headless=true query --nouse_legacy_sql %[2]s", projectID, query)
 
 			count := op.Get("count_rows").Int()
 			assert.Greater(t, count, 0, fmt.Sprintf("Table `%s` is empty.", table))
