@@ -42,7 +42,6 @@ func TestDataWarehouse(t *testing.T) {
 		projectID := dwh.GetTFSetupStringOutput("project_id")
 		bucket := dwh.GetStringOutput("raw_bucket")
 		workflow := "initial-workflow"
-		datasetID := "thelook"
 
 		// Assert that the bucket is in asia-southeast1
 		bucketOP := gcloud.Runf(t, "storage buckets describe gs://%s --project %s", bucket, projectID)
@@ -54,30 +53,30 @@ func TestDataWarehouse(t *testing.T) {
 			state := workflowState[0].Get("state").String()
 			assert.NotEqual(t, state, "FAILED")
 			if state == "SUCCEEDED" {
-				return true, nil
-			} else {
 				return false, nil
+			} else {
+				return true, nil
 			}
 		}
 		utils.Poll(t, verifyWorkflows, 8, 30*time.Second)
 
 		// Assert BigQuery tables & views are not empty
 		tables := []string{
-			"distribution_centers",
-			"events",
-			"inventory_items",
-			"order_items",
-			"orders",
-			"products",
-			"users",
-			"lookerstudio_report_distribution_centers",
-			"lookerstudio_report_profit",
+			"thelook.distribution_centers",
+			"thelook.events",
+			"thelook.inventory_items",
+			"thelook.order_items",
+			"thelook.orders",
+			"thelook.products",
+			"thelook.users",
+			"thelook.lookerstudio_report_distribution_centers",
+			"thelook.lookerstudio_report_profit",
 		}
 
-		query_template := "SELECT COUNT(*) AS count_rows FROM `%[1]s.%[2]s.%[3]s`;"
+		query_template := "SELECT COUNT(*) AS count_rows FROM `%[1]s.%[2]s`;"
 
 		for _, table := range tables {
-			query := fmt.Sprintf(query_template, projectID, datasetID, table)
+			query := fmt.Sprintf(query_template, projectID, table)
 			op := bq.Runf(t, "--project_id=%[1]s query --nouse_legacy_sql %[2]s", projectID, query)
 
 			count := op.Get("count_rows").Int()
