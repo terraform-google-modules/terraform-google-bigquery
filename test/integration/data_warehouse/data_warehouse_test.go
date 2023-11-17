@@ -73,10 +73,12 @@ func TestDataWarehouse(t *testing.T) {
 			"thelook.lookerstudio_report_profit",
 		}
 
-		query_template := "SELECT COUNT(*) AS count_rows FROM `%[1]s.%[2]s`;"
 		test_query := func (){
-			bq.Runf(t, " --headless=true show `%s.thelook.distribution_centers", projectID)
+			bq.Runf(t, "--headless=true show %s.thelook.distribution_centers", projectID)
 		}
+
+		query_template := "SELECT COUNT(*) AS count_rows FROM `%[1]s.%[2]s`;"
+
 		test_query()
 		for _, table := range tables {
 			query := fmt.Sprintf(query_template, projectID, table)
