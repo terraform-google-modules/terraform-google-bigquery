@@ -27,6 +27,7 @@ import (
 )
 
 // TODO: Remove because Eventarc is no longer in use
+// TODO: Remove because Eventarc is no longer in use
 // Retry if these errors are encountered.
 var retryErrors = map[string]string{
 	// IAM for Eventarc service agent is eventually consistent
