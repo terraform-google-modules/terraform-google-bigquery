@@ -74,7 +74,7 @@ func TestDataWarehouse(t *testing.T) {
 		}
 
 		test_query := func (){
-			bq.Runf(t, "--headless=true show %s.thelook.distribution_centers", projectID)
+			bq.Runf(t, "--project_id= %s --headless=true show %s.thelook.distribution_centers", projectID)
 		}
 
 		query_template := "SELECT COUNT(*) AS count_rows FROM `%[1]s.%[2]s`;"
