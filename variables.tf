@@ -103,22 +103,22 @@ variable "tables" {
     table_name  = optional(string),
     schema      = string,
     clustering  = list(string),
-    time_partitioning = object({
+    time_partitioning = optional(object({
       expiration_ms            = string,
       field                    = string,
       type                     = string,
       require_partition_filter = bool,
-    }),
-    range_partitioning = object({
+    })),
+    range_partitioning = optional(object({
       field = string,
       range = object({
         start    = string,
         end      = string,
         interval = string,
       }),
-    }),
-    expiration_time = string,
-    labels          = map(string),
+    })),
+    expiration_time = optional(string),
+    labels          = optional(map(string)),
   }))
 }
 
