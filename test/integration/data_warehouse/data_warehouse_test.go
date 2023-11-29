@@ -16,6 +16,8 @@ package multiple_buckets
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"testing"
 	"time"
 
@@ -59,6 +61,16 @@ func TestDataWarehouse(t *testing.T) {
 			}
 		}
 		utils.Poll(t, verifyWorkflows, 8, 30*time.Second)
+
+		homeDir, err := os.UserHomeDir()
+        if err != nil {
+            log.Fatal(err)
+        }
+        file, err := os.Create(homeDir + "/.bigqueryrc")
+        if err != nil {
+            log.Fatal(err)
+        }
+        file.Close()
 
 		// Assert BigQuery tables & views are not empty
 		tables := []string{
