@@ -92,15 +92,17 @@ func TestDataWarehouse(t *testing.T) {
 			for _, table := range tables {
 				query := fmt.Sprintf(query_template, projectID, table)
 				op := bq.Runf(t, "--project_id=%[1]s --headless=true query --nouse_legacy_sql %[2]s", projectID, query)
+				fmt.Print(op)
 
-				count := op.Get("count_rows").Int()
+				count := op.Get("0.count_rows").Int()
+				fmt.Printf("Table has %d rows \n", count)
 				count_kind := reflect.TypeOf(count).Kind()
-				fmt.Printf("count has type %s", count_kind)
-				test_result := assert.Greater(count, int64(0), fmt.Sprintf("Some kind of error occurred while running the count query for the %s table", table))
+				fmt.Printf("count has type %s \n", count_kind)
+				test_result := assert.Greater(count, int64(0))
 				if test_result == true {
 					fmt.Printf("Table `%s` has %d rows. Test passed.", table, count)
 				} else {
-					fmt.Printf("Table `%s` has no data. Test failed.", table)
+					fmt.Printf("Some kind of error occurred while running the count query for the %s table. We think it has %d rows. Test failed.", table, count)
 				}
 			}
 		}
@@ -114,14 +116,14 @@ func TestDataWarehouse(t *testing.T) {
 			query := fmt.Sprintf(llm_query_template, projectID)
 			llm_op := bq.Runf(t, "--project_id=%[1]s --headless=true query --nouse_legacy_sql %[2]s", projectID, query)
 
-			llm_count := llm_op.Get("count_rows").Int()
+			llm_count := llm_op.Get("0.count_rows").Int()
 			count_llm_kind := reflect.TypeOf(llm_count).Kind()
 			fmt.Printf("llm_count has type %s", count_llm_kind)
 			llm_test_result := assert.Greaterf(llm_count, int64(0), "Some kind of error occurred while running the count query for the LLM table")
 			if llm_test_result == true {
-					fmt.Printf("LLM query returned %d rows. Test passed", llm_count)
+					fmt.Printf("LLM table has %d rows. Test passed.", llm_count)
 				} else {
-					fmt.Print("The LLM query returned 0 rows. Test failed")
+					fmt.Printf("Some kind of error occurred while running the count query for the LLM table. We think it has %d rows. Test failed.", llm_count)
 				}
 		}
 
