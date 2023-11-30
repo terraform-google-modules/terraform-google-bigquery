@@ -96,7 +96,7 @@ func TestDataWarehouse(t *testing.T) {
 				count := op.Get("count_rows").Int()
 				count_kind := reflect.TypeOf(count).Kind()
 				fmt.Printf("count has type %s", count_kind)
-				test_result := assert.Greater(count, 0, fmt.Sprintf("Some kind of error occurred while running the count query for the %s table", table))
+				test_result := assert.Greater(count, int64(0), fmt.Sprintf("Some kind of error occurred while running the count query for the %s table", table))
 				if test_result == true {
 					fmt.Printf("Table `%s` has %d rows. Test passed.", table, count)
 				} else {
@@ -117,7 +117,7 @@ func TestDataWarehouse(t *testing.T) {
 			llm_count := llm_op.Get("count_rows").Int()
 			count_llm_kind := reflect.TypeOf(llm_count).Kind()
 			fmt.Printf("llm_count has type %s", count_llm_kind)
-			llm_test_result := assert.Greaterf(llm_count, int(0), "Some kind of error occurred while running the count query for the LLM table")
+			llm_test_result := assert.Greaterf(llm_count, int64(0), "Some kind of error occurred while running the count query for the LLM table")
 			if llm_test_result == true {
 					fmt.Printf("LLM query returned %d rows. Test passed", llm_count)
 				} else {
@@ -129,3 +129,4 @@ func TestDataWarehouse(t *testing.T) {
 	})
 	dwh.Test()
 }
+
