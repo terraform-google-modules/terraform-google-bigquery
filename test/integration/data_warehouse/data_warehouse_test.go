@@ -74,7 +74,9 @@ func TestDataWarehouse(t *testing.T) {
         file.Close()
 
 		// Assert BigQuery tables & views are not empty
-		tables := []string{
+		test_tables := func (){
+
+			tables := []string{
 			"thelook.distribution_centers",
 			"thelook.events",
 			"thelook.inventory_items",
@@ -84,40 +86,52 @@ func TestDataWarehouse(t *testing.T) {
 			"thelook.users",
 			"thelook.lookerstudio_report_distribution_centers",
 			"thelook.lookerstudio_report_profit",
-		}
+			}
 
-		test_query := func (){
-			bq.Runf(t, "--project_id=%s --headless=true show thelook.distribution_centers", projectID)
-		}
+			query_template := "SELECT COUNT(*) AS count_rows FROM `%[1]s.%[2]s`;"
+			for _, table := range tables {
+				query := fmt.Sprintf(query_template, projectID, table)
+				op := bq.Runf(t, "--project_id=%[1]s --headless=true query --nouse_legacy_sql %[2]s", projectID, query)
 
-		query_template := "SELECT COUNT(*) AS count_rows FROM `%[1]s.%[2]s`;"
-
-		test_query()
-		for _, table := range tables {
-			query := fmt.Sprintf(query_template, projectID, table)
-			op := bq.Runf(t, "--project_id=%[1]s --headless=true query --nouse_legacy_sql %[2]s", projectID, query)
-
-			count := op.Get("count_rows").Int()
-			count_type := reflect.TypeOf(count).Kind()
-
-			if count_type == reflect.Int {
-				assert.Greater(t, count, 0, fmt.Sprintf("Table `%s` is empty.", table))
-			} else {
-				if count_type != reflect.Int {
-					assert.Greater(t, int(count), 0, fmt.Sprintf("Table `%s` is empty.", table))
+				count := op.Get("count_rows").Int()
+				count_kind := reflect.TypeOf(count).Kind()
+				fmt.Printf("count has type %s", count_kind)
+				if count_kind == reflect.Int {
+					assert.Greater(t, count, int(0), fmt.Sprintf("Table `%s` is empty.", table))
 				} else {
-					log.Printf("[ERROR] in type conversion: '%+v' is not an integer or string", op.Get("count_rows"))
+					if count_kind != reflect.Int {
+						assert.Greater(t, int(count), int(0), fmt.Sprintf("Table `%s` is empty.", table))
+					} else {
+						log.Printf("[ERROR] in type conversion: The row count of table `%s` is not an integer or string type", table)
+					}
+				}
+			}
+		}
+
+		test_tables()
+
+		// Assert BigQuery connection to Vertex GenAI was successfully created and works as expected
+		test_llms := func() {
+
+			llm_query_template := "SELECT COUNT(*) AS count_rows FROM ML.GENERATE_TEXT(MODEL `%[1]s.thelook.text_generate_model`, (with clusters AS(SELECT CONCAT('cluster', CAST(centroid_id as STRING)) as centroid, avg_spend as average_spend, count_orders as count_of_orders, days_since_order FROM (SELECT centroid_id, feature, ROUND(numerical_value, 2) as value FROM ML.CENTROIDS(MODEL `%[1]s.thelook.customer_segment_clustering`)) PIVOT (SUM(value) FOR feature IN ('avg_spend', 'count_orders', 'days_since_order')) ORDER BY centroid_id) SELECT 'Pretend you are a creative strategist, given the following clusters come up with creative brand persona and title labels for each of these clusters, and explain step by step; what would be the next marketing step for these clusters' || ' ' || clusters.centroid || ', Average Spend $' || clusters.average_spend || ', Count of orders per person ' || clusters.count_of_orders || ', Days since last order ' || clusters.days_since_order AS prompt FROM clusters), STRUCT(800 AS max_output_tokens, 0.8 AS temperature, 40 AS top_k, 0.8 AS top_p, TRUE AS flatten_json_output));"
+			query := fmt.Sprintf(llm_query_template, projectID)
+			llm_op := bq.Runf(t, "--project_id=%[1]s --headless=true query --nouse_legacy_sql %[2]s", projectID, query)
+
+			llm_count := llm_op.Get("count_rows").Int()
+			count_llm_kind := reflect.TypeOf(llm_count).Kind()
+				fmt.Printf("count has type %s", count_llm_kind)
+				if count_llm_kind == reflect.Int {
+					assert.Greater(t, llm_count, int(0), "The LLM query had 0 results")
+				} else {
+					if count_llm_kind != reflect.Int {
+						assert.Greater(t, int(llm_count), int(0), "The LLM query had 0 results")
+					} else {
+						log.Print("[ERROR] in type conversion: The LLM query failed because of a type conversion issue")
 					}
 				}
 			}
 
-		// Assert BigQuery connection to Vertex GenAI was successfully created and works as expected
-		llm_query_template := "SELECT COUNT(*) AS count_rows FROM ML.GENERATE_TEXT(MODEL `%[1]s.thelook.text_generate_model`, (with clusters AS(SELECT CONCAT('cluster', CAST(centroid_id as STRING)) as centroid, avg_spend as average_spend, count_orders as count_of_orders, days_since_order FROM (SELECT centroid_id, feature, ROUND(numerical_value, 2) as value FROM ML.CENTROIDS(MODEL `%[1]s.thelook.customer_segment_clustering`)) PIVOT (SUM(value) FOR feature IN ('avg_spend', 'count_orders', 'days_since_order')) ORDER BY centroid_id) SELECT 'Pretend you are a creative strategist, given the following clusters come up with creative brand persona and title labels for each of these clusters, and explain step by step; what would be the next marketing step for these clusters' || ' ' || clusters.centroid || ', Average Spend $' || clusters.average_spend || ', Count of orders per person ' || clusters.count_of_orders || ', Days since last order ' || clusters.days_since_order AS prompt FROM clusters), STRUCT(800 AS max_output_tokens, 0.8 AS temperature, 40 AS top_k, 0.8 AS top_p, TRUE AS flatten_json_output));"
-		query := fmt.Sprintf(llm_query_template, projectID)
-		llm_op := bq.Runf(t, "--project_id=%[1]s --headless=true query --nouse_legacy_sql %[2]s", projectID, query)
-
-		llm_count := llm_op.Get("count_rows").Int()
-		assert.Greater(t, llm_count, 0, "The ML.GENERATE_TEXT() query failed")
+		test_llms()
 	})
 	dwh.Test()
 }
