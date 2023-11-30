@@ -75,7 +75,7 @@ resource "google_bigquery_table" "main" {
   clustering          = each.value["clustering"]
   expiration_time     = each.value["expiration_time"] != null ? each.value["expiration_time"] : 0
   project             = var.project_id
-  deletion_protection = var.deletion_protection
+  deletion_protection = coalesce(each.value["deletion_protection"], var.deletion_protection)
 
   dynamic "time_partitioning" {
     for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
@@ -186,7 +186,7 @@ resource "google_bigquery_table" "external_table" {
   expiration_time     = each.value["expiration_time"] != null ? each.value["expiration_time"] : 0
   max_staleness       = each.value["max_staleness"]
   project             = var.project_id
-  deletion_protection = var.deletion_protection
+  deletion_protection = coalesce(each.value["deletion_protection"], var.deletion_protection)
 
   external_data_configuration {
     autodetect            = each.value["autodetect"]
