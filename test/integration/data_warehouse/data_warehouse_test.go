@@ -93,16 +93,16 @@ func TestDataWarehouse(t *testing.T) {
 				query := fmt.Sprintf(query_template, projectID, table)
 				op := bq.Runf(t, "--project_id=%[1]s --headless=true query --nouse_legacy_sql %[2]s", projectID, query)
 
-				count := op.Get("count_rows").Int()
+				count := op.Get("count_rows")
 				count_kind := reflect.TypeOf(count).Kind()
 				fmt.Printf("count has type %s", count_kind)
 				if count_kind == reflect.Int {
-					assert.Greater(t, count, int(0), fmt.Sprintf("Table `%s` is empty.", table))
+					assert.Greater(t, count, 0, fmt.Sprintf("Table `%s` is empty.", table))
 				} else {
 					if count_kind != reflect.Int {
-						assert.Greater(t, int(count), int(0), fmt.Sprintf("Table `%s` is empty.", table))
+						assert.Greater(t, count.Int(), 0, fmt.Sprintf("Table `%s` is empty.", table))
 					} else {
-						log.Printf("[ERROR] in type conversion: The row count of table `%s` is not an integer or string type", table)
+						log.Printf("[ERROR] in type conversion: The row count of table `%s` is something that can be converted to an int", table)
 					}
 				}
 			}
