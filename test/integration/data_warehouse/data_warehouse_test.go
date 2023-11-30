@@ -93,17 +93,14 @@ func TestDataWarehouse(t *testing.T) {
 				query := fmt.Sprintf(query_template, projectID, table)
 				op := bq.Runf(t, "--project_id=%[1]s --headless=true query --nouse_legacy_sql %[2]s", projectID, query)
 
-				count := op.Get("count_rows")
+				count := op.Get("count_rows").Int()
 				count_kind := reflect.TypeOf(count).Kind()
 				fmt.Printf("count has type %s", count_kind)
-				if count_kind == reflect.Int {
-					assert.Greater(t, count, 0, fmt.Sprintf("Table `%s` is empty.", table))
+				test_result := assert.Greater(count, 0, fmt.Sprintf("Some kind of error occurred while running the count query for the %s table", table))
+				if test_result == true {
+					fmt.Printf("Table `%s` has %d rows. Test passed.", table, count)
 				} else {
-					if count_kind != reflect.Int {
-						assert.Greater(t, count.Int(), 0, fmt.Sprintf("Table `%s` is empty.", table))
-					} else {
-						log.Printf("[ERROR] in type conversion: The row count of table `%s` is something that can be converted to an int", table)
-					}
+					fmt.Printf("Table `%s` has no data. Test failed.", table)
 				}
 			}
 		}
@@ -119,17 +116,14 @@ func TestDataWarehouse(t *testing.T) {
 
 			llm_count := llm_op.Get("count_rows").Int()
 			count_llm_kind := reflect.TypeOf(llm_count).Kind()
-				fmt.Printf("count has type %s", count_llm_kind)
-				if count_llm_kind == reflect.Int {
-					assert.Greater(t, llm_count, int(0), "The LLM query had 0 results")
+			fmt.Printf("llm_count has type %s", count_llm_kind)
+			llm_test_result := assert.Greaterf(llm_count, int(0), "Some kind of error occurred while running the count query for the LLM table")
+			if llm_test_result == true {
+					fmt.Printf("LLM query returned %d rows. Test passed", llm_count)
 				} else {
-					if count_llm_kind != reflect.Int {
-						assert.Greater(t, int(llm_count), int(0), "The LLM query had 0 results")
-					} else {
-						log.Print("[ERROR] in type conversion: The LLM query failed because of a type conversion issue")
-					}
+					fmt.Print("The LLM query returned 0 rows. Test failed")
 				}
-			}
+		}
 
 		test_llms()
 	})
