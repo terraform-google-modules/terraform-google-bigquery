@@ -19,6 +19,7 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 
@@ -45,14 +46,15 @@ func TestDataWarehouse(t *testing.T) {
 		projectID := dwh.GetTFSetupStringOutput("project_id")
 		bucket := dwh.GetStringOutput("raw_bucket")
 		workflow := "initial-workflow"
+		location := "asia-southeast1"
 
-		// Assert that the bucket is in asia-southeast1
+		// Assert that the bucket is in location defined above
 		bucketOP := gcloud.Runf(t, "storage buckets describe gs://%s --project %s", bucket, projectID)
-		assert.Equal("ASIA-SOUTHEAST1", bucketOP.Get("location").String(), "Bucket should be in asia-southeast1")
+		assert.Equal("ASIA-SOUTHEAST1", bucketOP.Get("location").String(), "Bucket should be in %[1]s \n", strings.ToUpper(location))
 
 		// Assert that Workflow ran successfully
 		verifyWorkflows := func() (bool, error) {
-			workflowState := gcloud.Runf(t, "workflows executions list %s --project %s --location=asia-southeast1 --limit=1", workflow, projectID).Array()
+			workflowState := gcloud.Runf(t, "workflows executions list %s --project %s --location=%s --limit=1", workflow, projectID, location).Array()
 			state := workflowState[0].Get("state").String()
 			assert.NotEqual(t, state, "FAILED")
 			if state == "SUCCEEDED" {
@@ -92,21 +94,16 @@ func TestDataWarehouse(t *testing.T) {
 			for _, table := range tables {
 				query := fmt.Sprintf(query_template, projectID, table)
 				op := bq.Runf(t, "--project_id=%[1]s --headless=true query --nouse_legacy_sql %[2]s", projectID, query)
-				fmt.Print(op)
 
 				count := op.Get("0.count_rows").Int()
-				fmt.Printf("Table has %d rows \n", count)
 				count_kind := reflect.TypeOf(count).Kind()
-				fmt.Printf("count has type %s \n", count_kind)
 				test_result := assert.Greater(count, int64(0))
 				if test_result == true {
-					fmt.Printf("Table `%s` has %d rows. Test passed! \n", table, count)
 				} else {
-					fmt.Printf("Some kind of error occurred while running the count query for the %s table. We think it has %d rows. Test failed. \n", table, count)
+					fmt.Printf("Some kind of error occurred while running the count query for the %[1]s table. We think it has %[2]d rows. Test failed. Here's some additional details: \n Query results. If this number is greater than 0, then there is probably an issue in the comparison: %[3]s \n Variable type for the count. This should be INT64: %[4]s \n ", table, count, op, count_kind)
 				}
 			}
 		}
-
 		test_tables()
 
 		// Assert BigQuery connection to Vertex GenAI was successfully created and works as expected
@@ -118,17 +115,13 @@ func TestDataWarehouse(t *testing.T) {
 
 			llm_count := llm_op.Get("0.count_rows").Int()
 			count_llm_kind := reflect.TypeOf(llm_count).Kind()
-			fmt.Printf("llm_count has type %s", count_llm_kind)
 			llm_test_result := assert.Greater(llm_count, int64(0))
 			if llm_test_result == true {
-					fmt.Printf("LLM table has %d rows. Test passed! \n", llm_count)
 				} else {
-					fmt.Printf("Some kind of error occurred while running the count query for the LLM table. We think it has %d rows. Test failed. \n", llm_count)
+					fmt.Printf("Some kind of error occurred while running the llm_count query. We think it has %[1]d rows. Here's some additional details: \n Query results. If this number is greater than 0, then there is probably an issue in the comparison: %[2]s \n Variable type for the count. This should be INT64: %[3]s \n ", llm_count, llm_op, count_llm_kind)
 				}
 		}
-
 		test_llms()
 	})
 	dwh.Test()
 }
-
