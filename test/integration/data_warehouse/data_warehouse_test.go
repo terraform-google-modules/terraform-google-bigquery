@@ -50,7 +50,7 @@ func TestDataWarehouse(t *testing.T) {
 
 		// Assert that the bucket is in location defined above
 		bucketOP := gcloud.Runf(t, "storage buckets describe gs://%s --project %s", bucket, projectID)
-		assert.Equal("%q", bucketOP.Get("location").String(), "Bucket should be in %[1]s", strings.ToUpper(location))
+		assert.Equal(fmt.Sprintf("%q", strings.ToUpper(location)), bucketOP.Get("location").String(), "Bucket should be in %s", location)
 
 		// Assert that Workflow ran successfully
 		verifyWorkflows := func() (bool, error) {
