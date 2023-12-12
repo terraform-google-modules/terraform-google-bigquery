@@ -3,7 +3,7 @@ module github.com/terraform-google-modules/terraform-google-bigquery/test/integr
 go 1.21
 
 require (
-	github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test v0.10.1
+	github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test v0.10.2
 	github.com/stretchr/testify v1.8.4
 )
 
