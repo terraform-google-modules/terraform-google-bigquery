@@ -15,7 +15,9 @@
  */
 
 module "bigquery" {
-  source                     = "../.."
+  source  = "terraform-google-modules/bigquery/google"
+  version = "~> 7.0"
+
   dataset_id                 = "foo"
   dataset_name               = "foo"
   description                = "some description"
