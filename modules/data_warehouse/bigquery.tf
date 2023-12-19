@@ -41,10 +41,10 @@ resource "google_bigquery_connection" "ds_connection" {
 # # Grant IAM access to the BigQuery Connection account for Cloud Storage
 resource "google_project_iam_member" "bq_connection_iam_object_viewer" {
   project = module.project-services.project_id
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}"
+  role    = "roles/storage.objectViewer"
+  member  = "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}"
 
-  depends_on = [ google_storage_bucket.raw_bucket, google_bigquery_connection.ds_connection ]
+  depends_on = [google_storage_bucket.raw_bucket, google_bigquery_connection.ds_connection]
 }
 
 # # Create a BigQuery connection for Vertex AI to support GenerativeAI use cases
@@ -69,8 +69,7 @@ resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
   role    = each.key
   member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}"
 
-  depends_on = [ google_bigquery_connection.vertex_ai_connection,
-  google_project_iam_member.bq_connection_iam_object_viewer ]
+  depends_on = [google_bigquery_connection.vertex_ai_connection]
 }
 
 # Create data tables in BigQuery
@@ -256,7 +255,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_model" {
     }
   )
   depends_on = [
-    google_bigquery_table.tbl_edw_order_items,
+    google_bigquery_table.tbl_edw_order_items
   ]
 }
 
@@ -275,6 +274,11 @@ resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
     region        = var.region
     }
   )
+
+  depends_on = [
+    google_bigquery_routine.sp_bigqueryml_model,
+    google_bigquery_connection.vertex_ai_connection
+  ]
 }
 
 # # Query Bigquery ML Model for describing customer clusters
@@ -309,7 +313,7 @@ resource "google_bigquery_routine" "sp_sample_translation_queries" {
     }
   )
   depends_on = [
-    google_bigquery_table.tbl_edw_inventory_items,
+    google_bigquery_table.tbl_edw_inventory_items
   ]
 }
 
@@ -320,8 +324,7 @@ resource "google_project_service_identity" "bigquery_data_transfer_sa" {
   project  = module.project-services.project_id
   service  = "bigquerydatatransfer.googleapis.com"
 
-  depends_on = [time_sleep.wait_after_apis,
-  ]
+  depends_on = [time_sleep.wait_after_apis]
 }
 
 # # Grant the DTS service account access
@@ -336,8 +339,6 @@ resource "google_project_iam_member" "dts_service_account_roles" {
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
-
-  depends_on = [time_sleep.wait_after_apis, google_project_iam_member.bq_connection_iam_vertex_ai, google_project_service_identity.bigquery_data_transfer_sa]
 }
 
 # Set up scheduled query
@@ -351,10 +352,9 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
   params = {
     query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_bigqueryml_model`()"
   }
-  service_account_name = google_service_account.dts.email
+  service_account_name = google_project_service_identity.bigquery_data_transfer_sa.email
 
   depends_on = [
-    google_project_iam_member.dts_service_account_roles,
-    google_bigquery_dataset.ds_edw
-    ]
+    google_project_iam_member.dts_service_account_roles
+  ]
 }
