@@ -20,6 +20,8 @@ resource "google_service_account" "workflow_service_account" {
   project      = module.project-services.project_id
   account_id   = "cloud-workflow-sa-${random_id.id.hex}"
   display_name = "Service Account for Cloud Workflows"
+
+  depends_on = [ time_sleep.wait_after_apis ]
 }
 
 # # Grant the Workflow service account access
@@ -28,7 +30,8 @@ resource "google_project_iam_member" "workflow_service_account_roles" {
     "roles/workflows.admin",
     "roles/run.invoker",
     "roles/iam.serviceAccountTokenCreator",
-    "roles/storage.objectAdmin",
+    "roles/storage.Admin",
+    "roles/storage.legacyBucketReader",
     "roles/bigquery.connectionUser",
     "roles/bigquery.jobUser",
     "roles/bigquery.dataEditor",
@@ -37,6 +40,8 @@ resource "google_project_iam_member" "workflow_service_account_roles" {
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
+
+  depends_on = [ google_service_account.workflow_service_account, google_project_iam_member.dts ]
 }
 
 # # Create the workflow
@@ -74,6 +79,8 @@ data "http" "call_workflows_setup" {
     google_bigquery_routine.sp_bigqueryml_generate_create,
     google_bigquery_routine.sp_bigqueryml_model,
     google_bigquery_routine.sproc_sp_demo_lookerstudio_report,
-    google_bigquery_routine.sp_provision_lookup_tables
+    google_bigquery_routine.sp_provision_lookup_tables,
+    google_workflows_workflow.workflow,
+    google_storage_bucket.raw_bucket
   ]
 }
