@@ -318,29 +318,35 @@ resource "google_bigquery_routine" "sp_sample_translation_queries" {
 }
 
 # Add Scheduled Query
-# # Activate DTS service account
-resource "google_project_service_identity" "bigquery_data_transfer_sa" {
-  provider = google-beta
-  project  = module.project-services.project_id
-  service  = "bigquerydatatransfer.googleapis.com"
 
-  depends_on = [time_sleep.wait_after_apis]
+# Create specific service account for DTS Run
+# # Create a DTS specific service account
+resource "google_service_account" "dts" {
+  project      = module.project-services.project_id
+  account_id   = "cloud-dts-sa-${random_id.id.hex}"
+  display_name = "Service Account for Data Transfer Service"
 }
 
-# # Grant the DTS service account access
-resource "google_project_iam_member" "dts_service_account_roles" {
+# # Grant the DTS Specific service account access
+resource "google_project_iam_member" "dts_roles" {
   for_each = toset([
-    "roles/bigquerydatatransfer.serviceAgent",
     "roles/bigquery.user",
     "roles/bigquery.dataEditor",
     "roles/bigquery.connectionUser"
-    ]
-  )
-
+  ])
   project = module.project-services.project_id
   role    = each.key
-  member  = "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
+  member  = "serviceAccount:${google_service_account.dts.email}"
 }
+
+# # # Grant the DTS service account access
+# resource "google_project_iam_member" "dts_service_account_roles" {
+#   role = "roles/iam.serviceAccountTokenCreator"
+#   project = module.project-services.project_id
+#   member  = "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
+
+#   depends_on = [ google_project_iam ]
+# }
 
 # Set up scheduled query
 resource "google_bigquery_data_transfer_config" "dts_config" {
@@ -353,9 +359,11 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
   params = {
     query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_bigqueryml_model`()"
   }
-  service_account_name = google_project_service_identity.bigquery_data_transfer_sa.email
+  service_account_name = google_service_account.dts.email
 
   depends_on = [
-    google_project_iam_member.dts_service_account_roles
+    google_project_iam_member.dts_roles,
+    google_bigquery_dataset.ds_edw,
+    time_sleep.wait_after_workflow_execution
   ]
 }
