@@ -333,8 +333,9 @@ resource "google_project_iam_member" "dts_service_account_roles" {
     "roles/bigquerydatatransfer.serviceAgent",
     "roles/bigquery.user",
     "roles/bigquery.dataEditor",
-    "roles/iam.serviceAccountTokenCreator"
-  ])
+    "roles/bigquery.connectionUser"
+    ]
+  )
 
   project = module.project-services.project_id
   role    = each.key
