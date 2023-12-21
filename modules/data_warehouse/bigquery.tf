@@ -39,12 +39,12 @@ resource "google_bigquery_connection" "ds_connection" {
 }
 
 # # Grant IAM access to the BigQuery Connection account for Cloud Storage
-resource "google_storage_bucket_iam_binding" "bq_connection_iam_object_viewer" {
-  bucket = google_storage_bucket.raw_bucket.name
-  role   = "roles/storage.objectViewer"
-  members = [
-    "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}",
-  ]
+resource "google_project_iam_member" "bq_connection_iam_object_viewer" {
+  project = module.project-services.project_id
+  role    = "roles/storage.objectViewer"
+  member  = "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}"
+
+  depends_on = [google_storage_bucket.raw_bucket, google_bigquery_connection.ds_connection]
 }
 
 # # Create a BigQuery connection for Vertex AI to support GenerativeAI use cases
@@ -68,6 +68,8 @@ resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}"
+
+  depends_on = [google_bigquery_connection.vertex_ai_connection]
 }
 
 # Create data tables in BigQuery
@@ -253,7 +255,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_model" {
     }
   )
   depends_on = [
-    google_bigquery_table.tbl_edw_order_items,
+    google_bigquery_table.tbl_edw_order_items
   ]
 }
 
@@ -272,6 +274,11 @@ resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
     region        = var.region
     }
   )
+
+  depends_on = [
+    google_bigquery_routine.sp_bigqueryml_model,
+    google_bigquery_connection.vertex_ai_connection
+  ]
 }
 
 # # Query Bigquery ML Model for describing customer clusters
@@ -306,35 +313,14 @@ resource "google_bigquery_routine" "sp_sample_translation_queries" {
     }
   )
   depends_on = [
-    google_bigquery_table.tbl_edw_inventory_items,
+    google_bigquery_table.tbl_edw_inventory_items
   ]
 }
 
 # Add Scheduled Query
-# # Set up DTS permissions
-resource "google_project_service_identity" "bigquery_data_transfer_sa" {
-  provider = google-beta
-  project  = module.project-services.project_id
-  service  = "bigquerydatatransfer.googleapis.com"
-
-  depends_on = [time_sleep.wait_after_apis]
-}
-
-# # Grant the DTS service account access
-resource "google_project_iam_member" "dts_service_account_roles" {
-  for_each = toset([
-    "roles/bigquerydatatransfer.serviceAgent",
-  ])
-
-  project = module.project-services.project_id
-  role    = each.key
-  member  = "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
-
-  depends_on = [time_sleep.wait_after_apis]
-}
 
 # Create specific service account for DTS Run
-# # Set up the DTA service account
+# # Create a DTS specific service account
 resource "google_service_account" "dts" {
   project      = module.project-services.project_id
   account_id   = "cloud-dts-sa-${random_id.id.hex}"
@@ -346,25 +332,21 @@ resource "google_project_iam_member" "dts_roles" {
   for_each = toset([
     "roles/bigquery.user",
     "roles/bigquery.dataEditor",
+    "roles/bigquery.connectionUser"
   ])
-
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_service_account.dts.email}"
 }
 
-# # Grant the DTS specific service account Token Creator to the DTS Service Identity
-resource "google_service_account_iam_binding" "dts_token_creator" {
-  service_account_id = google_service_account.dts.id
-  role               = "roles/iam.serviceAccountTokenCreator"
-  members = [
-    "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
-  ]
+# # # Grant the DTS service account access
+# resource "google_project_iam_member" "dts_service_account_roles" {
+#   role = "roles/iam.serviceAccountTokenCreator"
+#   project = module.project-services.project_id
+#   member  = "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
 
-  depends_on = [
-    google_project_iam_member.dts_service_account_roles,
-  ]
-}
+#   depends_on = [ google_project_iam ]
+# }
 
 # Set up scheduled query
 resource "google_bigquery_data_transfer_config" "dts_config" {
@@ -382,6 +364,6 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
   depends_on = [
     google_project_iam_member.dts_roles,
     google_bigquery_dataset.ds_edw,
-    google_service_account_iam_binding.dts_token_creator,
+    time_sleep.wait_after_workflow_execution
   ]
 }

@@ -48,6 +48,10 @@ module "project-services" {
       api = "workflows.googleapis.com"
       roles = [
         "roles/workflows.viewer"
+      ],
+      api = "bigquerydatatransfer.googleapis.com"
+      roles = [
+        "roles/bigquerydatatransfer.serviceAgent"
       ]
     }
   ]
