@@ -116,17 +116,14 @@ invoke_function:
             assign:
                 - function_url = ${function_url}
                 - function_name = ${function_name}
-
         - run_function:
             try:
                 call: http.get
                 args:
                     url: function_url
                 result: function_result
-
             except:
                 as: e
                 raise:
                     exception: $${e}
                     functionName: $${function_name}
-
