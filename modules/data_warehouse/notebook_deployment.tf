@@ -110,7 +110,7 @@ resource "google_cloudfunctions2_function" "notebook_deploy_function" {
     max_instance_count = 1
     # min_instance_count can be set to 1 to improve performance and responsiveness
     min_instance_count               = 0
-    available_memory                 = "512m"
+    available_memory                 = "512Mi"
     timeout_seconds                  = 300
     max_instance_request_concurrency = 1
     available_cpu                    = "2"
