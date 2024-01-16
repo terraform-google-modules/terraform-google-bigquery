@@ -124,4 +124,8 @@ resource "google_cloudfunctions2_function" "notebook_deploy_function" {
   depends_on = [time_sleep.wait_after_apis, google_project_iam_member.function_manage_roles]
 }
 
+resource "time_sleep" "wait_after_function" {
+  create_duration = "10s"
+  depends_on = [google_cloudfunctions2_function.notebook_deploy_function]
+}
 
