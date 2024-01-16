@@ -37,6 +37,7 @@ module "project-services" {
     "compute.googleapis.com",
     "config.googleapis.com",
     "datacatalog.googleapis.com",
+    "dataform.googleapis.com",
     "datalineage.googleapis.com",
     "serviceusage.googleapis.com",
     "storage.googleapis.com",
