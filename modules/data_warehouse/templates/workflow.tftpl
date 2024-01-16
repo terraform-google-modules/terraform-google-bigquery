@@ -25,6 +25,9 @@ main:
     - sub_create_tables:
         call: create_tables
         result: output1
+    - sub_invoke_function:
+        call: invoke_function
+        result: output2
 
 # Subworkflow to copy initial objects
 copy_objects:
@@ -105,3 +108,25 @@ create_tables:
                     - sumStep:
                         assign:
                             - results[key]: $${queryResult}
+
+# Subworkflow to invoke Cloud Function
+invoke_function:
+    steps:
+        - init:
+            assign:
+                - function_url = ${function_url}
+                - function_name = ${function_name}
+
+        - run_function:
+            try:
+                call: http.get
+                args:
+                    url: function_url
+                result: function_result
+
+            except:
+                as: e
+                raise:
+                    exception: $${e}
+                    functionName: $${function_name}
+

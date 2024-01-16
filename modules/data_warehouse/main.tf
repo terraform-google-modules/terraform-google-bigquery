@@ -24,6 +24,7 @@ module "project-services" {
 
   activate_apis = [
     "aiplatform.googleapis.com",
+    "artifactregistry.googleapis.com",
     "bigquery.googleapis.com",
     "bigqueryconnection.googleapis.com",
     "bigquerydatatransfer.googleapis.com",
@@ -69,7 +70,7 @@ resource "random_id" "id" {
 }
 
 # Set up Storage Buckets
-# # Set up the raw storage bucket
+# # Set up the raw storage bucket for data
 resource "google_storage_bucket" "raw_bucket" {
   name                        = "ds-edw-raw-${random_id.id.hex}"
   project                     = module.project-services.project_id

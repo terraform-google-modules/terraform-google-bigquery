@@ -53,13 +53,16 @@ resource "google_workflows_workflow" "workflow" {
 
   source_contents = templatefile("${path.module}/templates/workflow.tftpl", {
     raw_bucket = google_storage_bucket.raw_bucket.name,
-    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    dataset_id = google_bigquery_dataset.ds_edw.dataset_id,
+    function_url = google_cloudfunctions2_function.notebook_deploy_function.url
+    function_name = google_cloudfunctions2_function.notebook_deploy_function.name
   })
 
   labels = var.labels
 
   depends_on = [
-    google_project_iam_member.workflow_service_account_roles
+    google_project_iam_member.workflow_service_account_roles,
+    google_cloudfunctions2_function.notebook_deploy_function
   ]
 }
 
@@ -80,6 +83,7 @@ data "http" "call_workflows_setup" {
     google_bigquery_routine.sproc_sp_demo_lookerstudio_report,
     google_bigquery_routine.sp_provision_lookup_tables,
     google_workflows_workflow.workflow,
-    google_storage_bucket.raw_bucket
+    google_storage_bucket.raw_bucket,
+    google_cloudfunctions2_function.notebook_deploy_function
   ]
 }
