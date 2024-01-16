@@ -114,8 +114,8 @@ invoke_function:
     steps:
         - init:
             assign:
-                - function_url = ${function_url}
-                - function_name = ${function_name}
+                - function_url: ${function_url}
+                - function_name: ${function_name}
         - run_function:
             try:
                 call: http.get
