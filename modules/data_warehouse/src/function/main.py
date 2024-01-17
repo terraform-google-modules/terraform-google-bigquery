@@ -55,7 +55,7 @@ def commit_repository_changes(client, repo_name, repo_id) -> None:
                            "getting_started_bq_dataframes.ipynb"), 'rb') as f:
         encoded_string = f.read()
         request = dataform_v1beta1.CommitRepositoryChangesRequest()
-        request.name = repo_name
+        request.name = repo_id
         request.commit_metadata = dataform_v1beta1.CommitMetadata(
             author=dataform_v1beta1.CommitAuthor(
                 name="Google JSS",

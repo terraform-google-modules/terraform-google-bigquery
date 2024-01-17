@@ -73,13 +73,14 @@ resource "google_service_account" "cloud_function_manage_sa" {
 ## Assign required permissions to the function service account
 resource "google_project_iam_member" "function_manage_roles" {
   for_each = toset([
-    "roles/cloudfunctions.admin",    // Service account role to manage access to the remote function
-    "roles/run.invoker",             // Service account role to invoke the remote function
-    "roles/storage.objectViewer",    // Read GCS files
-    "roles/dataform.codeEditor",     // Edit access code resources
     "roles/aiplatform.user",         // Needs to predict from endpoints
     "roles/aiplatform.serviceAgent", // Service account role
-    "roles/iam.serviceAccountUser"
+    "roles/cloudfunctions.admin",    // Service account role to manage access to the remote function
+    "roles/dataform.codeEditor",     // Edit access code resources
+    "roles/iam.serviceAccountUser",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/run.invoker",             // Service account role to invoke the remote function
+    "roles/storage.objectViewer"    // Read GCS files
     ]
   )
   project = module.project-services.project_id

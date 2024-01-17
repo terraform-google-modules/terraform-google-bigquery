@@ -27,13 +27,14 @@ resource "google_service_account" "workflow_manage_sa" {
 # # Grant the Workflow service account access
 resource "google_project_iam_member" "workflow_manage_sa_roles" {
   for_each = toset([
-    "roles/workflows.admin",
-    "roles/run.invoker",
-    "roles/iam.serviceAccountTokenCreator",
-    "roles/storage.objectAdmin",
     "roles/bigquery.connectionUser",
-    "roles/bigquery.jobUser",
     "roles/bigquery.dataEditor",
+    "roles/bigquery.jobUser",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/iam.serviceAccountUser",
+    "roles/run.invoker",
+    "roles/storage.objectAdmin",
+    "roles/workflows.admin",
     ]
   )
   project = module.project-services.project_id
