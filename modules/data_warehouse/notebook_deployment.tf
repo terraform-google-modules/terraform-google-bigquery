@@ -105,7 +105,8 @@ resource "google_dataform_repository" "notebook_repo" {
   provider = google-beta
   project = module.project-services.project_id
   region = var.region
-  name = "thelook-learning-resources"
+  display_name = "jss_learning_resources"
+  name = "thelook_learning_resources"
 
   depends_on = [ time_sleep.wait_after_apis ]
 }
