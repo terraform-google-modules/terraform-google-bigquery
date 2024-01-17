@@ -32,6 +32,8 @@ data "archive_file" "create_notebook_function_zip" {
   type        = "zip"
   output_path = "${path.root}/tmp/notebooks_function_source.zip"
   source_dir  = "${path.root}/src/function/"
+
+  depends_on = [ local_file.notebooks ]
 }
 
 ## Set up a storage bucket for Cloud Function source code
