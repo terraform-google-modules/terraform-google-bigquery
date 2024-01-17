@@ -16,23 +16,23 @@ import os
 # Initialize request argument(s)
 
 
-def create_repo(client, project_id, region, repo_id) -> None:
-    request = dataform_v1beta1.CreateRepositoryRequest(
-        parent=f"projects/{project_id}/locations/{region}",
-        repository_id=repo_id,
-        repository=dataform_v1beta1.Repository(
-            # Required. This is your notebook name in BQ Studio
-            display_name="BigFrames sample notebook 2",
-            labels={
-                "single-file-asset-type": "notebook",
-                "data-warehouse": "true"
-            },
-            set_authenticated_user_admin=True
-        )
-    )
-    response = client.create_repository(request=request)
-    repo_fqn = response.name
-    print(f"Created repository: {repo_fqn}")
+# def create_repo(client, project_id, region, repo_id) -> None:
+#     request = dataform_v1beta1.CreateRepositoryRequest(
+#         parent=f"projects/{project_id}/locations/{region}",
+#         repository_id=repo_id,
+#         repository=dataform_v1beta1.Repository(
+#             # Required. This is your notebook name in BQ Studio
+#             display_name="BigFrames sample notebook 2",
+#             labels={
+#                 "single-file-asset-type": "notebook",
+#                 "data-warehouse": "true"
+#             },
+#             set_authenticated_user_admin=True
+#         )
+#     )
+#     response = client.create_repository(request=request)
+#     repo_fqn = response.name
+#     print(f"Created repository: {repo_fqn}")
 
 
 # def copy_fromgcs(gcs_file_url):
@@ -98,10 +98,10 @@ def run_it(request):
         project_id = os.environ.get("PROJECT_ID")
         region = os.environ.get("REGION")
         dataform_client = dataform_v1beta1.DataformClient()
-        repository_id = "thelook-learning-resources"
-        create_repo(dataform_client, project_id, region, repository_id)
+        repo_id = os.environ.get("REPO_ID")
+        # create_repo(dataform_client, project_id, region, repo_id)
         commit_repository_changes(
-            dataform_client, project_id, region, repository_id)
-        confirm_repo_commit(dataform_client, project_id, region, repository_id)
+            dataform_client, project_id, region, repo_id)
+        confirm_repo_commit(dataform_client, project_id, region, repo_id)
     except Exception as e:
         return json.dumps({"errorMessage": str(e)}), 400

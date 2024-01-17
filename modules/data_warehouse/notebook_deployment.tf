@@ -100,6 +100,14 @@ resource "google_service_account_iam_member" "workflow_auth_function" {
   ]
 }
 
+# Create a Dataform repo to host notebooks
+resource "google_dataform_respository" "notebook-repo" {
+  provider = google-beta
+  project = module.project-services.project_id
+  region = var.region
+  name = "thelook-learning-resources"
+}
+
 # Create and deploy a Cloud Function to deploy notebooks
 ## Create the Cloud Function
 resource "google_cloudfunctions2_function" "notebook_deploy_function" {
@@ -132,7 +140,8 @@ resource "google_cloudfunctions2_function" "notebook_deploy_function" {
     service_account_email            = google_service_account.cloud_function_manage_sa.email
     environment_variables = {
       "PROJECT_ID" : module.project-services.project_id,
-    "REGION" : var.region }
+    "REGION" : var.region
+    "REPO_ID" : google_dataform_respository.notebook-repo.id }
   }
   depends_on = [time_sleep.wait_after_apis, google_project_iam_member.function_manage_roles]
 }
