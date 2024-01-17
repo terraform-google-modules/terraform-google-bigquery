@@ -90,7 +90,7 @@ def confirm_repo_commit() -> str:
         print(response)
 
 
-def run_it():
+def run_it(request):
     try:
         project_id = os.environ.get("PROJECT_ID")
         region = os.environ.get("REGION")
