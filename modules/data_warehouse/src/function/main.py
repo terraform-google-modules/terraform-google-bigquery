@@ -45,17 +45,17 @@ import os
 #     return local_dest
 
 
-def commit_repository_changes(client, repo_id) -> None:
+def commit_repository_changes(client, repo_name, repo_id) -> None:
     # Example uses a local file that is opened, encoded, and committed
     file_name = 'Using BigFrames to Analyze BigQuery data.ipynb'
-    repo_name = repo_id
+    repo_id = repo_id
     directory = os.path.dirname(__file__)
     # TODO: Add a loop here to handle multiple files as we add new notebooks
     with open(os.path.join(directory,
                            "getting_started_bq_dataframes.ipynb"), 'rb') as f:
         encoded_string = f.read()
         request = dataform_v1beta1.CommitRepositoryChangesRequest()
-        request.name = "thelook_learning_resources"
+        request.name = repo_name
         request.commit_metadata = dataform_v1beta1.CommitMetadata(
             author=dataform_v1beta1.CommitAuthor(
                 name="Google JSS",
@@ -76,10 +76,11 @@ def commit_repository_changes(client, repo_id) -> None:
     print(f"Committed changes to {repo_id}", )
 
 
-def confirm_repo_commit(client, repo_id) -> str:
+def confirm_repo_commit(client, repo_name, repo_id) -> str:
     # Initialize request argument(s)
+    repo_id = repo_id
     request = dataform_v1beta1.FetchRepositoryHistoryRequest(
-        name=repo_id
+        name=repo_name
     )
     # Make the request
     page_result = client.fetch_repository_history(request=request)
@@ -94,9 +95,10 @@ def run_it(request):
         # region = os.environ.get("REGION")
         dataform_client = dataform_v1beta1.DataformClient()
         repo_id = os.environ.get("REPO_ID")
+        repo_name = "thelook_learning_resources"
         # create_repo(dataform_client, project_id, region, repo_id)
         commit_repository_changes(
-            dataform_client, repo_id)
-        confirm_repo_commit(dataform_client, repo_id)
+            dataform_client, repo_name, repo_id)
+        confirm_repo_commit(dataform_client, repo_name, repo_id)
     except Exception as e:
         return json.dumps({"errorMessage": str(e)}), 400
