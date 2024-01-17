@@ -141,7 +141,7 @@ resource "google_cloudfunctions2_function" "notebook_deploy_function" {
     environment_variables = {
       "PROJECT_ID" : module.project-services.project_id,
     "REGION" : var.region
-    "REPO_ID" : google_dataform_respository.notebook-repo.id }
+    "REPO_ID" : google_dataform_repository.notebook-repo.id }
   }
   depends_on = [time_sleep.wait_after_apis, google_project_iam_member.function_manage_roles]
 }
