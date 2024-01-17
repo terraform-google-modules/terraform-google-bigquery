@@ -29,6 +29,7 @@ resource "google_project_iam_member" "workflow_service_account_roles" {
   for_each = toset([
     "roles/workflows.admin",
     "roles/run.invoker",
+    "roles/functions.invoker",
     "roles/iam.serviceAccountTokenCreator",
     "roles/storage.objectAdmin",
     "roles/bigquery.connectionUser",
@@ -52,9 +53,9 @@ resource "google_workflows_workflow" "workflow" {
   service_account = google_service_account.workflow_service_account.id
 
   source_contents = templatefile("${path.module}/templates/workflow.tftpl", {
-    raw_bucket = google_storage_bucket.raw_bucket.name,
-    dataset_id = google_bigquery_dataset.ds_edw.dataset_id,
-    function_url = google_cloudfunctions2_function.notebook_deploy_function.url
+    raw_bucket    = google_storage_bucket.raw_bucket.name,
+    dataset_id    = google_bigquery_dataset.ds_edw.dataset_id,
+    function_url  = google_cloudfunctions2_function.notebook_deploy_function.url
     function_name = google_cloudfunctions2_function.notebook_deploy_function.name
   })
 
@@ -62,7 +63,7 @@ resource "google_workflows_workflow" "workflow" {
 
   depends_on = [
     google_project_iam_member.workflow_service_account_roles,
-    google_cloudfunctions2_function.notebook_deploy_function
+    time_sleep.wait_after_function
   ]
 }
 
@@ -84,6 +85,7 @@ data "http" "call_workflows_setup" {
     google_bigquery_routine.sp_provision_lookup_tables,
     google_workflows_workflow.workflow,
     google_storage_bucket.raw_bucket,
-    google_cloudfunctions2_function.notebook_deploy_function
+    google_cloudfunctions2_function.notebook_deploy_function,
+    time_sleep.wait_after_function
   ]
 }

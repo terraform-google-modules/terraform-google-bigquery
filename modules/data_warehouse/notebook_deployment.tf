@@ -21,7 +21,7 @@ resource "local_file" "notebooks" {
   filename = "${path.root}/src/function/getting_started_bq_dataframes.ipynb"
   content = templatefile("${path.module}/templates/notebooks/getting_started_bq_dataframes.tftpl", {
     PROJECT_ID = module.project-services.project_id,
-    REGION = var.region
+    REGION     = var.region
     }
   )
 }
@@ -51,7 +51,7 @@ resource "google_storage_bucket" "function_source" {
 
 ## Upload the zip file of the source code to GCS
 resource "google_storage_bucket_object" "function_source_upload" {
-  name = "notebooks_function_source.zip"
+  name   = "notebooks_function_source.zip"
   bucket = google_storage_bucket.function_source.name
   source = data.archive_file.create_notebook_function_zip.output_path
 }
@@ -126,6 +126,6 @@ resource "google_cloudfunctions2_function" "notebook_deploy_function" {
 
 resource "time_sleep" "wait_after_function" {
   create_duration = "10s"
-  depends_on = [google_cloudfunctions2_function.notebook_deploy_function]
+  depends_on      = [google_cloudfunctions2_function.notebook_deploy_function]
 }
 
