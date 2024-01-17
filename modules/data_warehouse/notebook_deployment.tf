@@ -33,7 +33,7 @@ data "archive_file" "create_notebook_function_zip" {
   output_path = "${path.root}/tmp/notebooks_function_source.zip"
   source_dir  = "${path.root}/src/function/"
 
-  depends_on = [ local_file.notebooks ]
+  depends_on = [local_file.notebooks]
 }
 
 ## Set up a storage bucket for Cloud Function source code
@@ -100,15 +100,30 @@ resource "google_service_account_iam_member" "workflow_auth_function" {
   ]
 }
 
-# Create a Dataform repo to host notebooks
+# Setup a Dataform repo to host notebooks
+## Create a Dataform repo to host notebooks
 resource "google_dataform_repository" "notebook_repo" {
-  provider = google-beta
-  project = module.project-services.project_id
-  region = var.region
+  provider     = google-beta
+  project      = module.project-services.project_id
+  region       = var.region
   display_name = "jss_learning_resources"
-  name = "thelook_learning_resources"
+  name         = "thelook_learning_resources"
 
-  depends_on = [ time_sleep.wait_after_apis ]
+  depends_on = [time_sleep.wait_after_apis]
+}
+
+resource "google_dataform_repository_iam_member" "manage_repo" {
+  provider   = google-beta
+  project    = module.project-services.project_id
+  region     = var.region
+  repository = google_dataform_repository.notebook_repo.name
+  for_each = toset([
+    "serviceAccount:${google_service_account.cloud_function_manage_sa.email}",
+    "serviceAccount:${google_service_account.workflow_manage_sa.email}"
+    ]
+  )
+  role   = "roles/dataform.admin"
+  member = each.key
 }
 
 # Create and deploy a Cloud Function to deploy notebooks
@@ -143,10 +158,16 @@ resource "google_cloudfunctions2_function" "notebook_deploy_function" {
     service_account_email            = google_service_account.cloud_function_manage_sa.email
     environment_variables = {
       "PROJECT_ID" : module.project-services.project_id,
-    "REGION" : var.region
+      "REGION" : var.region
     "REPO_ID" : google_dataform_repository.notebook_repo.id }
   }
-  depends_on = [time_sleep.wait_after_apis, google_project_iam_member.function_manage_roles, google_dataform_repository.notebook_repo]
+
+  depends_on = [
+    time_sleep.wait_after_apis,
+    google_project_iam_member.function_manage_roles,
+    google_dataform_repository.notebook_repo,
+    google_dataform_repository_iam_member.manage_repo
+  ]
 }
 
 resource "time_sleep" "wait_after_function" {
