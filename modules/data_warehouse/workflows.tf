@@ -16,7 +16,7 @@
 
 # Set up the Workflow
 # # Create the Workflows service account
-resource "google_service_account" "workflow_service_account" {
+resource "google_service_account" "workflow_manage_sa" {
   project      = module.project-services.project_id
   account_id   = "cloud-workflow-sa-${random_id.id.hex}"
   display_name = "Service Account for Cloud Workflows"
@@ -25,11 +25,10 @@ resource "google_service_account" "workflow_service_account" {
 }
 
 # # Grant the Workflow service account access
-resource "google_project_iam_member" "workflow_service_account_roles" {
+resource "google_project_iam_member" "workflow_manage_sa_roles" {
   for_each = toset([
     "roles/workflows.admin",
     "roles/run.invoker",
-    "roles/functions.invoker",
     "roles/iam.serviceAccountTokenCreator",
     "roles/storage.objectAdmin",
     "roles/bigquery.connectionUser",
@@ -39,9 +38,9 @@ resource "google_project_iam_member" "workflow_service_account_roles" {
   )
   project = module.project-services.project_id
   role    = each.key
-  member  = "serviceAccount:${google_service_account.workflow_service_account.email}"
+  member  = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
 
-  depends_on = [google_service_account.workflow_service_account]
+  depends_on = [google_service_account.workflow_manage_sa]
 }
 
 # # Create the workflow
@@ -50,7 +49,7 @@ resource "google_workflows_workflow" "workflow" {
   project         = module.project-services.project_id
   region          = var.region
   description     = "Runs post Terraform setup steps for Solution in Console"
-  service_account = google_service_account.workflow_service_account.id
+  service_account = google_service_account.workflow_manage_sa.id
 
   source_contents = templatefile("${path.module}/templates/workflow.tftpl", {
     raw_bucket    = google_storage_bucket.raw_bucket.name,
@@ -62,7 +61,7 @@ resource "google_workflows_workflow" "workflow" {
   labels = var.labels
 
   depends_on = [
-    google_project_iam_member.workflow_service_account_roles,
+    google_project_iam_member.workflow_manage_sa_roles,
     time_sleep.wait_after_function
   ]
 }
@@ -86,6 +85,7 @@ data "http" "call_workflows_setup" {
     google_workflows_workflow.workflow,
     google_storage_bucket.raw_bucket,
     google_cloudfunctions2_function.notebook_deploy_function,
-    time_sleep.wait_after_function
+    time_sleep.wait_after_function,
+    google_service_account_iam_member.workflow_auth_function
   ]
 }

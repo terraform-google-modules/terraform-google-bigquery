@@ -87,6 +87,17 @@ resource "google_project_iam_member" "function_manage_roles" {
   depends_on = [google_service_account.cloud_function_manage_sa]
 }
 
+resource "google_service_account_iam_member" "workflow_auth_function" {
+  service_account_id = google_service_account.cloud_function_manage_sa.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
+
+  depends_on = [
+    google_service_account.workflow_manage_sa,
+    google_service_account.cloud_function_manage_sa
+  ]
+}
+
 # Create and deploy a Cloud Function to deploy notebooks
 ## Create the Cloud Function
 resource "google_cloudfunctions2_function" "notebook_deploy_function" {
@@ -128,4 +139,3 @@ resource "time_sleep" "wait_after_function" {
   create_duration = "10s"
   depends_on      = [google_cloudfunctions2_function.notebook_deploy_function]
 }
-
