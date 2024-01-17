@@ -3,20 +3,19 @@ from google.cloud import dataform_v1beta1
 # from google.cloud.storage import Blob
 import json
 import os
-import tempfile
+# import tempfile
 
 # TODO: Add environment variables
-project_id = os.environ.get("PROJECT_ID")
-region = os.environ.get("REGION")
-repository_id = "thelook-learning-resources"
-gcs_file_url = os.environ.get("GCS_FILE_URL")
-dataform_client = dataform_v1beta1.DataformClient()
-tmpdir = tempfile.mkdtemp()
+# project_id = os.environ.get("PROJECT_ID")
+# region = os.environ.get("REGION")
+# repository_id = "thelook-learning-resources"
+# gcs_file_url = os.environ.get("GCS_FILE_URL")
+# dataform_client = dataform_v1beta1.DataformClient()
+# tmpdir = tempfile.mkdtemp()
 
 
 # Initialize request argument(s)
-def create_repo(project_id, region) -> None:
-    client = dataform_client
+def create_repo(client, project_id, region) -> None:
     request = dataform_v1beta1.CreateRepositoryRequest(
         parent=f"projects/{project_id}/locations/{region}",
         repository=dataform_v1beta1.Repository(
@@ -44,9 +43,9 @@ def create_repo(project_id, region) -> None:
 #     return local_dest
 
 
-def commit_repository_changes() -> None:
-    client = dataform_client
-# Example uses a local file that is opened, encoded, and committed
+def commit_repository_changes(client, project_id,
+                              region, repository_id) -> None:
+    # Example uses a local file that is opened, encoded, and committed
     file_name = 'Using BigFrames to Analyze BigQuery data.ipynb'
     repo_name = f"""projects/{project_id}/
         locations/{region}/
@@ -75,9 +74,8 @@ def commit_repository_changes() -> None:
     client.commit_repository_changes(request=request)
 
 
-def confirm_repo_commit() -> str:
-    client = dataform_client
-# Initialize request argument(s)
+def confirm_repo_commit(client, project_id, region, repository_id) -> str:
+    # Initialize request argument(s)
     request = dataform_v1beta1.FetchRepositoryHistoryRequest(
         name=f"""projects/{project_id}/
             locations/{region}/
@@ -94,9 +92,14 @@ def run_it(request):
     try:
         project_id = os.environ.get("PROJECT_ID")
         region = os.environ.get("REGION")
-        create_repo(project_id, region)
+        repository_id = "thelook-learning-resources"
+        # gcs_file_url = os.environ.get("GCS_FILE_URL")
+        dataform_client = dataform_v1beta1.DataformClient()
+        # tmpdir = tempfile.mkdtemp()
+        create_repo(dataform_client, project_id, region)
         # local_file = copy_fromgcs(gcs_file_url)
-        commit_repository_changes()
-        confirm_repo_commit()
+        commit_repository_changes(
+            dataform_client, project_id, region, repository_id)
+        confirm_repo_commit(dataform_client, project_id, region, repository_id)
     except Exception as e:
         return json.dumps({"errorMessage": str(e)}), 400
