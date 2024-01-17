@@ -49,9 +49,7 @@ def commit_repository_changes(client, project_id,
                               region, repository_id) -> None:
     # Example uses a local file that is opened, encoded, and committed
     file_name = 'Using BigFrames to Analyze BigQuery data.ipynb'
-    repo_name = f"""projects/{project_id}/
-        locations/{region}/
-        repositories/{repository_id}"""
+    repo_name = f"projects/{project_id}/locations/{region}/repositories/{repository_id}"
     directory = os.path.dirname(__file__)
     # TODO: Add a loop here to handle multiple files as we add new notebooks
     with open(os.path.join(directory,
