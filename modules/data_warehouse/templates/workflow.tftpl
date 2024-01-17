@@ -118,7 +118,7 @@ invoke_function:
                 - function_name: ${function_name}
         - run_function:
             try:
-                call: http.get
+                call: http.post
                 args:
                     url: function_url
                 result: function_result
