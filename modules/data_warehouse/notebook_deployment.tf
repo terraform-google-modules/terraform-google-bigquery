@@ -101,7 +101,7 @@ resource "google_service_account_iam_member" "workflow_auth_function" {
 }
 
 # Create a Dataform repo to host notebooks
-resource "google_dataform_respository" "notebook-repo" {
+resource "google_dataform_repository" "notebook-repo" {
   provider = google-beta
   project = module.project-services.project_id
   region = var.region
