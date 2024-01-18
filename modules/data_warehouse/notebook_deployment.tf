@@ -108,12 +108,13 @@ resource "google_service_account_iam_member" "workflow_auth_function" {
 # Setup a Dataform repo to host notebooks
 ## Create a Dataform repo to host notebooks
 resource "google_dataform_repository" "notebook_repo" {
-  provider = google-beta
-  project  = module.project-services.project_id
-  region   = var.region
-  name     = "jss_learning_resources"
+  provider     = google-beta
+  project      = module.project-services.project_id
+  region       = var.region
+  name         = "jss_notebooks"
+  display_name = "jss_notebooks"
   labels = {
-    "data-warehouse" = "true",
+    "data-warehouse" = "true"
     "single-file-asset-type" : "notebook"
   }
 
