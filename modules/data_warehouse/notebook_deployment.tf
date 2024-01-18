@@ -121,7 +121,7 @@ resource "google_dataform_repository" "notebook_repo" {
 }
 
 locals {
-  dataform_repo_roles = [
+  dataform_repo_access = [
     "serviceAccount:${google_service_account.cloud_function_manage_sa.email}",
     "serviceAccount:${google_service_account.workflow_manage_sa.email}"
   ]
@@ -132,8 +132,8 @@ resource "google_dataform_repository_iam_member" "manage_repo" {
   project    = module.project-services.project_id
   region     = var.region
   repository = google_dataform_repository.notebook_repo.name
-  count      = length(local.dataform_repo_roles)
-  member     = local.dataform_repo_roles[count.index]
+  count      = length(local.dataform_repo_access)
+  member     = local.dataform_repo_access[count.index]
   role       = "roles/dataform.admin"
 
   depends_on = [
