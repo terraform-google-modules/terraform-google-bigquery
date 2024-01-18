@@ -54,12 +54,10 @@ def commit_repository_changes(client, repo_id) -> str:
         commit_message="Committing learning notebooks"
     )
     request.file_operations = {}
-    request.file_operations["analyze_data_with_bq_dataframes.ipynb"] = dataform_v1beta1.\
-        CommitRepositoryChangesRequest.FileOperation(
-        write_file=dataform_v1beta1.
-        CommitRepositoryChangesRequest.FileOperation.WriteFile(
+    request.file_operations["analyze_data_with_bq_dataframes.ipynb"] = \
+        dataform_v1beta1.CommitRepositoryChangesRequest.\
+        FileOperation.WriteFile(
             contents=encoded_string
-        )
     )
     client.commit_repository_changes(request=request)
     print(f"Committed changes to {repo_id}")
