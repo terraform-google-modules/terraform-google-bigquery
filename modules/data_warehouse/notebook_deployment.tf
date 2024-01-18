@@ -129,6 +129,11 @@ resource "google_dataform_repository_iam_member" "manage_repo" {
   )
   role   = "roles/dataform.admin"
   member = each.key
+
+  depends_on = [
+    google_service_account.cloud_function_manage_sa,
+    google_service_account.workflow_manage_sa
+  ]
 }
 
 # Create and deploy a Cloud Function to deploy notebooks
