@@ -43,24 +43,24 @@ def commit_repository_changes(client, repo_id) -> str:
     # TODO: Add a loop here to handle multiple files as we add new notebooks
     with open(os.path.join(directory, file_name), 'rb') as f:
         encoded_string = f.read()
-        request = dataform_v1beta1.CommitRepositoryChangesRequest()
-        request.name = repo_id
-        request.commit_metadata = dataform_v1beta1.CommitMetadata(
-            author=dataform_v1beta1.CommitAuthor(
-                name="Google JSS",
-                # TODO: Figure out what to put here
-                email_address="no-reply@google.com"
-            ),
-            commit_message="Committing learning notebooks"
+    request = dataform_v1beta1.CommitRepositoryChangesRequest()
+    request.name = repo_id
+    request.commit_metadata = dataform_v1beta1.CommitMetadata(
+        author=dataform_v1beta1.CommitAuthor(
+            name="Google JSS",
+            # TODO: Figure out what to put here
+            email_address="no-reply@google.com"
+        ),
+        commit_message="Committing learning notebooks"
+    )
+    request.file_operations = {}
+    request.file_operations["analyze_data_with_bq_dataframes.ipynb"] = dataform_v1beta1.\
+        CommitRepositoryChangesRequest.FileOperation(
+        write_file=dataform_v1beta1.
+        CommitRepositoryChangesRequest.FileOperation.WriteFile(
+            contents=encoded_string
         )
-        request.file_operations = {}
-        request.file_operations[file_name] = dataform_v1beta1.\
-            CommitRepositoryChangesRequest.FileOperation(
-            write_file=dataform_v1beta1.
-            CommitRepositoryChangesRequest.FileOperation.WriteFile(
-                    contents=encoded_string
-                )
-        )
+    )
     client.commit_repository_changes(request=request)
     print(f"Committed changes to {repo_id}")
     return (f"Committed changes to {repo_id}")
