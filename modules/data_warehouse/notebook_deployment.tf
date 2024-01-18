@@ -120,7 +120,7 @@ resource "google_dataform_repository" "notebook_repo" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
-locals{
+locals {
   dataform_repo_roles = [
     "serviceAccount:${google_service_account.cloud_function_manage_sa.email}",
     "serviceAccount:${google_service_account.workflow_manage_sa.email}"

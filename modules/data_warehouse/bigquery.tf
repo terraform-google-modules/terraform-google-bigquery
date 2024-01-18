@@ -57,7 +57,7 @@ resource "google_bigquery_connection" "vertex_ai_connection" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
-locals{
+locals {
   bq_vertex_ai_roles = [
     "roles/aiplatform.user",
     "roles/bigquery.connectionUser",
@@ -331,7 +331,7 @@ resource "google_service_account" "dts" {
   description  = "Service account used to manage Data Transfer Service"
 }
 
-locals{
+locals {
   dts_roles = [
     "roles/bigquery.user",
     "roles/bigquery.dataEditor",
