@@ -121,9 +121,14 @@ invoke_function:
                 call: http.get
                 args:
                     url: function_url
+                    auth:
+                        type: OIDC
                 result: function_result
             except:
                 as: e
                 raise:
                     exception: $${e}
                     functionName: $${function_name}
+        - finish:
+            return: $${function_result}
+
