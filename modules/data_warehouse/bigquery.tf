@@ -57,16 +57,19 @@ resource "google_bigquery_connection" "vertex_ai_connection" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
+locals {
+  bq_vertex_ai_roles = [
+    "roles/aiplatform.user",
+    "roles/bigquery.connectionUser",
+    "roles/serviceusage.serviceUsageConsumer",
+  ]
+}
+
 # # Grant IAM access to the BigQuery Connection account for Vertex AI
 resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
-  for_each = {
-    role1 = "roles/aiplatform.user",
-    role2 = "roles/bigquery.connectionUser",
-    role3 = "roles/serviceusage.serviceUsageConsumer",
-    }
-
+  count = length(locals.bq_vertex_ai_roles)
+  role = locals.bq_vertex_ai_roles[count.index]
   project = module.project-services.project_id
-  role    = each.key
   member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}"
 
   depends_on = [google_bigquery_connection.vertex_ai_connection]
@@ -329,15 +332,19 @@ resource "google_service_account" "dts" {
 
 }
 
-# # Grant the DTS Specific service account access
-resource "google_project_iam_member" "dts_roles" {
-  for_each = toset([
+locals {
+  dts_roles = [
     "roles/bigquery.user",
     "roles/bigquery.dataEditor",
     "roles/bigquery.connectionUser"
-  ])
+  ]
+}
+
+# # Grant the DTS Specific service account access
+resource "google_project_iam_member" "dts_roles" {
   project = module.project-services.project_id
-  role    = each.key
+  count = length(locals.dts_roles)
+  role    = locals.dts_roles[count.index]
   member  = "serviceAccount:${google_service_account.dts.email}"
 }
 
