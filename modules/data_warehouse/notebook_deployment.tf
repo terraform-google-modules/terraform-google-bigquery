@@ -79,8 +79,8 @@ resource "google_project_iam_member" "function_manage_roles" {
     "roles/dataform.codeEditor",     // Edit access code resources
     "roles/iam.serviceAccountUser",
     "roles/iam.serviceAccountTokenCreator",
-    "roles/run.invoker",             // Service account role to invoke the remote function
-    "roles/storage.objectViewer"    // Read GCS files
+    "roles/run.invoker",         // Service account role to invoke the remote function
+    "roles/storage.objectViewer" // Read GCS files
     ]
   )
   project = module.project-services.project_id
@@ -111,7 +111,7 @@ resource "google_dataform_repository" "notebook_repo" {
   name         = "thelook_learning_resources"
   labels = {
     "data-warehouse" = "true",
-    "single-file-asset-type": "notebook"
+    "single-file-asset-type" : "notebook"
   }
 
   depends_on = [time_sleep.wait_after_apis]
