@@ -87,8 +87,8 @@ locals {
 ## Assign required permissions to the function service account
 resource "google_project_iam_member" "function_manage_roles" {
   project = module.project-services.project_id
-  count   = length(locals.cloud_function_roles)
-  role    = locals.cloud_function_roles[count.index]
+  count   = length(local.cloud_function_roles)
+  role    = local.cloud_function_roles[count.index]
   member  = "serviceAccount:${google_service_account.cloud_function_manage_sa.email}"
 
   depends_on = [google_service_account.cloud_function_manage_sa]
@@ -120,7 +120,7 @@ resource "google_dataform_repository" "notebook_repo" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
-locals {
+locals{
   dataform_repo_roles = [
     "serviceAccount:${google_service_account.cloud_function_manage_sa.email}",
     "serviceAccount:${google_service_account.workflow_manage_sa.email}"
@@ -132,8 +132,8 @@ resource "google_dataform_repository_iam_member" "manage_repo" {
   project    = module.project-services.project_id
   region     = var.region
   repository = google_dataform_repository.notebook_repo.name
-  count      = length(locals.dataform_repo_roles)
-  member     = locals.dataform_repo_roles[count.index]
+  count      = length(local.dataform_repo_roles)
+  member     = local.dataform_repo_roles[count.index]
   role       = "roles/dataform.admin"
 
   depends_on = [

@@ -41,7 +41,7 @@ locals {
 
 # # Grant the Workflow service account access
 resource "google_project_iam_member" "workflow_manage_sa_roles" {
-  count   = length(locals.workflow_roles)
+  count   = length(local.workflow_roles)
   project = module.project-services.project_id
   member  = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
   role    = local.workflow_roles[count.index]
