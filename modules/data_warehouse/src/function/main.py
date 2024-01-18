@@ -35,17 +35,7 @@ import os
 #     print(f"Created repository: {repo_fqn}")
 
 
-# def copy_fromgcs(gcs_file_url):
-#     client = gcs.Client()
-#     blob = Blob.from_string(gcs_file_url, client=client)
-#     blob_name = blob.name
-#     local_dest = os.path.join(tmpdir, blob_name)
-#     print(f"Downloading {blob.name}")
-#     blob.download_to_filename(local_dest)
-#     return local_dest
-
-
-def commit_repository_changes(client, repo_name, repo_id) -> None:
+def commit_repository_changes(client, repo_name, repo_id) -> str:
     # Example uses a local file that is opened, encoded, and committed
     file_name = 'Using BigFrames to Analyze BigQuery data.ipynb'
     repo_id = repo_id
@@ -73,21 +63,23 @@ def commit_repository_changes(client, repo_name, repo_id) -> None:
                 )
         )
     client.commit_repository_changes(request=request)
-    print(f"Committed changes to {repo_id}", )
+    print(f"Committed changes to {repo_id}")
+    return (f"Committed changes to {repo_id}")
 
 
-def confirm_repo_commit(client, repo_name, repo_id) -> str:
+def confirm_repo_commit(client, repo_name, repo_id) -> None:
     # Initialize request argument(s)
     repo_id = repo_id
     request = dataform_v1beta1.FetchRepositoryHistoryRequest(
-        name=repo_name
+        name=repo_id
     )
     # Make the request
     page_result = client.fetch_repository_history(request=request)
     # Handle the response
+    response_list = []
     for response in page_result:
         print(response)
-
+        response_list.append(response)
 
 def run_it(request):
     try:
@@ -97,8 +89,11 @@ def run_it(request):
         repo_id = os.environ.get("REPO_ID")
         repo_name = "thelook_learning_resources"
         # create_repo(dataform_client, project_id, region, repo_id)
-        commit_repository_changes(
+        commit_changes = commit_repository_changes(
             dataform_client, repo_name, repo_id)
-        confirm_repo_commit(dataform_client, repo_name, repo_id)
+        confirm_repo_commit(
+            dataform_client, repo_name, repo_id)
+        print("Notebooks created!")
+        return commit_changes
     except Exception as e:
         return json.dumps({"errorMessage": str(e)}), 400

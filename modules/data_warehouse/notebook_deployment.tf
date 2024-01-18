@@ -109,6 +109,10 @@ resource "google_dataform_repository" "notebook_repo" {
   region       = var.region
   display_name = "jss_learning_resources"
   name         = "thelook_learning_resources"
+  labels = {
+    "data-warehouse" = "true",
+    "single-file-asset-type": "notebook"
+  }
 
   depends_on = [time_sleep.wait_after_apis]
 }
