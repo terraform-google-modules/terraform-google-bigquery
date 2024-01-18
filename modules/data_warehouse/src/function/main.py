@@ -1,17 +1,7 @@
+import base64
 from google.cloud import dataform_v1beta1
-# import google.cloud.storage as gcs
-# from google.cloud.storage import Blob
 import json
 import os
-# import tempfile
-
-# TODO: Add environment variables
-# project_id = os.environ.get("PROJECT_ID")
-# region = os.environ.get("REGION")
-# repository_id = "thelook-learning-resources"
-# gcs_file_url = os.environ.get("GCS_FILE_URL")
-# dataform_client = dataform_v1beta1.DataformClient()
-# tmpdir = tempfile.mkdtemp()
 
 # Initialize request argument(s)
 
@@ -41,8 +31,9 @@ def commit_repository_changes(client, repo_id) -> str:
     repo_id = repo_id
     directory = os.path.dirname(__file__)
     # TODO: Add a loop here to handle multiple files as we add new notebooks
-    with open(os.path.join(directory, file_name), 'rb') as f:
-        encoded_string = f.read()
+    with open(os.path.join(directory, file_name), 'r') as f:
+        string = json.dumps(f)
+        encoded_string = base64.b64encode(string)
     request = dataform_v1beta1.CommitRepositoryChangesRequest()
     request.name = repo_id
     request.commit_metadata = dataform_v1beta1.CommitMetadata(
@@ -55,10 +46,15 @@ def commit_repository_changes(client, repo_id) -> str:
     )
     request.file_operations = {}
     request.file_operations["analyze_data_with_bq_dataframes.ipynb"] = \
-        dataform_v1beta1.CommitRepositoryChangesRequest.\
-        FileOperation.WriteFile(
-            contents=encoded_string
-    )
+        dataform_v1beta1.\
+        CommitRepositoryChangesRequest.\
+        FileOperation(write_file=dataform_v1beta1.
+                      CommitRepositoryChangesRequest.
+                      FileOperation.
+                      WriteFile(contents=encoded_string)
+                      )
+    print(request)
+    print(request.file_operations)
     client.commit_repository_changes(request=request)
     print(f"Committed changes to {repo_id}")
     return (f"Committed changes to {repo_id}")
