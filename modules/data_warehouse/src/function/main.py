@@ -80,6 +80,7 @@ def confirm_repo_commit(client, repo_name, repo_id) -> None:
         print(response)
         response_list.append(response)
 
+
 def run_it(request):
     try:
         # project_id = os.environ.get("PROJECT_ID")

@@ -20,6 +20,8 @@ resource "google_service_account" "workflow_manage_sa" {
   project      = module.project-services.project_id
   account_id   = "cloud-workflow-sa-${random_id.id.hex}"
   display_name = "Service Account for Cloud Workflows"
+  description  = "Service account used to manage Cloud Workflows"
+
 
   depends_on = [time_sleep.wait_after_apis]
 }

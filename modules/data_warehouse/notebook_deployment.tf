@@ -64,6 +64,7 @@ resource "google_service_account" "cloud_function_manage_sa" {
   project      = module.project-services.project_id
   account_id   = "notebook-deployment"
   display_name = "Cloud Functions Service Account"
+  description  = "Service account used to manage Cloud Function"
 
   depends_on = [
     time_sleep.wait_after_apis,
@@ -104,10 +105,10 @@ resource "google_service_account_iam_member" "workflow_auth_function" {
 # Setup a Dataform repo to host notebooks
 ## Create a Dataform repo to host notebooks
 resource "google_dataform_repository" "notebook_repo" {
-  provider     = google-beta
-  project      = module.project-services.project_id
-  region       = var.region
-  name = "jss_learning_resources"
+  provider = google-beta
+  project  = module.project-services.project_id
+  region   = var.region
+  name     = "jss_learning_resources"
   labels = {
     "data-warehouse" = "true",
     "single-file-asset-type" : "notebook"
