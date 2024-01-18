@@ -67,8 +67,8 @@ locals {
 
 # # Grant IAM access to the BigQuery Connection account for Vertex AI
 resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
-  count = length(locals.bq_vertex_ai_roles)
-  role = locals.bq_vertex_ai_roles[count.index]
+  count   = length(locals.bq_vertex_ai_roles)
+  role    = locals.bq_vertex_ai_roles[count.index]
   project = module.project-services.project_id
   member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}"
 
@@ -343,7 +343,7 @@ locals {
 # # Grant the DTS Specific service account access
 resource "google_project_iam_member" "dts_roles" {
   project = module.project-services.project_id
-  count = length(locals.dts_roles)
+  count   = length(locals.dts_roles)
   role    = locals.dts_roles[count.index]
   member  = "serviceAccount:${google_service_account.dts.email}"
 }

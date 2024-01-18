@@ -27,7 +27,7 @@ resource "google_service_account" "workflow_manage_sa" {
 }
 
 locals {
-    workflow_roles = [
+  workflow_roles = [
     "roles/bigquery.connectionUser",
     "roles/bigquery.dataEditor",
     "roles/bigquery.jobUser",
@@ -36,15 +36,15 @@ locals {
     "roles/run.invoker",
     "roles/storage.objectAdmin",
     "roles/workflows.admin",
-    ]
+  ]
 }
 
 # # Grant the Workflow service account access
 resource "google_project_iam_member" "workflow_manage_sa_roles" {
-  count = length(locals.workflow_roles)
+  count   = length(locals.workflow_roles)
   project = module.project-services.project_id
   member  = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
-  role = local.workflow_roles[count.index]
+  role    = local.workflow_roles[count.index]
 
   depends_on = [google_service_account.workflow_manage_sa]
 }
