@@ -35,14 +35,13 @@ import os
 #     print(f"Created repository: {repo_fqn}")
 
 
-def commit_repository_changes(client, repo_name, repo_id) -> str:
+def commit_repository_changes(client, repo_id) -> str:
     # Example uses a local file that is opened, encoded, and committed
-    file_name = 'Using BigFrames to Analyze BigQuery data.ipynb'
+    file_name = 'getting_started_bq_dataframes.ipynb'
     repo_id = repo_id
     directory = os.path.dirname(__file__)
     # TODO: Add a loop here to handle multiple files as we add new notebooks
-    with open(os.path.join(directory,
-                           "getting_started_bq_dataframes.ipynb"), 'rb') as f:
+    with open(os.path.join(directory, file_name), 'rb') as f:
         encoded_string = f.read()
         request = dataform_v1beta1.CommitRepositoryChangesRequest()
         request.name = repo_id
@@ -90,7 +89,7 @@ def run_it(request):
         repo_name = "thelook_learning_resources"
         # create_repo(dataform_client, project_id, region, repo_id)
         commit_changes = commit_repository_changes(
-            dataform_client, repo_name, repo_id)
+            dataform_client, repo_id)
         confirm_repo_commit(
             dataform_client, repo_name, repo_id)
         print("Notebooks created!")

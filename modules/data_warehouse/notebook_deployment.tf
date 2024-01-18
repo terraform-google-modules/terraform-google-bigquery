@@ -107,8 +107,7 @@ resource "google_dataform_repository" "notebook_repo" {
   provider     = google-beta
   project      = module.project-services.project_id
   region       = var.region
-  display_name = "jss_learning_resources"
-  name         = "thelook_learning_resources"
+  name = "jss_learning_resources"
   labels = {
     "data-warehouse" = "true",
     "single-file-asset-type" : "notebook"

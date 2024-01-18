@@ -55,7 +55,7 @@ resource "google_workflows_workflow" "workflow" {
   source_contents = templatefile("${path.module}/templates/workflow.tftpl", {
     raw_bucket    = google_storage_bucket.raw_bucket.name,
     dataset_id    = google_bigquery_dataset.ds_edw.dataset_id,
-    function_url  = google_cloudfunctions2_function.notebook_deploy_function.service_config[0].uri
+    function_url  = google_cloudfunctions2_function.notebook_deploy_function.url
     function_name = google_cloudfunctions2_function.notebook_deploy_function.name
   })
 
