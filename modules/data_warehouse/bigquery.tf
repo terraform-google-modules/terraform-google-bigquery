@@ -59,12 +59,12 @@ resource "google_bigquery_connection" "vertex_ai_connection" {
 
 # # Grant IAM access to the BigQuery Connection account for Vertex AI
 resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
-  for_each = toset([
-    "roles/aiplatform.user",
-    "roles/bigquery.connectionUser",
-    "roles/serviceusage.serviceUsageConsumer",
-    ]
-  )
+  for_each = {
+    role1 = "roles/aiplatform.user",
+    role2 = "roles/bigquery.connectionUser",
+    role3 = "roles/serviceusage.serviceUsageConsumer",
+    }
+
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}"

@@ -73,17 +73,17 @@ resource "google_service_account" "cloud_function_manage_sa" {
 
 ## Assign required permissions to the function service account
 resource "google_project_iam_member" "function_manage_roles" {
-  for_each = toset([
-    "roles/aiplatform.user",         // Needs to predict from endpoints
-    "roles/aiplatform.serviceAgent", // Service account role
-    "roles/cloudfunctions.admin",    // Service account role to manage access to the remote function
-    "roles/dataform.codeEditor",     // Edit access code resources
-    "roles/iam.serviceAccountUser",
-    "roles/iam.serviceAccountTokenCreator",
-    "roles/run.invoker",         // Service account role to invoke the remote function
-    "roles/storage.objectViewer" // Read GCS files
-    ]
-  )
+  for_each = {
+    role1 = "roles/aiplatform.user",         // Needs to predict from endpoints
+    role2 = "roles/aiplatform.serviceAgent", // Service account role
+    role3 = "roles/cloudfunctions.admin",    // Service account role to manage access to the remote function
+    role4 = "roles/dataform.codeEditor",     // Edit access code resources
+    role5 = "roles/iam.serviceAccountUser",
+    role6 = "roles/iam.serviceAccountTokenCreator",
+    role7 = "roles/run.invoker",         // Service account role to invoke the remote function
+    role8 = "roles/storage.objectViewer" // Read GCS files
+  }
+
   project = module.project-services.project_id
   role    = each.key
   member  = "serviceAccount:${google_service_account.cloud_function_manage_sa.email}"
@@ -122,11 +122,11 @@ resource "google_dataform_repository_iam_member" "manage_repo" {
   project    = module.project-services.project_id
   region     = var.region
   repository = google_dataform_repository.notebook_repo.name
-  for_each = toset([
-    "serviceAccount:${google_service_account.cloud_function_manage_sa.email}",
-    "serviceAccount:${google_service_account.workflow_manage_sa.email}"
-    ]
-  )
+  for_each = {
+    role1 = "serviceAccount:${google_service_account.cloud_function_manage_sa.email}",
+    role2 = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
+  }
+
   role   = "roles/dataform.admin"
   member = each.key
 
