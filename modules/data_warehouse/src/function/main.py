@@ -23,40 +23,36 @@ import os
 
 def commit_repository_changes(client, project_id, region_id) -> str:
     # Example uses a local file that is opened, encoded, and committed
-    directory = os.path.dirname(__file__)
+    directory = f"{os.path.dirname(__file__)}/notebooks/"
     for file in os.listdir(directory):
-        if file.endswith('.ipynb'):
-            with open(os.path.join(directory, file), 'rb') as f:
-                encoded_string = f.read()
-            file_base_name = os.path.basename(file).removesuffix(".ipynb")
-            repo_id = f"projects/{project_id}/locations/{region_id}/\
-                repositories/{file_base_name}"
-            print(repo_id)
-            request = dataform_v1beta1.CommitRepositoryChangesRequest()
-            request.name = repo_id
-            request.commit_metadata = dataform_v1beta1.CommitMetadata(
-                author=dataform_v1beta1.CommitAuthor(
-                    name="Google JSS",
-                    # TODO: Figure out what to put here
-                    email_address="no-reply@google.com"
-                ),
-                commit_message="Committing learning notebooks"
-            )
-            request.file_operations = {}
-            request.file_operations["content.ipynb"] = \
-                dataform_v1beta1.\
-                CommitRepositoryChangesRequest.\
-                FileOperation(write_file=dataform_v1beta1.
-                              CommitRepositoryChangesRequest.
-                              FileOperation.
-                              WriteFile(contents=encoded_string)
-                              )
-            print(request.file_operations)
-            client.commit_repository_changes(request=request)
-            print(f"Committed changes to {repo_id}")
-            return (f"Committed changes to {repo_id}")
-        else:
-            continue
+        with open(os.path.join(directory, file), 'rb') as f:
+            encoded_string = f.read()
+        file_base_name = os.path.basename(file).removesuffix(".ipynb")
+        repo_id = f"projects/{project_id}/locations/{region_id}/\
+            repositories/{file_base_name}"
+        print(repo_id)
+        request = dataform_v1beta1.CommitRepositoryChangesRequest()
+        request.name = repo_id
+        request.commit_metadata = dataform_v1beta1.CommitMetadata(
+            author=dataform_v1beta1.CommitAuthor(
+                name="Google JSS",
+                # TODO: Figure out what to put here
+                email_address="no-reply@google.com"
+            ),
+            commit_message="Committing learning notebooks"
+        )
+        request.file_operations = {}
+        request.file_operations["content.ipynb"] = \
+            dataform_v1beta1.\
+            CommitRepositoryChangesRequest.\
+            FileOperation(write_file=dataform_v1beta1.
+                          CommitRepositoryChangesRequest.
+                          FileOperation.
+                          WriteFile(contents=encoded_string)
+                          )
+        print(request.file_operations)
+        client.commit_repository_changes(request=request)
+        print(f"Committed changes to {repo_id}")
     return ("Committed changes to all repos")
 
 

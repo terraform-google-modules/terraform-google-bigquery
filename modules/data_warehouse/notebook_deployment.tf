@@ -37,7 +37,7 @@ resource "local_file" "notebooks" {
 data "archive_file" "create_notebook_function_zip" {
   type        = "zip"
   output_path = "${path.root}/tmp/notebooks_function_source.zip"
-  source_dir  = "${path.root}/src/function/"
+  source_dir  = "${path.root}/src/function/notebooks/"
 
   depends_on = [local_file.notebooks]
 }
