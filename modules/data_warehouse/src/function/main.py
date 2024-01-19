@@ -24,7 +24,7 @@ import os
 def commit_repository_changes(client, project_id, region_id) -> str:
     # Example uses a local file that is opened, encoded, and committed
     directory = os.path.dirname(__file__)
-    for file in directory:
+    for file in os.listdir(directory):
         if file.endswith('.ipynb'):
             with open(os.path.join(directory, file), 'rb') as f:
                 encoded_string = f.read()
