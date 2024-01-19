@@ -105,43 +105,46 @@ resource "google_service_account_iam_member" "workflow_auth_function" {
   ]
 }
 
+locals {
+  repo_names = [
+    for s in fileset("${path.module}/templates/notebooks/", "*.ipynb") : trimsuffix(s, ".ipynb")
+  ]
+}
+
 # Setup a Dataform repo to host notebooks
 ## Create a Dataform repo to host notebooks
 resource "google_dataform_repository" "notebook_repo" {
+  count        = length(local.repo_names)
   provider     = google-beta
   project      = module.project-services.project_id
   region       = var.region
-  name         = "jss_notebooks"
-  display_name = "jss_notebooks"
+  name         = local.repo_names[count.index]
+  display_name = local.repo_names[count.index]
   labels = {
-    "data-warehouse" = "true"
+    "data-warehouse"         = "true"
     "single-file-asset-type" = "notebook"
-    # "set_authenticated_user_admin" = "true"
   }
-
   depends_on = [time_sleep.wait_after_apis]
 }
 
-locals {
-  dataform_repo_access = [
-    "serviceAccount:${google_service_account.cloud_function_manage_sa.email}",
-    "serviceAccount:${google_service_account.workflow_manage_sa.email}"
-  ]
-}
-
-resource "google_dataform_repository_iam_member" "manage_repo" {
+resource "google_dataform_repository_iam_member" "function_manage_repo" {
   provider   = google-beta
   project    = module.project-services.project_id
   region     = var.region
-  repository = google_dataform_repository.notebook_repo.name
-  count      = length(local.dataform_repo_access)
-  member     = local.dataform_repo_access[count.index]
   role       = "roles/dataform.admin"
+  member     = "serviceAccount:${google_service_account.cloud_function_manage_sa.email}"
+  count      = length(local.repo_names)
+  repository = "projects/${module.project-services.project_id}/locations/${var.region}/repository/${local.repo_names[count.index]}"
+}
 
-  depends_on = [
-    google_service_account.cloud_function_manage_sa,
-    google_service_account.workflow_manage_sa
-  ]
+resource "google_dataform_repository_iam_member" "workflow_manage_repo" {
+  provider   = google-beta
+  project    = module.project-services.project_id
+  region     = var.region
+  role       = "roles/dataform.admin"
+  member     = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
+  count      = length(local.repo_names)
+  repository = "projects/${module.project-services.project_id}/locations/${var.region}/repository/${local.repo_names[count.index]}"
 }
 
 # Create and deploy a Cloud Function to deploy notebooks
@@ -177,14 +180,15 @@ resource "google_cloudfunctions2_function" "notebook_deploy_function" {
     environment_variables = {
       "PROJECT_ID" : module.project-services.project_id,
       "REGION" : var.region
-    "REPO_ID" : google_dataform_repository.notebook_repo.id }
+    }
   }
 
   depends_on = [
     time_sleep.wait_after_apis,
     google_project_iam_member.function_manage_roles,
     google_dataform_repository.notebook_repo,
-    google_dataform_repository_iam_member.manage_repo
+    google_dataform_repository_iam_member.workflow_manage_repo,
+    google_dataform_repository_iam_member.function_manage_repo
   ]
 }
 
