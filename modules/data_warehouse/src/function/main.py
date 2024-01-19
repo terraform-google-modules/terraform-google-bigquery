@@ -21,15 +21,14 @@ import os
 #     print(f"Created repository: {repo_fqn}")
 
 
-def commit_repository_changes(client, project_id, region_id) -> str:
+def commit_repository_changes(client, project, region) -> str:
     # Example uses a local file that is opened, encoded, and committed
     directory = f"{os.path.dirname(__file__)}/notebooks/"
     for file in os.listdir(directory):
         with open(os.path.join(directory, file), 'rb') as f:
             encoded_string = f.read()
         file_base_name = os.path.basename(file).removesuffix(".ipynb")
-        repo_id = f"projects/{project_id}/locations/{region_id}/\
-            repositories/{file_base_name}"
+        repo_id = f"projects/{project}/locations/{region}/repositories/{file_base_name}"
         print(repo_id)
         request = dataform_v1beta1.CommitRepositoryChangesRequest()
         request.name = repo_id
@@ -74,7 +73,7 @@ def commit_repository_changes(client, project_id, region_id) -> str:
 def run_it(request) -> str:
     dataform_client = dataform_v1beta1.DataformClient()
     project_id = os.environ.get("PROJECT_ID")
-    region_id = os.environ.get("REGION_ID")
+    region_id = os.environ.get("REGION")
     # create_repo(dataform_client, project_id, region, repo_id)
     commit_changes = commit_repository_changes(
         dataform_client, project_id, region_id)
