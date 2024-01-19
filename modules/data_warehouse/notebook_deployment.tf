@@ -134,7 +134,7 @@ resource "google_dataform_repository_iam_member" "function_manage_repo" {
   role       = "roles/dataform.admin"
   member     = "serviceAccount:${google_service_account.cloud_function_manage_sa.email}"
   count      = length(local.repo_names)
-  repository = "projects/${module.project-services.project_id}/locations/${var.region}/repository/${local.repo_names[count.index]}"
+  repository = local.repo_names[count.index]
 }
 
 resource "google_dataform_repository_iam_member" "workflow_manage_repo" {
@@ -144,7 +144,7 @@ resource "google_dataform_repository_iam_member" "workflow_manage_repo" {
   role       = "roles/dataform.admin"
   member     = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
   count      = length(local.repo_names)
-  repository = "projects/${module.project-services.project_id}/locations/${var.region}/repository/${local.repo_names[count.index]}"
+  repository = local.repo_names[count.index]
 }
 
 # Create and deploy a Cloud Function to deploy notebooks
