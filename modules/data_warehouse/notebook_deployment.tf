@@ -24,7 +24,7 @@ locals {
 # Create the notebook files to be uploaded
 resource "local_file" "notebooks" {
   count = length(local.repo_names)
-  filename = "${path.root}/src/function/${local.repo_names[count.index]}.ipynb"
+  filename = "${path.root}/src/function/notebooks/${local.repo_names[count.index]}.ipynb"
   content = templatefile("${path.root}/templates/notebooks/${local.repo_names[count.index]}.tftpl", {
     PROJECT_ID = module.project-services.project_id,
     REGION     = var.region
@@ -37,7 +37,7 @@ resource "local_file" "notebooks" {
 data "archive_file" "create_notebook_function_zip" {
   type        = "zip"
   output_path = "${path.root}/tmp/notebooks_function_source.zip"
-  source_dir  = "${path.root}/src/function/notebooks/"
+  source_dir  = "${path.root}/src/function/"
 
   depends_on = [local_file.notebooks]
 }
