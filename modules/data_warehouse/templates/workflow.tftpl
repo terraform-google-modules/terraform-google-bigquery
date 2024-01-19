@@ -120,7 +120,7 @@ invoke_function:
             try:
                 call: http.get
                 args:
-                    url: function_url
+                    url: $${function_url}
                     auth:
                         type: OIDC
                 result: function_result
