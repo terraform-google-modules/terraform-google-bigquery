@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
+locals {
+  repo_names = [
+    for s in fileset("${path.root}/templates/notebooks/", "*.tftpl") : trimsuffix(s, ".tftpl")
+  ]
+}
 
 # TODO[SCG] Create a for-each sequence to handle multiple files here
 # Create the notebook files to be uploaded
 resource "local_file" "notebooks" {
-  filename = "${path.root}/src/function/getting_started_bq_dataframes.ipynb"
-  content = templatefile("${path.module}/templates/notebooks/getting_started_bq_dataframes.tftpl", {
+  count = length(local.repo_names)
+  filename = "${path.root}/src/function/${local.repo_names[count.index]}.ipynb"
+  content = templatefile("${path.root}/templates/notebooks/${local.repo_names[count.index]}.tftpl", {
     PROJECT_ID = module.project-services.project_id,
     REGION     = var.region
     }
@@ -102,12 +108,6 @@ resource "google_service_account_iam_member" "workflow_auth_function" {
   depends_on = [
     google_service_account.workflow_manage_sa,
     google_service_account.cloud_function_manage_sa
-  ]
-}
-
-locals {
-  repo_names = [
-    for s in fileset("${path.module}/templates/notebooks/", "*.ipynb") : trimsuffix(s, ".ipynb")
   ]
 }
 
