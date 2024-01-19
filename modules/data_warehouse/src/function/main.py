@@ -57,6 +57,7 @@ def commit_repository_changes(client, project_id, region_id) -> str:
             return (f"Committed changes to {repo_id}")
         else:
             continue
+    return ("Committed changes to all repos")
 
 
 # def confirm_repo_commit(client, repo_id) -> None:
@@ -74,7 +75,7 @@ def commit_repository_changes(client, project_id, region_id) -> str:
 #         response_list.append(response)
 
 
-def run_it(request):
+def run_it(request) -> str:
     dataform_client = dataform_v1beta1.DataformClient()
     project_id = os.environ.get("PROJECT_ID")
     region_id = os.environ.get("REGION_ID")
