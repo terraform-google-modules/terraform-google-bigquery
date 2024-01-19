@@ -1,11 +1,7 @@
-import base64
 from google.cloud import dataform_v1beta1
-import json
 import os
 
 # Initialize request argument(s)
-
-
 # def create_repo(client, project_id, region, repo_id) -> None:
 #     request = dataform_v1beta1.CreateRepositoryRequest(
 #         parent=f"projects/{project_id}/locations/{region}",
@@ -44,7 +40,7 @@ def commit_repository_changes(client, repo_id) -> str:
         commit_message="Committing learning notebooks"
     )
     request.file_operations = {}
-    request.file_operations["analyze_data_with_bq_dataframes.ipynb"] = \
+    request.file_operations["content.ipynb"] = \
         dataform_v1beta1.\
         CommitRepositoryChangesRequest.\
         FileOperation(write_file=dataform_v1beta1.
@@ -74,18 +70,13 @@ def confirm_repo_commit(client, repo_name, repo_id) -> None:
 
 
 def run_it(request):
-    try:
-        # project_id = os.environ.get("PROJECT_ID")
-        # region = os.environ.get("REGION")
-        dataform_client = dataform_v1beta1.DataformClient()
-        repo_id = os.environ.get("REPO_ID")
-        repo_name = "thelook_learning_resources"
-        # create_repo(dataform_client, project_id, region, repo_id)
-        commit_changes = commit_repository_changes(
-            dataform_client, repo_id)
-        confirm_repo_commit(
-            dataform_client, repo_name, repo_id)
-        print("Notebooks created!")
-        return commit_changes
-    except Exception as e:
-        return json.dumps({"errorMessage": str(e)}), 400
+    dataform_client = dataform_v1beta1.DataformClient()
+    repo_id = os.environ.get("REPO_ID")
+    repo_name = "thelook_learning_resources"
+    # create_repo(dataform_client, project_id, region, repo_id)
+    commit_changes = commit_repository_changes(
+        dataform_client, repo_id)
+    confirm_repo_commit(
+        dataform_client, repo_name, repo_id)
+    print("Notebooks created!")
+    return commit_changes

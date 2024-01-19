@@ -115,7 +115,8 @@ resource "google_dataform_repository" "notebook_repo" {
   display_name = "jss_notebooks"
   labels = {
     "data-warehouse" = "true"
-    "single-file-asset-type" : "notebook"
+    "single-file-asset-type" = "notebook"
+    # "set_authenticated_user_admin" = "true"
   }
 
   depends_on = [time_sleep.wait_after_apis]

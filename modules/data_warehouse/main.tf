@@ -63,7 +63,7 @@ module "project-services" {
 
 # Wait after APIs are enabled to give time for them to spin up
 resource "time_sleep" "wait_after_apis" {
-  create_duration = "90s"
+  create_duration = "30s"
   depends_on      = [module.project-services]
 }
 
