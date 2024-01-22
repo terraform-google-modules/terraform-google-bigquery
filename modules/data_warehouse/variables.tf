@@ -68,9 +68,9 @@ variable "deletion_protection" {
 }
 
 variable "runtime_auto_delete" {
-  type = string
+  type        = string
   description = "Specifies whether the disk will be auto-deleted when the notebook runtime VM instance is deleted"
-  default = true
+  default     = true
 }
 
 

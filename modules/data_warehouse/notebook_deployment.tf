@@ -35,9 +35,9 @@ resource "local_file" "notebooks" {
 
 # Create the notebook runtime to save time after deployment
 resource "google_notebooks_runtime" "notebook_runtime" {
-  name = "notebook-runtime"
+  name     = "notebook-runtime"
   location = var.region
-  project = module.project-services.project_id
+  project  = module.project-services.project_id
   virtual_machine {
     virtual_machine_config {
       machine_type = "e2-standard-4"
@@ -45,14 +45,14 @@ resource "google_notebooks_runtime" "notebook_runtime" {
         auto_delete = var.runtime_auto_delete
         initialize_params {
           disk_size_gb = "20"
-          disk_type = "PD_STANDARD"
+          disk_type    = "PD_STANDARD"
         }
       }
       labels = var.labels
     }
   }
   software_config {
-    idle_shutdown = true
+    idle_shutdown         = true
     idle_shutdown_timeout = "90m"
   }
 }
