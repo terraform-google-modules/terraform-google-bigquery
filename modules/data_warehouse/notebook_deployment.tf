@@ -53,7 +53,7 @@ resource "google_notebooks_runtime" "notebook_runtime" {
   }
   software_config {
     idle_shutdown         = true
-    idle_shutdown_timeout = "90m"
+    idle_shutdown_timeout = "90"
   }
 }
 
