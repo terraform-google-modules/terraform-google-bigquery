@@ -94,7 +94,7 @@
         "\n",
         "The steps include:\n",
         "\n",
-        "- Creating a BigQuery DataFrames DataFrame: Access data from a local CSV to create a BigQuery DataFrames DataFrame.\n",
+        "- Creating a BigQuery DataFrames DataFrame: Access data from a Parquet file stored in GCS to create a BigQuery DataFrames DataFrame.\n",
         "- Inspecting and manipulating data: Use pandas to perform data cleaning and preparation on the DataFrame.\n",
         "- Deploying a custom function: Deploy a [remote function ](https://cloud.google.com/bigquery/docs/remote-functions)that runs a scalar Python function at BigQuery scale."
       ]
@@ -107,9 +107,9 @@
       "source": [
         "### Dataset\n",
         "\n",
-        "This tutorial uses the [```penguins``` table](https://console.cloud.google.com/bigquery?p=bigquery-public-data&d=ml_datasets&t=penguins) (a BigQuery public dataset), which contains data on a set of penguins including species, island of residence, weight, culmen length and depth, flipper length, and sex.\n",
+        "This tutorial uses the Jump Start Solution dataset (```thelook```), which contains syntheic retail sales data for a fictional eCommerce clothing retailer.\n",
         "\n",
-        "The same dataset is also stored in a public Cloud Storage bucket as a CSV file so that you can use it to try ingesting data from a local environment."
+        "The same dataset is also deployed to a Cloud Storage bucket in your project as Parquet files so that you can use it to try ingesting data from a local environment."
       ]
     },
     {
@@ -135,87 +135,12 @@
     {
       "cell_type": "markdown",
       "metadata": {
-        "id": "i7EUnXsZhAGF"
-      },
-      "source": [
-        "## Installation\n",
-        "\n",
-        "Install the following packages, which are required to run this notebook:"
-      ]
-    },
-    {
-      "cell_type": "code",
-      "execution_count": null,
-      "metadata": {
-        "id": "mfPoOwPLGpSr"
-      },
-      "outputs": [],
-      "source": [
-        "!pip install bigframes"
-      ]
-    },
-    {
-      "cell_type": "markdown",
-      "metadata": {
-        "id": "58707a750154"
-      },
-      "source": [
-        "### Colab only\n",
-        "\n",
-        "Uncomment and run the following cell to restart the kernel:"
-      ]
-    },
-    {
-      "cell_type": "code",
-      "execution_count": null,
-      "metadata": {
-        "id": "f200f10a1da3"
-      },
-      "outputs": [],
-      "source": [
-        "# Automatically restart kernel after installs so that your environment can access the new packages\n",
-        "# import IPython\n",
-        "\n",
-        "# app = IPython.Application.instance()\n",
-        "# app.kernel.do_shutdown(True)"
-      ]
-    },
-    {
-      "cell_type": "markdown",
-      "metadata": {
         "id": "BF1j6f9HApxa"
       },
       "source": [
         "## Before you begin\n",
         "\n",
         "Complete the tasks in this section to set up your environment."
-      ]
-    },
-    {
-      "cell_type": "markdown",
-      "metadata": {
-        "id": "Yq7zKYWelRQP"
-      },
-      "source": [
-        "### Set up your Google Cloud project\n",
-        "\n",
-        "**The following steps are required, regardless of your notebook environment.**\n",
-        "\n",
-        "1. [Select or create a Google Cloud project](https://console.cloud.google.com/cloud-resource-manager). When you first create an account, you get a $300 credit towards your compute/storage costs.\n",
-        "\n",
-        "2. [Make sure that billing is enabled for your project](https://cloud.google.com/billing/docs/how-to/modify-project).\n",
-        "\n",
-        "3. [Click here](https://console.cloud.google.com/flows/enableapi?apiid=bigquery.googleapis.com,bigqueryconnection.googleapis.com,cloudfunctions.googleapis.com,run.googleapis.com,artifactregistry.googleapis.com,cloudbuild.googleapis.com,cloudresourcemanager.googleapis.com) to enable the following APIs:\n",
-        "\n",
-        "  * BigQuery API\n",
-        "  * BigQuery Connection API\n",
-        "  * Cloud Functions API\n",
-        "  * Cloud Run API\n",
-        "  * Artifact Registry API\n",
-        "  * Cloud Build API\n",
-        "  * Cloud Resource Manager API\n",
-        "\n",
-        "4. If you are running this notebook locally, install the [Cloud SDK](https://cloud.google.com/sdk)."
       ]
     },
     {
@@ -234,16 +159,23 @@
     },
     {
       "cell_type": "code",
-      "execution_count": null,
+      "execution_count": 2,
       "metadata": {
+        "executionInfo": {
+          "elapsed": 19,
+          "status": "ok",
+          "timestamp": 1705950462905,
+          "user": {
+            "displayName": "",
+            "userId": ""
+          },
+          "user_tz": 300
+        },
         "id": "oM1iC_MfAts1"
       },
       "outputs": [],
       "source": [
-        "PROJECT_ID = ${PROJECT_ID}\n",
-        "\n",
-        "# Set the project id\n",
-        "! gcloud config set project $${PROJECT_ID}"
+        "PROJECT_ID = ${PROJECT_ID}"
       ]
     },
     {
@@ -259,80 +191,23 @@
     },
     {
       "cell_type": "code",
-      "execution_count": null,
+      "execution_count": 4,
       "metadata": {
+        "executionInfo": {
+          "elapsed": 1632,
+          "status": "ok",
+          "timestamp": 1705950681580,
+          "user": {
+            "displayName": "",
+            "userId": ""
+          },
+          "user_tz": 300
+        },
         "id": "eF-Twtc4XGem"
       },
       "outputs": [],
       "source": [
         "REGION = ${REGION}"
-      ]
-    },
-    {
-      "cell_type": "markdown",
-      "metadata": {
-        "id": "sBCra4QMA2wR"
-      },
-      "source": [
-        "### Authenticate your Google Cloud account\n",
-        "\n",
-        "Depending on your Jupyter environment, you might have to manually authenticate. Follow the relevant instructions below."
-      ]
-    },
-    {
-      "cell_type": "markdown",
-      "metadata": {
-        "id": "74ccc9e52986"
-      },
-      "source": [
-        "**Vertex AI Workbench**\n",
-        "\n",
-        "Do nothing, you are already authenticated."
-      ]
-    },
-    {
-      "cell_type": "markdown",
-      "metadata": {
-        "id": "de775a3773ba"
-      },
-      "source": [
-        "**Local JupyterLab instance**\n",
-        "\n",
-        "Uncomment and run the following cell:"
-      ]
-    },
-    {
-      "cell_type": "code",
-      "execution_count": null,
-      "metadata": {
-        "id": "254614fa0c46"
-      },
-      "outputs": [],
-      "source": [
-        "# ! gcloud auth login"
-      ]
-    },
-    {
-      "cell_type": "markdown",
-      "metadata": {
-        "id": "ef21552ccea8"
-      },
-      "source": [
-        "**Colab**\n",
-        "\n",
-        "Uncomment and run the following cell:"
-      ]
-    },
-    {
-      "cell_type": "code",
-      "execution_count": null,
-      "metadata": {
-        "id": "603adbbf0532"
-      },
-      "outputs": [],
-      "source": [
-        "# from google.colab import auth\n",
-        "# auth.authenticate_user()"
       ]
     },
     {
@@ -346,8 +221,18 @@
     },
     {
       "cell_type": "code",
-      "execution_count": null,
+      "execution_count": 5,
       "metadata": {
+        "executionInfo": {
+          "elapsed": 17,
+          "status": "ok",
+          "timestamp": 1705950696793,
+          "user": {
+            "displayName": "",
+            "userId": ""
+          },
+          "user_tz": 300
+        },
         "id": "PyQmSRbKA8r-"
       },
       "outputs": [],
@@ -367,8 +252,18 @@
     },
     {
       "cell_type": "code",
-      "execution_count": null,
+      "execution_count": 6,
       "metadata": {
+        "executionInfo": {
+          "elapsed": 16,
+          "status": "ok",
+          "timestamp": 1705950704127,
+          "user": {
+            "displayName": "",
+            "userId": ""
+          },
+          "user_tz": 300
+        },
         "id": "NPPMuw2PXGeo"
       },
       "outputs": [],
@@ -470,9 +365,9 @@
         "id": "i6XV-HTN-IFF"
       },
       "source": [
-        "In addition to giving you access to pandas, BigQuery DataFrames also enables you to build ML models, run inference, and deploy and run your own Python functions at scale. You'll see examples throughout this and other notebooks in this GitHub repo.\n",
+        "In addition to giving you access to pandas, BigQuery DataFrames also enables you to build ML models, run inference, and deploy and run your own Python functions at scale. You'll see examples throughout this notebook.\n",
         "\n",
-        "Now you'll move to the smaller `penguins` dataset for the remainder of this getting started guide."
+        "Now you'll move to the JSS dataset (`thelook`) for the remainder of this getting started guide."
       ]
     },
     {
@@ -485,9 +380,9 @@
         "\n",
         "You can create a BigQuery DataFrames DataFrame by reading data from any of the following locations:\n",
         "\n",
-        "* A local data file\n",
-        "* Data stored in a BigQuery table\n",
         "* A data file stored in Cloud Storage\n",
+        "* Data stored in a BigQuery table\n",
+        "* A local data file\n",
         "* An in-memory pandas DataFrame\n",
         "\n",
         "The following sections show how to use the first two options."
@@ -499,9 +394,27 @@
         "id": "iZDjzglh9eWZ"
       },
       "source": [
-        "### Create a DataFrame from a local file\n",
+        "### Create a DataFrame from a GCS file\n",
         "\n",
-        "Use the instructions in the following sections to create a BigQuery DataFrames DataFrame from a local file.\n"
+        "Use these instructions in the following sections to create a BigQuery DataFrames DataFrame from a file stored in Google Cloud Storage.\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "#### Define the bucket name\n",
+        "\n",
+        "First, run the cell below to set the GCS bucket that was created by the Jump Start Solution"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {},
+      "outputs": [],
+      "source": [
+        "GCS_BUCKET = ${GCS_BUCKET}"
       ]
     },
     {
@@ -510,55 +423,30 @@
         "id": "8Jry3NoFv3Wm"
       },
       "source": [
-        "#### Get the CSV file\n",
+        "#### Define the file path\n",
         "\n",
-        "First, copy and paste the following link into a new browser window to download the CSV file of the penguin data to your local machine:\n",
-        "\n",
-        "> http://storage.googleapis.com/cloud-samples-data/vertex-ai/bigframe/penguins.csv\n",
-        "\n",
-        "Next, upload the local CSV file to your notebook environment, using the relevant instructions for your environment:\n",
-        "\n",
-        "**Vertex AI Workbench or a local JupyterLab instance**\n",
-        "\n",
-        "1. Follow these [directions](https://jupyterlab.readthedocs.io/en/latest/user/files.html#uploading-and-downloading) to upload the file from your machine to your notebook environment by using the UI.\n",
-        "2. Uncomment the next cell, set the variable `fn` to match the path to your file, and then run the cell."
+        "Next, follow the steps below to define the Parquet file URI."
       ]
     },
     {
       "cell_type": "code",
-      "execution_count": null,
+      "execution_count": 9,
       "metadata": {
+        "executionInfo": {
+          "elapsed": 3,
+          "status": "ok",
+          "timestamp": 1705951374283,
+          "user": {
+            "displayName": "",
+            "userId": ""
+          },
+          "user_tz": 300
+        },
         "id": "SvyXzkRl783u"
       },
       "outputs": [],
       "source": [
-        "# fn = 'penguins.csv'"
-      ]
-    },
-    {
-      "cell_type": "markdown",
-      "metadata": {
-        "id": "yqcuF1JNvFse"
-      },
-      "source": [
-        "**Colab**\n",
-        "\n",
-        "Uncomment and run the following cell:"
-      ]
-    },
-    {
-      "cell_type": "code",
-      "execution_count": null,
-      "metadata": {
-        "id": "3QHQYlnoBLpt"
-      },
-      "outputs": [],
-      "source": [
-        "# from google.colab import files\n",
-        "# uploaded = files.upload()\n",
-        "# for fn in uploaded.keys():\n",
-        "#  print('User uploaded file \"{name}\" with length {length} bytes'.format(\n",
-        "#      name=fn, length=len(uploaded[fn])))"
+        "fn_order_items = f\"${GCS_BUCKET}/thelook-ecommerce/order_items.parquet\""
       ]
     },
     {
@@ -569,7 +457,7 @@
       "source": [
         "#### Create a DataFrame\n",
         "\n",
-        "Create a BigQuery DataFrames DataFrame from the uploaded CSV file:"
+        "Create a BigQuery DataFrames DataFrame from the parquet file:"
       ]
     },
     {
@@ -580,7 +468,7 @@
       },
       "outputs": [],
       "source": [
-        "df_from_local = bf.read_csv(fn)"
+        "df_from_gcs = bf.read_parquet(path=fn_order_items)"
       ]
     },
     {
@@ -589,7 +477,7 @@
         "id": "U-RVfNCu_h_h"
       },
       "source": [
-        "Take a look at the first few rows of the DataFrame:"
+        "Take a look at the first few rows of the `orders` DataFrame that was just created:"
       ]
     },
     {
@@ -600,7 +488,7 @@
       },
       "outputs": [],
       "source": [
-        "df_from_local.head()"
+        "df_from_gcs.head()"
       ]
     },
     {
@@ -620,18 +508,40 @@
         "id": "V1DWpmSCAEql"
       },
       "source": [
-        "First, create a BigQuery dataset to house the table. Choose a name for your dataset, or keep the suggestion of `birds`."
+        "First, create a BigQuery dataset to house the table."
       ]
     },
     {
       "cell_type": "code",
-      "execution_count": null,
+      "execution_count": 10,
       "metadata": {
-        "id": "ZSP7gt13QrQt"
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "executionInfo": {
+          "elapsed": 2753,
+          "status": "ok",
+          "timestamp": 1705951974404,
+          "user": {
+            "displayName": "",
+            "userId": ""
+          },
+          "user_tz": 300
+        },
+        "id": "ZSP7gt13QrQt",
+        "outputId": "f77acb4b-6c1b-4790-990f-2278821a52b4"
       },
-      "outputs": [],
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Dataset thelook_bigframes created.\n"
+          ]
+        }
+      ],
       "source": [
-        "DATASET_ID = \"birds\"\n",
+        "DATASET_ID = \"thelook_bigframes\"\n",
         "\n",
         "from google.cloud import bigquery\n",
         "client = bigquery.Client(project=PROJECT_ID)\n",
@@ -658,7 +568,7 @@
       },
       "outputs": [],
       "source": [
-        "df_from_local.to_gbq(PROJECT_ID + \".\" + DATASET_ID + \".penguins\")"
+        "df_from_gcs.to_gbq(PROJECT_ID + \".\" + DATASET_ID + \".order_items\")"
       ]
     },
     {
@@ -688,7 +598,7 @@
       },
       "outputs": [],
       "source": [
-        "query_or_table = f\"\"\"{PROJECT_ID}.{DATASET_ID}.penguins\"\"\"\n",
+        "query_or_table = f\"\"\"{PROJECT_ID}.{DATASET_ID}.order_items\"\"\"\n",
         "bq_df = bf.read_gbq(query_or_table)\n",
         "bq_df.head()"
       ]
@@ -730,7 +640,7 @@
       },
       "outputs": [],
       "source": [
-        "bq_df[\"body_mass_g\"].head(10)"
+        "bq_df[\"sale_price\"].head(10)"
       ]
     },
     {
@@ -739,7 +649,7 @@
         "id": "EJIZJaNXFQzh"
       },
       "source": [
-        "Compute the mean of this series:"
+        "Compute the sum of this series to find the total reveneue from all items sold:"
       ]
     },
     {
@@ -750,8 +660,8 @@
       },
       "outputs": [],
       "source": [
-        "average_body_mass = bq_df[\"body_mass_g\"].mean()\n",
-        "print(f\"average_body_mass: {average_body_mass}\")"
+        "average_sale_price = bq_df[\"sale_price\"].mean()\n",
+        "print(f\"average_sale_price: {average_sale_price}\")"
       ]
     },
     {
@@ -760,7 +670,7 @@
         "id": "DSs1cnca-MOU"
       },
       "source": [
-        "Calculate the mean `body_mass_g` by `species` using the `groupby` operation:"
+        "Calculate the mean `sales_price` of all items in an order using the `groupby` operation to group by `order_id`:"
       ]
     },
     {
@@ -771,7 +681,8 @@
       },
       "outputs": [],
       "source": [
-        "bq_df[\"species\", \"body_mass_g\"].groupby(by=bq_df[\"species\"]).mean(numeric_only=True).head()"
+        "bq_df[\"order_id\", \"sale_price\"].groupby(\n",
+        "    by=bq_df[\"order_id\"]).mean(numeric_only=True).head()"
       ]
     },
     {
@@ -800,7 +711,7 @@
         "id": "zjw8toUbHuRD"
       },
       "source": [
-        "Running the cell below creates a custom function using the `remote_function` method. This function categorizes a value into one of two buckets: >= 4000 or <4000.\n",
+        "Running the cell below creates a custom function using the `remote_function` method. This function categorizes a value into one of two buckets: >= 400 or <400.\n",
         "\n",
         "> Note: Creating a function requires a [BigQuery connection](https://cloud.google.com/bigquery/docs/remote-functions#create_a_remote_function). This code assumes a pre-created connection named `bigframes-default-connection`. If\n",
         "the connection is not already created, BigQuery DataFrames attempts to create one assuming the [necessary APIs\n",
@@ -820,8 +731,8 @@
         "@bf.remote_function([float], str)\n",
         "def get_bucket(num):\n",
         "  if not num: return \"NA\"\n",
-        "  boundary = 4000\n",
-        "  return \"at_or_above_4000\" if num >= boundary else \"below_4000\""
+        "  boundary = 400\n",
+        "  return \"at_or_above_400\" if num >= boundary else \"below_400\""
       ]
     },
     {
@@ -855,7 +766,7 @@
         "id": "vHV3JqKjJHsH"
       },
       "source": [
-        "Apply the custom function to the BigQuery DataFrames DataFrame to bucketize the `body_mass_g` value of the penguins:"
+        "Apply the custom function to the BigQuery DataFrames DataFrame to bucketize the `sale_price` value of each item sold:"
       ]
     },
     {
@@ -866,8 +777,9 @@
       },
       "outputs": [],
       "source": [
-        "bq_df = bq_df.assign(body_mass_bucket=bq_df['body_mass_g'].apply(get_bucket))\n",
-        "bq_df[['body_mass_g', 'body_mass_bucket']].head(10)"
+        "bq_df = bq_df.assign(order_value_bucket=bq_df['sale_price'].groupby(\n",
+        "    by=bq_df[\"order_id\"]).sum(numeric_only=True)groupapply(get_bucket))\n",
+        "bq_df[['sale_price', 'order_value_bucket']].head(10)"
       ]
     },
     {
@@ -958,8 +870,7 @@
   ],
   "metadata": {
     "colab": {
-      "provenance": [],
-      "toc_visible": true
+      "provenance": []
     },
     "kernelspec": {
       "display_name": "Python 3",
@@ -969,5 +880,3 @@
   "nbformat": 4,
   "nbformat_minor": 0
 }
-
-
