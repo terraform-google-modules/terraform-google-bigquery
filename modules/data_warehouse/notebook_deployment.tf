@@ -41,7 +41,7 @@ resource "google_notebooks_runtime" "notebook_runtime" {
   labels   = var.labels
   virtual_machine {
     virtual_machine_config {
-      machine_type = "e2-standard-4"
+      machine_type = "n1-standard"
       data_disk {
         initialize_params {
           disk_size_gb = "20"
