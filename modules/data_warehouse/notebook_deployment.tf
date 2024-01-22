@@ -38,7 +38,7 @@ resource "google_notebooks_runtime" "notebook_runtime" {
   name     = "notebook-runtime"
   location = var.region
   project  = module.project-services.project_id
-  labels = var.labels
+  labels   = var.labels
   virtual_machine {
     virtual_machine_config {
       machine_type = "e2-standard-4"
