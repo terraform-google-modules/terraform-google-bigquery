@@ -24,8 +24,17 @@ variable "region" {
   description = "Google Cloud Region"
 
   validation {
-    condition     = contains(["us-central1", "us-west4", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west9", "asia-northeast3", "asia-southeast1"], var.region)
-    error_message = "This region is not supported. Region must be one of us-central1, us-west4, europe-west1, europe-west2, europe-west3, europe-west4, europe-west9, asia-northeast3, asia-southeast1."
+    condition     = contains(["us-central1",
+                              #"us-west4",
+                              "europe-west1",
+                              "europe-west2",
+                              "europe-west3",
+                              "europe-west4",
+                              #"europe-west9",
+                              #"asia-northeast3",
+                              "asia-southeast1"],
+                              var.region)
+    error_message = "This region is not supported. Region must be one of: us-central1, us-west4, europe-west1, europe-west2, europe-west3, europe-west4, europe-west9, asia-northeast3, asia-southeast1."
   }
 }
 

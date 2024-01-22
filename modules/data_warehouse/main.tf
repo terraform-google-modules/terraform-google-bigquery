@@ -73,7 +73,7 @@ resource "random_id" "id" {
 }
 
 # Set up Storage Buckets
-# # Set up the raw storage bucket for data
+## Set up the raw storage bucket for data
 resource "google_storage_bucket" "raw_bucket" {
   name                        = "ds-edw-raw-${random_id.id.hex}"
   project                     = module.project-services.project_id

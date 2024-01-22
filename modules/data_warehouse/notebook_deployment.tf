@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
+# Define the list of notebook files to be created
 locals {
-  repo_names = [
+  notebook_names = [
     for s in fileset("${path.root}/templates/notebooks/", "*.tftpl") : trimsuffix(s, ".tftpl")
   ]
 }
 
-# TODO[SCG] Create a for-each sequence to handle multiple files here
 # Create the notebook files to be uploaded
 resource "local_file" "notebooks" {
-  count = length(local.repo_names)
-  filename = "${path.root}/src/function/notebooks/${local.repo_names[count.index]}.ipynb"
-  content = templatefile("${path.root}/templates/notebooks/${local.repo_names[count.index]}.tftpl", {
+  count    = length(local.notebook_names)
+  filename = "${path.root}/src/function/notebooks/${local.notebook_names[count.index]}.ipynb"
+  content = templatefile("${path.root}/templates/notebooks/${local.notebook_names[count.index]}.tftpl", {
     PROJECT_ID = module.project-services.project_id,
     REGION     = var.region
     }
@@ -33,7 +33,7 @@ resource "local_file" "notebooks" {
 }
 
 # Upload the Cloud Function source code to a GCS bucket
-## Define/create zip file as a source for the Cloud Function that deploys the notebooks
+## Define/create zip file for the Cloud Function source. This includes notebooks that will be uploaded
 data "archive_file" "create_notebook_function_zip" {
   type        = "zip"
   output_path = "${path.root}/tmp/notebooks_function_source.zip"
@@ -77,6 +77,7 @@ resource "google_service_account" "cloud_function_manage_sa" {
   ]
 }
 
+## Define the IAM roles that are granted to the Cloud Function service account
 locals {
   cloud_function_roles = [
     "roles/aiplatform.user",         // Needs to predict from endpoints
@@ -100,6 +101,7 @@ resource "google_project_iam_member" "function_manage_roles" {
   depends_on = [google_service_account.cloud_function_manage_sa]
 }
 
+## Grant the Cloud Workflows service account access to act as the Cloud Function service account
 resource "google_service_account_iam_member" "workflow_auth_function" {
   service_account_id = google_service_account.cloud_function_manage_sa.name
   role               = "roles/iam.serviceAccountUser"
@@ -107,19 +109,18 @@ resource "google_service_account_iam_member" "workflow_auth_function" {
 
   depends_on = [
     google_service_account.workflow_manage_sa,
-    google_service_account.cloud_function_manage_sa
   ]
 }
 
-# Setup a Dataform repo to host notebooks
-## Create a Dataform repo to host notebooks
+# Setup Dataform repositories to host notebooks
+## Create the Dataform repos
 resource "google_dataform_repository" "notebook_repo" {
-  count        = length(local.repo_names)
+  count        = length(local.notebook_names)
   provider     = google-beta
   project      = module.project-services.project_id
   region       = var.region
-  name         = local.repo_names[count.index]
-  display_name = local.repo_names[count.index]
+  name         = local.notebook_names[count.index]
+  display_name = local.notebook_names[count.index]
   labels = {
     "data-warehouse"         = "true"
     "single-file-asset-type" = "notebook"
@@ -127,24 +128,26 @@ resource "google_dataform_repository" "notebook_repo" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
+## Grant Cloud Function service account access to write to the repo
 resource "google_dataform_repository_iam_member" "function_manage_repo" {
   provider   = google-beta
   project    = module.project-services.project_id
   region     = var.region
   role       = "roles/dataform.admin"
   member     = "serviceAccount:${google_service_account.cloud_function_manage_sa.email}"
-  count      = length(local.repo_names)
-  repository = local.repo_names[count.index]
+  count      = length(local.notebook_names)
+  repository = local.notebook_names[count.index]
 }
 
+## Grant Cloud Workflows service account access to write to the repo
 resource "google_dataform_repository_iam_member" "workflow_manage_repo" {
   provider   = google-beta
   project    = module.project-services.project_id
   region     = var.region
   role       = "roles/dataform.admin"
   member     = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
-  count      = length(local.repo_names)
-  repository = local.repo_names[count.index]
+  count      = length(local.notebook_names)
+  repository = local.notebook_names[count.index]
 }
 
 # Create and deploy a Cloud Function to deploy notebooks
@@ -192,7 +195,8 @@ resource "google_cloudfunctions2_function" "notebook_deploy_function" {
   ]
 }
 
+## Wait for Function deployment to complete
 resource "time_sleep" "wait_after_function" {
-  create_duration = "10s"
+  create_duration = "5s"
   depends_on      = [google_cloudfunctions2_function.notebook_deploy_function]
 }

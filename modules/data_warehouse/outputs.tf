@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-output "repo_names" {
-  value       = local.repo_names
-  description = "TESTING - REMOVE BEFORE PUBLISH"
-}
-
 output "ds_friendly_name" {
   value       = google_bigquery_dataset.ds_edw.friendly_name
   description = "Dataset name"

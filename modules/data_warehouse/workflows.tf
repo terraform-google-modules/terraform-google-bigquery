@@ -15,7 +15,7 @@
  */
 
 # Set up the Workflow
-# # Create the Workflows service account
+## Create the Workflows service account
 resource "google_service_account" "workflow_manage_sa" {
   project      = module.project-services.project_id
   account_id   = "cloud-workflow-sa-${random_id.id.hex}"
@@ -26,6 +26,7 @@ resource "google_service_account" "workflow_manage_sa" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
+## Define the IAM roles granted to the Workflows service account
 locals {
   workflow_roles = [
     "roles/bigquery.connectionUser",
@@ -39,7 +40,7 @@ locals {
   ]
 }
 
-# # Grant the Workflow service account access
+## Grant the Workflow service account access
 resource "google_project_iam_member" "workflow_manage_sa_roles" {
   count   = length(local.workflow_roles)
   project = module.project-services.project_id
@@ -49,7 +50,7 @@ resource "google_project_iam_member" "workflow_manage_sa_roles" {
   depends_on = [google_service_account.workflow_manage_sa]
 }
 
-# # Create the workflow
+## Create the workflow
 resource "google_workflows_workflow" "workflow" {
   name            = "initial-workflow"
   project         = module.project-services.project_id
@@ -75,7 +76,7 @@ resource "google_workflows_workflow" "workflow" {
 data "google_client_config" "current" {
 }
 
-# # Trigger the execution of the setup workflow
+## Trigger the execution of the setup workflow with an API call
 data "http" "call_workflows_setup" {
   url    = "https://workflowexecutions.googleapis.com/v1/projects/${module.project-services.project_id}/locations/${var.region}/workflows/${google_workflows_workflow.workflow.name}/executions"
   method = "POST"
