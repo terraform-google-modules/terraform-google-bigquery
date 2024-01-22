@@ -38,23 +38,25 @@ resource "google_notebooks_runtime" "notebook_runtime" {
   name     = "notebook-runtime"
   location = var.region
   project  = module.project-services.project_id
+  labels = var.labels
   virtual_machine {
     virtual_machine_config {
       machine_type = "e2-standard-4"
       data_disk {
-        auto_delete = var.runtime_auto_delete
         initialize_params {
           disk_size_gb = "20"
           disk_type    = "PD_STANDARD"
         }
       }
-      labels = var.labels
     }
   }
   software_config {
     idle_shutdown         = true
     idle_shutdown_timeout = "90"
   }
+
+  depends_on = [time_sleep.wait_after_apis]
+
 }
 
 # Upload the Cloud Function source code to a GCS bucket
