@@ -40,6 +40,7 @@ module "project-services" {
     "datacatalog.googleapis.com",
     "dataform.googleapis.com",
     "datalineage.googleapis.com",
+    "notebooks.googleapis.com",
     "run.googleapis.com",
     "serviceusage.googleapis.com",
     "storage.googleapis.com",

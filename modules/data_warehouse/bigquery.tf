@@ -348,6 +348,8 @@ resource "google_project_iam_member" "dts_roles" {
   count   = length(local.dts_roles)
   role    = local.dts_roles[count.index]
   member  = "serviceAccount:${google_service_account.dts.email}"
+
+  depends_on = [time_sleep.wait_after_apis]
 }
 
 # Set up scheduled query
