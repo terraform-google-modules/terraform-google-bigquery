@@ -16,7 +16,7 @@
 
 output "config_user" {
   description = "REMOVE BEFORE PUBLICATION"
-  value = data.google_client_openid_userinfo.user.email
+  value       = data.google_client_openid_userinfo.user.email
 }
 
 output "ds_friendly_name" {
