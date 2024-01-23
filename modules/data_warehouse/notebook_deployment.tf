@@ -27,8 +27,8 @@ resource "local_file" "notebooks" {
   filename = "${path.root}/src/function/notebooks/${local.notebook_names[count.index]}.ipynb"
   content = templatefile("${path.root}/templates/notebooks/${local.notebook_names[count.index]}.tftpl", {
     PROJECT_ID = format("\\%s${module.project-services.project_id}%\\s", "\"", "\""),
-    REGION     = format("%s\"${var.region}%s\"", "\\", "\\"),
-    GCS_BUCKET = format("%s\"${google_storage_bucket.raw_bucket.url}%s\"", "\\")
+    REGION     = format("\\%s${var.region}%\\s", "\"", "\""),
+    GCS_BUCKET = format("\\%s${google_storage_bucket.raw_bucket.url}%\\s", "\"", "\"")
     }
   )
 }
