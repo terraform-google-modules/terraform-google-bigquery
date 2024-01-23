@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+output "config_user" {
+  description = "REMOVE BEFORE PUBLICATION"
+  value = data.google_client_openid_userinfo.provider_identity
+}
+
 output "ds_friendly_name" {
   value       = google_bigquery_dataset.ds_edw.friendly_name
   description = "Dataset name"
