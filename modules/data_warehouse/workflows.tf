@@ -74,9 +74,6 @@ resource "google_workflows_workflow" "workflow" {
   ]
 }
 
-data "google_client_config" "current" {
-}
-
 ## Trigger the execution of the setup workflow with an API call
 data "http" "call_workflows_setup" {
   url    = "https://workflowexecutions.googleapis.com/v1/projects/${module.project-services.project_id}/locations/${var.region}/workflows/${google_workflows_workflow.workflow.name}/executions"
