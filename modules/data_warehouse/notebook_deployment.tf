@@ -33,15 +33,21 @@ resource "local_file" "notebooks" {
   )
 }
 
-##TODO: Create notebook runtime template first
-
-
 # Create the notebook runtime to save time after deployment
+## Grab user email to make them the owner of the runtime
+data "google_client_openid_userinfo" "provider_identity" {
+}
+
+##Create the runtime
 resource "google_notebooks_runtime" "notebook_runtime" {
   name     = "notebook-runtime"
   location = var.region
   project  = module.project-services.project_id
   labels   = var.labels
+  access_config {
+    access_type   = "SINGLE_USER"
+    runtime_owner = data.google_client_openid_userinfo.provider_identity.email
+  }
   virtual_machine {
     virtual_machine_config {
       machine_type = "n1-standard-2"
@@ -97,10 +103,10 @@ resource "google_storage_bucket_object" "function_source_upload" {
 # Manage Cloud Function permissions and access
 ## Create a service account to manage the function
 resource "google_service_account" "cloud_function_manage_sa" {
-  project      = module.project-services.project_id
-  account_id   = "notebook-deployment"
-  display_name = "Cloud Functions Service Account"
-  description  = "Service account used to manage Cloud Function"
+  project                      = module.project-services.project_id
+  account_id                   = "notebook-deployment"
+  display_name                 = "Cloud Functions Service Account"
+  description                  = "Service account used to manage Cloud Function"
   create_ignore_already_exists = var.create_ignore_service_accounts
 
   depends_on = [
@@ -129,7 +135,7 @@ resource "google_project_iam_member" "function_manage_roles" {
   role    = local.cloud_function_roles[count.index]
   member  = "serviceAccount:${google_service_account.cloud_function_manage_sa.email}"
 
-  depends_on = [google_service_account.cloud_function_manage_sa]
+  depends_on = [google_service_account.cloud_function_manage_sa, google_project_iam_member.dts_roles]
 }
 
 ## Grant the Cloud Workflows service account access to act as the Cloud Function service account
@@ -140,6 +146,7 @@ resource "google_service_account_iam_member" "workflow_auth_function" {
 
   depends_on = [
     google_service_account.workflow_manage_sa,
+    google_project_iam_member.function_manage_roles
   ]
 }
 
@@ -168,6 +175,7 @@ resource "google_dataform_repository_iam_member" "function_manage_repo" {
   member     = "serviceAccount:${google_service_account.cloud_function_manage_sa.email}"
   count      = length(local.notebook_names)
   repository = local.notebook_names[count.index]
+  depends_on = [time_sleep.wait_after_apis, google_service_account_iam_member.workflow_auth_function]
 }
 
 ## Grant Cloud Workflows service account access to write to the repo
@@ -179,6 +187,8 @@ resource "google_dataform_repository_iam_member" "workflow_manage_repo" {
   member     = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
   count      = length(local.notebook_names)
   repository = local.notebook_names[count.index]
+
+  depends_on = [google_service_account_iam_member.workflow_auth_function, google_dataform_repository_iam_member.function_manage_repo]
 }
 
 # Create and deploy a Cloud Function to deploy notebooks

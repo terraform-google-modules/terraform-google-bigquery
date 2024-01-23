@@ -68,7 +68,7 @@ variable "deletion_protection" {
 }
 
 variable "create_ignore_service_accounts" {
-  type = string
+  type        = string
   description = "Whether or not to ignore creation of a service account if an account of the same name already exists"
-  default = true
+  default     = true
 }

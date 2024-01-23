@@ -17,10 +17,10 @@
 # Set up the Workflow
 ## Create the Workflows service account
 resource "google_service_account" "workflow_manage_sa" {
-  project      = module.project-services.project_id
-  account_id   = "cloud-workflow-sa-${random_id.id.hex}"
-  display_name = "Service Account for Cloud Workflows"
-  description  = "Service account used to manage Cloud Workflows"
+  project                      = module.project-services.project_id
+  account_id                   = "cloud-workflow-sa-${random_id.id.hex}"
+  display_name                 = "Service Account for Cloud Workflows"
+  description                  = "Service account used to manage Cloud Workflows"
   create_ignore_already_exists = var.create_ignore_service_accounts
 
 
@@ -48,7 +48,7 @@ resource "google_project_iam_member" "workflow_manage_sa_roles" {
   member  = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
   role    = local.workflow_roles[count.index]
 
-  depends_on = [google_service_account.workflow_manage_sa]
+  depends_on = [google_dataform_repository_iam_member.workflow_manage_repo]
 }
 
 ## Create the workflow

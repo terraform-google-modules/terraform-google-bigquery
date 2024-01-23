@@ -73,7 +73,7 @@ resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
   project = module.project-services.project_id
   member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}"
 
-  depends_on = [google_bigquery_connection.vertex_ai_connection]
+  depends_on = [google_bigquery_connection.vertex_ai_connection, google_project_iam_member.bq_connection_iam_object_viewer]
 }
 
 # Create data tables in BigQuery
@@ -326,13 +326,13 @@ resource "google_bigquery_routine" "sp_sample_translation_queries" {
 # Create specific service account for DTS Run
 ## Create a DTS specific service account
 resource "google_service_account" "dts" {
-  project      = module.project-services.project_id
-  account_id   = "cloud-dts-sa-${random_id.id.hex}"
-  display_name = "Service Account for Data Transfer Service"
-  description  = "Service account used to manage Data Transfer Service"
+  project                      = module.project-services.project_id
+  account_id                   = "cloud-dts-sa-${random_id.id.hex}"
+  display_name                 = "Service Account for Data Transfer Service"
+  description                  = "Service account used to manage Data Transfer Service"
   create_ignore_already_exists = var.create_ignore_service_accounts
 
-  depends_on = [ time_sleep.wait_after_apis ]
+  depends_on = [time_sleep.wait_after_apis]
 
 }
 
@@ -353,7 +353,7 @@ resource "google_project_iam_member" "dts_roles" {
   role    = local.dts_roles[count.index]
   member  = "serviceAccount:${google_service_account.dts.email}"
 
-  depends_on = [time_sleep.wait_after_apis]
+  depends_on = [time_sleep.wait_after_apis, google_project_iam_member.bq_connection_iam_vertex_ai]
 }
 
 # Set up scheduled query
