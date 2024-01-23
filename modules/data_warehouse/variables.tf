@@ -66,9 +66,3 @@ variable "deletion_protection" {
   description = "Whether or not to protect GCS resources from deletion when solution is modified or changed."
   default     = true
 }
-
-variable "create_ignore_service_accounts" {
-  type        = string
-  description = "Whether or not to ignore creation of a service account if an account of the same name already exists"
-  default     = true
-}
