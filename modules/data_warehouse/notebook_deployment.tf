@@ -28,7 +28,7 @@ resource "local_file" "notebooks" {
   content = templatefile("${path.root}/templates/notebooks/${local.notebook_names[count.index]}.tftpl", {
     PROJECT_ID = format("\\%s${module.project-services.project_id}\\%s", "\"", "\""),
     REGION     = format("\\%s${var.region}\\%s", "\"", "\""),
-    GCS_BUCKET = format("\\%s${google_storage_bucket.raw_bucket.url}\\%s", "\"", "\"")
+    GCS_BUCKET = google_storage_bucket.raw_bucket.url
     }
   )
 }
@@ -36,36 +36,6 @@ resource "local_file" "notebooks" {
 # Create the notebook runtime to save time after deployment
 ## Grab user email to make them the owner of the runtime
 data "google_client_openid_userinfo" "provider_identity" {
-}
-
-##Create the runtime
-resource "google_notebooks_runtime" "notebook_runtime" {
-  name     = "notebook-runtime"
-  location = var.region
-  project  = module.project-services.project_id
-  labels   = var.labels
-  access_config {
-    access_type   = "SINGLE_USER"
-    runtime_owner = data.google_client_openid_userinfo.provider_identity.email
-  }
-  virtual_machine {
-    virtual_machine_config {
-      machine_type = "n1-standard-2"
-      data_disk {
-        initialize_params {
-          disk_size_gb = "20"
-          disk_type    = "PD_STANDARD"
-        }
-      }
-    }
-  }
-  software_config {
-    idle_shutdown         = true
-    idle_shutdown_timeout = "90"
-  }
-
-  depends_on = [time_sleep.wait_after_apis]
-
 }
 
 # Upload the Cloud Function source code to a GCS bucket
