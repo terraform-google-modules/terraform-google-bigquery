@@ -26,12 +26,15 @@ resource "local_file" "notebooks" {
   count    = length(local.notebook_names)
   filename = "${path.root}/src/function/notebooks/${local.notebook_names[count.index]}.ipynb"
   content = templatefile("${path.root}/templates/notebooks/${local.notebook_names[count.index]}.tftpl", {
-    PROJECT_ID = format("%s${module.project-services.project_id}\\%s", "\"", "\""),
+    PROJECT_ID = format("\\%s${module.project-services.project_id}\\%s", "\"", "\""),
     REGION     = format("\\%s${var.region}\\%s", "\"", "\""),
     GCS_BUCKET = format("\\%s${google_storage_bucket.raw_bucket.url}\\%s", "\"", "\"")
     }
   )
 }
+
+##TODO: Create notebook runtime template first
+
 
 # Create the notebook runtime to save time after deployment
 resource "google_notebooks_runtime" "notebook_runtime" {
@@ -98,6 +101,7 @@ resource "google_service_account" "cloud_function_manage_sa" {
   account_id   = "notebook-deployment"
   display_name = "Cloud Functions Service Account"
   description  = "Service account used to manage Cloud Function"
+  create_ignore_already_exists = var.create_ignore_service_accounts
 
   depends_on = [
     time_sleep.wait_after_apis,

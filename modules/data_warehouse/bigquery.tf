@@ -330,6 +330,10 @@ resource "google_service_account" "dts" {
   account_id   = "cloud-dts-sa-${random_id.id.hex}"
   display_name = "Service Account for Data Transfer Service"
   description  = "Service account used to manage Data Transfer Service"
+  create_ignore_already_exists = var.create_ignore_service_accounts
+
+  depends_on = [ time_sleep.wait_after_apis ]
+
 }
 
 ## Define the IAM roles granted to the DTS service account

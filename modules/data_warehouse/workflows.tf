@@ -21,6 +21,7 @@ resource "google_service_account" "workflow_manage_sa" {
   account_id   = "cloud-workflow-sa-${random_id.id.hex}"
   display_name = "Service Account for Cloud Workflows"
   description  = "Service account used to manage Cloud Workflows"
+  create_ignore_already_exists = var.create_ignore_service_accounts
 
 
   depends_on = [time_sleep.wait_after_apis]
