@@ -43,7 +43,7 @@ data "google_client_config" "current" {
 
 ## Create the runtime template
 data "http" "create_notebook_template" {
-  url    = "https://${var.region}-aiplatform.googleapis.com/v1/projects/${vmodule.project-services.project_id}/locations/${var.region}/notebookRuntimeTemplates?notebookRuntimeTemplateId=jss_runtime_template"
+  url    = "https://${var.region}-aiplatform.googleapis.com/v1/projects/${module.project-services.project_id}/locations/${var.region}/notebookRuntimeTemplates?notebookRuntimeTemplateId=jss_runtime_template"
   method = "POST"
   request_headers = {
     Accept        = "application/json"
@@ -82,7 +82,7 @@ resource "time_sleep" "wait_after_template" {
 
 ## API call to create the runtime
 data "http" "create_notebook_runtime" {
-  url    = "https://${var.region}-aiplatform.googleapis.com/v1/projects/${vmodule.project-services.project_id}/locations/${var.region}/notebookRuntimeTemplates?notebookRuntimeTemplateId=jss_runtime_template"
+  url    = "https://${var.region}-aiplatform.googleapis.com/v1/projects/${module.project-services.project_id}/locations/${var.region}/notebookRuntimeTemplates?notebookRuntimeTemplateId=jss_runtime_template"
   method = "POST"
   request_headers = {
     Accept        = "application/json"
