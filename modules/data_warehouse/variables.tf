@@ -35,13 +35,13 @@ variable "region" {
       "europe-west9",
       "us-central1",
       "us-west4"
-    ],
+      ],
     var.region)
     error_message = "This region is not supported. Region must be one of: asia-northeast3, asia-southeast1, europe-west1, europe-west2, europe-west3, europe-west4, europe-west9, us-central1, us-west4"
   }
 }
 
-variable "dataform_region"{
+variable "dataform_region" {
   description = "Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in."
 
   validation {
@@ -60,7 +60,7 @@ variable "dataform_region"{
       "us-central1",
       "us-east1",
       "us-west1"
-    ],
+      ],
     var.dataform_region)
     error_message = "This region is not supported for Dataform. Region must be one of: asia-east1, asia-northeast1, asia-south1, asia-southeast1, australia-southeast1, europe-west1, europe-west2, europe-west3, europe-west4, europe-west6, southamerica-east1, us-central1, us-east1, us-west1."
   }
