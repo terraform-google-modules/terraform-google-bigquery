@@ -38,6 +38,72 @@ resource "local_file" "notebooks" {
 data "google_client_openid_userinfo" "provider_identity" {
 }
 
+data "google_client_config" "current" {
+}
+
+## Create the runtime template
+data "http" "create_notebook_template" {
+  url    = "https://${var.region}-aiplatform.googleapis.com/v1/projects/${vmodule.project-services.project_id}/locations/${var.region}/notebookRuntimeTemplates?notebookRuntimeTemplateId=jss_runtime_template"
+  method = "POST"
+  request_headers = {
+    Accept        = "application/json"
+    Authorization = "Bearer ${data.google_client_config.current.access_token}"
+  }
+  request_body = <<EOF
+    '{
+        "displayName": "jss-notebook-template",
+        "description": "jss-notebook",
+        "isDefault": true,
+        "machineSpec": {
+          "machineType": "e2-standard-4"
+        },
+        "dataPersistentDiskSpec": {
+          "diskType": "pd-standard",
+          "diskSizeGb": 100,
+        },
+        "networkSpec": {
+          "enableInternetAccess": true
+        },
+        "idleShutdownConfig": {
+          "idleTimeout": 3600,
+          "idleShutdownDisabled": false
+        }
+        "notebookRuntimeType": ONE_CLICK
+      }
+  EOF
+  depends_on = [
+  time_sleep.wait_after_apis]
+}
+
+resource "time_sleep" "wait_after_template" {
+  create_duration = "120s"
+  depends_on      = [data.http.create_notebook_template]
+}
+
+## API call to create the runtime
+data "http" "create_notebook_runtime" {
+  url    = "https://${var.region}-aiplatform.googleapis.com/v1/projects/${vmodule.project-services.project_id}/locations/${var.region}/notebookRuntimeTemplates?notebookRuntimeTemplateId=jss_runtime_template"
+  method = "POST"
+  request_headers = {
+    Accept        = "application/json"
+    Authorization = "Bearer ${data.google_client_config.current.access_token}"
+  }
+  request_body = <<EOF
+    '{
+        "notebookRuntimeTemplate": "jss_runtime_template",
+        "notebookRuntime": {
+          "runtimeUser": "${data.google_client_openid_userinfo.provider_identity}"
+          "displayName": "jss-notebook-runtime",
+          "description": "A runtime to support the notebooks deployed by the Data Warehouse Jump Start Solution",
+        }
+      }
+  EOF
+  depends_on = [
+    time_sleep.wait_after_template
+
+  ]
+}
+
 # Upload the Cloud Function source code to a GCS bucket
 ## Define/create zip file for the Cloud Function source. This includes notebooks that will be uploaded
 data "archive_file" "create_notebook_function_zip" {
