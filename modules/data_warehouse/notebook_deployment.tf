@@ -35,7 +35,7 @@ resource "local_file" "notebooks" {
 
 # Create the notebook runtime to save time after deployment
 ## Grab user email to make them the owner of the runtime
-data "google_client_openid_userinfo" "provider_identity" {
+data "google_client_openid_userinfo" "user" {
 }
 
 data "google_client_config" "current" {
@@ -92,7 +92,7 @@ data "http" "create_notebook_runtime" {
     '{
         "notebookRuntimeTemplate": "jss_runtime_template",
         "notebookRuntime": {
-          "runtimeUser": "${data.google_client_openid_userinfo.provider_identity}"
+          "runtimeUser": "${data.google_client_openid_userinfo.user.email}"
           "displayName": "jss-notebook-runtime",
           "description": "A runtime to support the notebooks deployed by the Data Warehouse Jump Start Solution",
         }
