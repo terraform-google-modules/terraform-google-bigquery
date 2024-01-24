@@ -188,7 +188,7 @@ resource "google_cloudfunctions2_function" "notebook_deploy_function" {
     service_account_email            = google_service_account.cloud_function_manage_sa.email
     environment_variables = {
       "PROJECT_ID" : module.project-services.project_id,
-      "REGION" : var.region
+      "REGION" : var.dataform_region
     }
   }
 
