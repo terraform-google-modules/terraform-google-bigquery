@@ -25,7 +25,7 @@ locals {
 resource "local_file" "notebooks" {
   count    = length(local.notebook_names)
   filename = "${path.root}/src/function/notebooks/${local.notebook_names[count.index]}.ipynb"
-  content = templatefile("${path.root}/templates/notebooks/${local.notebook_names[count.index]}.tftpl", {
+  content = templatefile("${path.root}/templates/notebooks/${local.notebook_names[count.index]}.ipynb", {
     PROJECT_ID     = format("\\%s${module.project-services.project_id}\\%s", "\"", "\""),
     REGION         = format("\\%s${var.region}\\%s", "\"", "\""),
     GCS_BUCKET_URI = google_storage_bucket.raw_bucket.url
