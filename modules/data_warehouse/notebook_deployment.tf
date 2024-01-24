@@ -17,7 +17,7 @@
 # Define the list of notebook files to be created
 locals {
   notebook_names = [
-    for s in fileset("${path.root}/templates/notebooks/", "*.tftpl") : trimsuffix(s, ".tftpl")
+    for s in fileset("${path.root}/templates/notebooks/", "*.ipynb") : trimsuffix(s, ".ipynb")
   ]
 }
 
