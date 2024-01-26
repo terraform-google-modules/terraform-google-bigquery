@@ -42,7 +42,7 @@ variable "region" {
 }
 
 variable "dataform_region" {
-  type = string
+  type        = string
   description = "Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in."
 
   validation {
