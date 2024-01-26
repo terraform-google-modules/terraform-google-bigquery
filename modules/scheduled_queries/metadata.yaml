@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ spec:
     version: 7.0.0
     actuationTool:
       flavor: Terraform
-      version: ">= 0.13"
+      version: ">= 1.3"
     description: {}
   content:
     examples:
@@ -47,12 +47,10 @@ spec:
       - name: project_id
         description: The project where scheduled queries are created
         varType: string
-        defaultValue: null
         required: true
       - name: queries
         description: Data transfer configuration for creating scheduled queries
         varType: list(any)
-        defaultValue: null
         required: true
     outputs:
       - name: query_names

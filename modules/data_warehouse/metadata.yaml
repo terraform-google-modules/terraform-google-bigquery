@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,7 +29,15 @@ spec:
     actuationTool:
       flavor: Terraform
       version: ">= 0.13"
-    description: {}
+    description:
+      tagline: Build and analyze structured and unstructured data with a data warehouse and generative AI
+      detailed: Deploys an example data warehouse with BigLake tables, a dashboard for you to explore and analyze data, and the generative AI capabilites from Vertex AI to summarize the results of the analysis.
+    deploymentDuration:
+      configurationSecs: 120
+      deploymentSecs: 420
+    costEstimate:
+      description: cost of this solution is $0.65
+      url: https://cloud.google.com/products/calculator/#id=857776c6-49e8-4c6a-adc5-42a15b8fb67d
   content:
     documentation:
       - title: Create a Data Warehouse
@@ -49,10 +57,18 @@ spec:
         location: examples/scheduled_queries
   interfaces:
     variables:
+      - name: create_ignore_service_accounts
+        description: Whether or not to ignore creation of a service account if an account of the same name already exists
+        varType: string
+        defaultValue: true
+      - name: dataform_region
+        description: Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in.
+        varType: string
+        required: true
       - name: deletion_protection
         description: Whether or not to protect GCS resources from deletion when solution is modified or changed.
         varType: string
-        defaultValue: true
+        defaultValue: false
       - name: enable_apis
         description: Whether or not to enable underlying apis in this solution.
         varType: string
@@ -60,7 +76,7 @@ spec:
       - name: force_destroy
         description: Whether or not to protect BigQuery resources from deletion when solution is modified or changed.
         varType: string
-        defaultValue: false
+        defaultValue: true
       - name: labels
         description: A map of labels to apply to contained resources.
         varType: map(string)
@@ -69,12 +85,10 @@ spec:
       - name: project_id
         description: Google Cloud Project ID
         varType: string
-        defaultValue: null
         required: true
       - name: region
         description: Google Cloud Region
         varType: string
-        defaultValue: null
         required: true
       - name: text_generation_model_name
         description: Name of the BigQuery ML GenAI remote model that connects to the LLM used for text generation

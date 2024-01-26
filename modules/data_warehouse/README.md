@@ -35,9 +35,11 @@ Functional examples are included in the
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| deletion\_protection | Whether or not to protect GCS resources from deletion when solution is modified or changed. | `string` | `true` | no |
+| create\_ignore\_service\_accounts | Whether or not to ignore creation of a service account if an account of the same name already exists | `string` | `true` | no |
+| dataform\_region | Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in. | `string` | n/a | yes |
+| deletion\_protection | Whether or not to protect GCS resources from deletion when solution is modified or changed. | `string` | `false` | no |
 | enable\_apis | Whether or not to enable underlying apis in this solution. | `string` | `true` | no |
-| force\_destroy | Whether or not to protect BigQuery resources from deletion when solution is modified or changed. | `string` | `false` | no |
+| force\_destroy | Whether or not to protect BigQuery resources from deletion when solution is modified or changed. | `string` | `true` | no |
 | labels | A map of labels to apply to contained resources. | `map(string)` | <pre>{<br>  "data-warehouse": true<br>}</pre> | no |
 | project\_id | Google Cloud Project ID | `string` | n/a | yes |
 | region | Google Cloud Region | `string` | n/a | yes |

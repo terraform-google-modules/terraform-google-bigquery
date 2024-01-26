@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ spec:
     version: 7.0.0
     actuationTool:
       flavor: Terraform
-      version: ">= 0.13"
+      version: ">= 1.3"
     description: {}
   content:
     subBlueprints:
@@ -61,7 +61,6 @@ spec:
       - name: dataset_id
         description: Unique ID for the dataset being provisioned.
         varType: string
-        defaultValue: null
         required: true
       - name: dataset_labels
         description: Key value pairs in a map for dataset labels
@@ -70,27 +69,22 @@ spec:
       - name: dataset_name
         description: Friendly name for the dataset being provisioned.
         varType: string
-        defaultValue: null
       - name: default_table_expiration_ms
         description: TTL of tables using the dataset in MS
         varType: number
-        defaultValue: null
       - name: delete_contents_on_destroy
         description: (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present.
         varType: bool
-        defaultValue: null
       - name: deletion_protection
-        description: Whether or not to allow Terraform to destroy the instance. Unless this field is set to false in Terraform state, a terraform destroy or terraform apply that would delete the instance will fail
+        description: Whether or not to allow deletion of tables and external tables defined by this module. Can be overriden by table-level deletion_protection configuration.
         varType: bool
         defaultValue: false
       - name: description
         description: Dataset description.
         varType: string
-        defaultValue: null
       - name: encryption_key
         description: Default encryption key to apply to the dataset. Defaults to null (Google-managed).
         varType: string
-        defaultValue: null
       - name: external_tables
         description: A list of objects which include table_id, expiration_time, external_data_configuration, and labels.
         varType: |-
@@ -120,9 +114,10 @@ spec:
                 mode              = string,
                 source_uri_prefix = string,
               }),
-              expiration_time = string,
-              max_staleness   = optional(string),
-              labels          = map(string),
+              expiration_time     = string,
+              max_staleness       = optional(string),
+              deletion_protection = optional(bool),
+              labels              = map(string),
             }))
         defaultValue: []
       - name: location
@@ -161,11 +156,9 @@ spec:
       - name: max_time_travel_hours
         description: Defines the time travel window in hours
         varType: number
-        defaultValue: null
       - name: project_id
         description: Project where the dataset and table are created
         varType: string
-        defaultValue: null
         required: true
       - name: routines
         description: A list of objects which include routine_id, routine_type, routine_language, definition_body, return_type, routine_description and arguments.
@@ -208,8 +201,9 @@ spec:
                   interval = string,
                 }),
               }),
-              expiration_time = string,
-              labels          = map(string),
+              expiration_time     = string,
+              deletion_protection = optional(bool),
+              labels              = map(string),
             }))
         defaultValue: []
       - name: views
