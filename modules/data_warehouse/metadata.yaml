@@ -39,6 +39,31 @@ spec:
     costEstimate:
       description: cost of this solution is $0.65
       url: https://cloud.google.com/products/calculator/#id=857776c6-49e8-4c6a-adc5-42a15b8fb67d
+    cloudProducts:
+    - productId: search_BIGQUERY_SECTION
+      pageUrl: ""
+      Label: BigQuery
+    - productId: WORKFLOWS_SECTION
+      pageUrl: ""
+      Label: Cloud Workflows
+    - productId: STORAGE_SECTION
+      pageUrl: ""
+      Label: Cloud Storage
+    - productId: ai-platform
+      pageUrl: ""
+      Label: Vertex AI
+    - productId:
+      pageUrl: ""
+      Label: Data Studio
+    - productId: CLOUD_DMS_SECTION
+      pageUrl: ""
+      Label: BigQuery Migration Service
+    - productId: FUNCTIONS_SECTION
+      pageUrl: ""
+      Label: Cloud Functions
+    - productId: DATAFORM_SECTION
+      pageUrl: ""
+      Label: Dataform
   content:
     architecture:
       diagramUrl: www.gstatic.com/pantheon/images/solutions/data-warehouse-architecture_v6.svg
