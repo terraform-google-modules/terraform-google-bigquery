@@ -20,7 +20,7 @@ metadata:
     config.kubernetes.io/local-config: "true"
 spec:
   info:
-    title: terraform-google-bigquery-data-warehouse
+    title: Data warehouse with BigQuery
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-bigquery
       sourceType: git
@@ -31,8 +31,9 @@ spec:
       version: ">= 0.13"
     description:
       tagline: Build and analyze structured and unstructured data with a data warehouse and generative AI
-      detailed: Deploys an example data warehouse with BigLake tables, a dashboard for you to explore and analyze data, and the generative AI capabilites from Vertex AI to summarize the results of the analysis.
-    icon: www.gstatic.com/pantheon/images/solutions/data_warehouse_icon_v1.png
+      detailed: |-
+        Deploys an example data warehouse with BigLake tables, a dashboard for you to explore and analyze data, and the generative AI capabilites from Vertex AI to summarize the results of the analysis.
+    icon: assets/data_warehouse_icon_v1.png
     deploymentDuration:
       configurationSecs: 120
       deploymentSecs: 420

@@ -55,13 +55,3 @@ spec:
         text_generation_model_name:
           name: text_generation_model_name
           title: Text Generation Model Name
-    runtime:
-      outputs:
-        ds_friendly_name:
-          name: ds_friendly_name
-          title: BigQuery dataset name
-          openInNewTab: true
-        raw_bucket:
-          name: raw_bucket
-          title: Cloud Storage ingeestion bucket
-          openInNewTab: true
