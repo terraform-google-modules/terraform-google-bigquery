@@ -17,6 +17,7 @@ The resources/services/activations/deletions that this module will create/trigge
 - Creates and inferences with a BigQuery ML model
 - Creates a remote model and uses Generative AI to generate text through a BigQuery ML remote model
 - Creates a Looker Studio report
+- Deploys follow-on learning notebooks
 
 ### preDeploy
 To deploy this blueprint you must have an active billing account and billing permissions.
@@ -88,6 +89,7 @@ A project with the following APIs enabled must be used to host the
 resources of this module:
 
 - Vertex AI API: `aiplatform.googleapis.com`
+- Artifact Registry API: `artifactregistry.googleapis.com`
 - BigQuery API: `bigquery.googleapis.com`
 - BigQuery Connection API: `bigqueryconnection.googleapis.com`
 - BigQuery Data Policy API: `bigquerydatapolicy.googleapis.com`
@@ -97,10 +99,14 @@ resources of this module:
 - BigQuery Storage API: `bigquerystorage.googleapis.com`
 - Google Cloud APIs: `cloudapis.googleapis.com`
 - Cloud Build API: `cloudbuild.googleapis.com`
+- Cloud Functions API: `cloudfunctions.googleapis.com`
 - Compute Engine API: `compute.googleapis.com`
 - Infrastructure Manager API: `config.googleapis.com`
 - Data Catalog API: `datacatalog.googleapis.com`
+- Dataform API: `dataform.googleapis.com`
 - Data Lineage API: `datalineage.googleapis.com`
+- Notebooks API: `notebooks.googleapis.com`
+- Cloud Run API: `run.googleapis.com`
 - Service Usage API: `serviceusage.googleapis.com`
 - Google Cloud Storage API: `storage.googleapis.com`
 - Google Cloud Storage JSON API: `storage-api.googleapis.com`
