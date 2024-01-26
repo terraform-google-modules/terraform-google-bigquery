@@ -68,13 +68,13 @@ spec:
     architecture:
       diagramUrl: www.gstatic.com/pantheon/images/solutions/data-warehouse-architecture_v6.svg
       description:
-      - 1. Data lands in a Cloud Storage bucket.
-      - 2. Cloud Workflows facilitates the data movement.
-      - 3. Data is loaded into BigQuery as a BigLake table.
-      - 4. Views of the data are created in BigQuery using stored procedures
-      - 5. Dashboards are created from the data to perform more analytics.
-      - 6. BigQuery ML calls the generative AI capabilities of Vertex AI to summarize the analysis.
-      - 7. Cloud Functions creates notebooks with additional learning content.
+      - Data lands in a Cloud Storage bucket.
+      - Cloud Workflows facilitates the data movement.
+      - Data is loaded into BigQuery as a BigLake table.
+      - Views of the data are created in BigQuery using stored procedures
+      - Dashboards are created from the data to perform more analytics.
+      - BigQuery ML calls the generative AI capabilities of Vertex AI to summarize the analysis.
+      - Cloud Functions creates notebooks with additional learning content.
     documentation:
       - title: Create a Data Warehouse
         url: https://cloud.google.com/architecture/big-data-analytics/data-warehouse
