@@ -82,10 +82,8 @@ resource "google_service_account" "cloud_function_manage_sa" {
 ## Define the IAM roles that are granted to the Cloud Function service account
 locals {
   cloud_function_roles = [
-    "roles/aiplatform.user",         // Needs to predict from endpoints
-    "roles/aiplatform.serviceAgent", // Service account role
     "roles/cloudfunctions.admin",    // Service account role to manage access to the remote function
-    "roles/dataform.codeEditor",     // Edit access code resources
+    "roles/dataform.admin",     // Edit access code resources
     "roles/iam.serviceAccountUser",
     "roles/iam.serviceAccountTokenCreator",
     "roles/run.invoker",         // Service account role to invoke the remote function
