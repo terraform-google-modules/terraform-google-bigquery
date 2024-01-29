@@ -53,9 +53,10 @@ spec:
     - productId: ai-platform
       pageUrl: ""
       Label: Vertex AI
-    - productId:
-      pageUrl: ""
-      Label: Data Studio
+    - productId: LOOKER_STUDIO_SECTION
+      pageUrl: "lookerstudio.google.com"
+      Label: Looker Studio
+      isExternal: true
     - productId: CLOUD_DMS_SECTION
       pageUrl: ""
       Label: BigQuery Migration Service
@@ -146,14 +147,40 @@ spec:
     roles:
       - level: Project
         roles:
+          - roles/aiplatform.admin
           - roles/bigquery.admin
-          - roles/cloudkms.cryptoKeyEncrypterDecrypter
-          - roles/owner
+          - roles/cloudfunctions.admin
+          - roles/config.agent
+          - roles/datalineage.viewer
+          - roles/dataform.admin
+          - roles/iam.serviceAccountAdmin
+          - roles/iam.serviceAccountUser
+          - roles/iam.serviceAccountTokenCreator
+          - roles/logging.configWriter
+          - roles/resourcemanager.projectIamAdmin
+          - roles/run.invoker
+          - roles/serviceusage.serviceUsageAdmin
+          - roles/storage.admin
+          - roles/workflows.admin
     services:
-      - cloudkms.googleapis.com
-      - cloudresourcemanager.googleapis.com
+      - aiplatform.googleapis.com
+      - artifactregistry.googleapis.com
       - bigquery.googleapis.com
-      - bigquerystorage.googleapis.com
       - bigqueryconnection.googleapis.com
+      - bigquerydatapolicy.googleapis.com
+      - bigquerymigration.googleapis.com
+      - bigqueryreservation.googleapis.com
+      - bigquerystorage.googleapis.com
+      - cloudapis.googleapis.com
+      - cloudbuild.googleapis.com
+      - cloudfunctions.googleapis.com
+      - compute.googleapis.com
+      - config.googleapis.com
+      - datacatalog.googleapis.com
+      - dataform.googleapis.com
+      - datalineage.googleapis.com
+      - notebooks.googleapis.com
       - serviceusage.googleapis.com
-      - iam.googleapis.com
+      - storage.googleapis.com
+      - storage-api.googleapis.com
+      - workflows.googleapis.com

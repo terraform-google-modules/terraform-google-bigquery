@@ -30,19 +30,21 @@ spec:
       variables:
         create_ignore_service_accounts:
           name: create_ignore_service_accounts
-          title: Create Ignore Service Accounts
+          title: Ignore Service Accounts if Exist
         dataform_region:
           name: dataform_region
           title: Dataform Region
         deletion_protection:
           name: deletion_protection
           title: Deletion Protection
+          invisible: true
         enable_apis:
           name: enable_apis
           title: Enable Apis
         force_destroy:
           name: force_destroy
           title: Force Destroy
+          invisible: true
         labels:
           name: labels
           title: Labels
@@ -55,3 +57,29 @@ spec:
         text_generation_model_name:
           name: text_generation_model_name
           title: Text Generation Model Name
+  runtime:
+    outputs:
+      ds_friendly_name:
+        label: BigQuery dataset name
+        show_in_details: true
+        type: TEXT
+        openInNewTab: false
+        showInNotification: false
+      raw_bucket:
+        label: Cloud Storage ingestion bucket
+        show_in_details: true
+        type: TEXT
+        openInNewTab: false
+        showInNotification: false
+      bigquery_editor_url:
+        label: Open BigQuery Editor
+        show_in_details: true
+        type: LINK
+        openInNewTab: true
+        showInNotification: true
+      lookerstudio_report_url:
+        label: View Looker Studio Dashboard
+        show_in_details: true
+        type: LINK
+        openInNewTab: true
+        showInNotification: false
