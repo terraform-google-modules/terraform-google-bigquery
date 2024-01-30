@@ -58,10 +58,11 @@ variable "region" {
 variable "dataform_region" {
   type        = string
   description = "Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in."
+  default = null
   nullable = true
 
   validation {
-    condition = null || contains([
+    condition = var.dataform_region == null || contains([
       "asia-east1",
       "asia-northeast1",
       "asia-south1",
