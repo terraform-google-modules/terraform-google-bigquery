@@ -59,15 +59,10 @@ spec:
           title: Text Generation Model Name
     runtime:
       outputs:
-        ds_friendly_name:
-          openInNewTab: false
-          showInNotification: false
-        raw_bucket:
-          openInNewTab: false
-          showInNotification: false
         bigquery_editor_url:
           openInNewTab: true
           showInNotification: true
+        ds_friendly_name: {}
         lookerstudio_report_url:
           openInNewTab: true
-          showInNotification: false
+        raw_bucket: {}

@@ -20,7 +20,7 @@ metadata:
     config.kubernetes.io/local-config: "true"
 spec:
   info:
-    title: Data warehouse with BigQuery
+    title: terraform-google-bigquery-data-warehouse
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-bigquery
       sourceType: git
@@ -29,46 +29,36 @@ spec:
     actuationTool:
       flavor: Terraform
       version: ">= 0.13"
-    description:
-      tagline: Build and analyze structured and unstructured data with a data warehouse and generative AI
-      detailed: |-
-        Deploys an example data warehouse with BigLake tables, a dashboard for you to explore and analyze data, and the generative AI capabilites from Vertex AI to summarize the results of the analysis.
+    description: {}
     icon: assets/data_warehouse_icon_v1.png
     deploymentDuration:
-      configurationSecs: 120
-      deploymentSecs: 420
+      configurationSecs: "120"
+      deploymentSecs: "420"
     costEstimate:
       description: cost of this solution is $0.65
       url: https://cloud.google.com/products/calculator/#id=857776c6-49e8-4c6a-adc5-42a15b8fb67d
     cloudProducts:
-    - productId: search_BIGQUERY_SECTION
-      pageUrl: ""
-    - productId: WORKFLOWS_SECTION
-      pageUrl: ""
-    - productId: STORAGE_SECTION
-      pageUrl: ""
-    - productId: ai-platform
-      pageUrl: ""
-    - productId: LOOKER_STUDIO_SECTION
-      pageUrl: "lookerstudio.google.com"
-      isExternal: true
-    - productId: CLOUD_DMS_SECTION
-      pageUrl: ""
-    - productId: FUNCTIONS_SECTION
-      pageUrl: ""
-    - productId: DATAFORM_SECTION
-      pageUrl: ""
+      - productId: search_BIGQUERY_SECTION
+      - productId: WORKFLOWS_SECTION
+      - productId: STORAGE_SECTION
+      - productId: ai-platform
+      - productId: LOOKER_STUDIO_SECTION
+        pageUrl: lookerstudio.google.com
+        isExternal: true
+      - productId: CLOUD_DMS_SECTION
+      - productId: FUNCTIONS_SECTION
+      - productId: DATAFORM_SECTION
   content:
     architecture:
       diagramUrl: www.gstatic.com/pantheon/images/solutions/data-warehouse-architecture_v6.svg
       description:
-      - Data lands in a Cloud Storage bucket.
-      - Cloud Workflows facilitates the data movement.
-      - Data is loaded into BigQuery as a BigLake table.
-      - Views of the data are created in BigQuery using stored procedures
-      - Dashboards are created from the data to perform more analytics.
-      - BigQuery ML calls the generative AI capabilities of Vertex AI to summarize the analysis.
-      - Cloud Functions creates notebooks with additional learning content.
+        - Data lands in a Cloud Storage bucket.
+        - Cloud Workflows facilitates the data movement.
+        - Data is loaded into BigQuery as a BigLake table.
+        - Views of the data are created in BigQuery using stored procedures
+        - Dashboards are created from the data to perform more analytics.
+        - BigQuery ML calls the generative AI capabilities of Vertex AI to summarize the analysis.
+        - Cloud Functions creates notebooks with additional learning content.
     documentation:
       - title: Create a Data Warehouse
         url: https://cloud.google.com/architecture/big-data-analytics/data-warehouse
@@ -94,7 +84,6 @@ spec:
       - name: dataform_region
         description: Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in.
         varType: string
-        required: true
       - name: deletion_protection
         description: Whether or not to protect GCS resources from deletion when solution is modified or changed.
         varType: string
@@ -139,40 +128,14 @@ spec:
     roles:
       - level: Project
         roles:
-          - roles/aiplatform.admin
           - roles/bigquery.admin
-          - roles/cloudfunctions.admin
-          - roles/config.agent
-          - roles/datalineage.viewer
-          - roles/dataform.admin
-          - roles/iam.serviceAccountAdmin
-          - roles/iam.serviceAccountUser
-          - roles/iam.serviceAccountTokenCreator
-          - roles/logging.configWriter
-          - roles/resourcemanager.projectIamAdmin
-          - roles/run.invoker
-          - roles/serviceusage.serviceUsageAdmin
-          - roles/storage.admin
-          - roles/workflows.admin
+          - roles/cloudkms.cryptoKeyEncrypterDecrypter
+          - roles/owner
     services:
-      - aiplatform.googleapis.com
-      - artifactregistry.googleapis.com
+      - cloudkms.googleapis.com
+      - cloudresourcemanager.googleapis.com
       - bigquery.googleapis.com
-      - bigqueryconnection.googleapis.com
-      - bigquerydatapolicy.googleapis.com
-      - bigquerymigration.googleapis.com
-      - bigqueryreservation.googleapis.com
       - bigquerystorage.googleapis.com
-      - cloudapis.googleapis.com
-      - cloudbuild.googleapis.com
-      - cloudfunctions.googleapis.com
-      - compute.googleapis.com
-      - config.googleapis.com
-      - datacatalog.googleapis.com
-      - dataform.googleapis.com
-      - datalineage.googleapis.com
-      - notebooks.googleapis.com
+      - bigqueryconnection.googleapis.com
       - serviceusage.googleapis.com
-      - storage.googleapis.com
-      - storage-api.googleapis.com
-      - workflows.googleapis.com
+      - iam.googleapis.com
