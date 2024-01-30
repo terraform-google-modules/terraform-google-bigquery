@@ -23,7 +23,7 @@ variable "region" {
   type        = string
   description = "Google Cloud Region"
 
-/* This variable list assumes you are using the same region for both Dataform and all other assets.
+  /* This variable list assumes you are using the same region for both Dataform and all other assets.
  * If you want to deploy your Dataform respositories in a different region, set the default value
  * for var.dataform_region to one of the regions in the Dataform validation list.
  * You can then set this variable value to any of the following:
@@ -58,8 +58,8 @@ variable "region" {
 variable "dataform_region" {
   type        = string
   description = "Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in."
-  default = null
-  nullable = true
+  default     = null
+  nullable    = true
 
   validation {
     condition = var.dataform_region == null || contains([
