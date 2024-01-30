@@ -59,11 +59,11 @@ variable "region" {
 variable "dataform_region" {
   type        = string
   description = "Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in."
-  default     = null
+  default = null
   nullable    = true
 
   validation {
-    condition = var.dataform_region == null || contains([
+    condition = (var.dataform_region == null || contains([
       "asia-east1",
       "asia-northeast1",
       "asia-south1",
@@ -79,7 +79,7 @@ variable "dataform_region" {
       "us-east1",
       "us-west1",
       ],
-    var.dataform_region)
+    var.dataform_region))
     error_message = "This region is not supported for Dataform. Region must be one of: asia-east1, asia-northeast1, asia-south1, asia-southeast1, australia-southeast1, europe-west1, europe-west2, europe-west3, europe-west4, europe-west6, southamerica-east1, us-central1, us-east1, us-west1."
   }
 }
