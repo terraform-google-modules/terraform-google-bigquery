@@ -24,7 +24,7 @@ def commit_repository_changes(client, project, region) -> str:
         with open(os.path.join(directory, file), 'rb') as f:
             encoded_string = f.read()
         file_base_name = os.path.basename(file).removesuffix(".ipynb")
-        repo_id = f"projects/{project}/locations/{region}/repositories/{file_base_name}"
+        repo_id = f"projects/{project}/locations/{region}/repositories/{file_base_name}"  # noqa: E501 #ignore line too long error
         print(repo_id)
         request = dataform_v1beta1.CommitRepositoryChangesRequest()
         request.name = repo_id
