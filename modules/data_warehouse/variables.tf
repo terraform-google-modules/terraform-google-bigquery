@@ -63,23 +63,23 @@ variable "dataform_region" {
   nullable    = true
 
   validation {
-    condition = (var.dataform_region == null || contains([
-      "asia-east1",
-      "asia-northeast1",
-      "asia-south1",
-      "asia-southeast1",
-      "australia-southeast1",
-      "europe-west1",
-      "europe-west2",
-      "europe-west3",
-      "europe-west4",
-      "europe-west6",
-      "southamerica-east1",
-      "us-central1",
-      "us-east1",
-      "us-west1",
-      ],
-    var.dataform_region))
+    condition = anytrue([var.dataform_region == null, try(contains(
+        [
+          "asia-east1",
+          "asia-northeast1",
+          "asia-south1",
+          "asia-southeast1",
+          "australia-southeast1",
+          "europe-west1",
+          "europe-west2",
+          "europe-west3",
+          "europe-west4",
+          "europe-west6",
+          "southamerica-east1",
+          "us-central1",
+          "us-east1",
+          "us-west1",
+        ], var.dataform_region), true)])
     error_message = "This region is not supported for Dataform. Region must be one of: asia-east1, asia-northeast1, asia-south1, asia-southeast1, australia-southeast1, europe-west1, europe-west2, europe-west3, europe-west4, europe-west6, southamerica-east1, us-central1, us-east1, us-west1."
   }
 }
