@@ -60,22 +60,14 @@ spec:
     runtime:
       outputs:
         ds_friendly_name:
-          show_in_details: true
-          type: TEXT
           openInNewTab: false
           showInNotification: false
         raw_bucket:
-          show_in_details: true
-          type: TEXT
           openInNewTab: false
           showInNotification: false
         bigquery_editor_url:
-          show_in_details: true
-          type: LINK
           openInNewTab: true
           showInNotification: true
         lookerstudio_report_url:
-          show_in_details: true
-          type: LINK
           openInNewTab: true
           showInNotification: false
