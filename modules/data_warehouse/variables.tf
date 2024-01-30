@@ -23,30 +23,45 @@ variable "region" {
   type        = string
   description = "Google Cloud Region"
 
-  #TODO: Change region inputs to support a separate Dataform region than deployment region
+/* This variable list assumes you are using the same region for both Dataform and all other assets.
+ * If you want to deploy your Dataform respositories in a different region, set the default value
+ * for var.dataform_region to one of the regions in the Dataform validation list.
+ * You can then set this variable value to any of the following:
+ *     "asia-northeast3"
+ *     "asia-southeast1"
+ *     "europe-west1"
+ *     "europe-west2"
+ *     "europe-west3"
+ *     "europe-west4"
+ *     "europe-west9"
+ *     "us-central1"
+ *     "us-west4"
+ *
+ * Be sure to update the validation list below to include these additional values!
+ */
+
   validation {
     condition = contains([
-      "asia-northeast3",
       "asia-southeast1",
       "europe-west1",
       "europe-west2",
       "europe-west3",
       "europe-west4",
-      "europe-west9",
       "us-central1",
-      "us-west4"
       ],
     var.region)
-    error_message = "This region is not supported. Region must be one of: asia-northeast3, asia-southeast1, europe-west1, europe-west2, europe-west3, europe-west4, europe-west9, us-central1, us-west4"
+    error_message = "This region is not supported. Region must be one of: asia-southeast1, europe-west1, europe-west2, europe-west3, europe-west4, us-central1"
   }
 }
+
 
 variable "dataform_region" {
   type        = string
   description = "Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in."
+  nullable = true
 
   validation {
-    condition = contains([
+    condition = null || contains([
       "asia-east1",
       "asia-northeast1",
       "asia-south1",
@@ -60,12 +75,13 @@ variable "dataform_region" {
       "southamerica-east1",
       "us-central1",
       "us-east1",
-      "us-west1"
+      "us-west1",
       ],
     var.dataform_region)
     error_message = "This region is not supported for Dataform. Region must be one of: asia-east1, asia-northeast1, asia-south1, asia-southeast1, australia-southeast1, europe-west1, europe-west2, europe-west3, europe-west4, europe-west6, southamerica-east1, us-central1, us-east1, us-west1."
   }
 }
+
 
 variable "text_generation_model_name" {
   type        = string

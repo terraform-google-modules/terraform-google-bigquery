@@ -113,13 +113,17 @@ resource "google_service_account_iam_member" "workflow_auth_function" {
   ]
 }
 
+locals {
+  dataform_region = (var.dataform_region == null ? var.region : var.dataform_region)
+}
+
 # Setup Dataform repositories to host notebooks
 ## Create the Dataform repos
 resource "google_dataform_repository" "notebook_repo" {
   count        = length(local.notebook_names)
   provider     = google-beta
   project      = module.project-services.project_id
-  region       = var.dataform_region
+  region       = local.dataform_region
   name         = local.notebook_names[count.index]
   display_name = local.notebook_names[count.index]
   labels = {
@@ -133,7 +137,7 @@ resource "google_dataform_repository" "notebook_repo" {
 resource "google_dataform_repository_iam_member" "function_manage_repo" {
   provider   = google-beta
   project    = module.project-services.project_id
-  region     = var.dataform_region
+  region     = local.dataform_region
   role       = "roles/dataform.admin"
   member     = "serviceAccount:${google_service_account.cloud_function_manage_sa.email}"
   count      = length(local.notebook_names)
@@ -145,7 +149,7 @@ resource "google_dataform_repository_iam_member" "function_manage_repo" {
 resource "google_dataform_repository_iam_member" "workflow_manage_repo" {
   provider   = google-beta
   project    = module.project-services.project_id
-  region     = var.dataform_region
+  region     = local.dataform_region
   role       = "roles/dataform.admin"
   member     = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
   count      = length(local.notebook_names)
@@ -186,7 +190,7 @@ resource "google_cloudfunctions2_function" "notebook_deploy_function" {
     service_account_email            = google_service_account.cloud_function_manage_sa.email
     environment_variables = {
       "PROJECT_ID" : module.project-services.project_id,
-      "REGION" : var.dataform_region
+      "REGION" : local.dataform_region
     }
   }
 
