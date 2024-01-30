@@ -43,29 +43,21 @@ spec:
     cloudProducts:
     - productId: search_BIGQUERY_SECTION
       pageUrl: ""
-      Label: BigQuery
     - productId: WORKFLOWS_SECTION
       pageUrl: ""
-      Label: Cloud Workflows
     - productId: STORAGE_SECTION
       pageUrl: ""
-      Label: Cloud Storage
     - productId: ai-platform
       pageUrl: ""
-      Label: Vertex AI
     - productId: LOOKER_STUDIO_SECTION
       pageUrl: "lookerstudio.google.com"
-      Label: Looker Studio
       isExternal: true
     - productId: CLOUD_DMS_SECTION
       pageUrl: ""
-      Label: BigQuery Migration Service
     - productId: FUNCTIONS_SECTION
       pageUrl: ""
-      Label: Cloud Functions
     - productId: DATAFORM_SECTION
       pageUrl: ""
-      Label: Dataform
   content:
     architecture:
       diagramUrl: www.gstatic.com/pantheon/images/solutions/data-warehouse-architecture_v6.svg
