@@ -61,6 +61,18 @@ variable "max_time_travel_hours" {
   default     = null
 }
 
+variable "storage_billing_model" {
+  description = "Specifies the storage billing model for the dataset."
+  type        = string
+  default     = null
+  validation {
+    condition     = (var.storage_billing_model == null ? true : ( contains([
+      "LOGICAL", "PHYSICAL"
+    ], var.storage_billing_model)))
+    error_message = "storage_billing_model must be null or either \"LOGICAL\" or \"PHYSICAL\"."
+  }
+}
+
 variable "project_id" {
   description = "Project where the dataset and table are created"
   type        = string

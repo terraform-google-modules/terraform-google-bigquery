@@ -39,6 +39,11 @@ output "project" {
   description = "Project where the dataset and tables are created"
 }
 
+output "dataset_id" {
+  value       = google_bigquery_dataset.main.dataset_id
+  description = "Dataset ID"
+}
+
 output "table_ids" {
   value = [
     for table in google_bigquery_table.main :
