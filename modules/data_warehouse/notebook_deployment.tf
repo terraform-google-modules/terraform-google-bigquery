@@ -17,15 +17,15 @@
 # Define the list of notebook files to be created
 locals {
   notebook_names = [
-    for s in fileset("${path.root}/templates/notebooks/", "*.ipynb") : trimsuffix(s, ".ipynb")
+    for s in fileset("${path.module}/templates/notebooks/", "*.ipynb") : trimsuffix(s, ".ipynb")
   ]
 }
 
 # Create the notebook files to be uploaded
 resource "local_file" "notebooks" {
   count    = length(local.notebook_names)
-  filename = "${path.root}/src/function/notebooks/${local.notebook_names[count.index]}.ipynb"
-  content = templatefile("${path.root}/templates/notebooks/${local.notebook_names[count.index]}.ipynb", {
+  filename = "${path.module}/src/function/notebooks/${local.notebook_names[count.index]}.ipynb"
+  content = templatefile("${path.module}/templates/notebooks/${local.notebook_names[count.index]}.ipynb", {
     PROJECT_ID     = format("\\%s${module.project-services.project_id}\\%s", "\"", "\""),
     REGION         = format("\\%s${var.region}\\%s", "\"", "\""),
     GCS_BUCKET_URI = google_storage_bucket.raw_bucket.url
@@ -37,8 +37,8 @@ resource "local_file" "notebooks" {
 ## Define/create zip file for the Cloud Function source. This includes notebooks that will be uploaded
 data "archive_file" "create_notebook_function_zip" {
   type        = "zip"
-  output_path = "${path.root}/tmp/notebooks_function_source.zip"
-  source_dir  = "${path.root}/src/function/"
+  output_path = "${path.module}/tmp/notebooks_function_source.zip"
+  source_dir  = "${path.module}/src/function/"
 
   depends_on = [local_file.notebooks]
 }
