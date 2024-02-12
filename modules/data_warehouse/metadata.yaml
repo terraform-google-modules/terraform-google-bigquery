@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +30,42 @@ spec:
       flavor: Terraform
       version: ">= 0.13"
     description: {}
+    icon: assets/data_warehouse_icon_v1.png
+    deploymentDuration:
+      configurationSecs: 120
+      deploymentSecs: 420
+    costEstimate:
+      description: cost of this solution is $0.65
+      url: https://cloud.google.com/products/calculator/#id=857776c6-49e8-4c6a-adc5-42a15b8fb67d
+    cloudProducts:
+      - productId: search_BIGQUERY_SECTION
+        pageUrl: ""
+      - productId: WORKFLOWS_SECTION
+        pageUrl: ""
+      - productId: STORAGE_SECTION
+        pageUrl: ""
+      - productId: ai-platform
+        pageUrl: ""
+      - productId: LOOKER_STUDIO_SECTION
+        pageUrl: lookerstudio.google.com
+        isExternal: true
+      - productId: CLOUD_DMS_SECTION
+        pageUrl: ""
+      - productId: FUNCTIONS_SECTION
+        pageUrl: ""
+      - productId: DATAFORM_SECTION
+        pageUrl: ""
   content:
+    architecture:
+      diagramUrl: www.gstatic.com/pantheon/images/solutions/data-warehouse-architecture_v6.svg
+      description:
+        - Data lands in a Cloud Storage bucket.
+        - Cloud Workflows facilitates the data movement.
+        - Data is loaded into BigQuery as a BigLake table.
+        - Views of the data are created in BigQuery using stored procedures
+        - Dashboards are created from the data to perform more analytics.
+        - BigQuery ML calls the generative AI capabilities of Vertex AI to summarize the analysis.
+        - Cloud Functions creates notebooks with additional learning content.
     documentation:
       - title: Create a Data Warehouse
         url: https://cloud.google.com/architecture/big-data-analytics/data-warehouse
@@ -49,10 +84,17 @@ spec:
         location: examples/scheduled_queries
   interfaces:
     variables:
+      - name: create_ignore_service_accounts
+        description: Whether or not to ignore creation of a service account if an account of the same name already exists
+        varType: string
+        defaultValue: true
+      - name: dataform_region
+        description: Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in.
+        varType: string
       - name: deletion_protection
         description: Whether or not to protect GCS resources from deletion when solution is modified or changed.
         varType: string
-        defaultValue: true
+        defaultValue: false
       - name: enable_apis
         description: Whether or not to enable underlying apis in this solution.
         varType: string
@@ -60,7 +102,7 @@ spec:
       - name: force_destroy
         description: Whether or not to protect BigQuery resources from deletion when solution is modified or changed.
         varType: string
-        defaultValue: false
+        defaultValue: true
       - name: labels
         description: A map of labels to apply to contained resources.
         varType: map(string)
@@ -69,12 +111,10 @@ spec:
       - name: project_id
         description: Google Cloud Project ID
         varType: string
-        defaultValue: null
         required: true
       - name: region
         description: Google Cloud Region
         varType: string
-        defaultValue: null
         required: true
       - name: text_generation_model_name
         description: Name of the BigQuery ML GenAI remote model that connects to the LLM used for text generation

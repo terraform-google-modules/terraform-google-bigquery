@@ -24,19 +24,24 @@ module "project-services" {
 
   activate_apis = [
     "aiplatform.googleapis.com",
+    "artifactregistry.googleapis.com",
     "bigquery.googleapis.com",
     "bigqueryconnection.googleapis.com",
-    "bigquerydatatransfer.googleapis.com",
     "bigquerydatapolicy.googleapis.com",
+    "bigquerydatatransfer.googleapis.com",
     "bigquerymigration.googleapis.com",
     "bigqueryreservation.googleapis.com",
     "bigquerystorage.googleapis.com",
     "cloudapis.googleapis.com",
     "cloudbuild.googleapis.com",
+    "cloudfunctions.googleapis.com",
     "compute.googleapis.com",
     "config.googleapis.com",
     "datacatalog.googleapis.com",
+    "dataform.googleapis.com",
     "datalineage.googleapis.com",
+    "notebooks.googleapis.com",
+    "run.googleapis.com",
     "serviceusage.googleapis.com",
     "storage.googleapis.com",
     "storage-api.googleapis.com",
@@ -59,7 +64,7 @@ module "project-services" {
 
 # Wait after APIs are enabled to give time for them to spin up
 resource "time_sleep" "wait_after_apis" {
-  create_duration = "90s"
+  create_duration = "30s"
   depends_on      = [module.project-services]
 }
 
@@ -69,7 +74,7 @@ resource "random_id" "id" {
 }
 
 # Set up Storage Buckets
-# # Set up the raw storage bucket
+## Set up the raw storage bucket for data
 resource "google_storage_bucket" "raw_bucket" {
   name                        = "ds-edw-raw-${random_id.id.hex}"
   project                     = module.project-services.project_id

@@ -15,7 +15,7 @@
  */
 
 # Set up BigQuery resources
-# # Create the BigQuery dataset
+## Create the BigQuery dataset
 resource "google_bigquery_dataset" "ds_edw" {
   project                    = module.project-services.project_id
   dataset_id                 = "thelook"
@@ -28,7 +28,7 @@ resource "google_bigquery_dataset" "ds_edw" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
-# # Create a BigQuery connection for Cloud Storage to create BigLake tables
+## Create a BigQuery connection for Cloud Storage to create BigLake tables
 resource "google_bigquery_connection" "ds_connection" {
   project       = module.project-services.project_id
   connection_id = "ds_connection"
@@ -38,7 +38,7 @@ resource "google_bigquery_connection" "ds_connection" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
-# # Grant IAM access to the BigQuery Connection account for Cloud Storage
+## Grant IAM access to the BigQuery Connection account for Cloud Storage
 resource "google_project_iam_member" "bq_connection_iam_object_viewer" {
   project = module.project-services.project_id
   role    = "roles/storage.objectViewer"
@@ -47,7 +47,7 @@ resource "google_project_iam_member" "bq_connection_iam_object_viewer" {
   depends_on = [google_storage_bucket.raw_bucket, google_bigquery_connection.ds_connection]
 }
 
-# # Create a BigQuery connection for Vertex AI to support GenerativeAI use cases
+## Create a BigQuery connection for Vertex AI to support GenerativeAI use cases
 resource "google_bigquery_connection" "vertex_ai_connection" {
   project       = module.project-services.project_id
   connection_id = "genai_connection"
@@ -57,23 +57,27 @@ resource "google_bigquery_connection" "vertex_ai_connection" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
-# # Grant IAM access to the BigQuery Connection account for Vertex AI
-resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
-  for_each = toset([
+## Define IAM roles granted to the BigQuery Connection service account
+locals {
+  bq_vertex_ai_roles = [
     "roles/aiplatform.user",
     "roles/bigquery.connectionUser",
     "roles/serviceusage.serviceUsageConsumer",
-    ]
-  )
+  ]
+}
+
+## Grant IAM access to the BigQuery Connection account for Vertex AI
+resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
+  count   = length(local.bq_vertex_ai_roles)
+  role    = local.bq_vertex_ai_roles[count.index]
   project = module.project-services.project_id
-  role    = each.key
   member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}"
 
-  depends_on = [google_bigquery_connection.vertex_ai_connection]
+  depends_on = [google_bigquery_connection.vertex_ai_connection, google_project_iam_member.bq_connection_iam_object_viewer]
 }
 
 # Create data tables in BigQuery
-# # Create a Biglake table for events with metadata caching
+## Create a Biglake table for events with metadata caching
 resource "google_bigquery_table" "tbl_edw_events" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "events"
@@ -92,7 +96,7 @@ resource "google_bigquery_table" "tbl_edw_events" {
   labels = var.labels
 }
 
-# # Create a Biglake table for inventory_items
+## Create a Biglake table for inventory_items
 resource "google_bigquery_table" "tbl_edw_inventory_items" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "inventory_items"
@@ -111,7 +115,7 @@ resource "google_bigquery_table" "tbl_edw_inventory_items" {
   labels = var.labels
 }
 
-# # Create a Biglake table with metadata caching for order_items
+## Create a Biglake table with metadata caching for order_items
 resource "google_bigquery_table" "tbl_edw_order_items" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "order_items"
@@ -130,7 +134,7 @@ resource "google_bigquery_table" "tbl_edw_order_items" {
   labels = var.labels
 }
 
-# # Create a Biglake table for orders
+## Create a Biglake table for orders
 resource "google_bigquery_table" "tbl_edw_orders" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "orders"
@@ -149,7 +153,7 @@ resource "google_bigquery_table" "tbl_edw_orders" {
   labels = var.labels
 }
 
-# # Create a Biglake table for products
+## Create a Biglake table for products
 resource "google_bigquery_table" "tbl_edw_products" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "products"
@@ -168,7 +172,7 @@ resource "google_bigquery_table" "tbl_edw_products" {
   labels = var.labels
 }
 
-# # Create a Biglake table for products
+## Create a Biglake table for products
 resource "google_bigquery_table" "tbl_edw_users" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "users"
@@ -188,7 +192,7 @@ resource "google_bigquery_table" "tbl_edw_users" {
 }
 
 # Load Queries for Stored Procedure Execution
-# # Load Distribution Center Lookup Data Tables
+## Load Distribution Center Lookup Data Tables
 resource "google_bigquery_routine" "sp_provision_lookup_tables" {
   project      = module.project-services.project_id
   dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
@@ -202,7 +206,7 @@ resource "google_bigquery_routine" "sp_provision_lookup_tables" {
   )
 }
 
-# # Add Looker Studio Data Report Procedure
+## Add Looker Studio Data Report Procedure
 resource "google_bigquery_routine" "sproc_sp_demo_lookerstudio_report" {
   project      = module.project-services.project_id
   dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
@@ -222,7 +226,7 @@ resource "google_bigquery_routine" "sproc_sp_demo_lookerstudio_report" {
   ]
 }
 
-# # Add Sample Queries
+## Add Sample Queries
 resource "google_bigquery_routine" "sp_sample_queries" {
   project      = module.project-services.project_id
   dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
@@ -242,7 +246,7 @@ resource "google_bigquery_routine" "sp_sample_queries" {
 }
 
 
-# # Add Bigquery ML Model for clustering
+## Add Bigquery ML Model for clustering
 resource "google_bigquery_routine" "sp_bigqueryml_model" {
   project      = module.project-services.project_id
   dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
@@ -259,7 +263,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_model" {
   ]
 }
 
-# # Create Bigquery ML Model for using text generation
+## Create Bigquery ML Model for using text generation
 resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
   project      = module.project-services.project_id
   dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
@@ -281,7 +285,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
   ]
 }
 
-# # Query Bigquery ML Model for describing customer clusters
+## Query Bigquery ML Model for describing customer clusters
 resource "google_bigquery_routine" "sp_bigqueryml_generate_describe" {
   project      = module.project-services.project_id
   dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
@@ -300,7 +304,7 @@ resource "google_bigquery_routine" "sp_bigqueryml_generate_describe" {
   ]
 }
 
-# # Add Translation Scripts
+## Add Translation Scripts
 resource "google_bigquery_routine" "sp_sample_translation_queries" {
   project      = module.project-services.project_id
   dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
@@ -320,33 +324,37 @@ resource "google_bigquery_routine" "sp_sample_translation_queries" {
 # Add Scheduled Query
 
 # Create specific service account for DTS Run
-# # Create a DTS specific service account
+## Create a DTS specific service account
 resource "google_service_account" "dts" {
-  project      = module.project-services.project_id
-  account_id   = "cloud-dts-sa-${random_id.id.hex}"
-  display_name = "Service Account for Data Transfer Service"
+  project                      = module.project-services.project_id
+  account_id                   = "cloud-dts-sa-${random_id.id.hex}"
+  display_name                 = "Service Account for Data Transfer Service"
+  description                  = "Service account used to manage Data Transfer Service"
+  create_ignore_already_exists = var.create_ignore_service_accounts
+
+  depends_on = [time_sleep.wait_after_apis]
+
 }
 
-# # Grant the DTS Specific service account access
-resource "google_project_iam_member" "dts_roles" {
-  for_each = toset([
+## Define the IAM roles granted to the DTS service account
+locals {
+  dts_roles = [
     "roles/bigquery.user",
     "roles/bigquery.dataEditor",
-    "roles/bigquery.connectionUser"
-  ])
-  project = module.project-services.project_id
-  role    = each.key
-  member  = "serviceAccount:${google_service_account.dts.email}"
+    "roles/bigquery.connectionUser",
+    "roles/iam.serviceAccountTokenCreator"
+  ]
 }
 
-# # # Grant the DTS service account access
-# resource "google_project_iam_member" "dts_service_account_roles" {
-#   role = "roles/iam.serviceAccountTokenCreator"
-#   project = module.project-services.project_id
-#   member  = "serviceAccount:${google_project_service_identity.bigquery_data_transfer_sa.email}"
+## Grant the DTS Specific service account access
+resource "google_project_iam_member" "dts_roles" {
+  project = module.project-services.project_id
+  count   = length(local.dts_roles)
+  role    = local.dts_roles[count.index]
+  member  = "serviceAccount:${google_service_account.dts.email}"
 
-#   depends_on = [ google_project_iam ]
-# }
+  depends_on = [time_sleep.wait_after_apis, google_project_iam_member.bq_connection_iam_vertex_ai]
+}
 
 # Set up scheduled query
 resource "google_bigquery_data_transfer_config" "dts_config" {
