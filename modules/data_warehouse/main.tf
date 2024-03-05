@@ -88,11 +88,3 @@ resource "google_storage_bucket" "raw_bucket" {
 
   labels = var.labels
 }
-
-# Sleep for 120 seconds to allow the workflow to execute and finish setup
-resource "time_sleep" "wait_after_workflow_execution" {
-  create_duration = "120s"
-  depends_on = [
-    data.http.call_workflows_setup,
-  ]
-}
