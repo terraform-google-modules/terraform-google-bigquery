@@ -78,7 +78,6 @@ module "workflow_polling_1" {
   source = "./workflow_polling"
 
   workflow_id          = google_workflows_workflow.workflow.id
-  first_try = true
   input_workflow_state = null
 
   depends_on = [
@@ -103,7 +102,6 @@ module "workflow_polling_2" {
   source      = "./workflow_polling"
   workflow_id = google_workflows_workflow.workflow.id
 
-  first_try = false
   input_workflow_state = module.workflow_polling_1.workflow_state
 
   depends_on = [
@@ -120,7 +118,6 @@ module "workflow_polling_3" {
   workflow_id = google_workflows_workflow.workflow.id
 
   input_workflow_state = module.workflow_polling_2.workflow_state
-  first_try = false
 
   depends_on = [
     module.workflow_polling_2
@@ -132,7 +129,6 @@ module "workflow_polling_4" {
   workflow_id = google_workflows_workflow.workflow.id
 
   input_workflow_state = module.workflow_polling_3.workflow_state
-  first_try = false
 
   depends_on = [
     module.workflow_polling_3
