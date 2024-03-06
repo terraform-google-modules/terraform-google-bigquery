@@ -74,16 +74,18 @@ resource "google_workflows_workflow" "workflow" {
   ]
 }
 
-data "google_client_config" "current" {
+locals {
+  polling_count = [1,2,3,4]
 }
 
-## Trigger the execution of the setup workflow with an API call
-data "http" "call_workflows_setup" {
-  url    = "https://workflowexecutions.googleapis.com/v1/projects/${module.project-services.project_id}/locations/${var.region}/workflows/${google_workflows_workflow.workflow.name}/executions"
-  method = "POST"
-  request_headers = {
-    Accept = "application/json"
-  Authorization = "Bearer ${data.google_client_config.current.access_token}" }
+module "workflow_polling" {
+  source = "./workflow_polling"
+  workflow_id = google_workflows_workflow.workflow.id
+
+  count = length(local.polling_count)
+  polling_count = local.polling_count[count.index]
+  input_workflow_state = "module.workflow_polling.workflow_state[execution_check_${local.polling_count[count.index]-1}]"
+
   depends_on = [
     google_storage_bucket.raw_bucket,
     google_bigquery_routine.sp_bigqueryml_generate_create,
@@ -95,53 +97,5 @@ data "http" "call_workflows_setup" {
     google_cloudfunctions2_function.notebook_deploy_function,
     time_sleep.wait_after_function,
     google_service_account_iam_member.workflow_auth_function
-  ]
-}
-
-# Sleep for 120 seconds to allow the workflow to execute and finish setup
-resource "time_sleep" "wait_after_workflow_execution" {
-  create_duration = "120s"
-  depends_on = [
-    data.http.call_workflows_setup,
-    google_workflows_workflow.workflow
-  ]
-}
-
-## Trigger the execution of the setup workflow with an API call
-data "http" "call_workflows_state_1" {
-  url    = "https://workflowexecutions.googleapis.com/v1/projects/${module.project-services.project_id}/locations/${var.region}/workflows/${google_workflows_workflow.workflow.name}/executions"
-  method = "GET"
-  request_headers = {
-    Accept = "application/json"
-  Authorization = "Bearer ${data.google_client_config.current.access_token}" }
-  depends_on = [
-    time_sleep.wait_after_workflow_execution,
-    google_workflows_workflow.workflow
-  ]
-}
-
-locals {
-  json_workflow_result = jsondecode(data.http.call_workflows_state_1.response_body)
-  json_workflow_state = jsonencode(local.json_workflow_result.executions[0].state)
-  depends_on = [time_sleep.wait_after_workflow_execution, data.http.call_workflows_state_1]
-}
-
-data "http" "retry_workflows_1" {
-  url    = "https://workflowexecutions.googleapis.com/v1/projects/${module.project-services.project_id}/locations/${var.region}/workflows/${google_workflows_workflow.workflow.name}/executions"
-  method = local.json_workflow_state == "SUCCEEDED" || local.json_workflow_state == "ACTIVE" ? "GET" : "POST"
-  request_headers = {
-    Accept = "application/json"
-  Authorization = "Bearer ${data.google_client_config.current.access_token}" }
-  depends_on = [
-    data.http.call_workflows_state_1,
-    local.json_workflow_state
-  ]
-}
-
-# Sleep for 120 seconds to allow the workflow to execute and finish setup
-resource "time_sleep" "complete_workflow" {
-  create_duration = local.json_workflow_state == "SUCCEEDED" ? "1s" : "120s"
-  depends_on = [
-    data.http.retry_workflows_1,
   ]
 }
