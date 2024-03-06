@@ -2,13 +2,13 @@ data "google_client_config" "current" {
 }
 
 locals {
-  shortcut = var.input_workflow_state == null || var.input_workflow_state == "FAILED" ? "no" : "yes"
+  is_active = var.input_workflow_state == null || var.input_workflow_state == "FAILED" ? "no" : "yes"
 }
 
 ## Trigger the execution of the setup workflow with an API call
 data "http" "call_workflows_setup" {
   url    = "https://workflowexecutions.googleapis.com/v1/${var.workflow_id}/executions"
-  method = locals.shortcut == "no" ? "POST" : "GET"
+  method = local.is_active == "no" ? "POST" : "GET"
   request_headers = {
     Accept = "application/json"
   Authorization = "Bearer ${data.google_client_config.current.access_token}" }
@@ -17,7 +17,7 @@ data "http" "call_workflows_setup" {
 ## If the workflow last failed, sleep for 30 seconds before checking the workflow execution status.
 ## If last execution did not fail, exit as quickly as possible (1 second)
 resource "time_sleep" "workflow_execution_wait" {
-  create_duration = locals.shortcut == "no" ? "30s" : "1s"
+  create_duration = local.is_active == "no" ? "30s" : "1s"
   depends_on = [
     data.http.call_workflows_setup,
   ]
