@@ -100,7 +100,7 @@ data "http" "call_workflows_setup" {
 
 # Sleep for 120 seconds to allow the workflow to execute and finish setup
 resource "time_sleep" "wait_after_workflow_execution" {
-  create_duration = "30s"
+  create_duration = "120s"
   depends_on = [
     data.http.call_workflows_setup,
     google_workflows_workflow.workflow
