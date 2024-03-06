@@ -38,8 +38,8 @@ data "http" "call_workflows_state" {
 
 ## Parse out the workflow execution state from the API call response
 locals {
-  response_body = jsondecode(data.http.call_workflows_state.response_body)
-  workflow_state = jsonencode(local.response_body.executions[0].state)
+  response_body = data.http.call_workflows_state.response_body
+  workflow_state = local.response_body.executions[0].state
   depends_on = [
     time_sleep.workflow_execution_wait,
     data.http.call_workflows_state
