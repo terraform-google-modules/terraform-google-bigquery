@@ -120,7 +120,8 @@ data "http" "call_workflows_state_1" {
 }
 
 locals {
-  json_workflow_state = jsondecode(data.http.call_workflows_state_1).executions[0].state
+  json_workflow_result = jsondecode(data.http.call_workflows_state_1)
+  json_workflow_state = local.json_workflow_result.executions[0].state
   depends_on = [time_sleep.wait_after_workflow_execution, data.http.call_workflows_state_1]
 }
 
