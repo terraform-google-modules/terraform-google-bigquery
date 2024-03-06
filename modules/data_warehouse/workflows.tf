@@ -121,6 +121,7 @@ data "http" "call_workflows_state_1" {
 
 locals {
   json_workflow_state = jsondecode(data.http.call_workflows_state_1.executions[0].state)
+  depends_on = [data.http.call_workflows_state_1]
 }
 
 data "http" "retry_workflows_1" {
@@ -131,7 +132,7 @@ data "http" "retry_workflows_1" {
   Authorization = "Bearer ${data.google_client_config.current.access_token}" }
   depends_on = [
     data.http.call_workflows_state_1,
-    locals.json_workflow_state
+    local.json_workflow_state
   ]
 }
 
