@@ -74,17 +74,11 @@ resource "google_workflows_workflow" "workflow" {
   ]
 }
 
-locals {
-  polling_count = [1,2,3,4]
-}
-
-module "workflow_polling" {
+module "workflow_polling_1" {
   source = "./workflow_polling"
-  workflow_id = google_workflows_workflow.workflow.id
 
-  count = length(local.polling_count)
-  polling_count = local.polling_count[count.index]
-  input_workflow_state = "module.workflow_polling.workflow_state[execution_check_${local.polling_count[count.index]-1}]"
+  workflow_id          = google_workflows_workflow.workflow.id
+  input_workflow_state = null
 
   depends_on = [
     google_storage_bucket.raw_bucket,
@@ -97,5 +91,38 @@ module "workflow_polling" {
     google_cloudfunctions2_function.notebook_deploy_function,
     time_sleep.wait_after_function,
     google_service_account_iam_member.workflow_auth_function
+  ]
+}
+
+module "workflow_polling_2" {
+  source      = "./workflow_polling"
+  workflow_id = google_workflows_workflow.workflow.id
+
+  input_workflow_state = module.workflow_polling_1.workflow_state
+
+  depends_on = [
+    module.workflow_polling_1
+  ]
+}
+
+module "workflow_polling_3" {
+  source      = "./workflow_polling"
+  workflow_id = google_workflows_workflow.workflow.id
+
+  input_workflow_state = module.workflow_polling_2.workflow_state
+
+  depends_on = [
+    module.workflow_polling_2
+  ]
+}
+
+module "workflow_polling_4" {
+  source      = "./workflow_polling"
+  workflow_id = google_workflows_workflow.workflow.id
+
+  input_workflow_state = module.workflow_polling_3.workflow_state
+
+  depends_on = [
+    module.workflow_polling_3
   ]
 }

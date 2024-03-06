@@ -160,7 +160,7 @@ resource "google_dataform_repository_iam_member" "workflow_manage_repo" {
     google_service_account_iam_member.workflow_auth_function,
     google_dataform_repository_iam_member.function_manage_repo,
     google_dataform_repository.notebook_repo
-    ]
+  ]
 }
 
 # Create and deploy a Cloud Function to deploy notebooks
