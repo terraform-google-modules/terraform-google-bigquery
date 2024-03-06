@@ -48,7 +48,7 @@ resource "google_project_iam_member" "workflow_manage_sa_roles" {
   member  = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
   role    = local.workflow_roles[count.index]
 
-  depends_on = [google_dataform_repository_iam_member.workflow_manage_repo]
+  depends_on = [google_service_account.workflow_manage_sa]
 }
 
 ## Create the workflow
