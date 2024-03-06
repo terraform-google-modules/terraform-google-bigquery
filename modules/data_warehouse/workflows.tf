@@ -98,10 +98,6 @@ data "http" "call_workflows_setup" {
   ]
 }
 
-output "workflow_init_url" {
-  value = data.http.call_workflows_setup
-}
-
 # Sleep for 120 seconds to allow the workflow to execute and finish setup
 resource "time_sleep" "wait_after_workflow_execution" {
   create_duration = "30s"
@@ -124,13 +120,9 @@ data "http" "call_workflows_state_1" {
   ]
 }
 
-output "workflow_response" {
-  value = data.http.call_workflows_state_1
-}
-
 locals {
   json_workflow_result = jsondecode(data.http.call_workflows_state_1.response_body)
-  json_workflow_state = local.json_workflow_result.executions[0].state
+  json_workflow_state = jsonencode(local.json_workflow_result.executions[0].state)
   depends_on = [time_sleep.wait_after_workflow_execution, data.http.call_workflows_state_1]
 }
 
@@ -145,8 +137,6 @@ data "http" "retry_workflows_1" {
     local.json_workflow_state
   ]
 }
-
-
 
 # Sleep for 120 seconds to allow the workflow to execute and finish setup
 resource "time_sleep" "complete_workflow" {
