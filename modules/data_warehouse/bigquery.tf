@@ -372,6 +372,6 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
   depends_on = [
     google_project_iam_member.dts_roles,
     google_bigquery_dataset.ds_edw,
-    module.workflow_polling
+    module.workflow_polling_4
   ]
 }
