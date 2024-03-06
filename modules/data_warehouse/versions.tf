@@ -24,6 +24,10 @@ terraform {
       source  = "hashicorp/google-beta"
       version = ">= 4.52, < 6"
     }
+    archive = {
+      source  = "hashicorp/archive"
+      version = "2.4.2"
+    }
     time = {
       source  = "hashicorp/time"
       version = ">= 0.9.1"
@@ -35,6 +39,10 @@ terraform {
     local = {
       source  = "hashicorp/local"
       version = ">=2.4"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.6.0"
     }
   }
   required_version = ">= 0.13"

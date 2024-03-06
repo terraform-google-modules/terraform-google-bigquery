@@ -45,7 +45,7 @@ locals {
 ## Output the workflow state to use as input for subsequent invocations
 output "workflow_state" {
   description = "State of the most recent workflow execution. Used to determine how to proceed with next polling run."
-  value = local.workflow_state
+  value       = local.workflow_state
 }
 
 ## If workflow execution is actively running, sleep for 90 seconds to allow it to finish
