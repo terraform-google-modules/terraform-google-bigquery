@@ -120,13 +120,13 @@ data "http" "call_workflows_state_1" {
 }
 
 locals {
-  json_workflow_state = jsonencode(data.http.call_workflows_state_1)
+  json_workflow_state = jsondecode(data.http.call_workflows_state_1)
   depends_on = [time_sleep.wait_after_workflow_execution, data.http.call_workflows_state_1]
 }
 
 data "http" "retry_workflows_1" {
   url    = "https://workflowexecutions.googleapis.com/v1/projects/${module.project-services.project_id}/locations/${var.region}/workflows/${google_workflows_workflow.workflow.name}/executions"
-  method = json_workflow_state.executions[0].state == "SUCCEEDED" || json_workflow_state.executions[0].state == "ACTIVE" ? "GET" : "POST"
+  method = local.json_workflow_state.executions[0].state == "SUCCEEDED" || local.json_workflow_state.executions[0].state == "ACTIVE" ? "GET" : "POST"
   request_headers = {
     Accept = "application/json"
   Authorization = "Bearer ${data.google_client_config.current.access_token}" }
