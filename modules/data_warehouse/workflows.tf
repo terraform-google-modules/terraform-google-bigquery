@@ -94,6 +94,10 @@ module "workflow_polling_1" {
   ]
 }
 
+output "workflow_polling_1_state" {
+  value = module.workflow_polling_1.workflow_state
+}
+
 module "workflow_polling_2" {
   source      = "./workflow_polling"
   workflow_id = google_workflows_workflow.workflow.id
@@ -103,6 +107,10 @@ module "workflow_polling_2" {
   depends_on = [
     module.workflow_polling_1
   ]
+}
+
+output "workflow_polling_2_state" {
+  value = module.workflow_polling_2.workflow_state
 }
 
 module "workflow_polling_3" {
