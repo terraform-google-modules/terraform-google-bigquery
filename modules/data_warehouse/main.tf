@@ -46,6 +46,7 @@ module "project-services" {
     "storage.googleapis.com",
     "storage-api.googleapis.com",
     "workflows.googleapis.com",
+    "workflowexecutions.googleapis.com"
   ]
 
   activate_api_identities = [
@@ -67,6 +68,12 @@ resource "time_sleep" "wait_after_apis" {
   create_duration = "30s"
   depends_on      = [module.project-services]
 }
+
+# resource "google_project_service_identity" "default" {
+#   provider = google-beta
+#   project = module.project-services.project_id
+#   service = "workflows.googleapis.com"
+# }
 
 # Create random ID to be used for deployment uniqueness
 resource "random_id" "id" {
