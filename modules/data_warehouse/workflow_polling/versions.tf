@@ -24,6 +24,14 @@ terraform {
       source  = "hashicorp/google-beta"
       version = ">= 4.52, < 6"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = ">= 2"
+    }
+    archive = {
+      source  = "hashicorp/archive"
+      version = ">= 2"
+    }
     time = {
       source  = "hashicorp/time"
       version = ">= 0.9.1"

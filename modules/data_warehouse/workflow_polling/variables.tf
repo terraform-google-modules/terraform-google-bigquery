@@ -4,7 +4,7 @@ variable "input_workflow_state" {
 }
 
 variable "workflow_id" {
-  type = string
+  type        = string
   description = "The identifer of a workflow created by Terraform. Format is projects/{project ID}/locations/{region}/workflows/{workflow name}"
 }
 

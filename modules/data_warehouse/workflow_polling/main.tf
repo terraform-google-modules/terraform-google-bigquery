@@ -38,16 +38,13 @@ data "http" "call_workflows_state" {
 
 ## Parse out the workflow execution state from the API call response
 locals {
-  response_body = jsondecode(data.http.call_workflows_state.response_body)
+  response_body  = jsondecode(data.http.call_workflows_state.response_body)
   workflow_state = local.response_body.executions[0].state
-  depends_on = [
-    time_sleep.workflow_execution_wait,
-    data.http.call_workflows_state
-  ]
 }
 
 ## Output the workflow state to use as input for subsequent invocations
-output workflow_state {
+output "workflow_state" {
+  description = "State of the most recent workflow execution. Used to determine how to proceed with next polling run."
   value = local.workflow_state
 }
 
