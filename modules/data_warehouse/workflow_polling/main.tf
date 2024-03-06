@@ -16,7 +16,6 @@ resource "time_sleep" "workflow_execution_wait" {
   create_duration = var.polling_count == 1 || var.input_workflow_state == "FAILED" ? "30s" : "1s"
   depends_on = [
     data.http.call_workflows_setup,
-    google_workflows_workflow.workflow
   ]
 }
 
@@ -28,7 +27,7 @@ data "http" "call_workflows_state" {
     Accept = "application/json"
   Authorization = "Bearer ${data.google_client_config.current.access_token}" }
   depends_on = [
-    http.call_workflows_setup,
+    data.http.call_workflows_setup,
     time_sleep.workflow_execution_wait
   ]
 }
@@ -38,7 +37,7 @@ locals {
   response_body = jsondecode(data.http.call_workflows_state.response_body)
   workflow_state = jsonencode(local.response_body.executions[0].state)
   depends_on = [
-    time_sleep.wait_after_workflow_execution,
+    time_sleep.workflow_execution_wait,
     data.http.call_workflows_state
   ]
 }
@@ -53,9 +52,9 @@ output workflow_state {
 resource "time_sleep" "complete_workflow" {
   create_duration = local.workflow_state == "ACTIVE" ? "90s" : "1s"
   depends_on = [
-    http.call_workflows_setup,
+    data.http.call_workflows_setup,
     time_sleep.workflow_execution_wait,
-    http.call_workflows_state,
-    locals.workflow_state
+    data.http.call_workflows_state,
+    local.workflow_state
   ]
 }
