@@ -101,9 +101,10 @@ data "http" "call_workflows_setup" {
 
 # Sleep for 120 seconds to allow the workflow to execute and finish setup
 resource "time_sleep" "wait_after_workflow_execution" {
-  create_duration = "15s"
+  create_duration = "30s"
   depends_on = [
     data.http.call_workflows_setup,
+    google_workflows_workflow.workflow
   ]
 }
 
@@ -116,12 +117,13 @@ data "http" "call_workflows_state_1" {
   Authorization = "Bearer ${data.google_client_config.current.access_token}" }
   depends_on = [
     time_sleep.wait_after_workflow_execution,
+    google_workflows_workflow.workflow
   ]
 }
 
 locals {
   json_workflow_result = data.http.call_workflows_state_1
-  json_workflow_state = jsondecode(local.json_workflow_result.executions[0].state)
+  json_workflow_state = jsondecode(local.json_workflow_result[0].state)
   depends_on = [time_sleep.wait_after_workflow_execution, data.http.call_workflows_state_1]
 }
 
