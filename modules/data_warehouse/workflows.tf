@@ -75,7 +75,6 @@ resource "google_workflows_workflow" "workflow" {
 }
 
 data "google_client_config" "current" {
-
 }
 
 ## Trigger the execution of the setup workflow with an API call
@@ -97,6 +96,10 @@ data "http" "call_workflows_setup" {
     time_sleep.wait_after_function,
     google_service_account_iam_member.workflow_auth_function
   ]
+}
+
+output "workflow_init_url" {
+  value = data.http.call_workflows_setup
 }
 
 # Sleep for 120 seconds to allow the workflow to execute and finish setup
