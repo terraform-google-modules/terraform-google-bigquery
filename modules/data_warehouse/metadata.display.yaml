@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,15 +28,23 @@ spec:
   ui:
     input:
       variables:
+        create_ignore_service_accounts:
+          name: create_ignore_service_accounts
+          title: Ignore Service Accounts if Exist
+        dataform_region:
+          name: dataform_region
+          title: Dataform Region
         deletion_protection:
           name: deletion_protection
           title: Deletion Protection
+          invisible: true
         enable_apis:
           name: enable_apis
           title: Enable Apis
         force_destroy:
           name: force_destroy
           title: Force Destroy
+          invisible: true
         labels:
           name: labels
           title: Labels
@@ -49,3 +57,12 @@ spec:
         text_generation_model_name:
           name: text_generation_model_name
           title: Text Generation Model Name
+    runtime:
+      outputs:
+        bigquery_editor_url:
+          openInNewTab: true
+          showInNotification: true
+        ds_friendly_name: {}
+        lookerstudio_report_url:
+          openInNewTab: true
+        raw_bucket: {}

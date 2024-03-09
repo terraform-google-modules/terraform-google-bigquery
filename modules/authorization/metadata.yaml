@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -73,12 +73,10 @@ spec:
       - name: dataset_id
         description: Unique ID for the dataset being provisioned.
         varType: string
-        defaultValue: null
         required: true
       - name: project_id
         description: Project where the dataset and table are created
         varType: string
-        defaultValue: null
         required: true
       - name: roles
         description: An array of objects that define dataset access for one or more entities.
