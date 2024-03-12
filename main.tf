@@ -38,6 +38,7 @@ resource "google_bigquery_dataset" "main" {
   max_time_travel_hours       = var.max_time_travel_hours
   project                     = var.project_id
   labels                      = var.dataset_labels
+  is_case_insensitive         = var.is_case_insensitive
 
   dynamic "default_encryption_configuration" {
     for_each = var.encryption_key == null ? [] : [var.encryption_key]
