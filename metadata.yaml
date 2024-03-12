@@ -120,6 +120,10 @@ spec:
               labels              = map(string),
             }))
         defaultValue: []
+      - name: is_case_insensitive
+        description: Whether or not the dataset and its table names are case-insensitive.
+        varType: bool
+        defaultValue: false
       - name: location
         description: The regional location for the dataset only US and EU are allowed in module
         varType: string

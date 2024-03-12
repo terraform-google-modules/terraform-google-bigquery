@@ -49,6 +49,12 @@ variable "deletion_protection" {
   default     = false
 }
 
+variable "is_case_insensitive" {
+  description = "Whether or not the dataset and its table names are case-insensitive."
+  type        = bool
+  default     = false
+}
+
 variable "default_table_expiration_ms" {
   description = "TTL of tables using the dataset in MS"
   type        = number
@@ -200,7 +206,6 @@ variable "external_tables" {
     labels              = map(string),
   }))
 }
-
 
 variable "routines" {
   description = "A list of objects which include routine_id, routine_type, routine_language, definition_body, return_type, routine_description and arguments."
