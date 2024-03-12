@@ -57,6 +57,9 @@ spec:
         external_tables:
           name: external_tables
           title: External Tables
+        is_case_insensitive:
+          name: is_case_insensitive
+          title: Is Case Insensitive
         location:
           name: location
           title: Location
