@@ -26,12 +26,13 @@ module "bigquery" {
   delete_contents_on_destroy = var.delete_contents_on_destroy
   tables = [
     {
-      table_id           = "bar",
-      schema             = file("sample_bq_schema.json"),
-      time_partitioning  = null,
-      range_partitioning = null,
-      expiration_time    = 2524604400000, # 2050/01/01
-      clustering         = [],
+      table_id                 = "bar",
+      schema                   = file("sample_bq_schema.json"),
+      require_partition_filter = false,
+      time_partitioning        = null,
+      range_partitioning       = null,
+      expiration_time          = 2524604400000, # 2050/01/01
+      clustering               = [],
       labels = {
         env      = "devops"
         billable = "true"
