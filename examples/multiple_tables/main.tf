@@ -29,10 +29,10 @@ module "bigquery" {
     {
       table_id = "foo",
       schema   = file("sample_bq_schema.json"),
+      require_partition_filter = false,
       time_partitioning = {
         type                     = "DAY",
         field                    = null,
-        require_partition_filter = false,
         expiration_ms            = null,
       },
       range_partitioning = null,
