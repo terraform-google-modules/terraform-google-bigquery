@@ -75,10 +75,8 @@ resource "google_workflows_workflow" "workflow" {
 }
 
 module "workflow_polling_1" {
-  source = "./workflow_polling"
-
-  workflow_id          = google_workflows_workflow.workflow.id
-  input_workflow_state = null
+  source      = "./workflow_polling"
+  workflow_id = google_workflows_workflow.workflow.id
 
   depends_on = [
     google_storage_bucket.raw_bucket,
@@ -94,35 +92,66 @@ module "workflow_polling_1" {
   ]
 }
 
-module "workflow_polling_2" {
+
+module "workflow_polling_4" {
   source      = "./workflow_polling"
   workflow_id = google_workflows_workflow.workflow.id
-
-  input_workflow_state = module.workflow_polling_1.workflow_state
 
   depends_on = [
     module.workflow_polling_1
   ]
 }
 
-module "workflow_polling_3" {
-  source      = "./workflow_polling"
-  workflow_id = google_workflows_workflow.workflow.id
+# TODO: Expand testing to support more dynamic polling of workflow state
+# module "workflow_polling_1" {
+#   source = "./workflow_polling"
 
-  input_workflow_state = module.workflow_polling_2.workflow_state
+#   workflow_id          = google_workflows_workflow.workflow.id
+#   input_workflow_state = null
 
-  depends_on = [
-    module.workflow_polling_2
-  ]
-}
+#   depends_on = [
+#     google_storage_bucket.raw_bucket,
+#     google_bigquery_routine.sp_bigqueryml_generate_create,
+#     google_bigquery_routine.sp_bigqueryml_model,
+#     google_bigquery_routine.sproc_sp_demo_lookerstudio_report,
+#     google_bigquery_routine.sp_provision_lookup_tables,
+#     google_workflows_workflow.workflow,
+#     google_storage_bucket.raw_bucket,
+#     google_cloudfunctions2_function.notebook_deploy_function,
+#     time_sleep.wait_after_function,
+#     google_service_account_iam_member.workflow_auth_function
+#   ]
+# }
 
-module "workflow_polling_4" {
-  source      = "./workflow_polling"
-  workflow_id = google_workflows_workflow.workflow.id
+# module "workflow_polling_2" {
+#   source      = "./workflow_polling"
+#   workflow_id = google_workflows_workflow.workflow.id
 
-  input_workflow_state = module.workflow_polling_3.workflow_state
+#   input_workflow_state = module.workflow_polling_1.workflow_state
 
-  depends_on = [
-    module.workflow_polling_3
-  ]
-}
+#   depends_on = [
+#     module.workflow_polling_1
+#   ]
+# }
+
+# module "workflow_polling_3" {
+#   source      = "./workflow_polling"
+#   workflow_id = google_workflows_workflow.workflow.id
+
+#   input_workflow_state = module.workflow_polling_2.workflow_state
+
+#   depends_on = [
+#     module.workflow_polling_2
+#   ]
+# }
+
+# module "workflow_polling_4" {
+#   source      = "./workflow_polling"
+#   workflow_id = google_workflows_workflow.workflow.id
+
+#   input_workflow_state = module.workflow_polling_3.workflow_state
+
+#   depends_on = [
+#     module.workflow_polling_3
+#   ]
+# }
