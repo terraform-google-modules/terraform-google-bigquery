@@ -75,8 +75,9 @@ resource "google_workflows_workflow" "workflow" {
 }
 
 module "workflow_polling_1" {
-  source      = "./workflow_polling"
-  workflow_id = google_workflows_workflow.workflow.id
+  source               = "./workflow_polling"
+  workflow_id          = google_workflows_workflow.workflow.id
+  input_workflow_state = null
 
   depends_on = [
     google_storage_bucket.raw_bucket,
@@ -94,8 +95,9 @@ module "workflow_polling_1" {
 
 
 module "workflow_polling_4" {
-  source      = "./workflow_polling"
-  workflow_id = google_workflows_workflow.workflow.id
+  source               = "./workflow_polling"
+  workflow_id          = google_workflows_workflow.workflow.id
+  input_workflow_state = module.workflow_polling_1.workflow_state
 
   depends_on = [
     module.workflow_polling_1

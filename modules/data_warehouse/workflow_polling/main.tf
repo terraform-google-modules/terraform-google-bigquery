@@ -17,15 +17,15 @@
 data "google_client_config" "current" {
 }
 
-# locals {
-#   is_active = var.input_workflow_state == null || var.input_workflow_state == "FAILED" ? "no" : "yes"
-# }
+locals {
+  is_active = var.input_workflow_state == null || var.input_workflow_state == "FAILED" ? "no" : "yes"
+}
 
 ## Trigger the execution of the setup workflow with an API call
 data "http" "call_workflows_setup" {
   url    = "https://workflowexecutions.googleapis.com/v1/${var.workflow_id}/executions"
-  # method = local.is_active == "no" ? "POST" : "GET"
-  method = "POST"
+  method = local.is_active == "no" ? "POST" : "GET"
+  # method = "POST"
   request_headers = {
     Accept = "application/json"
   Authorization = "Bearer ${data.google_client_config.current.access_token}" }
@@ -47,30 +47,30 @@ resource "time_sleep" "workflow_execution_wait" {
 #   ]
 # }
 
-# ## Check the state of the setup workflow execution with an API call
-# data "http" "call_workflows_state" {
-#   url    = "https://workflowexecutions.googleapis.com/v1/${var.workflow_id}/executions"
-#   method = "GET"
-#   request_headers = {
-#     Accept = "application/json"
-#   Authorization = "Bearer ${data.google_client_config.current.access_token}" }
-#   depends_on = [
-#     data.http.call_workflows_setup,
-#     time_sleep.workflow_execution_wait
-#   ]
-# }
+## Check the state of the setup workflow execution with an API call
+data "http" "call_workflows_state" {
+  url    = "https://workflowexecutions.googleapis.com/v1/${var.workflow_id}/executions"
+  method = "GET"
+  request_headers = {
+    Accept = "application/json"
+  Authorization = "Bearer ${data.google_client_config.current.access_token}" }
+  depends_on = [
+    data.http.call_workflows_setup,
+    time_sleep.workflow_execution_wait
+  ]
+}
 
-# ## Parse out the workflow execution state from the API call response
-# locals {
-#   response_body  = jsondecode(data.http.call_workflows_state.response_body)
-#   workflow_state = local.response_body.executions[0].state
-# }
+## Parse out the workflow execution state from the API call response
+locals {
+  response_body  = jsondecode(data.http.call_workflows_state.response_body)
+  workflow_state = local.response_body.executions[0].state
+}
 
-# ## Output the workflow state to use as input for subsequent invocations
-# output "workflow_state" {
-#   description = "State of the most recent workflow execution. Used to determine how to proceed with next polling run."
-#   value       = local.workflow_state
-# }
+## Output the workflow state to use as input for subsequent invocations
+output "workflow_state" {
+  description = "State of the most recent workflow execution. Used to determine how to proceed with next polling run."
+  value       = local.workflow_state
+}
 
 # ## If workflow execution is actively running, sleep for 90 seconds to allow it to finish
 # ## If not, exit as quickly as possible (1 second)
