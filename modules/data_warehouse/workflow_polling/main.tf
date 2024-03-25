@@ -38,6 +38,19 @@ resource "time_sleep" "workflow_execution_wait" {
   ]
 }
 
+# locals {
+#   is_active = var.input_workflow_state == null || var.input_workflow_state == "FAILED" ? "no" : "yes"
+# }
+
+# ## Trigger the execution of the setup workflow with an API call
+# data "http" "call_workflows_setup" {
+#   url    = "https://workflowexecutions.googleapis.com/v1/${var.workflow_id}/executions"
+#   method = local.is_active == "no" ? "POST" : "GET"
+#   request_headers = {
+#     Accept = "application/json"
+#   Authorization = "Bearer ${data.google_client_config.current.access_token}" }
+# }
+
 # ## If the workflow last failed, sleep for 30 seconds before checking the workflow execution status.
 # ## If last execution did not fail, exit as quickly as possible (1 second)
 # resource "time_sleep" "workflow_execution_wait" {
