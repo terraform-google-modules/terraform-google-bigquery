@@ -47,7 +47,7 @@ SELECT
   GROUP BY
     1, 2
   ORDER BY
-    WeekdayNumber, 3
+    WeekdayNumber
 ;
 
 -- Query: Items with less than 30 days of inventory remaining
@@ -58,7 +58,7 @@ WITH Orders AS (
   FROM
     `${project_id}.${dataset_id}.order_items` AS order_items
   WHERE
-    order_items.created_at > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 30 DAY)
+    order_items.created_at > TIMESTAMP_SUB(TIMESTAMP("2023-09-26 00:00:00"), INTERVAL 30 DAY)
   GROUP BY
     product_id
 ),
@@ -99,7 +99,7 @@ SELECT
 FROM
   End30dInventory
 ORDER BY
-  rank ASC, current_stock DESC
+  rank ASC, count_sold_30d DESC, current_stock DESC
 ;
 
 -- Query: data summed by month, then pivoted by department
