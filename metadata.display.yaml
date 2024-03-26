@@ -72,6 +72,9 @@ spec:
         routines:
           name: routines
           title: Routines
+        storage_billing_model:
+          name: storage_billing_model
+          title: Storage Billing Model
         tables:
           name: tables
           title: Tables

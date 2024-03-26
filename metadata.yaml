@@ -178,6 +178,10 @@ spec:
               })),
             }))
         defaultValue: []
+      - name: storage_billing_model
+        description: Defines the storage billing model for the dataset
+        varType: string
+        defaultValue: LOGICAL
       - name: tables
         description: A list of objects which include table_id, table_name, schema, clustering, time_partitioning, range_partitioning, expiration_time and labels.
         varType: |-
