@@ -24,6 +24,11 @@ output "bigquery_tables" {
   description = "Map of bigquery table resources being provisioned."
 }
 
+output "dataset_id" {
+  value       = google_bigquery_dataset.main.dataset_id
+  description = "Dataset ID"
+}
+
 output "bigquery_views" {
   value       = google_bigquery_table.view
   description = "Map of bigquery view resources being provisioned."

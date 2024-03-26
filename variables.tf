@@ -49,6 +49,18 @@ variable "deletion_protection" {
   default     = false
 }
 
+variable "storage_billing_model" {
+  description = "Specifies the storage billing model for the dataset."
+  type        = string
+  default     = null
+  validation {
+    condition     = (var.storage_billing_model == null ? true : ( contains([
+      "LOGICAL", "PHYSICAL"
+    ], var.storage_billing_model)))
+    error_message = "storage_billing_model must be null or either \"LOGICAL\" or \"PHYSICAL\"."
+  }
+}
+
 variable "default_table_expiration_ms" {
   description = "TTL of tables using the dataset in MS"
   type        = number
