@@ -3,7 +3,7 @@ module github.com/terraform-google-modules/terraform-google-bigquery/test/integr
 go 1.21
 
 require (
-	github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test v0.13.1
+	github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test v0.13.2
 	github.com/stretchr/testify v1.9.0
 )
 
@@ -31,7 +31,7 @@ require (
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
 	github.com/googleapis/gax-go/v2 v2.12.0 // indirect
-	github.com/gruntwork-io/terratest v0.46.11 // indirect
+	github.com/gruntwork-io/terratest v0.46.13 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-getter v1.7.3 // indirect
