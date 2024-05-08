@@ -45,7 +45,7 @@ func TestDataWarehouse(t *testing.T) {
 
 		projectID := dwh.GetTFSetupStringOutput("project_id")
 		bucket := dwh.GetStringOutput("raw_bucket")
-		workflow := "initial-workflow"
+		workflow := dwh.GetStringOutput("workflow_name")
 		location := "asia-southeast1"
 
 		// Assert that the bucket is in location defined above
