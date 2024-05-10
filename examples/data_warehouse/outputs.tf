@@ -28,3 +28,8 @@ output "raw_bucket" {
   description = "Raw bucket name"
   value       = module.data_warehouse.raw_bucket
 }
+
+output "workflow_name" {
+  description = "Workflow name"
+  value       = module.data_warehouse.workflow_name
+}
