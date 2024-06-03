@@ -15,6 +15,7 @@ tables = [
   {
     table_id           = "bar",
     schema             = "sample_bq_schema.json",
+    require_partition_filter = false,
     time_partitioning  = null,
     range_partitioning = null,
     expiration_time    = 2524604400000, # 2050/01/01
