@@ -99,6 +99,15 @@ resource "google_bigquery_table" "main" {
     }
   }
 
+  dynamic "table_constraints" {
+    for_each = each.value["table_constraints"] != null ? [each.value["table_constraints"]] : []
+    content {
+      primary_key {
+        columns = table_constraints.value["primary_key"].columns
+      }
+    }
+  }
+
   lifecycle {
     ignore_changes = [
       encryption_configuration # managed by google_bigquery_dataset.main.default_encryption_configuration
