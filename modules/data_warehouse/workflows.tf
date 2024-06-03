@@ -53,7 +53,7 @@ resource "google_project_iam_member" "workflow_manage_sa_roles" {
 
 ## Create the workflow
 resource "google_workflows_workflow" "workflow" {
-  name            = "initial-workflow"
+  name            = "initial-workflow-${random_id.id.hex}"
   project         = module.project-services.project_id
   region          = var.region
   description     = "Runs post Terraform setup steps for Solution in Console"
