@@ -178,6 +178,9 @@ spec:
               })),
             }))
         defaultValue: []
+      - name: storage_billing_model
+        description: Specifies the storage billing model for the dataset. Set this flag value to LOGICAL to use logical bytes for storage billing, or to PHYSICAL to use physical bytes instead
+        varType: string
       - name: tables
         description: A list of objects which include table_id, table_name, schema, clustering, time_partitioning, range_partitioning, expiration_time and labels.
         varType: |-
