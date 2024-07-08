@@ -66,6 +66,12 @@ spec:
         description: The regional location for the dataset only US and EU are allowed in module
         varType: string
         defaultValue: US
+      - name: default_table_expiration_ms
+        description: TTL of tables using the dataset in MS
+        varType: number
+      - name: default_partition_expiration_ms
+        description: The default partition expiration for all partitioned tables in the dataset, in MS
+        varType: number
       - name: delete_contents_on_destroy
         description: (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present.
         varType: bool
