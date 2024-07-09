@@ -55,6 +55,12 @@ variable "default_table_expiration_ms" {
   default     = null
 }
 
+variable "default_partition_expiration_ms" {
+  description = "The default partition expiration for all partitioned tables in the dataset, in MS"
+  type        = number
+  default     = null
+}
+
 variable "max_time_travel_hours" {
   description = "Defines the time travel window in hours"
   type        = number
