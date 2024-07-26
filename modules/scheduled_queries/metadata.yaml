@@ -47,12 +47,10 @@ spec:
       - name: project_id
         description: The project where scheduled queries are created
         varType: string
-        defaultValue: null
         required: true
       - name: queries
         description: Data transfer configuration for creating scheduled queries
         varType: list(any)
-        defaultValue: null
         required: true
     outputs:
       - name: query_names

@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-module "data_warehouse" {
-  source  = "terraform-google-modules/bigquery/google//modules/data_warehouse"
-  version = "~> 7.0"
-
-  project_id          = var.project_id
-  region              = "asia-southeast1"
-  deletion_protection = false
-  force_destroy       = true
+variable "input_workflow_state" {
+  type        = string
+  description = "Name of the BigQuery ML GenAI remote model that connects to the LLM used for text generation"
 }
+
+variable "workflow_id" {
+  type        = string
+  description = "The identifer of a workflow created by Terraform. Format is projects/{project ID}/locations/{region}/workflows/{workflow name}"
+}
+
+

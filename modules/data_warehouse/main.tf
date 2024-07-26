@@ -16,7 +16,7 @@
 
 module "project-services" {
   source                      = "terraform-google-modules/project-factory/google//modules/project_services"
-  version                     = "14.4"
+  version                     = "~> 15.0"
   disable_services_on_destroy = false
 
   project_id  = var.project_id
@@ -24,23 +24,29 @@ module "project-services" {
 
   activate_apis = [
     "aiplatform.googleapis.com",
+    "artifactregistry.googleapis.com",
     "bigquery.googleapis.com",
     "bigqueryconnection.googleapis.com",
-    "bigquerydatatransfer.googleapis.com",
     "bigquerydatapolicy.googleapis.com",
+    "bigquerydatatransfer.googleapis.com",
     "bigquerymigration.googleapis.com",
     "bigqueryreservation.googleapis.com",
     "bigquerystorage.googleapis.com",
     "cloudapis.googleapis.com",
     "cloudbuild.googleapis.com",
+    "cloudfunctions.googleapis.com",
     "compute.googleapis.com",
     "config.googleapis.com",
     "datacatalog.googleapis.com",
+    "dataform.googleapis.com",
     "datalineage.googleapis.com",
+    "notebooks.googleapis.com",
+    "run.googleapis.com",
     "serviceusage.googleapis.com",
     "storage.googleapis.com",
     "storage-api.googleapis.com",
     "workflows.googleapis.com",
+    "workflowexecutions.googleapis.com"
   ]
 
   activate_api_identities = [
@@ -48,6 +54,10 @@ module "project-services" {
       api = "workflows.googleapis.com"
       roles = [
         "roles/workflows.viewer"
+      ],
+      api = "bigquerydatatransfer.googleapis.com"
+      roles = [
+        "roles/bigquerydatatransfer.serviceAgent"
       ]
     }
   ]
@@ -55,9 +65,15 @@ module "project-services" {
 
 # Wait after APIs are enabled to give time for them to spin up
 resource "time_sleep" "wait_after_apis" {
-  create_duration = "90s"
+  create_duration = "30s"
   depends_on      = [module.project-services]
 }
+
+# resource "google_project_service_identity" "default" {
+#   provider = google-beta
+#   project = module.project-services.project_id
+#   service = "workflows.googleapis.com"
+# }
 
 # Create random ID to be used for deployment uniqueness
 resource "random_id" "id" {
@@ -65,7 +81,7 @@ resource "random_id" "id" {
 }
 
 # Set up Storage Buckets
-# # Set up the raw storage bucket
+## Set up the raw storage bucket for data
 resource "google_storage_bucket" "raw_bucket" {
   name                        = "ds-edw-raw-${random_id.id.hex}"
   project                     = module.project-services.project_id
@@ -78,12 +94,4 @@ resource "google_storage_bucket" "raw_bucket" {
   depends_on = [time_sleep.wait_after_apis]
 
   labels = var.labels
-}
-
-# Sleep for 120 seconds to allow the workflow to execute and finish setup
-resource "time_sleep" "wait_after_workflow_execution" {
-  create_duration = "120s"
-  depends_on = [
-    data.http.call_workflows_setup,
-  ]
 }

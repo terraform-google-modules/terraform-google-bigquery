@@ -17,6 +17,7 @@ The resources/services/activations/deletions that this module will create/trigge
 - Creates and inferences with a BigQuery ML model
 - Creates a remote model and uses Generative AI to generate text through a BigQuery ML remote model
 - Creates a Looker Studio report
+- Deploys follow-on learning notebooks
 
 ### preDeploy
 To deploy this blueprint you must have an active billing account and billing permissions.
@@ -35,9 +36,11 @@ Functional examples are included in the
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| deletion\_protection | Whether or not to protect GCS resources from deletion when solution is modified or changed. | `string` | `true` | no |
+| create\_ignore\_service\_accounts | Whether or not to ignore creation of a service account if an account of the same name already exists | `string` | `true` | no |
+| dataform\_region | Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in. | `string` | `null` | no |
+| deletion\_protection | Whether or not to protect GCS resources from deletion when solution is modified or changed. | `string` | `false` | no |
 | enable\_apis | Whether or not to enable underlying apis in this solution. | `string` | `true` | no |
-| force\_destroy | Whether or not to protect BigQuery resources from deletion when solution is modified or changed. | `string` | `false` | no |
+| force\_destroy | Whether or not to protect BigQuery resources from deletion when solution is modified or changed. | `string` | `true` | no |
 | labels | A map of labels to apply to contained resources. | `map(string)` | <pre>{<br>  "data-warehouse": true<br>}</pre> | no |
 | project\_id | Google Cloud Project ID | `string` | n/a | yes |
 | region | Google Cloud Region | `string` | n/a | yes |
@@ -86,6 +89,7 @@ A project with the following APIs enabled must be used to host the
 resources of this module:
 
 - Vertex AI API: `aiplatform.googleapis.com`
+- Artifact Registry API: `artifactregistry.googleapis.com`
 - BigQuery API: `bigquery.googleapis.com`
 - BigQuery Connection API: `bigqueryconnection.googleapis.com`
 - BigQuery Data Policy API: `bigquerydatapolicy.googleapis.com`
@@ -95,10 +99,14 @@ resources of this module:
 - BigQuery Storage API: `bigquerystorage.googleapis.com`
 - Google Cloud APIs: `cloudapis.googleapis.com`
 - Cloud Build API: `cloudbuild.googleapis.com`
+- Cloud Functions API: `cloudfunctions.googleapis.com`
 - Compute Engine API: `compute.googleapis.com`
 - Infrastructure Manager API: `config.googleapis.com`
 - Data Catalog API: `datacatalog.googleapis.com`
+- Dataform API: `dataform.googleapis.com`
 - Data Lineage API: `datalineage.googleapis.com`
+- Notebooks API: `notebooks.googleapis.com`
+- Cloud Run API: `run.googleapis.com`
 - Service Usage API: `serviceusage.googleapis.com`
 - Google Cloud Storage API: `storage.googleapis.com`
 - Google Cloud Storage JSON API: `storage-api.googleapis.com`

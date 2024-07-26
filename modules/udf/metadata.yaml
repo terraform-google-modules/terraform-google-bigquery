@@ -51,12 +51,10 @@ spec:
       - name: dataset_id
         description: Dataset id
         varType: string
-        defaultValue: null
         required: true
       - name: project_id
         description: Project ID that contains the dataset
         varType: string
-        defaultValue: null
         required: true
     outputs:
       - name: added_udfs
