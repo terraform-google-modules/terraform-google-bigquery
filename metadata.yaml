@@ -24,7 +24,7 @@ spec:
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-bigquery
       sourceType: git
-    version: 7.0.0
+    version: 8.0.0
     actuationTool:
       flavor: Terraform
       version: ">= 1.3"
@@ -187,7 +187,7 @@ spec:
               table_name               = optional(string),
               schema                   = string,
               clustering               = list(string),
-              require_partition_filter = bool,
+              require_partition_filter = optional(bool),
               time_partitioning = object({
                 expiration_ms = string,
                 field         = string,

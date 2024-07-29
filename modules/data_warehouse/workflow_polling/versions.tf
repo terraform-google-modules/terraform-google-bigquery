@@ -15,17 +15,39 @@
  */
 
 terraform {
-  required_version = ">= 1.3"
   required_providers {
-
     google = {
       source  = "hashicorp/google"
-      version = ">= 3.53, < 6"
+      version = ">= 4.52, < 6"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = ">= 4.52, < 6"
+    }
+    archive = {
+      source  = "hashicorp/archive"
+      version = ">= 2"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = ">= 2"
+    }
+    time = {
+      source  = "hashicorp/time"
+      version = ">= 0.9.1"
+    }
+    http = {
+      source  = "hashicorp/http"
+      version = ">= 2"
+    }
+    local = {
+      source  = "hashicorp/local"
+      version = ">=2.4"
     }
   }
+  required_version = ">= 0.13"
 
   provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-bigquery:udf/v8.0.0"
+    module_name = "blueprints/terraform/terraform-google-bigquery:data_warehouse/v8.0.0"
   }
-
 }

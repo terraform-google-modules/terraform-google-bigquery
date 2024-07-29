@@ -103,7 +103,7 @@ variable "tables" {
     table_name               = optional(string),
     schema                   = string,
     clustering               = list(string),
-    require_partition_filter = bool,
+    require_partition_filter = optional(bool),
     time_partitioning = object({
       expiration_ms = string,
       field         = string,

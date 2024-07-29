@@ -44,7 +44,7 @@ resource "google_project_iam_member" "bq_connection_iam_object_viewer" {
   role    = "roles/storage.objectViewer"
   member  = "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}"
 
-  depends_on = [google_storage_bucket.raw_bucket, google_bigquery_connection.ds_connection]
+  depends_on = [google_project_iam_member.workflow_manage_sa_roles, google_bigquery_connection.ds_connection]
 }
 
 ## Create a BigQuery connection for Vertex AI to support GenerativeAI use cases
@@ -372,6 +372,6 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
   depends_on = [
     google_project_iam_member.dts_roles,
     google_bigquery_dataset.ds_edw,
-    time_sleep.complete_workflow
+    module.workflow_polling_4
   ]
 }
