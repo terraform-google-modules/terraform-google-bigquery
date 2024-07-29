@@ -37,10 +37,9 @@ variable "tables" {
     schema     = string,
     clustering = list(string),
     time_partitioning = object({
-      expiration_ms            = string,
-      field                    = string,
-      type                     = string,
-      require_partition_filter = bool,
+      expiration_ms = string,
+      field         = string,
+      type          = string,
     }),
     range_partitioning = object({
       field = string,

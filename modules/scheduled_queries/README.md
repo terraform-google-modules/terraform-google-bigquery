@@ -7,7 +7,7 @@ Example:
 ```hcl
 module "dataset" {
   source = "terraform-google-modules/bigquery/google"
-  version = "~> 7.0"
+  version = "~> 8.0"
 
   dataset_id                  = "example_dataset"
   dataset_name                = "example_dataset"

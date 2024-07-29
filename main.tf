@@ -65,25 +65,25 @@ resource "google_bigquery_dataset" "main" {
 }
 
 resource "google_bigquery_table" "main" {
-  for_each            = local.tables
-  dataset_id          = google_bigquery_dataset.main.dataset_id
-  friendly_name       = each.value["table_name"] != null ? each.value["table_name"] : each.key
-  table_id            = each.key
-  description         = each.value["description"]
-  labels              = each.value["labels"]
-  schema              = each.value["schema"]
-  clustering          = each.value["clustering"]
-  expiration_time     = each.value["expiration_time"] != null ? each.value["expiration_time"] : 0
-  project             = var.project_id
-  deletion_protection = coalesce(each.value["deletion_protection"], var.deletion_protection)
+  for_each                 = local.tables
+  dataset_id               = google_bigquery_dataset.main.dataset_id
+  friendly_name            = each.value["table_name"] != null ? each.value["table_name"] : each.key
+  table_id                 = each.key
+  description              = each.value["description"]
+  labels                   = each.value["labels"]
+  schema                   = each.value["schema"]
+  clustering               = each.value["clustering"]
+  expiration_time          = each.value["expiration_time"] != null ? each.value["expiration_time"] : 0
+  project                  = var.project_id
+  deletion_protection      = coalesce(each.value["deletion_protection"], var.deletion_protection)
+  require_partition_filter = each.value["require_partition_filter"]
 
   dynamic "time_partitioning" {
     for_each = each.value["time_partitioning"] != null ? [each.value["time_partitioning"]] : []
     content {
-      type                     = time_partitioning.value["type"]
-      expiration_ms            = time_partitioning.value["expiration_ms"] != null ? time_partitioning.value["expiration_ms"] : 0
-      field                    = time_partitioning.value["field"]
-      require_partition_filter = time_partitioning.value["require_partition_filter"]
+      type          = time_partitioning.value["type"]
+      expiration_ms = time_partitioning.value["expiration_ms"] != null ? time_partitioning.value["expiration_ms"] : 0
+      field         = time_partitioning.value["field"]
     }
   }
 
