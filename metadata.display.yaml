@@ -39,12 +39,12 @@ spec:
         dataset_name:
           name: dataset_name
           title: Dataset Name
-        default_table_expiration_ms:
-          name: default_table_expiration_ms
-          title: Default Table Expiration Ms
         default_partition_expiration_ms:
           name: default_partition_expiration_ms
           title: Default Partition Expiration Ms
+        default_table_expiration_ms:
+          name: default_table_expiration_ms
+          title: Default Table Expiration Ms
         delete_contents_on_destroy:
           name: delete_contents_on_destroy
           title: Delete Contents On Destroy
