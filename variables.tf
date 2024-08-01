@@ -56,7 +56,7 @@ variable "default_table_expiration_ms" {
 }
 
 variable "default_partition_expiration_ms" {
-  description = "The default partition expiration for all partitioned tables in the dataset, in MS"
+  description = "The default partition expiration for all partitioned tables in the dataset, in msec"
   type        = number
   default     = null
 }
