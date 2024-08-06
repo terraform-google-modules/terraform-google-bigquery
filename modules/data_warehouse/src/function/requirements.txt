@@ -1,2 +1,2 @@
 functions-framework==3.*
-google-cloud-dataform==0.5.10
+google-cloud-dataform==0.5.11
