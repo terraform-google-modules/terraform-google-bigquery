@@ -220,8 +220,9 @@ resource "google_bigquery_table" "external_table" {
     dynamic "hive_partitioning_options" {
       for_each = each.value["hive_partitioning_options"] != null ? [each.value["hive_partitioning_options"]] : []
       content {
-        mode              = hive_partitioning_options.value["mode"]
-        source_uri_prefix = hive_partitioning_options.value["source_uri_prefix"]
+        mode                     = hive_partitioning_options.value["mode"]
+        source_uri_prefix        = hive_partitioning_options.value["source_uri_prefix"]
+        require_partition_filter = hive_partitioning_options.value["require_partition_filter"]
       }
     }
   }
