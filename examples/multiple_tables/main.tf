@@ -116,7 +116,8 @@ module "bigquery" {
       ]
       csv_options = null
       hive_partitioning_options = {
-        mode = "AUTO"
+        mode                     = "AUTO"
+        require_partition_filter = true
         # DO NOT CHANGE - see above source_uris
         source_uri_prefix = "gs://ci-bq-external-data/hive_partition_example/"
       }
