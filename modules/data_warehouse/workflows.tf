@@ -48,7 +48,7 @@ resource "google_project_iam_member" "workflow_manage_sa_roles" {
   member  = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
   role    = local.workflow_roles[count.index]
 
-  depends_on = [google_dataform_repository_iam_member.workflow_manage_repo]
+  depends_on = [google_service_account.workflow_manage_sa]
 }
 
 ## Create the workflow
@@ -74,17 +74,11 @@ resource "google_workflows_workflow" "workflow" {
   ]
 }
 
-data "google_client_config" "current" {
+module "workflow_polling_1" {
+  source               = "./workflow_polling"
+  workflow_id          = google_workflows_workflow.workflow.id
+  input_workflow_state = null
 
-}
-
-## Trigger the execution of the setup workflow with an API call
-data "http" "call_workflows_setup" {
-  url    = "https://workflowexecutions.googleapis.com/v1/projects/${module.project-services.project_id}/locations/${var.region}/workflows/${google_workflows_workflow.workflow.name}/executions"
-  method = "POST"
-  request_headers = {
-    Accept = "application/json"
-  Authorization = "Bearer ${data.google_client_config.current.access_token}" }
   depends_on = [
     google_storage_bucket.raw_bucket,
     google_bigquery_routine.sp_bigqueryml_generate_create,
@@ -98,3 +92,68 @@ data "http" "call_workflows_setup" {
     google_service_account_iam_member.workflow_auth_function
   ]
 }
+
+
+module "workflow_polling_4" {
+  source               = "./workflow_polling"
+  workflow_id          = google_workflows_workflow.workflow.id
+  input_workflow_state = module.workflow_polling_1.workflow_state
+
+  depends_on = [
+    module.workflow_polling_1
+  ]
+}
+
+# TODO: Expand testing to support more dynamic polling of workflow state
+# module "workflow_polling_1" {
+#   source = "./workflow_polling"
+
+#   workflow_id          = google_workflows_workflow.workflow.id
+#   input_workflow_state = null
+
+#   depends_on = [
+#     google_storage_bucket.raw_bucket,
+#     google_bigquery_routine.sp_bigqueryml_generate_create,
+#     google_bigquery_routine.sp_bigqueryml_model,
+#     google_bigquery_routine.sproc_sp_demo_lookerstudio_report,
+#     google_bigquery_routine.sp_provision_lookup_tables,
+#     google_workflows_workflow.workflow,
+#     google_storage_bucket.raw_bucket,
+#     google_cloudfunctions2_function.notebook_deploy_function,
+#     time_sleep.wait_after_function,
+#     google_service_account_iam_member.workflow_auth_function
+#   ]
+# }
+
+# module "workflow_polling_2" {
+#   source      = "./workflow_polling"
+#   workflow_id = google_workflows_workflow.workflow.id
+
+#   input_workflow_state = module.workflow_polling_1.workflow_state
+
+#   depends_on = [
+#     module.workflow_polling_1
+#   ]
+# }
+
+# module "workflow_polling_3" {
+#   source      = "./workflow_polling"
+#   workflow_id = google_workflows_workflow.workflow.id
+
+#   input_workflow_state = module.workflow_polling_2.workflow_state
+
+#   depends_on = [
+#     module.workflow_polling_2
+#   ]
+# }
+
+# module "workflow_polling_4" {
+#   source      = "./workflow_polling"
+#   workflow_id = google_workflows_workflow.workflow.id
+
+#   input_workflow_state = module.workflow_polling_3.workflow_state
+
+#   depends_on = [
+#     module.workflow_polling_3
+#   ]
+# }

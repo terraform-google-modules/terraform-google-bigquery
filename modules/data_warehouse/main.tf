@@ -16,7 +16,7 @@
 
 module "project-services" {
   source                      = "terraform-google-modules/project-factory/google//modules/project_services"
-  version                     = "14.4"
+  version                     = "~> 15.0"
   disable_services_on_destroy = false
 
   project_id  = var.project_id
@@ -46,6 +46,7 @@ module "project-services" {
     "storage.googleapis.com",
     "storage-api.googleapis.com",
     "workflows.googleapis.com",
+    "workflowexecutions.googleapis.com"
   ]
 
   activate_api_identities = [
@@ -68,6 +69,12 @@ resource "time_sleep" "wait_after_apis" {
   depends_on      = [module.project-services]
 }
 
+# resource "google_project_service_identity" "default" {
+#   provider = google-beta
+#   project = module.project-services.project_id
+#   service = "workflows.googleapis.com"
+# }
+
 # Create random ID to be used for deployment uniqueness
 resource "random_id" "id" {
   byte_length = 4
@@ -87,12 +94,4 @@ resource "google_storage_bucket" "raw_bucket" {
   depends_on = [time_sleep.wait_after_apis]
 
   labels = var.labels
-}
-
-# Sleep for 120 seconds to allow the workflow to execute and finish setup
-resource "time_sleep" "wait_after_workflow_execution" {
-  create_duration = "120s"
-  depends_on = [
-    data.http.call_workflows_setup,
-  ]
 }

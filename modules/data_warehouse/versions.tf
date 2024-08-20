@@ -24,13 +24,9 @@ terraform {
       source  = "hashicorp/google-beta"
       version = ">= 4.52, < 6"
     }
-    random = {
-      source  = "hashicorp/random"
-      version = ">= 2"
-    }
     archive = {
       source  = "hashicorp/archive"
-      version = ">= 2"
+      version = "2.4.2"
     }
     time = {
       source  = "hashicorp/time"
@@ -44,10 +40,14 @@ terraform {
       source  = "hashicorp/local"
       version = ">=2.4"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.6.2"
+    }
   }
   required_version = ">= 0.13"
 
   provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-bigquery:data_warehouse/v7.0.0"
+    module_name = "blueprints/terraform/terraform-google-bigquery:data_warehouse/v8.0.0"
   }
 }
