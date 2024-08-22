@@ -14,4 +14,4 @@
 
 CREATE OR REPLACE MODEL `${project_id}.${dataset_id}.${model_name}`
 REMOTE WITH CONNECTION `${connection_id}`
-OPTIONS (REMOTE_SERVICE_TYPE = 'CLOUD_AI_LARGE_LANGUAGE_MODEL_V1');
+OPTIONS (ENDPOINT = 'gemini-1.5-flash');
