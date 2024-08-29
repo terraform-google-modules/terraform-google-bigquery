@@ -191,8 +191,9 @@ variable "external_tables" {
       skip_leading_rows = number,
     }),
     hive_partitioning_options = object({
-      mode              = string,
-      source_uri_prefix = string,
+      mode                     = string,
+      source_uri_prefix        = string,
+      require_partition_filter = optional(bool),
     }),
     expiration_time     = string,
     max_staleness       = optional(string),
