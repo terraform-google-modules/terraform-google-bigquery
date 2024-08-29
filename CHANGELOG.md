@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.2.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v8.1.0...v8.2.0) (2024-08-29)
+
+
+### Features
+
+* **deps:** Update Terraform Google Provider to v6 (major) ([#347](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/347)) ([0fe8ab6](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/0fe8ab60d7291a2260cd460d55cdcca7fc815a0d))
+
 ## [8.1.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v8.0.0...v8.1.0) (2024-08-20)
 
 
