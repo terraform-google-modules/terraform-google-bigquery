@@ -17,7 +17,7 @@
 
 module "bigquery_tables" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 7.0"
+  version = "~> 8.0"
 
   dataset_id                 = "foo"
   dataset_name               = "foo"
@@ -36,7 +36,7 @@ module "bigquery_tables" {
 
 module "bigquery_views_without_pii" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 7.0"
+  version = "~> 8.0"
 
   dataset_id                 = "${module.bigquery_tables.bigquery_dataset.dataset_id}_view_without_pii" # this creates a dependency so that we have the tables first
   dataset_name               = "foo view"
@@ -60,7 +60,7 @@ module "bigquery_views_without_pii" {
 # so we create the authorized views after creating tables and views.
 module "authorization" {
   source  = "terraform-google-modules/bigquery/google//modules/authorization"
-  version = "~> 7.0"
+  version = "~> 8.0"
 
   project_id = var.table_project_id
   dataset_id = module.bigquery_tables.bigquery_dataset.dataset_id
