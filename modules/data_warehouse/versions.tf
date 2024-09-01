@@ -15,6 +15,7 @@
  */
 
 terraform {
+  required_version = ">= 1.5"
   required_providers {
     google = {
       source  = "hashicorp/google"
@@ -45,7 +46,6 @@ terraform {
       version = "3.6.2"
     }
   }
-  required_version = ">= 0.13"
 
   provider_meta "google" {
     module_name = "blueprints/terraform/terraform-google-bigquery:data_warehouse/v8.1.0"
