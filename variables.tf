@@ -191,8 +191,13 @@ variable "external_tables" {
       skip_leading_rows = number,
     }),
     hive_partitioning_options = object({
-      mode              = string,
-      source_uri_prefix = string,
+      mode                     = string,
+      require_partition_filter = bool,
+      source_uri_prefix        = string,
+    }),
+    parquet_options = object({
+      enable_list_inference = bool,
+      enum_as_string        = bool,
     }),
     expiration_time     = string,
     max_staleness       = optional(string),
