@@ -35,7 +35,9 @@ module "bigquery" {
   project_id                  = "<PROJECT ID>"
   location                    = "US"
   default_table_expiration_ms = 3600000
-
+  tag_key   = "56789"
+  tag_value = "production"
+  
   tables = [
   {
     table_id           = "foo",
@@ -100,9 +102,6 @@ module "bigquery" {
   dataset_labels = {
     env      = "dev"
     billable = "true"
-  }
-  resource_tags = {
-    short_name = "123456789012/environment"
   }
 }
 ```

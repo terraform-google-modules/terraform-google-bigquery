@@ -28,6 +28,12 @@ locals {
   }
 }
 
+data "google_tags_tag_value" "tag_value" {
+  count      = var.tag_key != "" && var.tag_value != "" ? 1 : 0
+  parent     = "tagKeys/${var.tag_key}"
+  short_name = var.tag_value
+}
+
 resource "google_bigquery_dataset" "main" {
   dataset_id                  = var.dataset_id
   friendly_name               = var.dataset_name
@@ -38,7 +44,15 @@ resource "google_bigquery_dataset" "main" {
   max_time_travel_hours       = var.max_time_travel_hours
   project                     = var.project_id
   labels                      = var.dataset_labels
-  resource_tags               = var.resource_tags
+
+  dynamic "resource_tags" {
+    for_each = var.tag_key != "" && var.tag_value != "" ? [1] : []
+    content {
+      key   = data.google_tags_tag_value.tag_value[0].parent
+      value = data.google_tags_tag_value.tag_value[0].id
+    }
+  }
+
   dynamic "default_encryption_configuration" {
     for_each = var.encryption_key == null ? [] : [var.encryption_key]
     content {

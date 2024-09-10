@@ -77,10 +77,16 @@ variable "dataset_labels" {
   type        = map(string)
   default     = {}
 }
-variable "resource_tags" {
-  description = "A map of resource tags to add to the dataset"
-  type        = map(string)
-  default     = {}
+variable "tag_key" {
+  description = "The ID of the parent TagKey"
+  type        = string
+  default     = ""
+}
+
+variable "tag_value" {
+  description = "The short name of the TagValue"
+  type        = string
+  default     = ""
 }
 
 # Format: list(objects)
