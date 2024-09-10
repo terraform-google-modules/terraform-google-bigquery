@@ -77,6 +77,11 @@ variable "dataset_labels" {
   type        = map(string)
   default     = {}
 }
+variable "resource_tags" {
+  description = "A map of resource tags to add to the dataset"
+  type        = map(string)
+  default     = {}
+}
 
 # Format: list(objects)
 # domain: A domain to grant access to.

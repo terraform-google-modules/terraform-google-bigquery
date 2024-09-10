@@ -101,6 +101,9 @@ module "bigquery" {
     env      = "dev"
     billable = "true"
   }
+  resource_tags = {
+    short_name = "123456789012/environment"
+  }
 }
 ```
 
