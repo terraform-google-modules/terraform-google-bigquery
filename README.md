@@ -35,8 +35,7 @@ module "bigquery" {
   project_id                  = "<PROJECT ID>"
   location                    = "US"
   default_table_expiration_ms = 3600000
-  tag_key   = "56789"
-  tag_value = "production"
+  resource_tags               = {"<PROJECT>/<TAG KEY>":"<TAG VALUE>"}
   
   tables = [
   {
