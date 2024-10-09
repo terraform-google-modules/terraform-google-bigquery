@@ -78,6 +78,12 @@ variable "dataset_labels" {
   default     = {}
 }
 
+variable "resource_tags" {
+  description = "A map of resource tags to add to the dataset"
+  type        = map(string)
+  default     = {}
+}
+
 # Format: list(objects)
 # domain: A domain to grant access to.
 # group_by_email: An email address of a Google Group to grant access to.
