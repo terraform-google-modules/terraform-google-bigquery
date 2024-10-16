@@ -16,7 +16,7 @@
 
 module "bigquery" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 7.0"
+  version = "~> 8.0"
 
   dataset_id                  = "foo"
   dataset_name                = "foo"
@@ -153,7 +153,7 @@ module "bigquery" {
 
 module "add_udfs" {
   source  = "terraform-google-modules/bigquery/google//modules/udf"
-  version = "~> 7.0"
+  version = "~> 8.0"
 
   dataset_id = module.bigquery.bigquery_dataset.dataset_id
   project_id = module.bigquery.bigquery_dataset.project
@@ -161,7 +161,7 @@ module "add_udfs" {
 
 module "auth_dataset" {
   source                      = "terraform-google-modules/bigquery/google"
-  version                     = "~> 7.0"
+  version                     = "~> 8.0"
   dataset_id                  = "auth_dataset"
   dataset_name                = "auth_dataset"
   description                 = "some description"
@@ -224,7 +224,7 @@ resource "google_bigquery_routine" "auth_ds_routine2" {
 
 module "add_authorization" {
   source  = "terraform-google-modules/bigquery/google//modules/authorization"
-  version = "~> 7.0"
+  version = "~> 8.0"
 
   dataset_id = module.bigquery.bigquery_dataset.dataset_id
   project_id = module.bigquery.bigquery_dataset.project
