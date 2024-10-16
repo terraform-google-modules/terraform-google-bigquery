@@ -69,6 +69,9 @@ spec:
         project_id:
           name: project_id
           title: Project Id
+        resource_tags:
+          name: resource_tags
+          title: Resource Tags
         routines:
           name: routines
           title: Routines

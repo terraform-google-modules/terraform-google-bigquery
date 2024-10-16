@@ -44,10 +44,6 @@ spec:
         location: examples/scheduled_queries
   interfaces:
     variables:
-      - name: add_udfs
-        description: Whether or not this module should be enabled.
-        varType: string
-        defaultValue: false
       - name: dataset_id
         description: Dataset id
         varType: string
@@ -56,6 +52,10 @@ spec:
         description: Project ID that contains the dataset
         varType: string
         required: true
+      - name: add_udfs
+        description: Whether or not this module should be enabled.
+        varType: string
+        defaultValue: false
     outputs:
       - name: added_udfs
         description: List of UDFs utility functions added.
@@ -74,3 +74,6 @@ spec:
       - bigqueryconnection.googleapis.com
       - serviceusage.googleapis.com
       - iam.googleapis.com
+    providerVersions:
+      - source: hashicorp/google
+        version: ">= 5.39, < 7"
