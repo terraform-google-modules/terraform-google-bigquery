@@ -16,7 +16,7 @@
 
 module "data_warehouse" {
   source  = "terraform-google-modules/bigquery/google//modules/data_warehouse"
-  version = "~> 7.0"
+  version = "~> 8.0"
 
   project_id          = var.project_id
   region              = "asia-southeast1"

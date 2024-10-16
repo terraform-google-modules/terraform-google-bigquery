@@ -16,7 +16,7 @@
 
 module "dataset" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 7.0"
+  version = "~> 8.0"
 
   dataset_id   = "example_dataset"
   dataset_name = "example_dataset"
@@ -27,7 +27,7 @@ module "dataset" {
 
 module "scheduled_queries" {
   source  = "terraform-google-modules/bigquery/google//modules/scheduled_queries"
-  version = "~> 7.0"
+  version = "~> 8.0"
 
   project_id = module.dataset.project
 
