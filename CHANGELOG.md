@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [9.0.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v8.1.0...v9.0.0) (2024-10-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** Update Terraform terraform-google-modules/project-factory/google to v17 ([#358](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/358))
+* **TPG>=5.39:** add resource_tags ([#354](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/354))
+
+### Features
+
+* **deps:** Update Terraform Google Provider to v6 (major) ([#347](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/347)) ([0fe8ab6](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/0fe8ab60d7291a2260cd460d55cdcca7fc815a0d))
+* **TPG>=5.39:** add resource_tags ([#354](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/354)) ([c07d42e](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/c07d42e110b4012d2410acfbe6ceb6f4ac5ec2a4))
+
+
+### Bug Fixes
+
+* **deps:** Update Terraform terraform-google-modules/project-factory/google to v17 ([#358](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/358)) ([23446d6](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/23446d629021ecbae7a6c2a55c42db07d65c386f))
+
 ## [8.1.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v8.0.0...v8.1.0) (2024-08-20)
 
 
