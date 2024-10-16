@@ -77,30 +77,6 @@ spec:
         location: examples/scheduled_queries
   interfaces:
     variables:
-      - name: create_ignore_service_accounts
-        description: Whether or not to ignore creation of a service account if an account of the same name already exists
-        varType: string
-        defaultValue: true
-      - name: dataform_region
-        description: Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in.
-        varType: string
-      - name: deletion_protection
-        description: Whether or not to protect GCS resources from deletion when solution is modified or changed.
-        varType: string
-        defaultValue: false
-      - name: enable_apis
-        description: Whether or not to enable underlying apis in this solution.
-        varType: string
-        defaultValue: true
-      - name: force_destroy
-        description: Whether or not to protect BigQuery resources from deletion when solution is modified or changed.
-        varType: string
-        defaultValue: true
-      - name: labels
-        description: A map of labels to apply to contained resources.
-        varType: map(string)
-        defaultValue:
-          data-warehouse: true
       - name: project_id
         description: Google Cloud Project ID
         varType: string
@@ -109,10 +85,34 @@ spec:
         description: Google Cloud Region
         varType: string
         required: true
+      - name: dataform_region
+        description: Region that is used to deploy Dataform resources. This does not limit where resources can be run or what region data must be located in.
+        varType: string
       - name: text_generation_model_name
         description: Name of the BigQuery ML GenAI remote model that connects to the LLM used for text generation
         varType: string
         defaultValue: text_generate_model
+      - name: labels
+        description: A map of labels to apply to contained resources.
+        varType: map(string)
+        defaultValue:
+          data-warehouse: true
+      - name: enable_apis
+        description: Whether or not to enable underlying apis in this solution.
+        varType: string
+        defaultValue: true
+      - name: force_destroy
+        description: Whether or not to protect BigQuery resources from deletion when solution is modified or changed.
+        varType: string
+        defaultValue: true
+      - name: deletion_protection
+        description: Whether or not to protect GCS resources from deletion when solution is modified or changed.
+        varType: string
+        defaultValue: false
+      - name: create_ignore_service_accounts
+        description: Whether or not to ignore creation of a service account if an account of the same name already exists
+        varType: string
+        defaultValue: true
     outputs:
       - name: bigquery_editor_url
         description: The URL to launch the BigQuery editor with the sample query procedure opened
@@ -139,3 +139,6 @@ spec:
       - bigqueryconnection.googleapis.com
       - serviceusage.googleapis.com
       - iam.googleapis.com
+    providerVersions:
+      - source: hashicorp/google
+        version: ">= 5.39, < 7"

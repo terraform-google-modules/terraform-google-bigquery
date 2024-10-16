@@ -52,26 +52,20 @@ spec:
         location: examples/scheduled_queries
   interfaces:
     variables:
-      - name: access
-        description: An array of objects that define dataset access for one or more entities.
-        varType: any
-        defaultValue:
-          - role: roles/bigquery.dataOwner
-            special_group: projectOwners
       - name: dataset_id
         description: Unique ID for the dataset being provisioned.
         varType: string
         required: true
-      - name: dataset_labels
-        description: Key value pairs in a map for dataset labels
-        varType: map(string)
-        defaultValue: {}
       - name: dataset_name
         description: Friendly name for the dataset being provisioned.
         varType: string
-      - name: default_table_expiration_ms
-        description: TTL of tables using the dataset in MS
-        varType: number
+      - name: description
+        description: Dataset description.
+        varType: string
+      - name: location
+        description: The regional location for the dataset only US and EU are allowed in module
+        varType: string
+        defaultValue: US
       - name: delete_contents_on_destroy
         description: (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present.
         varType: bool
@@ -79,80 +73,9 @@ spec:
         description: Whether or not to allow deletion of tables and external tables defined by this module. Can be overriden by table-level deletion_protection configuration.
         varType: bool
         defaultValue: false
-      - name: description
-        description: Dataset description.
-        varType: string
-      - name: encryption_key
-        description: Default encryption key to apply to the dataset. Defaults to null (Google-managed).
-        varType: string
-      - name: external_tables
-        description: A list of objects which include table_id, expiration_time, external_data_configuration, and labels.
-        varType: |-
-          list(object({
-              table_id              = string,
-              description           = optional(string),
-              autodetect            = bool,
-              compression           = string,
-              ignore_unknown_values = bool,
-              max_bad_records       = number,
-              schema                = string,
-              source_format         = string,
-              source_uris           = list(string),
-              csv_options = object({
-                quote                 = string,
-                allow_jagged_rows     = bool,
-                allow_quoted_newlines = bool,
-                encoding              = string,
-                field_delimiter       = string,
-                skip_leading_rows     = number,
-              }),
-              google_sheets_options = object({
-                range             = string,
-                skip_leading_rows = number,
-              }),
-              hive_partitioning_options = object({
-                mode              = string,
-                source_uri_prefix = string,
-              }),
-              expiration_time     = string,
-              max_staleness       = optional(string),
-              deletion_protection = optional(bool),
-              labels              = map(string),
-            }))
-        defaultValue: []
-      - name: location
-        description: The regional location for the dataset only US and EU are allowed in module
-        varType: string
-        defaultValue: US
-      - name: materialized_views
-        description: A list of objects which includes view_id, view_query, clustering, time_partitioning, range_partitioning, expiration_time and labels
-        varType: |-
-          list(object({
-              view_id             = string,
-              description         = optional(string),
-              query               = string,
-              enable_refresh      = bool,
-              refresh_interval_ms = string,
-              clustering          = list(string),
-              time_partitioning = object({
-                expiration_ms            = string,
-                field                    = string,
-                type                     = string,
-                require_partition_filter = bool,
-              }),
-              range_partitioning = object({
-                field = string,
-                range = object({
-                  start    = string,
-                  end      = string,
-                  interval = string,
-                }),
-              }),
-              expiration_time = string,
-              max_staleness   = optional(string),
-              labels          = map(string),
-            }))
-        defaultValue: []
+      - name: default_table_expiration_ms
+        description: TTL of tables using the dataset in MS
+        varType: number
       - name: max_time_travel_hours
         description: Defines the time travel window in hours
         varType: number
@@ -160,24 +83,23 @@ spec:
         description: Project where the dataset and table are created
         varType: string
         required: true
-      - name: routines
-        description: A list of objects which include routine_id, routine_type, routine_language, definition_body, return_type, routine_description and arguments.
-        varType: |-
-          list(object({
-              routine_id      = string,
-              routine_type    = string,
-              language        = string,
-              definition_body = string,
-              return_type     = string,
-              description     = string,
-              arguments = list(object({
-                name          = string,
-                data_type     = string,
-                argument_kind = string,
-                mode          = string,
-              })),
-            }))
-        defaultValue: []
+      - name: encryption_key
+        description: Default encryption key to apply to the dataset. Defaults to null (Google-managed).
+        varType: string
+      - name: dataset_labels
+        description: Key value pairs in a map for dataset labels
+        varType: map(string)
+        defaultValue: {}
+      - name: resource_tags
+        description: A map of resource tags to add to the dataset
+        varType: map(string)
+        defaultValue: {}
+      - name: access
+        description: An array of objects that define dataset access for one or more entities.
+        varType: any
+        defaultValue:
+          - role: roles/bigquery.dataOwner
+            special_group: projectOwners
       - name: tables
         description: A list of objects which include table_id, table_name, schema, clustering, time_partitioning, range_partitioning, expiration_time and labels.
         varType: |-
@@ -215,6 +137,88 @@ spec:
               query          = string,
               use_legacy_sql = bool,
               labels         = map(string),
+            }))
+        defaultValue: []
+      - name: materialized_views
+        description: A list of objects which includes view_id, view_query, clustering, time_partitioning, range_partitioning, expiration_time and labels
+        varType: |-
+          list(object({
+              view_id             = string,
+              description         = optional(string),
+              query               = string,
+              enable_refresh      = bool,
+              refresh_interval_ms = string,
+              clustering          = list(string),
+              time_partitioning = object({
+                expiration_ms            = string,
+                field                    = string,
+                type                     = string,
+                require_partition_filter = bool,
+              }),
+              range_partitioning = object({
+                field = string,
+                range = object({
+                  start    = string,
+                  end      = string,
+                  interval = string,
+                }),
+              }),
+              expiration_time = string,
+              max_staleness   = optional(string),
+              labels          = map(string),
+            }))
+        defaultValue: []
+      - name: external_tables
+        description: A list of objects which include table_id, expiration_time, external_data_configuration, and labels.
+        varType: |-
+          list(object({
+              table_id              = string,
+              description           = optional(string),
+              autodetect            = bool,
+              compression           = string,
+              ignore_unknown_values = bool,
+              max_bad_records       = number,
+              schema                = string,
+              source_format         = string,
+              source_uris           = list(string),
+              csv_options = object({
+                quote                 = string,
+                allow_jagged_rows     = bool,
+                allow_quoted_newlines = bool,
+                encoding              = string,
+                field_delimiter       = string,
+                skip_leading_rows     = number,
+              }),
+              google_sheets_options = object({
+                range             = string,
+                skip_leading_rows = number,
+              }),
+              hive_partitioning_options = object({
+                mode              = string,
+                source_uri_prefix = string,
+              }),
+              expiration_time     = string,
+              max_staleness       = optional(string),
+              deletion_protection = optional(bool),
+              labels              = map(string),
+            }))
+        defaultValue: []
+      - name: routines
+        description: A list of objects which include routine_id, routine_type, routine_language, definition_body, return_type, routine_description and arguments.
+        varType: |-
+          list(object({
+              routine_id      = string,
+              routine_type    = string,
+              language        = string,
+              definition_body = string,
+              return_type     = string,
+              description     = string,
+              arguments = list(object({
+                name          = string,
+                data_type     = string,
+                argument_kind = string,
+                mode          = string,
+              })),
             }))
         defaultValue: []
     outputs:
@@ -257,3 +261,6 @@ spec:
       - bigqueryconnection.googleapis.com
       - serviceusage.googleapis.com
       - iam.googleapis.com
+    providerVersions:
+      - source: hashicorp/google
+        version: ">= 5.39, < 7"

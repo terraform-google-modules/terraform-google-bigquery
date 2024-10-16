@@ -44,6 +44,27 @@ spec:
         location: examples/scheduled_queries
   interfaces:
     variables:
+      - name: dataset_id
+        description: Unique ID for the dataset being provisioned.
+        varType: string
+        required: true
+      - name: project_id
+        description: Project where the dataset and table are created
+        varType: string
+        required: true
+      - name: roles
+        description: An array of objects that define dataset access for one or more entities.
+        varType: any
+        defaultValue: []
+      - name: authorized_views
+        description: An array of views to give authorize for the dataset
+        varType: |-
+          list(object({
+              dataset_id = string,
+              project_id = string,
+              table_id   = string # this is the view id, but we keep table_id to stay consistent as the resource
+            }))
+        defaultValue: []
       - name: authorized_datasets
         description: An array of datasets to be authorized on the dataset
         varType: |-
@@ -60,27 +81,6 @@ spec:
               dataset_id = string,
               routine_id = string
             }))
-        defaultValue: []
-      - name: authorized_views
-        description: An array of views to give authorize for the dataset
-        varType: |-
-          list(object({
-              dataset_id = string,
-              project_id = string,
-              table_id   = string # this is the view id, but we keep table_id to stay consistent as the resource
-            }))
-        defaultValue: []
-      - name: dataset_id
-        description: Unique ID for the dataset being provisioned.
-        varType: string
-        required: true
-      - name: project_id
-        description: Project where the dataset and table are created
-        varType: string
-        required: true
-      - name: roles
-        description: An array of objects that define dataset access for one or more entities.
-        varType: any
         defaultValue: []
     outputs:
       - name: authorized_dataset
@@ -104,3 +104,6 @@ spec:
       - bigqueryconnection.googleapis.com
       - serviceusage.googleapis.com
       - iam.googleapis.com
+    providerVersions:
+      - source: hashicorp/google
+        version: ">= 5.39, < 7"
