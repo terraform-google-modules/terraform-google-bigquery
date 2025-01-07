@@ -41,10 +41,10 @@ module "bigquery" {
   {
     table_id           = "foo",
     schema             =  "<SCHEMA JSON DATA>",
+    require_partition_filter = false,
     time_partitioning  = {
       type                     = "DAY",
       field                    = null,
-      require_partition_filter = false,
       expiration_ms            = null,
     },
     range_partitioning = null,
@@ -116,10 +116,10 @@ The `tables` variable should be provided as a list of object with the following 
   table_id = "some_id"                        # Unique table id (will be used as ID for table).
   table_name = "Friendly Name"                # Optional friendly name for table. If not set, the "table_id" will be used by default.
   schema = file("path/to/schema.json")        # Schema as JSON string.
+  require_partition_filter = false,           # If set to true, queries over this table require a partition filter that can be used for partition elimination to be specified. Set it to `null` to omit configuration.
   time_partitioning = {                       # Set it to `null` to omit partitioning configuration for the table.
         type                     = "DAY",     # The only type supported is DAY, which will generate one partition per day based on data loading time.
         field                    = null,      # The field used to determine how to create a time-based partition. If time-based partitioning is enabled without this value, the table is partitioned based on the load time. Set it to `null` to omit configuration.
-        require_partition_filter = false,     # If set to true, queries over this table require a partition filter that can be used for partition elimination to be specified. Set it to `null` to omit configuration.
         expiration_ms            = null,      # Number of milliseconds for which to keep the storage for a partition.
       },
   range_partitioning = {                      # Set it to `null` to omit partitioning configuration for the table.
