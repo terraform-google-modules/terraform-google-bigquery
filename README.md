@@ -13,8 +13,10 @@ intended for Terraform 0.12.x is [v4.5.0](https://registry.terraform.io/modules/
 
 ## Upgrading
 
-The current version is 4.X. The following guides are available to assist with upgrades:
+The current version is 8.X. The following guides are available to assist with upgrades:
 
+- [8.0 -> 9.0](./docs/upgrading_to_bigquery_v9.0.md)
+- [7.0 -> 8.0](./docs/upgrading_to_bigquery_v8.0.md)
 - [3.0 -> 4.0](./docs/upgrading_to_bigquery_v4.0.md)
 - [2.0 -> 3.0](./docs/upgrading_to_bigquery_v3.0.md)
 - [1.0 -> 2.0](./docs/upgrading_to_bigquery_v2.0.md)
