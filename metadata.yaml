@@ -149,11 +149,11 @@ spec:
               enable_refresh      = bool,
               refresh_interval_ms = string,
               clustering          = list(string),
+              require_partition_filter = optional(bool),
               time_partitioning = object({
                 expiration_ms            = string,
                 field                    = string,
                 type                     = string,
-                require_partition_filter = bool,
               }),
               range_partitioning = object({
                 field = string,

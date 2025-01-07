@@ -145,17 +145,17 @@ variable "materialized_views" {
   description = "A list of objects which includes view_id, view_query, clustering, time_partitioning, range_partitioning, expiration_time and labels"
   default     = []
   type = list(object({
-    view_id             = string,
-    description         = optional(string),
-    query               = string,
-    enable_refresh      = bool,
-    refresh_interval_ms = string,
-    clustering          = list(string),
+    view_id                  = string,
+    description              = optional(string),
+    query                    = string,
+    enable_refresh           = bool,
+    refresh_interval_ms      = string,
+    clustering               = list(string),
+    require_partition_filter = optional(bool),
     time_partitioning = object({
-      expiration_ms            = string,
-      field                    = string,
-      type                     = string,
-      require_partition_filter = bool,
+      expiration_ms = string,
+      field         = string,
+      type          = string,
     }),
     range_partitioning = object({
       field = string,
