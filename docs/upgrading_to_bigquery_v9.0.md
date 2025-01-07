@@ -1,6 +1,6 @@
 # Upgrading to BigQuery v9.0
 
-- The supported provider has been updated to v5.3
+- The supported provider has been updated to v5.3 ([terraform-provider-google/releases/tag/v5.3.0](https://github.com/hashicorp/terraform-provider-google/releases/tag/v5.3.0))
 - `require_partition_filter` has been deprecated under the `time_partitioning` block and can be used at the top level with the same name instead. (hashicorp/terraform-provider-google#16238)
 
 ## Migration Instructions
