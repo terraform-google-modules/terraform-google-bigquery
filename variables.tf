@@ -84,6 +84,11 @@ variable "resource_tags" {
   default     = {}
 }
 
+variable "create_dataset" {
+  type    = bool
+  default = false
+}
+
 # Format: list(objects)
 # domain: A domain to grant access to.
 # group_by_email: An email address of a Google Group to grant access to.

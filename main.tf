@@ -26,9 +26,13 @@ locals {
     "roles/bigquery.dataEditor" : "WRITER"
     "roles/bigquery.dataViewer" : "READER"
   }
+
+  effective_dataset_id = var.create_dataset ? google_bigquery_dataset.main[0].dataset_id : data.google_bigquery_dataset.existing[0].dataset_id
 }
 
 resource "google_bigquery_dataset" "main" {
+  count = var.create_dataset ? 1 : 0 # if dataset does not exist
+
   dataset_id                  = var.dataset_id
   friendly_name               = var.dataset_name
   description                 = var.description
@@ -65,9 +69,15 @@ resource "google_bigquery_dataset" "main" {
   }
 }
 
+data "google_bigquery_dataset" "existing" {
+  count      = var.create_dataset ? 0 : 1 # If dataset does exist
+  dataset_id = var.dataset_id
+  project    = var.project_id
+}
+
 resource "google_bigquery_table" "main" {
   for_each                 = local.tables
-  dataset_id               = google_bigquery_dataset.main.dataset_id
+  dataset_id               = local.effective_dataset_id
   friendly_name            = each.value["table_name"] != null ? each.value["table_name"] : each.key
   table_id                 = each.key
   description              = each.value["description"]
@@ -109,7 +119,7 @@ resource "google_bigquery_table" "main" {
 
 resource "google_bigquery_table" "view" {
   for_each            = local.views
-  dataset_id          = google_bigquery_dataset.main.dataset_id
+  dataset_id          = local.effective_dataset_id
   friendly_name       = each.key
   table_id            = each.key
   description         = each.value["description"]
@@ -131,7 +141,7 @@ resource "google_bigquery_table" "view" {
 
 resource "google_bigquery_table" "materialized_view" {
   for_each            = local.materialized_views
-  dataset_id          = google_bigquery_dataset.main.dataset_id
+  dataset_id          = local.effective_dataset_id
   friendly_name       = each.key
   table_id            = each.key
   description         = each.value["description"]
@@ -179,7 +189,7 @@ resource "google_bigquery_table" "materialized_view" {
 
 resource "google_bigquery_table" "external_table" {
   for_each            = local.external_tables
-  dataset_id          = google_bigquery_dataset.main.dataset_id
+  dataset_id          = local.effective_dataset_id
   friendly_name       = each.key
   table_id            = each.key
   description         = each.value["description"]
