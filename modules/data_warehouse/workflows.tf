@@ -66,6 +66,8 @@ resource "google_workflows_workflow" "workflow" {
     function_name = google_cloudfunctions2_function.notebook_deploy_function.name
   })
 
+  deletion_protection = var.deletion_protection
+
   labels = var.labels
 
   depends_on = [

@@ -1,4 +1,4 @@
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -140,5 +140,17 @@ spec:
       - serviceusage.googleapis.com
       - iam.googleapis.com
     providerVersions:
+      - source: hashicorp/archive
+        version: 2.4.2
       - source: hashicorp/google
-        version: ">= 5.39, < 7"
+        version: ">= 4.52, < 7"
+      - source: hashicorp/google-beta
+        version: ">= 4.52, < 7"
+      - source: hashicorp/http
+        version: ">= 2"
+      - source: hashicorp/local
+        version: ">=2.4"
+      - source: hashicorp/random
+        version: 3.6.2
+      - source: hashicorp/time
+        version: ">= 0.9.1"
