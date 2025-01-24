@@ -28,7 +28,7 @@ spec:
     version: 9.0.0
     actuationTool:
       flavor: Terraform
-      version: ">= 0.13"
+      version: ">= 1.3"
     description: {}
     icon: assets/data_warehouse_icon_v1.png
     deploymentDuration:
