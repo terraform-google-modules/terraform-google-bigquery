@@ -26,7 +26,7 @@ terraform {
     }
     archive = {
       source  = "hashicorp/archive"
-      version = "2.4.2"
+      version = ">= 2.4.2"
     }
     time = {
       source  = "hashicorp/time"
@@ -38,11 +38,11 @@ terraform {
     }
     local = {
       source  = "hashicorp/local"
-      version = ">=2.4"
+      version = ">= 2.4"
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.6.2"
+      version = ">= 3.6.2"
     }
   }
   required_version = ">= 1.3"
