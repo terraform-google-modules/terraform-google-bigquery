@@ -39,6 +39,9 @@ spec:
         dataset_name:
           name: dataset_name
           title: Dataset Name
+        default_partition_expiration_ms:
+          name: default_partition_expiration_ms
+          title: Default Partition Expiration Ms
         default_table_expiration_ms:
           name: default_table_expiration_ms
           title: Default Table Expiration Ms
@@ -75,6 +78,9 @@ spec:
         routines:
           name: routines
           title: Routines
+        storage_billing_model:
+          name: storage_billing_model
+          title: Storage Billing Model
         tables:
           name: tables
           title: Tables
