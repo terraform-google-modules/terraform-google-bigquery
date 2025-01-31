@@ -230,28 +230,143 @@ spec:
     outputs:
       - name: bigquery_dataset
         description: Bigquery dataset resource.
+        type:
+          - object
+          - access:
+              - set
+              - - object
+                - condition:
+                    - list
+                    - - object
+                      - description: string
+                        expression: string
+                        location: string
+                        title: string
+                  dataset:
+                    - list
+                    - - object
+                      - dataset:
+                          - list
+                          - - object
+                            - dataset_id: string
+                              project_id: string
+                        target_types:
+                          - list
+                          - string
+                  domain: string
+                  group_by_email: string
+                  iam_member: string
+                  role: string
+                  routine:
+                    - list
+                    - - object
+                      - dataset_id: string
+                        project_id: string
+                        routine_id: string
+                  special_group: string
+                  user_by_email: string
+                  view:
+                    - list
+                    - - object
+                      - dataset_id: string
+                        project_id: string
+                        table_id: string
+            creation_time: number
+            dataset_id: string
+            default_collation: string
+            default_encryption_configuration:
+              - list
+              - - object
+                - kms_key_name: string
+            default_partition_expiration_ms: number
+            default_table_expiration_ms: number
+            delete_contents_on_destroy: bool
+            description: string
+            effective_labels:
+              - map
+              - string
+            etag: string
+            external_dataset_reference:
+              - list
+              - - object
+                - connection: string
+                  external_source: string
+            friendly_name: string
+            id: string
+            is_case_insensitive: bool
+            labels:
+              - map
+              - string
+            last_modified_time: number
+            location: string
+            max_time_travel_hours: string
+            project: string
+            resource_tags:
+              - map
+              - string
+            self_link: string
+            storage_billing_model: string
+            terraform_labels:
+              - map
+              - string
+            timeouts:
+              - object
+              - create: string
+                delete: string
+                update: string
       - name: bigquery_external_tables
         description: Map of BigQuery external table resources being provisioned.
+        type:
+          - object
+          - {}
       - name: bigquery_tables
         description: Map of bigquery table resources being provisioned.
+        type:
+          - object
+          - {}
       - name: bigquery_views
         description: Map of bigquery view resources being provisioned.
+        type:
+          - object
+          - {}
       - name: external_table_ids
         description: Unique IDs for any external tables being provisioned
+        type:
+          - tuple
+          - []
       - name: external_table_names
         description: Friendly names for any external tables being provisioned
+        type:
+          - tuple
+          - []
       - name: project
         description: Project where the dataset and tables are created
+        type: string
       - name: routine_ids
         description: Unique IDs for any routine being provisioned
+        type:
+          - tuple
+          - []
       - name: table_ids
         description: Unique id for the table being provisioned
+        type:
+          - tuple
+          - []
       - name: table_names
         description: Friendly name for the table being provisioned
+        type:
+          - tuple
+          - []
       - name: view_ids
         description: Unique id for the view being provisioned
+        type:
+          - tuple
+          - []
       - name: view_names
         description: friendlyname for the view being provisioned
+        type:
+          - tuple
+          - []
   requirements:
     roles:
       - level: Project
