@@ -98,11 +98,11 @@ output "routine_ids" {
 output "env_vars" {
   value = {
     "BIGQUERY_DATASET"            = google_bigquery_dataset.main.dataset_id
-    "BIGQUERY_TABLES"             = join(",", [for table in google_bigquery_table.main : table.table_id])
-    "BIGQUERY_VIEWS"              = join(",", [for table in google_bigquery_table.view : table.table_id])
-    "BIGQUERY_MATERIALIZED_VIEWS" = join(",", [for table in google_bigquery_table.materialized_view : table.table_id])
-    "BIGQUERY_EXTERNAL_TABLES"    = join(",", [for table in google_bigquery_table.external_table : table.table_id])
-    "BIGQUERY_ROUTINES"           = join(",", [for routine in google_bigquery_routine.routine : routine.routine_id])
+    "BIGQUERY_TABLES"             = jsonencode([for table in google_bigquery_table.main : table.table_id])
+    "BIGQUERY_VIEWS"              = jsonencode([for table in google_bigquery_table.view : table.table_id])
+    "BIGQUERY_MATERIALIZED_VIEWS" = jsonencode([for table in google_bigquery_table.materialized_view : table.table_id])
+    "BIGQUERY_EXTERNAL_TABLES"    = jsonencode([for table in google_bigquery_table.external_table : table.table_id])
+    "BIGQUERY_ROUTINES"           = jsonencode([for routine in google_bigquery_routine.routine : routine.routine_id])
   }
   description = "Exported environment variables"
 }
