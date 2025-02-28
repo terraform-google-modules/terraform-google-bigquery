@@ -329,6 +329,16 @@ spec:
         type:
           - object
           - {}
+      - name: env_vars
+        description: Exported environment variables
+        type:
+          - object
+          - BIGQUERY_DATASET: string
+            BIGQUERY_EXTERNAL_TABLES: string
+            BIGQUERY_MATERIALIZED_VIEWS: string
+            BIGQUERY_ROUTINES: string
+            BIGQUERY_TABLES: string
+            BIGQUERY_VIEWS: string
       - name: external_table_ids
         description: Unique IDs for any external tables being provisioned
         type:
