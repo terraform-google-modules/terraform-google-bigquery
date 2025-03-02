@@ -13,8 +13,10 @@ intended for Terraform 0.12.x is [v4.5.0](https://registry.terraform.io/modules/
 
 ## Upgrading
 
-The current version is 4.X. The following guides are available to assist with upgrades:
+The current version is 8.X. The following guides are available to assist with upgrades:
 
+- [8.0 -> 9.0](./docs/upgrading_to_bigquery_v9.0.md)
+- [7.0 -> 8.0](./docs/upgrading_to_bigquery_v8.0.md)
 - [3.0 -> 4.0](./docs/upgrading_to_bigquery_v4.0.md)
 - [2.0 -> 3.0](./docs/upgrading_to_bigquery_v3.0.md)
 - [1.0 -> 2.0](./docs/upgrading_to_bigquery_v2.0.md)
@@ -41,10 +43,10 @@ module "bigquery" {
   {
     table_id           = "foo",
     schema             =  "<SCHEMA JSON DATA>",
+    require_partition_filter = false,
     time_partitioning  = {
       type                     = "DAY",
       field                    = null,
-      require_partition_filter = false,
       expiration_ms            = null,
     },
     range_partitioning = null,
@@ -116,10 +118,10 @@ The `tables` variable should be provided as a list of object with the following 
   table_id = "some_id"                        # Unique table id (will be used as ID for table).
   table_name = "Friendly Name"                # Optional friendly name for table. If not set, the "table_id" will be used by default.
   schema = file("path/to/schema.json")        # Schema as JSON string.
+  require_partition_filter = false,           # If set to true, queries over this table require a partition filter that can be used for partition elimination to be specified. Set it to `null` to omit configuration.
   time_partitioning = {                       # Set it to `null` to omit partitioning configuration for the table.
         type                     = "DAY",     # The only type supported is DAY, which will generate one partition per day based on data loading time.
         field                    = null,      # The field used to determine how to create a time-based partition. If time-based partitioning is enabled without this value, the table is partitioned based on the load time. Set it to `null` to omit configuration.
-        require_partition_filter = false,     # If set to true, queries over this table require a partition filter that can be used for partition elimination to be specified. Set it to `null` to omit configuration.
         expiration_ms            = null,      # Number of milliseconds for which to keep the storage for a partition.
       },
   range_partitioning = {                      # Set it to `null` to omit partitioning configuration for the table.
@@ -198,7 +200,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | encryption\_key | Default encryption key to apply to the dataset. Defaults to null (Google-managed). | `string` | `null` | no |
 | external\_tables | A list of objects which include table\_id, expiration\_time, external\_data\_configuration, and labels. | <pre>list(object({<br>    table_id              = string,<br>    description           = optional(string),<br>    autodetect            = bool,<br>    compression           = string,<br>    ignore_unknown_values = bool,<br>    max_bad_records       = number,<br>    schema                = string,<br>    source_format         = string,<br>    source_uris           = list(string),<br>    csv_options = object({<br>      quote                 = string,<br>      allow_jagged_rows     = bool,<br>      allow_quoted_newlines = bool,<br>      encoding              = string,<br>      field_delimiter       = string,<br>      skip_leading_rows     = number,<br>    }),<br>    google_sheets_options = object({<br>      range             = string,<br>      skip_leading_rows = number,<br>    }),<br>    hive_partitioning_options = object({<br>      mode              = string,<br>      source_uri_prefix = string,<br>    }),<br>    expiration_time     = string,<br>    max_staleness       = optional(string),<br>    deletion_protection = optional(bool),<br>    labels              = map(string),<br>  }))</pre> | `[]` | no |
 | location | The regional location for the dataset only US and EU are allowed in module | `string` | `"US"` | no |
-| materialized\_views | A list of objects which includes view\_id, view\_query, clustering, time\_partitioning, range\_partitioning, expiration\_time and labels | <pre>list(object({<br>    view_id             = string,<br>    description         = optional(string),<br>    query               = string,<br>    enable_refresh      = bool,<br>    refresh_interval_ms = string,<br>    clustering          = list(string),<br>    time_partitioning = object({<br>      expiration_ms            = string,<br>      field                    = string,<br>      type                     = string,<br>      require_partition_filter = bool,<br>    }),<br>    range_partitioning = object({<br>      field = string,<br>      range = object({<br>        start    = string,<br>        end      = string,<br>        interval = string,<br>      }),<br>    }),<br>    expiration_time = string,<br>    max_staleness   = optional(string),<br>    labels          = map(string),<br>  }))</pre> | `[]` | no |
+| materialized\_views | A list of objects which includes view\_id, view\_query, clustering, time\_partitioning, range\_partitioning, expiration\_time and labels | <pre>list(object({<br>    view_id             = string,<br>    description         = optional(string),<br>    query               = string,<br>    enable_refresh      = bool,<br>    refresh_interval_ms = string,<br>    clustering          = list(string),<br>    require_partition_filter = optional(bool),<br>    time_partitioning = object({<br>      expiration_ms            = string,<br>      field                    = string,<br>      type                     = string,<br>    }),<br>    range_partitioning = object({<br>      field = string,<br>      range = object({<br>        start    = string,<br>        end      = string,<br>        interval = string,<br>      }),<br>    }),<br>    expiration_time = string,<br>    max_staleness   = optional(string),<br>    labels          = map(string),<br>  }))</pre> | `[]` | no |
 | max\_time\_travel\_hours | Defines the time travel window in hours | `number` | `null` | no |
 | project\_id | Project where the dataset and table are created | `string` | n/a | yes |
 | resource\_tags | A map of resource tags to add to the dataset | `map(string)` | `{}` | no |
