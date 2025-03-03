@@ -215,6 +215,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | bigquery\_external\_tables | Map of BigQuery external table resources being provisioned. |
 | bigquery\_tables | Map of bigquery table resources being provisioned. |
 | bigquery\_views | Map of bigquery view resources being provisioned. |
+| env\_vars | Exported environment variables |
 | external\_table\_ids | Unique IDs for any external tables being provisioned |
 | external\_table\_names | Friendly names for any external tables being provisioned |
 | project | Project where the dataset and tables are created |
