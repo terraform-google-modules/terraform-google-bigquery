@@ -22,7 +22,7 @@ spec:
   info:
     title: terraform-google-bigquery
     source:
-      repo: https://github.com/ayushmjain/terraform-google-bigquery
+      repo: https://github.com/terraform-google-modules/terraform-google-bigquery
       sourceType: git
   ui:
     input:

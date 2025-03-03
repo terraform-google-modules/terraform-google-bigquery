@@ -94,8 +94,6 @@ spec:
       - level: Project
         roles:
           - roles/bigquery.admin
-          - roles/cloudkms.cryptoKeyEncrypterDecrypter
-          - roles/owner
     services:
       - cloudkms.googleapis.com
       - cloudresourcemanager.googleapis.com
