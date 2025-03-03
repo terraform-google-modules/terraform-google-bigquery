@@ -17,8 +17,19 @@
 locals {
   int_required_roles = [
     "roles/bigquery.admin",
-    "roles/cloudkms.cryptoKeyEncrypterDecrypter",
-    "roles/owner" // TODO: Descope
+    "roles/aiplatform.admin",
+    "roles/cloudfunctions.admin",
+    "roles/dataform.admin",
+    "roles/datalineage.viewer",
+    "roles/iam.serviceAccountAdmin",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/iam.serviceAccountUser",
+    "roles/logging.configWriter",
+    "roles/resourcemanager.projectIamAdmin",
+    "roles/run.invoker",
+    "roles/serviceusage.serviceUsageAdmin",
+    "roles/storage.admin",
+    "roles/workflows.admin"
   ]
 }
 
