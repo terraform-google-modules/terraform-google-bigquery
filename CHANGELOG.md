@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.0.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v9.0.0...v10.0.0) (2025-03-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** Update Terraform terraform-google-modules/project-factory/google to v18 ([#366](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/366))
+* **modules:** require TF v1.3+ ([#361](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/361))
+* **TPG>=6.11:** add deletion protection variable to google_workflows_workflow ([#370](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/370))
+
+### Features
+
+* Add output variable env_vars ([#375](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/375)) ([ab9ed8c](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/ab9ed8c95fcb8db9517c1fc22aa52de7371bdfe8))
+* add storage_billing_model and default_partition_expiration_ms ([#367](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/367)) ([53646de](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/53646dedc8167c17b9b609d2ed2d5ef37668f7bb))
+
+
+### Bug Fixes
+
+* **deps:** Update Terraform provider constraints ([#357](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/357)) ([c285f34](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/c285f3478a1cd65af1b0812515c2bb3484e9fa3b))
+* **deps:** Update Terraform terraform-google-modules/project-factory/google to v18 ([#366](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/366)) ([d7723c4](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/d7723c495d6bf735e883543a2e83703877107368))
+* **modules:** require TF v1.3+ ([#361](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/361)) ([9f9581b](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/9f9581b1fb066f938d2af611d6ece1fa162381fe))
+* **TPG>=6.11:** add deletion protection variable to google_workflows_workflow ([#370](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/370)) ([7233527](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/72335270b153d959f0c3f46932f2970aaf5acdcc))
+
 ## [9.0.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v8.1.0...v9.0.0) (2024-10-16)
 
 
