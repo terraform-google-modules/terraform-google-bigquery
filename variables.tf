@@ -32,7 +32,7 @@ variable "description" {
 }
 
 variable "location" {
-  description = "The regional location for the dataset only US and EU are allowed in module"
+  description = "The location of the dataset. For multi-region, US or EU can be provided."
   type        = string
   default     = "US"
 }
@@ -125,24 +125,24 @@ variable "tables" {
     description              = optional(string),
     table_name               = optional(string),
     schema                   = string,
-    clustering               = list(string),
+    clustering               = optional(list(string), []),
     require_partition_filter = optional(bool),
-    time_partitioning = object({
+    time_partitioning = optional(object({
       expiration_ms = string,
       field         = string,
       type          = string,
-    }),
-    range_partitioning = object({
+    }), null),
+    range_partitioning = optional(object({
       field = string,
       range = object({
         start    = string,
         end      = string,
         interval = string,
       }),
-    }),
-    expiration_time     = string,
+    }), null),
+    expiration_time     = optional(string, null),
     deletion_protection = optional(bool),
-    labels              = map(string),
+    labels              = optional(map(string), {}),
   }))
 }
 
@@ -154,7 +154,7 @@ variable "views" {
     description    = optional(string),
     query          = string,
     use_legacy_sql = bool,
-    labels         = map(string),
+    labels         = optional(map(string), {}),
   }))
 }
 
@@ -167,24 +167,24 @@ variable "materialized_views" {
     query               = string,
     enable_refresh      = bool,
     refresh_interval_ms = string,
-    clustering          = list(string),
-    time_partitioning = object({
+    clustering          = optional(list(string), []),
+    time_partitioning = optional(object({
       expiration_ms            = string,
       field                    = string,
       type                     = string,
       require_partition_filter = bool,
-    }),
-    range_partitioning = object({
+    }), null),
+    range_partitioning = optional(object({
       field = string,
       range = object({
         start    = string,
         end      = string,
         interval = string,
       }),
-    }),
-    expiration_time = string,
+    }), null),
+    expiration_time = optional(string, null),
     max_staleness   = optional(string),
-    labels          = map(string),
+    labels          = optional(map(string), {}),
   }))
 }
 
@@ -217,10 +217,10 @@ variable "external_tables" {
       mode              = string,
       source_uri_prefix = string,
     }),
-    expiration_time     = string,
+    expiration_time     = optional(string, null),
     max_staleness       = optional(string),
     deletion_protection = optional(bool),
-    labels              = map(string),
+    labels              = optional(map(string), {}),
   }))
 }
 
@@ -235,11 +235,11 @@ variable "routines" {
     definition_body = string,
     return_type     = string,
     description     = string,
-    arguments = list(object({
+    arguments = optional(list(object({
       name          = string,
       data_type     = string,
       argument_kind = string,
       mode          = string,
-    })),
+    })), []),
   }))
 }
