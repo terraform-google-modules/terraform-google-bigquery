@@ -63,7 +63,7 @@ spec:
         description: Dataset description.
         varType: string
       - name: location
-        description: The regional location for the dataset only US and EU are allowed in module
+        description: The location of the dataset. For multi-region, US or EU can be provided.
         varType: string
         defaultValue: US
       - name: delete_contents_on_destroy
@@ -203,10 +203,10 @@ spec:
                 mode              = string,
                 source_uri_prefix = string,
               }),
-              expiration_time     = string,
+              expiration_time     = optional(string, null),
               max_staleness       = optional(string),
               deletion_protection = optional(bool),
-              labels              = map(string),
+              labels              = optional(map(string), {}),
             }))
         defaultValue: []
       - name: routines

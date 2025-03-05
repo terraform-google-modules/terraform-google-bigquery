@@ -32,7 +32,7 @@ variable "description" {
 }
 
 variable "location" {
-  description = "The regional location for the dataset only US and EU are allowed in module"
+  description = "The location of the dataset. For multi-region, US or EU can be provided."
   type        = string
   default     = "US"
 }
@@ -217,10 +217,10 @@ variable "external_tables" {
       mode              = string,
       source_uri_prefix = string,
     }),
-    expiration_time     = string,
+    expiration_time     = optional(string, null),
     max_staleness       = optional(string),
     deletion_protection = optional(bool),
-    labels              = map(string),
+    labels              = optional(map(string), {}),
   }))
 }
 
