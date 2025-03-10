@@ -342,41 +342,41 @@ spec:
       - name: external_table_ids
         description: Unique IDs for any external tables being provisioned
         type:
-          - tuple
-          - []
+          - list
+          - string
       - name: external_table_names
         description: Friendly names for any external tables being provisioned
         type:
-          - tuple
-          - []
+          - list
+          - string
       - name: project
         description: Project where the dataset and tables are created
         type: string
       - name: routine_ids
         description: Unique IDs for any routine being provisioned
         type:
-          - tuple
-          - []
+          - list
+          - string
       - name: table_ids
         description: Unique id for the table being provisioned
         type:
-          - tuple
-          - []
+          - list
+          - string
       - name: table_names
         description: Friendly name for the table being provisioned
         type:
-          - tuple
-          - []
+          - list
+          - string
       - name: view_ids
         description: Unique id for the view being provisioned
         type:
-          - tuple
-          - []
+          - list
+          - string
       - name: view_names
         description: friendlyname for the view being provisioned
         type:
-          - tuple
-          - []
+          - list
+          - string
   requirements:
     roles:
       - level: Project
