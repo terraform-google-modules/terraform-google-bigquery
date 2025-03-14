@@ -201,6 +201,7 @@ variable "external_tables" {
     schema                = string,
     source_format         = string,
     source_uris           = list(string),
+    connection_id         = optional(string),
     csv_options = object({
       quote                 = string,
       allow_jagged_rows     = bool,
@@ -219,6 +220,7 @@ variable "external_tables" {
     }),
     expiration_time     = optional(string, null),
     max_staleness       = optional(string),
+    metadata_cache_mode = optional(string),
     deletion_protection = optional(bool),
     labels              = optional(map(string), {}),
   }))
