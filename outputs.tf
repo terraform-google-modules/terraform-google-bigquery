@@ -47,6 +47,14 @@ output "table_ids" {
   description = "Unique id for the table being provisioned"
 }
 
+output "computed_table_ids" {
+  value = [
+    for table in google_bigquery_table.main :
+    table.id
+  ]
+  description = "An identifier for the resource with format projects/{{project}}/datasets/{{dataset}}/tables/{{name}}"
+}
+
 output "table_names" {
   value = [
     for table in google_bigquery_table.main :
