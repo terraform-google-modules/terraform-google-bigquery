@@ -331,7 +331,7 @@ spec:
           - {}
       - name: computed_table_ids
         description: Unique computed IDs for the table with format projects/{{project}}/datasets/{{dataset}}/tables/{{name}}
-        type: 
+        type:
           - list
           - string
       - name: env_vars
