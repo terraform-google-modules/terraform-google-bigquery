@@ -86,6 +86,10 @@ spec:
         tables:
           name: tables
           title: Tables
+          level: 1
+          altDefaults:
+            - type: ALTERNATE_TYPE_DC
+              table_id: table-1
         views:
           name: views
           title: Views
