@@ -90,7 +90,7 @@ spec:
           altDefaults:
             - type: ALTERNATE_TYPE_DC
               value:
-                -table_id: table-1
+                - table_id: table-1
         views:
           name: views
           title: Views
