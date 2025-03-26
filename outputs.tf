@@ -52,7 +52,7 @@ output "computed_table_ids" {
     for table in google_bigquery_table.main :
     table.id
   ]
-  description = "An identifier for the resource with format projects/{{project}}/datasets/{{dataset}}/tables/{{name}}"
+  description = "Unique computed IDs for the table with format projects/{{project}}/datasets/{{dataset}}/tables/{{name}}"
 }
 
 output "table_names" {
