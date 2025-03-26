@@ -329,6 +329,8 @@ spec:
         type:
           - object
           - {}
+      - name: computed_table_ids
+        description: An identifier for the resource with format projects/{{project}}/datasets/{{dataset}}/tables/{{name}}
       - name: env_vars
         description: Exported environment variables
         type:
