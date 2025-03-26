@@ -357,6 +357,11 @@ spec:
         type:
           - list
           - string
+      - name: table_fqns
+        description: Fully qualified names for the table with format projects/{{project}}/datasets/{{dataset}}/tables/{{name}}
+        type:
+          - list
+          - string
       - name: table_ids
         description: Unique id for the table being provisioned
         type:

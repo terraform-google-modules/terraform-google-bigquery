@@ -33,6 +33,8 @@ spec:
         dataset_id:
           name: dataset_id
           title: Dataset Id
+          regexValidation: ^[a-zA-Z0-9_]{1,1024}$$
+          validation: Must contain only letters, numbers, or underscores. Must be 1024 characters or fewer.
         dataset_labels:
           name: dataset_labels
           title: Dataset Labels
@@ -84,6 +86,12 @@ spec:
         tables:
           name: tables
           title: Tables
+          level: 1
+          altDefaults:
+            - type: ALTERNATE_TYPE_DC
+              value:
+                - schema: "[{\"description\": \"Full visitor ID\",\"mode\": \"NULLABLE\",\"name\": \"fullVisitorId\",\"type\": \"STRING\"},{\"description\": \"Visit number\",\"mode\": \"NULLABLE\",\"name\": \"visitNumber\",\"type\": \"INTEGER\"}]"
+                  table_id: table-1
         views:
           name: views
           title: Views
