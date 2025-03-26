@@ -329,11 +329,6 @@ spec:
         type:
           - object
           - {}
-      - name: computed_table_ids
-        description: Unique computed IDs for the table with format projects/{{project}}/datasets/{{dataset}}/tables/{{name}}
-        type:
-          - list
-          - string
       - name: env_vars
         description: Exported environment variables
         type:
@@ -362,6 +357,8 @@ spec:
         type:
           - list
           - string
+      - name: table_fqns
+        description: Fully qualified names for the table with format projects/{{project}}/datasets/{{dataset}}/tables/{{name}}
       - name: table_ids
         description: Unique id for the table being provisioned
         type:

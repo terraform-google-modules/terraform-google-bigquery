@@ -47,12 +47,12 @@ output "table_ids" {
   description = "Unique id for the table being provisioned"
 }
 
-output "computed_table_ids" {
+output "table_fqns" {
   value = [
     for table in google_bigquery_table.main :
     table.id
   ]
-  description = "Unique computed IDs for the table with format projects/{{project}}/datasets/{{dataset}}/tables/{{name}}"
+  description = "Fully qualified names for the table with format projects/{{project}}/datasets/{{dataset}}/tables/{{name}}"
 }
 
 output "table_names" {
