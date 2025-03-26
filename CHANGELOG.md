@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.1.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v10.0.2...v10.1.0) (2025-03-26)
+
+
+### Features
+
+* Adding regex validation for big query dataset id and adding new output value computed_table_id ([#384](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/384)) ([aab8238](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/aab82382cbf67a3b7e1af801f80c3113592d4193))
+
 ## [10.0.2](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v10.0.1...v10.0.2) (2025-03-14)
 
 

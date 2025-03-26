@@ -25,7 +25,7 @@ terraform {
   }
 
   provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-bigquery:authorization/v10.0.2"
+    module_name = "blueprints/terraform/terraform-google-bigquery:authorization/v10.1.0"
   }
 
 }
