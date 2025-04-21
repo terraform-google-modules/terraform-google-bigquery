@@ -102,6 +102,36 @@ resource "google_bigquery_table" "main" {
     }
   }
 
+  dynamic "table_constraints" {
+    for_each = each.value["table_constraints"] != null ? [each.value["table_constraints"]] : []
+    content {
+      primary_key {
+        columns = table_constraints.value["primary_key"].columns
+      }
+
+      dynamic "foreign_keys" {
+        for_each = table_constraints.value["foreign_keys"] != null ? table_constraints.value["foreign_keys"] : []
+        content {
+          name = foreign_keys.value["name"]
+
+          referenced_table {
+            project_id  = foreign_keys.value["referenced_table"].project_id
+            dataset_id  = foreign_keys.value["referenced_table"].dataset_id
+            table_id    = foreign_keys.value["referenced_table"].table_id
+          }
+
+          dynamic "column_references" {
+            for_each = foreign_keys.value["column_references"]
+            content {
+              referencing_column = column_references.value["referencing_column"]
+              referenced_column  = column_references.value["referenced_column"]
+            }
+          }
+        }
+      }
+    }
+  }
+
   lifecycle {
     ignore_changes = [
       encryption_configuration # managed by google_bigquery_dataset.main.default_encryption_configuration

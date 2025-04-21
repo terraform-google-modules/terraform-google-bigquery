@@ -47,6 +47,24 @@ module "bigquery" {
       require_partition_filter = false,
       expiration_ms            = null,
     },
+    table_constraints {
+
+      primary_key { 
+        columns = ["id_1", "id_2"] 
+      }
+      foreign_keys { 
+        name = "foreign_key_1"
+        referenced_table {
+          project_id  = "<PROJECT ID>"
+          dataset_id  = "foo"
+          table_id    = "table_1"
+        }
+        column_references {
+          referencing_column = "id_1"
+          referenced_column = "id"
+        }
+      }
+    },
     range_partitioning = null,
     expiration_time = null,
     clustering      = ["fullVisitorId", "visitId"],
