@@ -119,45 +119,47 @@ variable "access" {
 
 variable "tables" {
   description = "A list of objects which include table_id, table_name, schema, clustering, table_constraints, time_partitioning, range_partitioning, expiration_time, and labels."
+  default = []
   type = list(object({
-    table_id    = string
-    description = optional(string)
-    table_name  = optional(string)
-    schema      = string
-    clustering  = list(string)
+    table_id          = string,
+    description       = optional(string),
+    table_name        = optional(string),
+    schema            = string,
+    clustering        = optional(list(string), []),
     table_constraints = optional(object({
       primary_key = optional(object({
         columns = list(string)
-      }))
+      }), null),
       foreign_keys = optional(list(object({
         name = string
         referenced_table = object({
-          project_id = string
-          dataset_id = string
-          table_id   = string
+          project_id = string,
+          dataset_id = string,
+          table_id   = string,
         })
         column_references = list(object({
-          referencing_column = string
-          referenced_column  = string
+          referencing_column = string,
+          referenced_column  = string,
         }))
-      })))
-    }))
-    time_partitioning = object({
-      expiration_ms = string
-      field         = string
-    })
+      })), null),
+    }), null),
+    time_partitioning = optional(object({
+      expiration_ms = string,
+      field         = string,
+      type          = string,
+    }), null),
     range_partitioning = optional(object({
-      field = string
+      field = string,
       range = object({
-        start    = string
-        end      = string
-        interval = string
-      })
-    }))
-    expiration_time = optional(string)
-    labels          = optional(map(string))
+        start    = string,
+        end      = string,
+        interval = string,
+      }),
+    }), null),
+    expiration_time     = optional(string, null),
+    deletion_protection = optional(bool),
+    labels              = optional(map(string), {}),
   }))
-  default = []
 }
 
 variable "views" {
