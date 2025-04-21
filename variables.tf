@@ -119,13 +119,14 @@ variable "access" {
 
 variable "tables" {
   description = "A list of objects which include table_id, table_name, schema, clustering, table_constraints, time_partitioning, range_partitioning, expiration_time, and labels."
-  default = []
+  default     = []
   type = list(object({
-    table_id          = string,
-    description       = optional(string),
-    table_name        = optional(string),
-    schema            = string,
-    clustering        = optional(list(string), []),
+    table_id                 = string,
+    description              = optional(string),
+    table_name               = optional(string),
+    schema                   = string,
+    clustering               = optional(list(string), []),
+    require_partition_filter = optional(bool),
     table_constraints = optional(object({
       primary_key = optional(object({
         columns = list(string)
