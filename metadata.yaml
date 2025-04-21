@@ -150,7 +150,6 @@ spec:
               deletion_protection = optional(bool),
               labels              = optional(map(string), {}),
             }))
-          }
         defaultValue: []
       - name: views
         description: A list of objects which include view_id and view query
