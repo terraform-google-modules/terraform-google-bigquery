@@ -66,6 +66,10 @@ spec:
         description: The location of the dataset. For multi-region, US or EU can be provided.
         varType: string
         defaultValue: US
+      - name: is_case_insensitive
+        description: (Optional) TRUE if the dataset and its table names are case-insensitive, otherwise FALSE. By default, this is FALSE, which means the dataset and its table names are case-sensitive. This field does not affect routine references.
+        varType: bool
+        defaultValue: false
       - name: delete_contents_on_destroy
         description: (Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present.
         varType: bool
