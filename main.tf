@@ -33,6 +33,7 @@ resource "google_bigquery_dataset" "main" {
   friendly_name                   = var.dataset_name
   description                     = var.description
   location                        = var.location
+  is_case_insensitive             = var.is_case_insensitive
   delete_contents_on_destroy      = var.delete_contents_on_destroy
   default_table_expiration_ms     = var.default_table_expiration_ms
   max_time_travel_hours           = var.max_time_travel_hours
