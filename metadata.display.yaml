@@ -33,7 +33,7 @@ spec:
         dataset_id:
           name: dataset_id
           title: Dataset Id
-          regexValidation: ^[a-zA-Z0-9_]{1,1024}$
+          regexValidation: ^[a-zA-Z0-9_]{1,1000}$
           validation: Must contain only letters, numbers, or underscores. Must be 1024 characters or fewer.
         dataset_labels:
           name: dataset_labels
