@@ -90,7 +90,7 @@ spec:
           altDefaults:
             - type: ALTERNATE_TYPE_DC
               value:
-                - schema: "[{\"description\": \"Default String Value\",\"mode\": \"NULLABLE\",\"name\": \"defaultStringValue\",\"type\": \"STRING\"},{\"description\": \"Default Number Value\",\"mode\": \"NULLABLE\",\"name\": \"defaultNumberValue\",\"type\": \"INTEGER\"},{\"description\": \"Data\",\"mode\": \"NULLABLE\",\"name\": \"data\",\"type\": \"STRING\"}]"
+                - schema: "[{\"description\": \"An example string field. Illustrates the storage of textual data compliant with STRING type\",\"mode\": \"NULLABLE\",\"name\": \"exampleID\",\"type\": \"STRING\"},{\"description\": \"An integer value. Demonstrates the representation of whole number data compliant with INTEGER type\",\"mode\": \"NULLABLE\",\"name\": \"numberField\",\"type\": \"INTEGER\"},{\"description\": \"This field stores data crucial for Google Cloud Pub/Sub connectivity\",\"mode\": \"NULLABLE\",\"name\": \"data\",\"type\": \"STRING\"}]"
                   table_id: table-1
         views:
           name: views
