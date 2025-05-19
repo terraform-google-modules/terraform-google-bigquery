@@ -33,7 +33,7 @@ spec:
         dataset_id:
           name: dataset_id
           title: Dataset Id
-          regexValidation: ^[a-zA-Z0-9_]{1,1024}$$
+          regexValidation: ^[a-zA-Z0-9_]{1,1000}[a-zA-Z0-9_]{0,24}$
           validation: Must contain only letters, numbers, or underscores. Must be 1024 characters or fewer.
         dataset_labels:
           name: dataset_labels
@@ -90,7 +90,7 @@ spec:
           altDefaults:
             - type: ALTERNATE_TYPE_DC
               value:
-                - schema: "[{\"description\": \"Full visitor ID\",\"mode\": \"NULLABLE\",\"name\": \"fullVisitorId\",\"type\": \"STRING\"},{\"description\": \"Visit number\",\"mode\": \"NULLABLE\",\"name\": \"visitNumber\",\"type\": \"INTEGER\"},{\"description\": \"Data\",\"mode\": \"NULLABLE\",\"name\": \"data\",\"type\": \"STRING\"}]"
+                - schema: "[{\"description\": \"A string type unique identifier\",\"mode\": \"NULLABLE\",\"name\": \"simpleId\",\"type\": \"STRING\"},{\"description\": \"A field to hold integer values\",\"mode\": \"NULLABLE\",\"name\": \"integerField\",\"type\": \"INTEGER\"},{\"description\": \"Data\",\"mode\": \"NULLABLE\",\"name\": \"data\",\"type\": \"STRING\"}]"
                   table_id: table-1
         views:
           name: views
