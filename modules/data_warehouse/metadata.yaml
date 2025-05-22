@@ -159,7 +159,7 @@ spec:
       - iam.googleapis.com
     providerVersions:
       - source: hashicorp/archive
-        version: 10.1.0
+        version: ">= 2.4.2"
       - source: hashicorp/google
         version: ">= 6.11, < 7"
       - source: hashicorp/google-beta
@@ -167,8 +167,8 @@ spec:
       - source: hashicorp/http
         version: ">= 2"
       - source: hashicorp/local
-        version: ">=2.4"
+        version: ">= 2.4"
       - source: hashicorp/random
-        version: 10.1.0
+        version: ">= 3.6.2"
       - source: hashicorp/time
         version: ">= 0.9.1"

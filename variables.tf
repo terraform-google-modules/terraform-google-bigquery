@@ -37,6 +37,12 @@ variable "location" {
   default     = "US"
 }
 
+variable "is_case_insensitive" {
+  description = "(Optional) TRUE if the dataset and its table names are case-insensitive, otherwise FALSE. By default, this is FALSE, which means the dataset and its table names are case-sensitive. This field does not affect routine references."
+  type        = bool
+  default     = false
+}
+
 variable "delete_contents_on_destroy" {
   description = "(Optional) If set to true, delete all the tables in the dataset when destroying the resource; otherwise, destroying the resource will fail if tables are present."
   type        = bool
