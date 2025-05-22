@@ -24,7 +24,7 @@ spec:
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-bigquery
       sourceType: git
-    version: 10.1.0
+    version: 10.1.1
     actuationTool:
       flavor: Terraform
       version: ">= 1.3"
