@@ -14,4 +14,4 @@
 
 CREATE OR REPLACE MODEL `${project_id}.${dataset_id}.${model_name}`
 REMOTE WITH CONNECTION `${connection_id}`
-OPTIONS (ENDPOINT = 'gemini-1.5-flash');
+OPTIONS (ENDPOINT = 'gemini-2.0-flash');
