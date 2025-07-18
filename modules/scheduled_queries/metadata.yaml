@@ -59,28 +59,28 @@ spec:
     roles:
       - level: Project
         roles:
+          - roles/serviceusage.serviceUsageAdmin
+          - roles/iam.serviceAccountAdmin
+          - roles/iam.serviceAccountUser
+          - roles/logging.configWriter
+          - roles/resourcemanager.projectIamAdmin
+          - roles/storage.admin
+          - roles/workflows.admin
           - roles/bigquery.admin
           - roles/aiplatform.admin
           - roles/cloudfunctions.admin
           - roles/dataform.admin
           - roles/datalineage.viewer
-          - roles/iam.serviceAccountAdmin
           - roles/iam.serviceAccountTokenCreator
-          - roles/iam.serviceAccountUser
-          - roles/logging.configWriter
-          - roles/resourcemanager.projectIamAdmin
           - roles/run.invoker
-          - roles/serviceusage.serviceUsageAdmin
-          - roles/storage.admin
-          - roles/workflows.admin
     services:
+      - bigquery.googleapis.com
+      - bigqueryconnection.googleapis.com
+      - bigquerystorage.googleapis.com
       - cloudkms.googleapis.com
       - cloudresourcemanager.googleapis.com
-      - bigquery.googleapis.com
-      - bigquerystorage.googleapis.com
-      - bigqueryconnection.googleapis.com
-      - serviceusage.googleapis.com
       - iam.googleapis.com
+      - serviceusage.googleapis.com
     providerVersions:
       - source: hashicorp/google
         version: ">= 4.0, < 7"
