@@ -386,20 +386,20 @@ spec:
     roles:
       - level: Project
         roles:
-          - roles/logging.configWriter
-          - roles/run.invoker
-          - roles/dataform.admin
-          - roles/iam.serviceAccountTokenCreator
-          - roles/iam.serviceAccountUser
-          - roles/resourcemanager.projectIamAdmin
           - roles/serviceusage.serviceUsageAdmin
           - roles/storage.admin
-          - roles/workflows.admin
           - roles/bigquery.admin
           - roles/aiplatform.admin
+          - roles/dataform.admin
+          - roles/iam.serviceAccountAdmin
+          - roles/logging.configWriter
+          - roles/resourcemanager.projectIamAdmin
+          - roles/run.invoker
+          - roles/workflows.admin
           - roles/cloudfunctions.admin
           - roles/datalineage.viewer
-          - roles/iam.serviceAccountAdmin
+          - roles/iam.serviceAccountTokenCreator
+          - roles/iam.serviceAccountUser
     services:
       - bigquery.googleapis.com
       - bigqueryconnection.googleapis.com
