@@ -386,28 +386,13 @@ spec:
     roles:
       - level: Project
         roles:
-          - roles/serviceusage.serviceUsageAdmin
-          - roles/storage.admin
           - roles/bigquery.admin
-          - roles/aiplatform.admin
-          - roles/dataform.admin
           - roles/iam.serviceAccountAdmin
-          - roles/logging.configWriter
           - roles/resourcemanager.projectIamAdmin
-          - roles/run.invoker
-          - roles/workflows.admin
-          - roles/cloudfunctions.admin
-          - roles/datalineage.viewer
-          - roles/iam.serviceAccountTokenCreator
-          - roles/iam.serviceAccountUser
     services:
       - bigquery.googleapis.com
-      - bigqueryconnection.googleapis.com
-      - bigquerystorage.googleapis.com
-      - cloudkms.googleapis.com
       - cloudresourcemanager.googleapis.com
       - iam.googleapis.com
-      - serviceusage.googleapis.com
     providerVersions:
       - source: hashicorp/google
         version: ">= 5.39, < 7"

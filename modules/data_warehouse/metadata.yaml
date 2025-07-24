@@ -32,29 +32,22 @@ spec:
     description: {}
     icon: assets/data_warehouse_icon_v1.png
     deploymentDuration:
-      configurationSecs: 120
-      deploymentSecs: 420
+      configurationSecs: "120"
+      deploymentSecs: "420"
     costEstimate:
       description: cost of this solution is $0.65
       url: https://cloud.google.com/products/calculator/#id=857776c6-49e8-4c6a-adc5-42a15b8fb67d
     cloudProducts:
-    - productId: search_BIGQUERY_SECTION
-      pageUrl: ""
-    - productId: WORKFLOWS_SECTION
-      pageUrl: ""
-    - productId: STORAGE_SECTION
-      pageUrl: ""
-    - productId: ai-platform
-      pageUrl: ""
-    - productId: LOOKER_STUDIO_SECTION
-      pageUrl: lookerstudio.google.com
-      isExternal: true
-    - productId: CLOUD_DMS_SECTION
-      pageUrl: ""
-    - productId: FUNCTIONS_SECTION
-      pageUrl: ""
-    - productId: DATAFORM_SECTION
-      pageUrl: ""
+      - productId: search_BIGQUERY_SECTION
+      - productId: WORKFLOWS_SECTION
+      - productId: STORAGE_SECTION
+      - productId: ai-platform
+      - productId: LOOKER_STUDIO_SECTION
+        pageUrl: lookerstudio.google.com
+        isExternal: true
+      - productId: CLOUD_DMS_SECTION
+      - productId: FUNCTIONS_SECTION
+      - productId: DATAFORM_SECTION
   content:
     architecture:
       diagramUrl: www.gstatic.com/pantheon/images/solutions/data-warehouse-architecture_v6.svg
@@ -135,20 +128,20 @@ spec:
     roles:
       - level: Project
         roles:
-          - roles/resourcemanager.projectIamAdmin
-          - roles/run.invoker
+          - roles/dataform.admin
           - roles/datalineage.viewer
           - roles/iam.serviceAccountTokenCreator
           - roles/logging.configWriter
-          - roles/serviceusage.serviceUsageAdmin
-          - roles/storage.admin
+          - roles/run.invoker
           - roles/workflows.admin
-          - roles/bigquery.admin
           - roles/aiplatform.admin
-          - roles/cloudfunctions.admin
-          - roles/dataform.admin
           - roles/iam.serviceAccountAdmin
           - roles/iam.serviceAccountUser
+          - roles/resourcemanager.projectIamAdmin
+          - roles/serviceusage.serviceUsageAdmin
+          - roles/storage.admin
+          - roles/bigquery.admin
+          - roles/cloudfunctions.admin
     services:
       - bigquery.googleapis.com
       - bigqueryconnection.googleapis.com

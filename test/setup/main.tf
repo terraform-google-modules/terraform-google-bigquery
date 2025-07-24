@@ -16,12 +16,8 @@
 locals {
   per_module_services = {
     root = [
-      "cloudkms.googleapis.com",
       "cloudresourcemanager.googleapis.com",
       "bigquery.googleapis.com",
-      "bigquerystorage.googleapis.com",
-      "bigqueryconnection.googleapis.com",
-      "serviceusage.googleapis.com",
       "iam.googleapis.com",
     ]
     authorization = [
