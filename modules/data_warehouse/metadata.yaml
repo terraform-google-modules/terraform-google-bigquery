@@ -32,8 +32,8 @@ spec:
     description: {}
     icon: assets/data_warehouse_icon_v1.png
     deploymentDuration:
-      configurationSecs: "120"
-      deploymentSecs: "420"
+      configurationSecs: 120
+      deploymentSecs: 420
     costEstimate:
       description: cost of this solution is $0.65
       url: https://cloud.google.com/products/calculator/#id=857776c6-49e8-4c6a-adc5-42a15b8fb67d
