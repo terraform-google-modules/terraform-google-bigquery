@@ -18,8 +18,8 @@ locals {
   per_module_roles = {
     root = [
       "roles/bigquery.admin",
-      "roles/iam.serviceAccountAdmin",
-      "roles/resourcemanager.projectIamAdmin",
+      "roles/storage.admin",
+      "roles/cloudkms.cryptoKeyEncrypterDecrypter",
     ]
     authorization = [
       "roles/bigquery.admin",

@@ -60,19 +60,19 @@ spec:
       - level: Project
         roles:
           - roles/cloudfunctions.admin
-          - roles/iam.serviceAccountAdmin
-          - roles/serviceusage.serviceUsageAdmin
-          - roles/storage.admin
-          - roles/workflows.admin
-          - roles/aiplatform.admin
           - roles/dataform.admin
           - roles/datalineage.viewer
+          - roles/resourcemanager.projectIamAdmin
+          - roles/run.invoker
+          - roles/workflows.admin
+          - roles/bigquery.admin
+          - roles/aiplatform.admin
+          - roles/iam.serviceAccountAdmin
           - roles/iam.serviceAccountTokenCreator
           - roles/iam.serviceAccountUser
           - roles/logging.configWriter
-          - roles/resourcemanager.projectIamAdmin
-          - roles/run.invoker
-          - roles/bigquery.admin
+          - roles/serviceusage.serviceUsageAdmin
+          - roles/storage.admin
     services:
       - bigquery.googleapis.com
       - bigqueryconnection.googleapis.com

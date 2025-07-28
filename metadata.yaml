@@ -387,10 +387,12 @@ spec:
       - level: Project
         roles:
           - roles/bigquery.admin
-          - roles/iam.serviceAccountAdmin
-          - roles/resourcemanager.projectIamAdmin
+          - roles/storage.admin
+          - roles/cloudkms.cryptoKeyEncrypterDecrypter
     services:
       - bigquery.googleapis.com
+      - bigquerystorage.googleapis.com
+      - cloudkms.googleapis.com
       - cloudresourcemanager.googleapis.com
       - iam.googleapis.com
     providerVersions:
