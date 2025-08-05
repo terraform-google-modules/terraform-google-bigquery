@@ -71,6 +71,42 @@ spec:
                   value: GZIP
                 - label: NONE
                   value: NONE
+            csv_options:
+              name: csv_options
+              title: CSV Options
+              properties:
+                encoding:
+                  name: encoding
+                  title: Encoding
+                  enumValueLabels:
+                    - label: UTF-8
+                      value: UTF-8
+                    - label: ISO-8859-1
+                      value: ISO-8859-1
+                skip_leading_rows:
+                  name: skip_leading_rows
+                  title: Skip Leading Rows
+            google_sheets_options:
+              name: google_sheets_options
+              title: Google Sheets Options
+              properties:
+                skip_leading_rows:
+                  name: skip_leading_rows
+                  title: Skip Leading Rows
+            hive_partitioning_options:
+              name: hive_partitioning_options
+              title: Hive Partitioning Options
+              properties:
+                mode:
+                  name: mode
+                  title: Mode
+                  enumValueLabels:
+                    - label: AUTO
+                      value: AUTO
+                    - label: STRINGS
+                      value: STRINGS
+                    - label: CUSTOM
+                      value: CUSTOM
             source_format:
               name: source_format
               title: Source Format
@@ -98,44 +134,6 @@ spec:
               title: Source Uris
               regexValidation: ^gs://([a-z0-9]([a-z0-9-.]*[a-z0-9])?)/([^#?]+)?$
               validation: Must be a valid Google Cloud Storage URI.
-            google_sheets_options:
-              name: google_sheets_options
-              title: Google Sheets Options
-              properties:
-                skip_leading_rows:
-                  name: skip_leading_rows
-                  title: Skip Leading Rows
-                  min: 0
-            hive_partitioning_options:
-              name: hive_partitioning_options
-              title: Hive Partitioning Options
-              properties:
-                mode:
-                  name: mode
-                  title: Mode
-                  enumValueLabels:
-                    - label: AUTO
-                      value: AUTO
-                    - label: STRINGS
-                      value: STRINGS
-                    - label: CUSTOM
-                      value: CUSTOM
-            csv_options:
-              name: csv_options
-              title: CSV Options
-              properties:
-                encoding:
-                  name: encoding
-                  title: Encoding
-                  enumValueLabels:
-                    - label: UTF-8
-                      value: UTF-8
-                    - label: ISO-8859-1
-                      value: ISO-8859-1
-                skip_leading_rows:
-                  name: skip_leading_rows
-                  title: Skip Leading Rows
-                  min: 0
         location:
           name: location
           title: Location
@@ -174,35 +172,6 @@ spec:
           name: routines
           title: Routines
           properties:
-            routine_id:
-              name: routine_id
-              title: Routine Id
-              regexValidation: ^[A-Za-z_]{1,256}$
-              validation: The routine ID must contain only letters, numbers, and underscores, and cannot start with a number.
-            routine_type:
-              name: routine_type
-              title: Routine Type
-              enumValueLabels:
-                - label: SCALAR_FUNCTION
-                  value: SCALAR_FUNCTION
-                - label: PROCEDURE
-                  value: PROCEDURE
-                - label: TABLE_VALUED_FUNCTION
-                  value: TABLE_VALUED_FUNCTION
-            language:
-              name: language
-              title: Language
-              enumValueLabels:
-                - label: SQL
-                  value: SQL
-                - label: JAVASCRIPT
-                  value: JAVASCRIPT
-                - label: PYTHON
-                  value: PYTHON
-                - label: JAVA
-                  value: JAVA
-                - label: SCALA
-                  value: SCALA
             arguments:
               name: arguments
               title: Arguments
@@ -225,6 +194,35 @@ spec:
                       value: OUT
                     - label: INOUT
                       value: INOUT
+            language:
+              name: language
+              title: Language
+              enumValueLabels:
+                - label: SQL
+                  value: SQL
+                - label: JAVASCRIPT
+                  value: JAVASCRIPT
+                - label: PYTHON
+                  value: PYTHON
+                - label: JAVA
+                  value: JAVA
+                - label: SCALA
+                  value: SCALA
+            routine_id:
+              name: routine_id
+              title: Routine Id
+              regexValidation: ^[A-Za-z_]{1,256}$
+              validation: The routine ID must contain only letters, numbers, and underscores, and cannot start with a number.
+            routine_type:
+              name: routine_type
+              title: Routine Type
+              enumValueLabels:
+                - label: SCALAR_FUNCTION
+                  value: SCALAR_FUNCTION
+                - label: PROCEDURE
+                  value: PROCEDURE
+                - label: TABLE_VALUED_FUNCTION
+                  value: TABLE_VALUED_FUNCTION
         storage_billing_model:
           name: storage_billing_model
           title: Storage Billing Model
