@@ -186,6 +186,7 @@ resource "google_bigquery_table" "external_table" {
   table_id            = each.key
   description         = each.value["description"]
   labels              = each.value["labels"]
+  schema              = each.value["connection_id"] != null ? each.value["schema"] : null
   expiration_time     = each.value["expiration_time"] != null ? each.value["expiration_time"] : 0
   max_staleness       = each.value["max_staleness"]
   project             = var.project_id
@@ -194,9 +195,10 @@ resource "google_bigquery_table" "external_table" {
   external_data_configuration {
     autodetect            = each.value["autodetect"]
     compression           = each.value["compression"]
+    connection_id         = each.value["connection_id"]
     ignore_unknown_values = each.value["ignore_unknown_values"]
     max_bad_records       = each.value["max_bad_records"]
-    schema                = each.value["schema"]
+    schema                = each.value["connection_id"] == null ? each.value["schema"] : null
     source_format         = each.value["source_format"]
     source_uris           = each.value["source_uris"]
 

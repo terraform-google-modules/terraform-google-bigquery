@@ -74,6 +74,7 @@ module "bigquery" {
       max_bad_records       = 0
       source_format         = "CSV"
       schema                = null
+      connection_id         = null
       expiration_time       = 2524604400000 # 2050/01/01
       labels = {
         env      = "devops"
