@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -62,12 +62,96 @@ spec:
         external_tables:
           name: external_tables
           title: External Tables
+          properties:
+            compression:
+              name: compression
+              title: Compression
+              enumValueLabels:
+                - label: GZIP
+                  value: GZIP
+                - label: NONE
+                  value: NONE
+            source_format:
+              name: source_format
+              title: Source Format
+              enumValueLabels:
+                - label: AVRO
+                  value: AVRO
+                - label: BIGTABLE
+                  value: BIGTABLE
+                - label: CSV
+                  value: CSV
+                - label: DATASTORE_BACKUP
+                  value: DATASTORE_BACKUP
+                - label: GOOGLE_SHEETS
+                  value: GOOGLE_SHEETS
+                - label: NEWLINE_DELIMITED_JSON
+                  value: NEWLINE_DELIMITED_JSON
+                - label: ORC
+                  value: ORC
+                - label: PARQUET
+                  value: PARQUET
+                - label: ICEBERG
+                  value: ICEBERG
+            source_uris:
+              name: source_uris
+              title: Source Uris
+              regexValidation: ^gs://([a-z0-9]([a-z0-9-.]*[a-z0-9])?)/([^#?]+)?$
+              validation: Must be a valid Google Cloud Storage URI.
+            table_id:
+              name: table_id
+              title: Table Id
+              regexValidation: ^[A-Za-z_]{1,1024}$
+              validation: The table ID must contain only letters, numbers, and underscores, and cannot start with a number.
+            hive_partitioning_options:
+              name: hive_partitioning_options
+              title: Hive Partitioning Options
+              properties:
+                mode:
+                  name: mode
+                  title: Mode
+                  enumValueLabels:
+                    - label: AUTO
+                      value: AUTO
+                    - label: STRINGS
+                      value: STRINGS
+                    - label: CUSTOM
+                      value: CUSTOM
+            csv_options:
+              name: csv_options
+              title: CSV Options
+              properties:
+                encoding:
+                  name: encoding
+                  title: Encoding
+                  enumValueLabels:
+                    - label: UTF-8
+                      value: UTF-8
+                    - label: ISO-8859-1
+                      value: ISO-8859-1
         location:
           name: location
           title: Location
         materialized_views:
           name: materialized_views
           title: Materialized Views
+          properties:
+            time_partitioning:
+              name: time_partitioning
+              title: Time Partitioning
+              properties:
+                type:
+                  name: type
+                  title: Type
+                  enumValueLabels:
+                    - label: DAY
+                      value: DAY
+                    - label: HOUR
+                      value: HOUR
+                    - label: MONTH
+                      value: MONTH
+                    - label: YEAR
+                      value: YEAR
         max_time_travel_hours:
           name: max_time_travel_hours
           title: Max Time Travel Hours
@@ -80,9 +164,66 @@ spec:
         routines:
           name: routines
           title: Routines
+          properties:
+            routine_id:
+              name: routine_id
+              title: Routine Id
+              regexValidation: ^[A-Za-z_]{1,256}$
+              validation: The routine ID must contain only letters, numbers, and underscores, and cannot start with a number.
+            routine_type:
+              name: routine_type
+              title: Routine Type
+              enumValueLabels:
+                - label: SCALAR_FUNCTION
+                  value: SCALAR_FUNCTION
+                - label: PROCEDURE
+                  value: PROCEDURE
+                - label: TABLE_VALUED_FUNCTION
+                  value: TABLE_VALUED_FUNCTION
+            language:
+              name: language
+              title: Language
+              enumValueLabels:
+                - label: SQL
+                  value: SQL
+                - label: JAVASCRIPT
+                  value: JAVASCRIPT
+                - label: PYTHON
+                  value: PYTHON
+                - label: JAVA
+                  value: JAVA
+                - label: SCALA
+                  value: SCALA
+            arguments:
+              name: arguments
+              title: Arguments
+              properties:
+                argument_kind:
+                  name: argument_kind
+                  title: Argument Kind
+                  enumValueLabels:
+                    - label: FIXED_TYPE
+                      value: FIXED_TYPE
+                    - label: ANY_TYPE
+                      value: ANY_TYPE
+                mode:
+                  name: mode
+                  title: Mode
+                  enumValueLabels:
+                    - label: IN
+                      value: IN
+                    - label: OUT
+                      value: OUT
+                    - label: INOUT
+                      value: INOUT
         storage_billing_model:
           name: storage_billing_model
           title: Storage Billing Model
+          enumValueLabels:
+            - label: LOGICAL
+              value: LOGICAL
+            - label: PHYSICAL
+              value: PHYSICAL
         tables:
           name: tables
           title: Tables
@@ -92,6 +233,34 @@ spec:
               value:
                 - schema: "[{\"description\": \"A string type unique identifier\",\"mode\": \"NULLABLE\",\"name\": \"simpleId\",\"type\": \"STRING\"},{\"description\": \"A field to hold integer values\",\"mode\": \"NULLABLE\",\"name\": \"integerField\",\"type\": \"INTEGER\"},{\"description\": \"Data\",\"mode\": \"NULLABLE\",\"name\": \"data\",\"type\": \"STRING\"}]"
                   table_id: table-1
+          properties:
+            table_id:
+              name: table_id
+              title: Table Id
+              regexValidation: ^[A-Za-z_]{1,1024}$
+              validation: The table ID must contain only letters, numbers, and underscores, and cannot start with a number.
+            time_partitioning:
+              name: time_partitioning
+              title: Time Partitioning
+              properties:
+                type:
+                  name: type
+                  title: Type
+                  enumValueLabels:
+                    - label: DAY
+                      value: DAY
+                    - label: HOUR
+                      value: HOUR
+                    - label: MONTH
+                      value: MONTH
+                    - label: YEAR
+                      value: YEAR
         views:
           name: views
           title: Views
+          properties:
+            view_id:
+              name: view_id
+              title: View Id
+              regexValidation: ^[A-Za-z_]{1,1024}$
+              validation: The view ID must contain only letters, numbers, and underscores, and cannot start with a number.
