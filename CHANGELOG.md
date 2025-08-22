@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.2.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v10.1.1...v10.2.0) (2025-08-22)
+
+
+### Features
+
+* per module requirements configs for bigquery ([#405](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/405)) ([eec2567](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/eec2567df6203a0e45469f0c1d4f87f05a17ab23))
+
 ## [10.1.1](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v10.1.0...v10.1.1) (2025-06-06)
 
 
