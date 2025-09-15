@@ -1,4 +1,4 @@
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,12 +33,17 @@ spec:
         dataset_id:
           name: dataset_id
           title: Dataset Id
+          regexValidation: ^[a-zA-Z0-9_]{1,1000}[a-zA-Z0-9_]{0,24}$
+          validation: Must contain only letters, numbers, or underscores. Must be 1024 characters or fewer.
         dataset_labels:
           name: dataset_labels
           title: Dataset Labels
         dataset_name:
           name: dataset_name
           title: Dataset Name
+        default_partition_expiration_ms:
+          name: default_partition_expiration_ms
+          title: Default Partition Expiration Ms
         default_table_expiration_ms:
           name: default_table_expiration_ms
           title: Default Table Expiration Ms
@@ -75,9 +80,18 @@ spec:
         routines:
           name: routines
           title: Routines
+        storage_billing_model:
+          name: storage_billing_model
+          title: Storage Billing Model
         tables:
           name: tables
           title: Tables
+          level: 1
+          altDefaults:
+            - type: ALTERNATE_TYPE_DC
+              value:
+                - schema: "[{\"description\": \"A string type unique identifier\",\"mode\": \"NULLABLE\",\"name\": \"simpleId\",\"type\": \"STRING\"},{\"description\": \"A field to hold integer values\",\"mode\": \"NULLABLE\",\"name\": \"integerField\",\"type\": \"INTEGER\"},{\"description\": \"Data\",\"mode\": \"NULLABLE\",\"name\": \"data\",\"type\": \"STRING\"}]"
+                  table_id: table-1
         views:
           name: views
           title: Views

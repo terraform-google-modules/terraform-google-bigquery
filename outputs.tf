@@ -47,6 +47,14 @@ output "table_ids" {
   description = "Unique id for the table being provisioned"
 }
 
+output "table_fqns" {
+  value = [
+    for table in google_bigquery_table.main :
+    table.id
+  ]
+  description = "Fully qualified names for the table with format projects/{{project}}/datasets/{{dataset}}/tables/{{name}}"
+}
+
 output "table_names" {
   value = [
     for table in google_bigquery_table.main :
@@ -93,4 +101,16 @@ output "routine_ids" {
     routine.routine_id
   ]
   description = "Unique IDs for any routine being provisioned"
+}
+
+output "env_vars" {
+  value = {
+    "BIGQUERY_DATASET"            = google_bigquery_dataset.main.dataset_id
+    "BIGQUERY_TABLES"             = jsonencode([for table in google_bigquery_table.main : table.table_id])
+    "BIGQUERY_VIEWS"              = jsonencode([for table in google_bigquery_table.view : table.table_id])
+    "BIGQUERY_MATERIALIZED_VIEWS" = jsonencode([for table in google_bigquery_table.materialized_view : table.table_id])
+    "BIGQUERY_EXTERNAL_TABLES"    = jsonencode([for table in google_bigquery_table.external_table : table.table_id])
+    "BIGQUERY_ROUTINES"           = jsonencode([for routine in google_bigquery_routine.routine : routine.routine_id])
+  }
+  description = "Exported environment variables"
 }

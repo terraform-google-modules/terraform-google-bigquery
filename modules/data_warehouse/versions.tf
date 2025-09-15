@@ -18,15 +18,15 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 4.52, < 7"
+      version = ">= 6.11, < 8"
     }
     google-beta = {
       source  = "hashicorp/google-beta"
-      version = ">= 4.52, < 7"
+      version = ">= 6.11, < 8"
     }
     archive = {
       source  = "hashicorp/archive"
-      version = "2.4.2"
+      version = ">= 2.4.2"
     }
     time = {
       source  = "hashicorp/time"
@@ -38,16 +38,16 @@ terraform {
     }
     local = {
       source  = "hashicorp/local"
-      version = ">=2.4"
+      version = ">= 2.4"
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.6.2"
+      version = ">= 3.6.2"
     }
   }
-  required_version = ">= 0.13"
+  required_version = ">= 1.3"
 
   provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-bigquery:data_warehouse/v9.0.0"
+    module_name = "blueprints/terraform/terraform-google-bigquery:data_warehouse/v10.1.1"
   }
 }

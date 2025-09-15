@@ -46,11 +46,11 @@ func TestDataWarehouse(t *testing.T) {
 		projectID := dwh.GetTFSetupStringOutput("project_id")
 		bucket := dwh.GetStringOutput("raw_bucket")
 		workflow := "initial-workflow"
-		location := "asia-southeast1"
+		location := "us-central1"
 
 		// Assert that the bucket is in location defined above
 		bucketOP := gcloud.Runf(t, "storage buckets describe gs://%s --project %s", bucket, projectID)
-		assert.Equal("ASIA-SOUTHEAST1", bucketOP.Get("location").String(), "Bucket should be in %[1]s \n", strings.ToUpper(location))
+		assert.Equal("US-CENTRAL1", bucketOP.Get("location").String(), "Bucket should be in %[1]s \n", strings.ToUpper(location))
 
 		// Assert that Workflow ran successfully
 		verifyWorkflows := func() (bool, error) {

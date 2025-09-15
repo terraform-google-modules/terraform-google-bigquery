@@ -13,10 +13,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+locals {
+  per_module_services = {
+    root = [
+      "iam.googleapis.com",
+      "cloudkms.googleapis.com",
+      "cloudresourcemanager.googleapis.com",
+      "bigquery.googleapis.com",
+      "bigquerystorage.googleapis.com",
+    ]
+    authorization = [
+      "cloudkms.googleapis.com",
+      "cloudresourcemanager.googleapis.com",
+      "bigquery.googleapis.com",
+      "bigquerystorage.googleapis.com",
+      "bigqueryconnection.googleapis.com",
+      "serviceusage.googleapis.com",
+      "iam.googleapis.com",
+    ]
+    data_warehouse = [
+      "cloudkms.googleapis.com",
+      "cloudresourcemanager.googleapis.com",
+      "bigquery.googleapis.com",
+      "bigquerystorage.googleapis.com",
+      "bigqueryconnection.googleapis.com",
+      "serviceusage.googleapis.com",
+      "iam.googleapis.com",
+    ]
+    scheduled_queries = [
+      "cloudkms.googleapis.com",
+      "cloudresourcemanager.googleapis.com",
+      "bigquery.googleapis.com",
+      "bigquerystorage.googleapis.com",
+      "bigqueryconnection.googleapis.com",
+      "serviceusage.googleapis.com",
+      "iam.googleapis.com",
+    ]
+    udf = [
+      "cloudkms.googleapis.com",
+      "cloudresourcemanager.googleapis.com",
+      "bigquery.googleapis.com",
+      "bigquerystorage.googleapis.com",
+      "bigqueryconnection.googleapis.com",
+      "serviceusage.googleapis.com",
+      "iam.googleapis.com",
+    ]
+  }
+}
 
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 17.0"
+  version = "~> 18.0"
 
   name                    = "ci-bigquery"
   random_project_id       = "true"
@@ -25,15 +72,7 @@ module "project" {
   billing_account         = var.billing_account
   default_service_account = "keep"
 
-  activate_apis = [
-    "cloudkms.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
-    "bigquery.googleapis.com",
-    "bigquerystorage.googleapis.com",
-    "bigqueryconnection.googleapis.com",
-    "serviceusage.googleapis.com",
-    "iam.googleapis.com",
-  ]
+  activate_apis = tolist(toset(flatten(values(local.per_module_services))))
 }
 
 module "kms_keyring" {
