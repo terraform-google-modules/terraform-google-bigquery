@@ -98,11 +98,6 @@ spec:
               title: Source Uris
               regexValidation: ^gs://([a-z0-9]([a-z0-9-.]*[a-z0-9])?)/([^#?]+)?$
               validation: Must be a valid Google Cloud Storage URI.
-            table_id:
-              name: table_id
-              title: Table Id
-              regexValidation: ^[A-Za-z_][A-Za-z0-9_]{0,1000}[A-Za-z0-9_]{0,23}$
-              validation: The table ID must contain only letters, numbers, and underscores, and cannot start with a number.
             hive_partitioning_options:
               name: hive_partitioning_options
               title: Hive Partitioning Options
@@ -234,11 +229,6 @@ spec:
                 - schema: "[{\"description\": \"A string type unique identifier\",\"mode\": \"NULLABLE\",\"name\": \"simpleId\",\"type\": \"STRING\"},{\"description\": \"A field to hold integer values\",\"mode\": \"NULLABLE\",\"name\": \"integerField\",\"type\": \"INTEGER\"},{\"description\": \"Data\",\"mode\": \"NULLABLE\",\"name\": \"data\",\"type\": \"STRING\"}]"
                   table_id: table-1
           properties:
-            table_id:
-              name: table_id
-              title: Table Id
-              regexValidation: ^[A-Za-z_][A-Za-z0-9_]{0,1000}[A-Za-z0-9_]{0,23}$
-              validation: The table ID must contain only letters, numbers, and underscores, and cannot start with a number.
             time_partitioning:
               name: time_partitioning
               title: Time Partitioning
