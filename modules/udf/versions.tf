@@ -25,7 +25,7 @@ terraform {
   }
 
   provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-bigquery:udf/v10.1.1"
+    module_name = "blueprints/terraform/terraform-google-bigquery:udf/v10.2.0"
   }
 
 }
