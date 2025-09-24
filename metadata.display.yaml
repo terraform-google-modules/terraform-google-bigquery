@@ -98,6 +98,14 @@ spec:
               title: Source Uris
               regexValidation: ^gs://([a-z0-9]([a-z0-9-.]*[a-z0-9])?)/([^#?]+)?$
               validation: Must be a valid Google Cloud Storage URI.
+            google_sheets_options:
+              name: google_sheets_options
+              title: Google Sheets Options
+              properties:
+                skip_leading_rows:
+                  name: skip_leading_rows
+                  title: Skip Leading Rows
+                  min: 0
             hive_partitioning_options:
               name: hive_partitioning_options
               title: Hive Partitioning Options
@@ -124,6 +132,10 @@ spec:
                       value: UTF-8
                     - label: ISO-8859-1
                       value: ISO-8859-1
+                skip_leading_rows:
+                  name: skip_leading_rows
+                  title: Skip Leading Rows
+                  min: 0
         location:
           name: location
           title: Location
@@ -150,6 +162,8 @@ spec:
         max_time_travel_hours:
           name: max_time_travel_hours
           title: Max Time Travel Hours
+          min: 48
+          max: 168
         project_id:
           name: project_id
           title: Project Id
