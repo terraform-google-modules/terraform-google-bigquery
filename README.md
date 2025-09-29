@@ -27,7 +27,7 @@ Basic usage of this module is as follows:
 ```hcl
 module "bigquery" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 10.0"
+  version = "~> 10.2"
 
   dataset_id                  = "foo"
   dataset_name                = "foo"
@@ -220,6 +220,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | external\_table\_names | Friendly names for any external tables being provisioned |
 | project | Project where the dataset and tables are created |
 | routine\_ids | Unique IDs for any routine being provisioned |
+| table\_fqns | Fully qualified names for the table with format projects/{{project}}/datasets/{{dataset}}/tables/{{name}} |
 | table\_ids | Unique id for the table being provisioned |
 | table\_names | Friendly name for the table being provisioned |
 | view\_ids | Unique id for the view being provisioned |

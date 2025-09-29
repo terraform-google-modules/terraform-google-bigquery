@@ -4,6 +4,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.2.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v10.1.1...v10.2.0) (2025-09-18)
+
+
+### Features
+
+* **deps:** Update Terraform Google Provider to v7 (major) ([#416](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/416)) ([705217e](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/705217e3cca13ec89825f391e52d94544541504a))
+* per module requirements configs for bigquery ([#405](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/405)) ([eec2567](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/eec2567df6203a0e45469f0c1d4f87f05a17ab23))
+
+
+### Bug Fixes
+
+* Adding UI validation for bigquery ([#411](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/411)) ([1c63801](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/1c63801283c76273d9c373c8cf03eb7971c6a6f9))
+
+## [10.1.1](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v10.1.0...v10.1.1) (2025-06-06)
+
+
+### Bug Fixes
+
+* update display metadata to fix regex for bigquery dataset id [#392](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/392) ([2f7acb8](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/2f7acb889f1439ecffba84b060f02d2392005558))
+* Upgrade gemin model used in data_warehouse ([#397](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/397)) ([e383c94](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/e383c942fb21da0d6592a306543558f79ae834f0))
+
+## [10.1.0](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v10.0.2...v10.1.0) (2025-03-26)
+
+
+### Features
+
+* Adding regex validation for big query dataset id and adding new output value computed_table_id ([#384](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/384)) ([aab8238](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/aab82382cbf67a3b7e1af801f80c3113592d4193))
+
+## [10.0.2](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v10.0.1...v10.0.2) (2025-03-14)
+
+
+### Bug Fixes
+
+* Use list(string) instead of tuple for some of the output variables ([#380](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/380)) ([4d525f4](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/4d525f453ac291c18f4843da4bbf1483daf4b72e))
+
 ## [10.0.1](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v10.0.0...v10.0.1) (2025-03-06)
 
 
