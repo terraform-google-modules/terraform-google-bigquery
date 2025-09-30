@@ -141,7 +141,7 @@ spec:
               view_id        = string,
               description    = optional(string),
               query          = string,
-              use_legacy_sql = bool,
+              use_legacy_sql = optional(bool, true),
               labels         = optional(map(string), {}),
             }))
         defaultValue: []
@@ -397,4 +397,4 @@ spec:
       - iam.googleapis.com
     providerVersions:
       - source: hashicorp/google
-        version: ">= 5.39, < 7"
+        version: ">= 5.39, < 8"
