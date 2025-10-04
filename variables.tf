@@ -153,7 +153,7 @@ variable "views" {
     view_id        = string,
     description    = optional(string),
     query          = string,
-    use_legacy_sql = bool,
+    use_legacy_sql = optional(bool, true),
     labels         = optional(map(string), {}),
   }))
 }
