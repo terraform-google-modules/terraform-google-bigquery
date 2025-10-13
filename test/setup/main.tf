@@ -65,12 +65,14 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 18.0"
 
-  name                    = "ci-bigquery"
-  random_project_id       = "true"
-  org_id                  = var.org_id
-  folder_id               = var.folder_id
-  billing_account         = var.billing_account
-  default_service_account = "keep"
+  name                     = "ci-bigquery"
+  random_project_id        = "true"
+  #random_project_id_length = 8
+  org_id                   = var.org_id
+  folder_id                = var.folder_id
+  billing_account          = var.billing_account
+  default_service_account  = "keep"
+  deletion_policy          = "DELETE"
 
   activate_apis = tolist(toset(flatten(values(local.per_module_services))))
 }
