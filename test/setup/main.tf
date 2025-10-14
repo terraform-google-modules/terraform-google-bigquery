@@ -67,7 +67,6 @@ module "project" {
 
   name                     = "ci-bigquery"
   random_project_id        = "true"
-  #random_project_id_length = 8
   org_id                   = var.org_id
   folder_id                = var.folder_id
   billing_account          = var.billing_account

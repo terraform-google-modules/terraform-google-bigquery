@@ -16,17 +16,9 @@ package multiple_tables
 
 import (
 	"fmt"
-	"log"
-	"os"
-	"reflect"
-	"strings"
 	"testing"
-	"time"
 
-	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/bq"
-	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/gcloud"
 	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/tft"
-	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -34,169 +26,108 @@ func TestMultipleTables(t *testing.T) {
 	dwh := tft.NewTFBlueprintTest(t)
 
 	dwh.DefineVerify(func(assert *assert.Assertions) {
-		dwh.DefaultVerify(assert)
+		// Note: DefaultVerify() is unusable here because some attributes,
+		// such as last_modified_time, are changed outside of Terraform's knowledge.
 
 		projectID := dwh.GetTFSetupStringOutput("project_id")
-		location := "US"
-		dataset_name := dwh.GetJSONOutput("bigquery_dataset").Get("friendly_name")
-		tables := dwh.GetJSONOutput("bigquery_tables")
-		external_tables := dwh.GetJSONOutput("bigquery_external_tables")
-
-		//////////////////////////////////////////
-
-		homeDir, err := os.UserHomeDir()
-		if err != nil {
-			log.Fatal(err)
-		}
-		file, err := os.Create(homeDir + "/.bigqueryrc")
-		if err != nil {
-			log.Fatal(err)
-		}
-		file.Close()
+		tables := dwh.GetJsonOutput("bigquery_tables")
+		externalTables := dwh.GetJsonOutput("bigquery_external_tables")
 
 		{ // Dataset test
-			/*
-			   describe google_bigquery_dataset(project: "#{project_id}", name: "#{dataset_name}") do
-
-			   	it { should exist }
-
-			   	its('friendly_name') { should eq "#{dataset_name}" }
-			   	its('description') { should eq 'some description' }
-			   	its('location') { should eq 'US' }
-			   	its('default_table_expiration_ms') { should cmp '3600000' }
-			   	its('default_encryption_configuration.kms_key_name') { should cmp "projects/#{project_id}/locations/us/keyRings/ci-bigquery-keyring/cryptoKeys/foo" }
-
-			   end
-			*/
+			dataset := dwh.GetJsonOutput("bigquery_dataset")
+			assert.Equal("foo", dataset.Get("friendly_name").String(), "dataset's friendly_name should be foo")
+			assert.Equal("some description", dataset.Get("description").String(), "dataset foo's description should be 'some description'")
+			assert.Equal("US", dataset.Get("location").String(), "dataset foo's location should be US")
+			assert.Equal(int64(3600000), dataset.Get("default_table_expiration_ms").Int(), "dataset foo's default_table_expiration_ms should be 3600000")
+			assert.Equal(fmt.Sprintf("projects/%s/locations/us/keyRings/ci-bigquery-keyring/cryptoKeys/foo", projectID), dataset.Get("default_encryption_configuration.0.kms_key_name").String(), "dataset foo's default_encryption_configuration.0.kms_key_name")
 		}
 
 		{ // "foo" table test
-			//// Maybe bq show is best...
+			fooTable := tables.Get("foo")
+			assert.Equal("foo", fooTable.Get("friendly_name").String(), "table's friendly_name should be foo")
+			assert.Equal("DAY", fooTable.Get("time_partitioning.0.type").String(), "foo table's time_partitioning.type should be DAY")
 
-			query := fmt.Sprintf("DESCRIBE TABLE `%s.%s`;", projectID, tablePlaceholder)
-			op := bq.Runf(t, "--project_id=%[1]s --headless=true --format=prettyjson query --nouse_legacy_sql %[2]s", projectID, query)
-
-			friendlyName := op.Get("0.friendly_name").String()
-			friendlyNameKind := reflect.TypeOf(count).Kind()
-
-			/*
-			   describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{tables[:foo][:friendly_name]}") do
-
-			   	it { should exist }
-			   	its('friendly_name') { should eq "#{tables[:foo][:friendly_name]}" }
-			   	its('time_partitioning.type') { should eq 'DAY' }
-			   	its('clustering') { should_not be nil }
-
-			   end
-			*/
+			assert.Greater(len(fooTable.Get("clustering").Array()), 0, "foo table's clustering should be nonempty")
 		}
 
 		{ // "bar" table test
-			/*
-			   describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{tables[:bar][:friendly_name]}") do
-
-			   	it { should exist }
-			   	its('friendly_name') { should eq "#{tables[:bar][:friendly_name]}" }
-			   	its('time_partitioning.type') { should be nil }
-			   	its('clustering') { should be nil }
-
-			   end
-			*/
+			barTable := tables.Get("bar")
+			assert.True(barTable.Exists(), "bar table should exist in terraform outputs")
+			assert.Equal("bar", barTable.Get("friendly_name").String(), "table's friendly_name should be bar")
+			assert.False(barTable.Get("time_partitioning.0.type").Exists(), "bar table's time_partitioning.type should be null")
+			assert.Len(barTable.Get("clustering").Array(), 0, "bar table's clustering should be empty")
 		}
 
 		{ // CSV test
-			/*
-				describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{external_tables[:csv_example][:friendly_name]}") do
-				  it { should exist }
-				  its('friendly_name') { should eq "#{external_tables[:csv_example][:friendly_name]}" }
-				  its('time_partitioning.type') { should be nil }
-				  its('clustering') { should be nil }
-				  its('type') { should eq "EXTERNAL" }
-				  its('external_data_configuration.autodetect') { should be true }
-				  its('external_data_configuration.compression') { should eq "NONE" }
-				  its('external_data_configuration.ignore_unknown_values') { should be true }
-				  its('external_data_configuration.max_bad_records') { should be nil }
-				  its('external_data_configuration.source_format') { should eq "CSV" }
-				  its('external_data_configuration.source_uris') { should eq ["gs://ci-bq-external-data/bigquery-external-table-test.csv"] }
+			csvTable := externalTables.Get("csv_example")
+			assert.True(csvTable.Exists(), "csv_example table should exist in terraform outputs")
+			assert.Equal("csv_example", csvTable.Get("friendly_name").String(), "table's friendly_name should be csv_example")
+			assert.False(csvTable.Get("time_partitioning.0.type").Exists(), "csv_example table's time_partitioning.type should be null")
+			assert.Len(csvTable.Get("clustering").Array(), 0, "csv_example table's clustering should be empty")
+			assert.Equal("EXTERNAL", csvTable.Get("type").String(), "csv_example table's type should be EXTERNAL")
 
-				  its('external_data_configuration.csv_options.quote') { should eq "\"" }
-				  its('external_data_configuration.csv_options.allow_jagged_rows') { should be nil }
-				  its('external_data_configuration.csv_options.allow_quoted_newlines') { should be true }
-				  its('external_data_configuration.csv_options.encoding') { should eq "UTF-8" }
-				  its('external_data_configuration.csv_options.field_delimiter') { should eq "," }
-				  its('external_data_configuration.csv_options.skip_leading_rows') { should eq "1" }
-				end
-			*/
+			csvDataConfig := csvTable.Get("external_data_configuration.0")
+			assert.True(csvDataConfig.Exists(), "csv_example table should contain external_data_configuration")
+			assert.True(csvDataConfig.Get("autodetect").Bool(), "csv_example.external_data_configuration.autodetect should be true")
+			assert.Equal("NONE", csvDataConfig.Get("compression").String(), "csv_example.external_data_configuration.compression should be NONE")
+			assert.True(csvDataConfig.Get("ignore_unknown_values").Bool(), "csv_example.external_data_configuration.ignore_unknown_values should be true")
+			assert.Equal(int64(0), csvDataConfig.Get("max_bad_records").Int(), "csv_example.external_data_configuration.max_bad_records should be 0")
+			assert.Equal("CSV", csvDataConfig.Get("source_format").String(), "csv_example.external_data_configuration.source_format should be CSV")
+			assert.Len(csvDataConfig.Get("source_uris").Array(), 1, "csv_example.external_data_configuration.source_uris should have 1 element")
+			assert.Equal("gs://ci-bq-external-data/bigquery-external-table-test.csv", csvDataConfig.Get("source_uris.0").String(), "csv_example.external_data_configuration.source_uris[0] should have the expected URI")
+
+			csvOptions := csvDataConfig.Get("csv_options.0")
+			assert.True(csvOptions.Exists(), "csv_example table should contain external_data_configuration.csv_options")
+			assert.Equal(`"`, csvOptions.Get("quote").String(), `csv_example.external_data_configuration.csv_options should be " (a quote character)`)
+			assert.False(csvOptions.Get("allow_jagged_rows").Bool(), "csv_example.external_data_configuration.csv_options.allow_jagged_rows should be false")
+			assert.Equal(true, csvOptions.Get("allow_quoted_newlines").Bool(), "csv_example.external_data_configuration.csv_options.allow_quoted_newlines should be true")
+			assert.Equal("UTF-8", csvOptions.Get("encoding").String(), "csv_example.external_data_configuration.csv_options.encoding should be UTF-8")
+			assert.Equal(",", csvOptions.Get("field_delimiter").String(), "csv_example.external_data_configuration.csv_options.field_delimiter should be ,")
+			assert.Equal(int64(1), csvOptions.Get("skip_leading_rows").Int(), "csv_example.external_data_configuration.csv_options.skip_leading_rows should be 1")
 		}
 
 		{ // Hive test
-			/*
-				describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{external_tables[:hive_example][:friendly_name]}") do
-				  it { should exist }
-				  its('friendly_name') { should eq "#{external_tables[:hive_example][:friendly_name]}" }
-				  its('time_partitioning.type') { should be nil }
-				  its('clustering') { should be nil }
-				  its('type') { should eq "EXTERNAL" }
-				  its('external_data_configuration.autodetect') { should be true }
-				  its('external_data_configuration.compression') { should eq "NONE" }
-				  its('external_data_configuration.ignore_unknown_values') { should be true }
-				  its('external_data_configuration.max_bad_records') { should be nil }
-				  its('external_data_configuration.source_format') { should eq "CSV" }
-				  its('external_data_configuration.source_uris') { should eq ["gs://ci-bq-external-data/hive_partition_example/year=2012/foo.csv","gs://ci-bq-external-data/hive_partition_example/year=2013/bar.csv"] }
-				end
-			*/
+			hiveTable := externalTables.Get("hive_example")
+			assert.True(hiveTable.Exists(), "hive_example table should exist in terraform outputs")
+			assert.Equal("hive_example", hiveTable.Get("friendly_name").String(), "table's friendly_name should be hive_example")
+			assert.False(hiveTable.Get("time_partitioning.0.type").Exists(), "hive_example table's time_partitioning.type should be null")
+			assert.Len(hiveTable.Get("clustering").Array(), 0, "hive_example table's clustering should be empty")
+			assert.Equal("EXTERNAL", hiveTable.Get("type").String(), "hive_example table's type should be EXTERNAL")
+
+			hiveDataConfig := hiveTable.Get("external_data_configuration.0")
+			assert.True(hiveDataConfig.Exists(), "hive_example table should contain external_data_configuration")
+			assert.True(hiveDataConfig.Get("autodetect").Bool(), "hive_example.external_data_configuration.autodetect should be true")
+			assert.Equal("NONE", hiveDataConfig.Get("compression").String(), "hive_example.external_data_configuration.compression should be NONE")
+			assert.True(hiveDataConfig.Get("ignore_unknown_values").Bool(), "hive_example.external_data_configuration.ignore_unknown_values should be true")
+			assert.Equal(int64(0), hiveDataConfig.Get("max_bad_records").Int(), "hive_example.external_data_configuration.max_bad_records should be 0")
+			assert.Equal("CSV", hiveDataConfig.Get("source_format").String(), "hive_example.external_data_configuration.source_format should be CSV")
+
+			assert.Len(hiveDataConfig.Get("source_uris").Array(), 2, "hive_example.external_data_configuration.source_uris should have 2 elements")
+			assert.Equal("gs://ci-bq-external-data/hive_partition_example/year=2012/foo.csv", hiveDataConfig.Get("source_uris.0").String(), "hive_example.external_data_configuration.source_uris[0] should have the expected URI")
+			assert.Equal("gs://ci-bq-external-data/hive_partition_example/year=2013/bar.csv", hiveDataConfig.Get("source_uris.1").String(), "hive_example.external_data_configuration.source_uris[1] should have the expected URI")
 		}
 
 		{ // Google Sheets test
-			/*
-				describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{external_tables[:google_sheets_example][:friendly_name]}") do
-				  it { should exist }
-				  its('type') { should eq "EXTERNAL" }
-				  its('friendly_name') { should eq "#{external_tables[:google_sheets_example][:friendly_name]}" }
-				  its('time_partitioning.type') { should be nil }
-				  its('clustering') { should be nil }
-				  its('external_data_configuration.autodetect') { should be true }
-				  its('external_data_configuration.compression') { should eq "NONE" }
-				  its('external_data_configuration.ignore_unknown_values') { should be true }
-				  its('external_data_configuration.max_bad_records') { should be nil }
-				  its('external_data_configuration.source_format') { should eq "GOOGLE_SHEETS" }
-				  its('external_data_configuration.source_uris') { should eq ["https://docs.google.com/spreadsheets/d/15v4N2UG6bv1RmX__wru4Ei_mYMdVcM1MwRRLxFKc55s"] }
-				  its('external_data_configuration.google_sheets_options.skip_leading_rows') { should eq "1" }
-				end
-			*/
+			sheetsTable := externalTables.Get("google_sheets_example")
+			assert.True(sheetsTable.Exists(), "google_sheets_example table should exist in terraform outputs")
+			assert.Equal("google_sheets_example", sheetsTable.Get("friendly_name").String(), "table's friendly_name should be google_sheets_example")
+			assert.False(sheetsTable.Get("time_partitioning.0.type").Exists(), "google_sheets_example table's time_partitioning.type should be null")
+			assert.Len(sheetsTable.Get("clustering").Array(), 0, "google_sheets_example table's clustering should be empty")
+			assert.Equal("EXTERNAL", sheetsTable.Get("type").String(), "google_sheets_example table's type should be EXTERNAL")
+
+			sheetsDataConfig := sheetsTable.Get("external_data_configuration.0")
+			assert.True(sheetsDataConfig.Exists(), "google_sheets_example table should contain external_data_configuration")
+			assert.True(sheetsDataConfig.Get("autodetect").Bool(), "google_sheets_example.external_data_configuration.autodetect should be true")
+			assert.Equal("NONE", sheetsDataConfig.Get("compression").String(), "google_sheets_example.external_data_configuration.compression should be NONE")
+			assert.True(sheetsDataConfig.Get("ignore_unknown_values").Bool(), "google_sheets_example.external_data_configuration.ignore_unknown_values should be true")
+			assert.Equal(int64(0), sheetsDataConfig.Get("max_bad_records").Int(), "google_sheets_example.external_data_configuration.max_bad_records should be 0")
+			assert.Equal("GOOGLE_SHEETS", sheetsDataConfig.Get("source_format").String(), "google_sheets_example.external_data_configuration.source_format should be CSV")
+
+			assert.Len(sheetsDataConfig.Get("source_uris").Array(), 1, "google_sheets_example.external_data_configuration.source_uris should have 1 element")
+			assert.Equal("https://docs.google.com/spreadsheets/d/15v4N2UG6bv1RmX__wru4Ei_mYMdVcM1MwRRLxFKc55s", sheetsDataConfig.Get("source_uris.0").String(), "google_sheets_example.external_data_configuration.source_uris[0] should have the expected URI")
+
+			assert.Equal(int64(1), sheetsDataConfig.Get("google_sheets_options.0.skip_leading_rows").Int(), "google_sheets_example.external_data_configuration.google_sheets_options.0.skip_leading_rows should be 1")
 		}
-
-		// Assert BigQuery tables & views are not empty
-		test_tables := func() {
-
-			tables := []string{
-				"thelook.distribution_centers",
-				"thelook.events",
-				"thelook.inventory_items",
-				"thelook.order_items",
-				"thelook.orders",
-				"thelook.products",
-				"thelook.users",
-				"thelook.lookerstudio_report_distribution_centers",
-				"thelook.lookerstudio_report_profit",
-			}
-
-			query_template := "SELECT COUNT(*) AS count_rows FROM `%[1]s.%[2]s`;"
-			for _, table := range tables {
-				query := fmt.Sprintf(query_template, projectID, table)
-				op := bq.Runf(t, "--project_id=%[1]s --headless=true query --nouse_legacy_sql %[2]s", projectID, query)
-
-				count := op.Get("0.count_rows").Int()
-				count_kind := reflect.TypeOf(count).Kind()
-				test_result := assert.Greater(count, int64(0))
-				if test_result == true {
-				} else {
-					fmt.Printf("Some kind of error occurred while running the count query for the %[1]s table. We think it has %[2]d rows. Test failed. Here's some additional details: \n Query results. If this number is greater than 0, then there is probably an issue in the comparison: %[3]s \n Variable type for the count. This should be INT64: %[4]s \n ", table, count, op, count_kind)
-				}
-			}
-		}
-		test_tables()
-
 	})
 	dwh.Test()
 }

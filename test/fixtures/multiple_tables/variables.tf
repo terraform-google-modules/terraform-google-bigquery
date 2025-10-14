@@ -14,10 +14,20 @@
  * limitations under the License.
  */
 
-module "example" {
-  source                      = "../../../examples/multiple_tables"
-  default_table_expiration_ms = var.default_table_expiration_ms
-  project_id                  = var.project_id
-  dataset_labels              = var.dataset_labels
-  kms_key                     = jsondecode(var.kms_keys)["foo"]
+variable "default_table_expiration_ms" {
+  description = "Default TTL of tables using the dataset in MS"
+}
+
+variable "project_id" {
+  description = "Project where the dataset and table are created"
+}
+
+variable "kms_keys" {
+  description = "The KMS key module output"
+  type        = map(string)
+}
+
+variable "dataset_labels" {
+  description = "Key value pairs in a map for dataset labels"
+  type        = map(string)
 }
