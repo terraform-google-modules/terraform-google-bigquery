@@ -26,8 +26,8 @@ func TestMultipleTables(t *testing.T) {
 	dwh := tft.NewTFBlueprintTest(t)
 
 	dwh.DefineVerify(func(assert *assert.Assertions) {
-		// Note: DefaultVerify() is unusable here because some attributes,
-		// such as last_modified_time, are changed outside of Terraform's knowledge.
+		// This call is failing with "plan after apply should have no diffs", needs investigation.
+		dwh.DefaultVerify(assert)
 
 		projectID := dwh.GetTFSetupStringOutput("project_id")
 		tables := dwh.GetJsonOutput("bigquery_tables")
