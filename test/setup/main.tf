@@ -71,6 +71,7 @@ module "project" {
   folder_id               = var.folder_id
   billing_account         = var.billing_account
   default_service_account = "keep"
+  deletion_policy         = "DELETE"
 
   activate_apis = tolist(toset(flatten(values(local.per_module_services))))
 }
