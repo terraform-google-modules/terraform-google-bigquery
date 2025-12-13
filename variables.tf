@@ -199,6 +199,7 @@ variable "external_tables" {
     ignore_unknown_values = bool,
     max_bad_records       = number,
     schema                = string,
+    connection_id         = optional(string),
     source_format         = string,
     source_uris           = list(string),
     csv_options = object({
