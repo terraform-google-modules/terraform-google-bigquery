@@ -18,11 +18,11 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 4.52, < 7"
+      version = ">= 4.52, < 8"
     }
     google-beta = {
       source  = "hashicorp/google-beta"
-      version = ">= 4.52, < 7"
+      version = ">= 4.52, < 8"
     }
     archive = {
       source  = "hashicorp/archive"
@@ -48,6 +48,6 @@ terraform {
   required_version = ">= 1.3"
 
   provider_meta "google" {
-    module_name = "blueprints/terraform/terraform-google-bigquery:data_warehouse/v10.1.0"
+    module_name = "blueprints/terraform/terraform-google-bigquery:data_warehouse/v10.2.1"
   }
 }
