@@ -115,9 +115,9 @@ resource "google_bigquery_table" "main" {
           name = foreign_keys.value["name"]
 
           referenced_table {
-            project_id  = foreign_keys.value["referenced_table"].project_id
-            dataset_id  = foreign_keys.value["referenced_table"].dataset_id
-            table_id    = foreign_keys.value["referenced_table"].table_id
+            project_id = foreign_keys.value["referenced_table"].project_id
+            dataset_id = foreign_keys.value["referenced_table"].dataset_id
+            table_id   = foreign_keys.value["referenced_table"].table_id
           }
 
           dynamic "column_references" {
