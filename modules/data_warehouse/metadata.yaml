@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,29 +32,22 @@ spec:
     description: {}
     icon: assets/data_warehouse_icon_v1.png
     deploymentDuration:
-      configurationSecs: 120
-      deploymentSecs: 420
+      configurationSecs: "120"
+      deploymentSecs: "420"
     costEstimate:
       description: cost of this solution is $0.65
       url: https://cloud.google.com/products/calculator/#id=857776c6-49e8-4c6a-adc5-42a15b8fb67d
     cloudProducts:
       - productId: search_BIGQUERY_SECTION
-        pageUrl: ""
       - productId: WORKFLOWS_SECTION
-        pageUrl: ""
       - productId: STORAGE_SECTION
-        pageUrl: ""
       - productId: ai-platform
-        pageUrl: ""
       - productId: LOOKER_STUDIO_SECTION
         pageUrl: lookerstudio.google.com
         isExternal: true
       - productId: CLOUD_DMS_SECTION
-        pageUrl: ""
       - productId: FUNCTIONS_SECTION
-        pageUrl: ""
       - productId: DATAFORM_SECTION
-        pageUrl: ""
   content:
     architecture:
       diagramUrl: www.gstatic.com/pantheon/images/solutions/data-warehouse-architecture_v6.svg
@@ -135,20 +128,20 @@ spec:
     roles:
       - level: Project
         roles:
-          - roles/storage.admin
-          - roles/aiplatform.admin
-          - roles/cloudfunctions.admin
-          - roles/dataform.admin
-          - roles/iam.serviceAccountUser
-          - roles/serviceusage.serviceUsageAdmin
-          - roles/workflows.admin
-          - roles/bigquery.admin
-          - roles/datalineage.viewer
-          - roles/iam.serviceAccountAdmin
           - roles/iam.serviceAccountTokenCreator
+          - roles/iam.serviceAccountUser
           - roles/logging.configWriter
           - roles/resourcemanager.projectIamAdmin
           - roles/run.invoker
+          - roles/serviceusage.serviceUsageAdmin
+          - roles/aiplatform.admin
+          - roles/cloudfunctions.admin
+          - roles/datalineage.viewer
+          - roles/iam.serviceAccountAdmin
+          - roles/storage.admin
+          - roles/workflows.admin
+          - roles/bigquery.admin
+          - roles/dataform.admin
     services:
       - bigquery.googleapis.com
       - bigqueryconnection.googleapis.com
@@ -161,9 +154,9 @@ spec:
       - source: hashicorp/archive
         version: ">= 2.4.2"
       - source: hashicorp/google
-        version: ">= 6.11, < 7"
+        version: ">= 6.11, < 8"
       - source: hashicorp/google-beta
-        version: ">= 6.11, < 7"
+        version: ">= 6.11, < 8"
       - source: hashicorp/http
         version: ">= 2"
       - source: hashicorp/local
