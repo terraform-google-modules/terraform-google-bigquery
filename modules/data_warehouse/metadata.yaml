@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -135,20 +135,20 @@ spec:
     roles:
       - level: Project
         roles:
-          - roles/storage.admin
-          - roles/aiplatform.admin
-          - roles/cloudfunctions.admin
-          - roles/dataform.admin
-          - roles/iam.serviceAccountUser
-          - roles/serviceusage.serviceUsageAdmin
-          - roles/workflows.admin
-          - roles/bigquery.admin
-          - roles/datalineage.viewer
-          - roles/iam.serviceAccountAdmin
           - roles/iam.serviceAccountTokenCreator
+          - roles/iam.serviceAccountUser
           - roles/logging.configWriter
           - roles/resourcemanager.projectIamAdmin
           - roles/run.invoker
+          - roles/serviceusage.serviceUsageAdmin
+          - roles/aiplatform.admin
+          - roles/cloudfunctions.admin
+          - roles/datalineage.viewer
+          - roles/iam.serviceAccountAdmin
+          - roles/storage.admin
+          - roles/workflows.admin
+          - roles/bigquery.admin
+          - roles/dataform.admin
     services:
       - bigquery.googleapis.com
       - bigqueryconnection.googleapis.com
@@ -161,9 +161,9 @@ spec:
       - source: hashicorp/archive
         version: ">= 2.4.2"
       - source: hashicorp/google
-        version: ">= 6.11, < 7"
+        version: ">= 6.11, < 8"
       - source: hashicorp/google-beta
-        version: ">= 6.11, < 7"
+        version: ">= 6.11, < 8"
       - source: hashicorp/http
         version: ">= 2"
       - source: hashicorp/local
