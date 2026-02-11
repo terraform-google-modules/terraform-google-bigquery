@@ -32,22 +32,29 @@ spec:
     description: {}
     icon: assets/data_warehouse_icon_v1.png
     deploymentDuration:
-      configurationSecs: "120"
-      deploymentSecs: "420"
+      configurationSecs: 120
+      deploymentSecs: 420
     costEstimate:
       description: cost of this solution is $0.65
       url: https://cloud.google.com/products/calculator/#id=857776c6-49e8-4c6a-adc5-42a15b8fb67d
     cloudProducts:
       - productId: search_BIGQUERY_SECTION
+        pageUrl: ""
       - productId: WORKFLOWS_SECTION
+        pageUrl: ""
       - productId: STORAGE_SECTION
+        pageUrl: ""
       - productId: ai-platform
+        pageUrl: ""
       - productId: LOOKER_STUDIO_SECTION
         pageUrl: lookerstudio.google.com
         isExternal: true
       - productId: CLOUD_DMS_SECTION
+        pageUrl: ""
       - productId: FUNCTIONS_SECTION
+        pageUrl: ""
       - productId: DATAFORM_SECTION
+        pageUrl: ""
   content:
     architecture:
       diagramUrl: www.gstatic.com/pantheon/images/solutions/data-warehouse-architecture_v6.svg
