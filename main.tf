@@ -65,6 +65,12 @@ resource "google_bigquery_dataset" "main" {
       special_group  = lookup(access.value, "special_group", "")
     }
   }
+
+  lifecycle {
+    ignore_changes = [
+      access
+    ]
+  }
 }
 
 resource "google_bigquery_table" "main" {
