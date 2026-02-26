@@ -47,6 +47,24 @@ module "bigquery" {
       require_partition_filter = false,
       expiration_ms            = null,
     },
+    table_constraints {
+
+      primary_key {
+        columns = ["id_1", "id_2"]
+      }
+      foreign_keys {
+        name = "foreign_key_1"
+        referenced_table {
+          project_id  = "<PROJECT ID>"
+          dataset_id  = "foo"
+          table_id    = "table_1"
+        }
+        column_references {
+          referencing_column = "id_1"
+          referenced_column = "id"
+        }
+      }
+    },
     range_partitioning = null,
     expiration_time = null,
     clustering      = ["fullVisitorId", "visitId"],
@@ -204,7 +222,7 @@ This module provisions a dataset and a list of tables with associated JSON schem
 | resource\_tags | A map of resource tags to add to the dataset | `map(string)` | `{}` | no |
 | routines | A list of objects which include routine\_id, routine\_type, routine\_language, definition\_body, return\_type, routine\_description and arguments. | <pre>list(object({<br>    routine_id      = string,<br>    routine_type    = string,<br>    language        = string,<br>    definition_body = string,<br>    return_type     = string,<br>    description     = string,<br>    arguments = optional(list(object({<br>      name          = string,<br>      data_type     = string,<br>      argument_kind = string,<br>      mode          = string,<br>    })), []),<br>  }))</pre> | `[]` | no |
 | storage\_billing\_model | Specifies the storage billing model for the dataset. Set this flag value to LOGICAL to use logical bytes for storage billing, or to PHYSICAL to use physical bytes instead. LOGICAL is the default if this flag isn't specified. | `string` | `null` | no |
-| tables | A list of objects which include table\_id, table\_name, schema, clustering, time\_partitioning, range\_partitioning, expiration\_time and labels. | <pre>list(object({<br>    table_id                 = string,<br>    description              = optional(string),<br>    table_name               = optional(string),<br>    schema                   = string,<br>    clustering               = optional(list(string), []),<br>    require_partition_filter = optional(bool),<br>    time_partitioning = optional(object({<br>      expiration_ms = string,<br>      field         = string,<br>      type          = string,<br>    }), null),<br>    range_partitioning = optional(object({<br>      field = string,<br>      range = object({<br>        start    = string,<br>        end      = string,<br>        interval = string,<br>      }),<br>    }), null),<br>    expiration_time     = optional(string, null),<br>    deletion_protection = optional(bool),<br>    labels              = optional(map(string), {}),<br>  }))</pre> | `[]` | no |
+| tables | A list of objects which include table\_id, table\_name, schema, clustering, table\_constraints, time\_partitioning, range\_partitioning, expiration\_time, and labels. | <pre>list(object({<br>    table_id                 = string,<br>    description              = optional(string),<br>    table_name               = optional(string),<br>    schema                   = string,<br>    clustering               = optional(list(string), []),<br>    require_partition_filter = optional(bool),<br>    table_constraints = optional(object({<br>      primary_key = optional(object({<br>        columns = list(string)<br>      }), null),<br>      foreign_keys = optional(list(object({<br>        name = string<br>        referenced_table = object({<br>          project_id = string,<br>          dataset_id = string,<br>          table_id   = string,<br>        })<br>        column_references = list(object({<br>          referencing_column = string,<br>          referenced_column  = string,<br>        }))<br>      })), null),<br>    }), null),<br>    time_partitioning = optional(object({<br>      expiration_ms = string,<br>      field         = string,<br>      type          = string,<br>    }), null),<br>    range_partitioning = optional(object({<br>      field = string,<br>      range = object({<br>        start    = string,<br>        end      = string,<br>        interval = string,<br>      }),<br>    }), null),<br>    expiration_time     = optional(string, null),<br>    deletion_protection = optional(bool),<br>    labels              = optional(map(string), {}),<br>  }))</pre> | `[]` | no |
 | views | A list of objects which include view\_id and view query | <pre>list(object({<br>    view_id        = string,<br>    description    = optional(string),<br>    query          = string,<br>    use_legacy_sql = bool,<br>    labels         = optional(map(string), {}),<br>  }))</pre> | `[]` | no |
 
 ## Outputs
