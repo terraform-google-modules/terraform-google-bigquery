@@ -143,6 +143,23 @@ variable "tables" {
     expiration_time     = optional(string, null),
     deletion_protection = optional(bool),
     labels              = optional(map(string), {}),
+    table_constraints = optional(object({
+      primary_key = optional(object({
+        columns = list(string),
+      })),
+      foreign_keys = optional(list(object({
+        name = optional(string),
+        referenced_table = object({
+          project_id = string,
+          dataset_id = string,
+          table_id   = string,
+        }),
+        column_references = object({
+          referencing_column = string,
+          referenced_column  = string,
+        }),
+      })), []),
+    })),
   }))
 }
 

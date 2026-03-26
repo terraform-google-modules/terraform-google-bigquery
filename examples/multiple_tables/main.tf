@@ -38,6 +38,11 @@ module "bigquery" {
       range_partitioning = null,
       expiration_time    = null,
       clustering         = ["fullVisitorId", "visitId"],
+      table_constraints = {
+        primary_key = {
+          columns = ["fullVisitorId"]
+        }
+      },
       labels = {
         env      = "dev"
         billable = "true"

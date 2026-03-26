@@ -33,6 +33,7 @@ describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_nam
   its('friendly_name') { should eq "#{tables[:foo][:friendly_name]}" }
   its('time_partitioning.type') { should eq 'DAY' }
   its('clustering') { should_not be nil }
+  its('table_constraints.primary_key.columns') { should include 'fullVisitorId' }
 end
 
 describe google_bigquery_table(project: "#{project_id}", dataset: "#{dataset_name}", name: "#{tables[:bar][:friendly_name]}") do
