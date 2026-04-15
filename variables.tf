@@ -19,6 +19,12 @@ variable "dataset_id" {
   type        = string
 }
 
+variable "create_dataset" {
+  description = "Whether to create the BigQuery dataset. Set to false to use an existing dataset specified by dataset_id."
+  type        = bool
+  default     = true
+}
+
 variable "dataset_name" {
   description = "Friendly name for the dataset being provisioned."
   type        = string

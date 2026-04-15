@@ -15,7 +15,7 @@
  */
 
 output "bigquery_dataset" {
-  value       = google_bigquery_dataset.main
+  value       = local.dataset
   description = "Bigquery dataset resource."
 }
 
@@ -35,7 +35,7 @@ output "bigquery_external_tables" {
 }
 
 output "project" {
-  value       = google_bigquery_dataset.main.project
+  value       = local.dataset.project
   description = "Project where the dataset and tables are created"
 }
 
@@ -105,7 +105,7 @@ output "routine_ids" {
 
 output "env_vars" {
   value = {
-    "BIGQUERY_DATASET"            = google_bigquery_dataset.main.dataset_id
+    "BIGQUERY_DATASET"            = local.dataset.dataset_id
     "BIGQUERY_TABLES"             = jsonencode([for table in google_bigquery_table.main : table.table_id])
     "BIGQUERY_VIEWS"              = jsonencode([for table in google_bigquery_table.view : table.table_id])
     "BIGQUERY_MATERIALIZED_VIEWS" = jsonencode([for table in google_bigquery_table.materialized_view : table.table_id])
