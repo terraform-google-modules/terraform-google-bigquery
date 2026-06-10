@@ -110,8 +110,14 @@ resource "google_service_account_key" "int_test" {
   service_account_id = google_service_account.int_test.id
 }
 
+# Wait for Google's IAM control plane to fully propagate the lazily instantiated BigQuery Encryption service agent
+resource "time_sleep" "wait_for_bq_encryption_sa" {
+  create_duration = "60s"
+  depends_on      = [data.google_bigquery_default_service_account.initialize_encryption_account]
+}
+
 resource "google_project_iam_member" "bq_encryption_account" {
-  depends_on = [data.google_bigquery_default_service_account.initialize_encryption_account] #waits for account initialization
+  depends_on = [time_sleep.wait_for_bq_encryption_sa]
   project    = module.project.project_id
   role       = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
   member     = "serviceAccount:${data.google_bigquery_default_service_account.initialize_encryption_account.email}"
