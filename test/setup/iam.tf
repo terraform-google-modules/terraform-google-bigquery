@@ -19,6 +19,7 @@ locals {
     root = [
       "roles/bigquery.admin",
       "roles/storage.admin",
+      "roles/storagetransfer.admin",
       "roles/cloudkms.cryptoKeyEncrypterDecrypter",
     ]
     authorization = [
@@ -51,6 +52,7 @@ locals {
       "roles/run.invoker",
       "roles/serviceusage.serviceUsageAdmin",
       "roles/storage.admin",
+      "roles/storagetransfer.admin",
       "roles/workflows.admin"
     ]
     scheduled_queries = [
