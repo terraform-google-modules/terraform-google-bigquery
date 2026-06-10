@@ -24,11 +24,19 @@ data "google_storage_transfer_project_service_account" "default" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
+# Wait for Google IAM to propagate the newly triggered Storage Transfer service account
+resource "time_sleep" "wait_for_transfer_sa" {
+  create_duration = "60s"
+  depends_on      = [data.google_storage_transfer_project_service_account.default]
+}
+
 # Grant the Storage Transfer Service access to write to our staging bucket
 resource "google_storage_bucket_iam_member" "transfer_sa_sink" {
   bucket = google_storage_bucket.raw_bucket.name
-  role   = "roles/storage.objectAdmin"
+  role   = "roles/storage.admin"
   member = "serviceAccount:${data.google_storage_transfer_project_service_account.default.email}"
+
+  depends_on = [time_sleep.wait_for_transfer_sa]
 }
 
 # Create the transfer job to run exactly once immediately upon deployment

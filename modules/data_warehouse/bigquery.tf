@@ -358,8 +358,8 @@ resource "google_project_iam_member" "dts_roles" {
 
 # Execute Stored Procedures to provision tables, views and models
 resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
-  job_id  = "run_sp_provision_lookup_tables_${random_id.id.hex}"
-  project = module.project-services.project_id
+  job_id   = "run_sp_provision_lookup_tables_${random_id.id.hex}"
+  project  = module.project-services.project_id
   location = var.region
 
   query {
@@ -372,8 +372,8 @@ resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
 }
 
 resource "google_bigquery_job" "run_sp_lookerstudio_report" {
-  job_id  = "run_sp_lookerstudio_report_${random_id.id.hex}"
-  project = module.project-services.project_id
+  job_id   = "run_sp_lookerstudio_report_${random_id.id.hex}"
+  project  = module.project-services.project_id
   location = var.region
 
   query {
@@ -388,8 +388,8 @@ resource "google_bigquery_job" "run_sp_lookerstudio_report" {
 }
 
 resource "google_bigquery_job" "run_sp_bigqueryml_model" {
-  job_id  = "run_sp_bigqueryml_model_${random_id.id.hex}"
-  project = module.project-services.project_id
+  job_id   = "run_sp_bigqueryml_model_${random_id.id.hex}"
+  project  = module.project-services.project_id
   location = var.region
 
   query {
@@ -402,8 +402,8 @@ resource "google_bigquery_job" "run_sp_bigqueryml_model" {
 }
 
 resource "google_bigquery_job" "run_sp_bigqueryml_generate_create" {
-  job_id  = "run_sp_bigqueryml_generate_create_${random_id.id.hex}"
-  project = module.project-services.project_id
+  job_id   = "run_sp_bigqueryml_generate_create_${random_id.id.hex}"
+  project  = module.project-services.project_id
   location = var.region
 
   query {
