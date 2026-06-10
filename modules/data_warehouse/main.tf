@@ -54,12 +54,6 @@ module "project-services" {
       roles = [
         "roles/bigquerydatatransfer.serviceAgent"
       ]
-    },
-    {
-      api = "storagetransfer.googleapis.com"
-      roles = [
-        "roles/storagetransfer.serviceAgent"
-      ]
     }
   ]
 }
