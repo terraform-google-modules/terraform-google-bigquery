@@ -371,6 +371,12 @@ resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
   ]
 }
 
+# Wait for BigQuery storage layers to fully propagate the newly provisioned lookup tables
+resource "time_sleep" "wait_after_lookup_tables" {
+  create_duration = "30s"
+  depends_on      = [google_bigquery_job.run_sp_provision_lookup_tables]
+}
+
 resource "google_bigquery_job" "run_sp_lookerstudio_report" {
   job_id   = "run_sp_lookerstudio_report_${random_id.id.hex}"
   project  = module.project-services.project_id
@@ -382,7 +388,7 @@ resource "google_bigquery_job" "run_sp_lookerstudio_report" {
 
   depends_on = [
     google_bigquery_routine.sproc_sp_demo_lookerstudio_report,
-    google_bigquery_job.run_sp_provision_lookup_tables,
+    time_sleep.wait_after_lookup_tables,
     time_sleep.wait_after_data_transfer
   ]
 }
