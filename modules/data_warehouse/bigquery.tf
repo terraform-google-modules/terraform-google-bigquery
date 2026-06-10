@@ -210,10 +210,7 @@ resource "google_bigquery_table" "tbl_edw_distribution_centers" {
   schema = file("${path.module}/src/schema/distribution_centers_schema.json")
 
   lifecycle {
-    ignore_changes = [
-      schema,
-      labels
-    ]
+    ignore_changes = [all]
   }
 
   labels = var.labels
