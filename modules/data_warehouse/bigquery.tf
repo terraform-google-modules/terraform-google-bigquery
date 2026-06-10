@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-# Set up BigQuery resources
+# Define Core BigQuery EDW Infrastructure Resources
 ## Create the BigQuery dataset
 resource "google_bigquery_dataset" "ds_edw" {
   project                    = module.project-services.project_id
