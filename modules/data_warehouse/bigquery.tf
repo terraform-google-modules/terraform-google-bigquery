@@ -200,14 +200,17 @@ resource "google_bigquery_table" "tbl_edw_users" {
   labels = var.labels
 }
 
-## Create a Standard table for distribution centers lookup
+## Create a Declarative View table for distribution centers lookup
 resource "google_bigquery_table" "tbl_edw_distribution_centers" {
   dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
   table_id            = "distribution_centers"
   project             = module.project-services.project_id
   deletion_protection = var.deletion_protection
 
-  schema = file("${path.module}/src/schema/distribution_centers_schema.json")
+  view {
+    query          = file("${path.module}/src/sql/sp_provision_lookup_tables.sql")
+    use_legacy_sql = false
+  }
 
   lifecycle {
     ignore_changes = all
@@ -218,35 +221,7 @@ resource "google_bigquery_table" "tbl_edw_distribution_centers" {
 
 # Load Queries and Execute Jobs directly timed with dependencies
 
-## Execute Query to load Distribution Center Lookup Data Table
-resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
-  job_id   = "run_sp_provision_lookup_tables_${random_id.id.hex}"
-  project  = module.project-services.project_id
-  location = var.region
 
-  query {
-    query = templatefile("${path.module}/src/sql/sp_provision_lookup_tables.sql", {
-      project_id = module.project-services.project_id,
-      dataset_id = google_bigquery_dataset.ds_edw.dataset_id
-    })
-    use_legacy_sql = false
-  }
-
-  lifecycle {
-    ignore_changes = all
-  }
-
-  depends_on = [
-    google_bigquery_dataset.ds_edw,
-    google_bigquery_table.tbl_edw_distribution_centers
-  ]
-}
-
-# Wait for BigQuery storage layers to fully propagate the newly provisioned lookup tables
-resource "time_sleep" "wait_after_lookup_tables" {
-  create_duration = "30s"
-  depends_on      = [google_bigquery_job.run_sp_provision_lookup_tables]
-}
 
 ## Add Looker Studio Data Report Views
 resource "google_bigquery_table" "view_lookerstudio_report_distribution_centers" {
@@ -273,7 +248,6 @@ resource "google_bigquery_table" "view_lookerstudio_report_distribution_centers"
     google_bigquery_table.tbl_edw_distribution_centers,
     google_bigquery_table.tbl_edw_order_items,
     google_bigquery_table.tbl_edw_inventory_items,
-    time_sleep.wait_after_lookup_tables,
     time_sleep.wait_after_data_transfer
   ]
 }
@@ -353,6 +327,12 @@ resource "google_bigquery_job" "run_sp_bigqueryml_model" {
   ]
 }
 
+## Introduce 60s propagation wait to ensure global IAM eventual consistency replication for Vertex AI Connection permissions
+resource "time_sleep" "wait_for_vertex_ai_iam" {
+  create_duration = "60s"
+  depends_on      = [google_project_iam_member.bq_connection_iam_vertex_ai]
+}
+
 ## Execute BigQuery ML LLM Text Generation Remote Model Creation Job
 resource "google_bigquery_job" "run_sp_bigqueryml_generate_create" {
   job_id   = "run_sp_bigqueryml_generate_create_${random_id.id.hex}"
@@ -376,7 +356,7 @@ resource "google_bigquery_job" "run_sp_bigqueryml_generate_create" {
 
   depends_on = [
     google_bigquery_job.run_sp_bigqueryml_model,
-    google_project_iam_member.bq_connection_iam_vertex_ai
+    time_sleep.wait_for_vertex_ai_iam
   ]
 }
 
