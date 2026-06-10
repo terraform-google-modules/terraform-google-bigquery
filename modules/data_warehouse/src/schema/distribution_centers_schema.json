@@ -1,0 +1,27 @@
+[
+  {
+    "name": "id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "name",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "longitude",
+    "type": "FLOAT64",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "latitude",
+    "type": "FLOAT64",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "distribution_center_geom",
+    "type": "GEOGRAPHY",
+    "mode": "NULLABLE"
+  }
+]

@@ -38,13 +38,22 @@ resource "google_bigquery_connection" "ds_connection" {
   depends_on = [time_sleep.wait_after_apis]
 }
 
+## Wait for GCP's IAM control plane to fully replicate the lazily instantiated BigQuery connection service agent identities across all regional nodes
+resource "time_sleep" "wait_for_bq_connection_sa" {
+  create_duration = "60s"
+  depends_on = [
+    google_bigquery_connection.ds_connection,
+    google_bigquery_connection.vertex_ai_connection
+  ]
+}
+
 ## Grant IAM access to the BigQuery Connection account for Cloud Storage
 resource "google_project_iam_member" "bq_connection_iam_object_viewer" {
   project = module.project-services.project_id
   role    = "roles/storage.objectViewer"
   member  = "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}"
 
-  depends_on = [google_bigquery_connection.ds_connection]
+  depends_on = [time_sleep.wait_for_bq_connection_sa]
 }
 
 ## Create a BigQuery connection for Vertex AI to support GenerativeAI use cases
@@ -73,7 +82,7 @@ resource "google_project_iam_member" "bq_connection_iam_vertex_ai" {
   project = module.project-services.project_id
   member  = "serviceAccount:${google_bigquery_connection.vertex_ai_connection.cloud_resource[0].service_account_id}"
 
-  depends_on = [google_bigquery_connection.vertex_ai_connection, google_project_iam_member.bq_connection_iam_object_viewer]
+  depends_on = [time_sleep.wait_for_bq_connection_sa]
 }
 
 # Create data tables in BigQuery
@@ -191,6 +200,25 @@ resource "google_bigquery_table" "tbl_edw_users" {
   labels = var.labels
 }
 
+## Create a Standard table for distribution centers lookup
+resource "google_bigquery_table" "tbl_edw_distribution_centers" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "distribution_centers"
+  project             = module.project-services.project_id
+  deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/distribution_centers_schema.json")
+
+  lifecycle {
+    ignore_changes = [
+      schema,
+      labels
+    ]
+  }
+
+  labels = var.labels
+}
+
 # Load Queries and Execute Jobs directly timed with dependencies
 
 ## Execute Query to load Distribution Center Lookup Data Table
@@ -207,7 +235,8 @@ resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
   }
 
   depends_on = [
-    google_bigquery_dataset.ds_edw
+    google_bigquery_dataset.ds_edw,
+    google_bigquery_table.tbl_edw_distribution_centers
   ]
 }
 
@@ -235,6 +264,7 @@ resource "google_bigquery_table" "view_lookerstudio_report_distribution_centers"
   labels = var.labels
 
   depends_on = [
+    google_bigquery_table.tbl_edw_distribution_centers,
     google_bigquery_table.tbl_edw_order_items,
     google_bigquery_table.tbl_edw_inventory_items,
     time_sleep.wait_after_lookup_tables,

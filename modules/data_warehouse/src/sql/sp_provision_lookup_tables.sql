@@ -12,12 +12,10 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-CREATE OR REPLACE TABLE `${project_id}.${dataset_id}.distribution_centers`
-OPTIONS(
-    labels=[("data-warehouse","true")]
-)
-AS
-SELECT 1 AS id, 'Memphis TN' AS name, -89.9711 AS longitude, 35.1174 AS latitude, ST_GEOGPOINT(-89.9711, 35.1174) AS distribution_center_geom
+TRUNCATE TABLE `${project_id}.${dataset_id}.distribution_centers`;
+
+INSERT INTO `${project_id}.${dataset_id}.distribution_centers` (id, name, longitude, latitude, distribution_center_geom)
+SELECT 1, 'Memphis TN', -89.9711, 35.1174, ST_GEOGPOINT(-89.9711, 35.1174)
 UNION ALL
 SELECT 2, 'Chicago IL', -87.6847, 41.8369, ST_GEOGPOINT(-87.6847, 41.8369)
 UNION ALL
