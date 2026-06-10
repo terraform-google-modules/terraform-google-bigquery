@@ -44,7 +44,7 @@ resource "google_project_iam_member" "bq_connection_iam_object_viewer" {
   role    = "roles/storage.objectViewer"
   member  = "serviceAccount:${google_bigquery_connection.ds_connection.cloud_resource[0].service_account_id}"
 
-  depends_on = [google_project_iam_member.workflow_manage_sa_roles, google_bigquery_connection.ds_connection]
+  depends_on = [google_bigquery_connection.ds_connection]
 }
 
 ## Create a BigQuery connection for Vertex AI to support GenerativeAI use cases
@@ -356,6 +356,67 @@ resource "google_project_iam_member" "dts_roles" {
   depends_on = [time_sleep.wait_after_apis, google_project_iam_member.bq_connection_iam_vertex_ai]
 }
 
+# Execute Stored Procedures to provision tables, views and models
+resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
+  job_id  = "run_sp_provision_lookup_tables_${random_id.id.hex}"
+  project = module.project-services.project_id
+  location = var.region
+
+  query {
+    query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_provision_lookup_tables`();"
+  }
+
+  depends_on = [
+    google_bigquery_routine.sp_provision_lookup_tables
+  ]
+}
+
+resource "google_bigquery_job" "run_sp_lookerstudio_report" {
+  job_id  = "run_sp_lookerstudio_report_${random_id.id.hex}"
+  project = module.project-services.project_id
+  location = var.region
+
+  query {
+    query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_lookerstudio_report`();"
+  }
+
+  depends_on = [
+    google_bigquery_routine.sproc_sp_demo_lookerstudio_report,
+    google_bigquery_job.run_sp_provision_lookup_tables,
+    time_sleep.wait_after_data_transfer
+  ]
+}
+
+resource "google_bigquery_job" "run_sp_bigqueryml_model" {
+  job_id  = "run_sp_bigqueryml_model_${random_id.id.hex}"
+  project = module.project-services.project_id
+  location = var.region
+
+  query {
+    query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_bigqueryml_model`();"
+  }
+
+  depends_on = [
+    google_bigquery_routine.sp_bigqueryml_model
+  ]
+}
+
+resource "google_bigquery_job" "run_sp_bigqueryml_generate_create" {
+  job_id  = "run_sp_bigqueryml_generate_create_${random_id.id.hex}"
+  project = module.project-services.project_id
+  location = var.region
+
+  query {
+    query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_bigqueryml_generate_create`();"
+  }
+
+  depends_on = [
+    google_bigquery_routine.sp_bigqueryml_generate_create,
+    google_bigquery_job.run_sp_bigqueryml_model,
+    google_project_iam_member.bq_connection_iam_vertex_ai
+  ]
+}
+
 # Set up scheduled query
 resource "google_bigquery_data_transfer_config" "dts_config" {
 
@@ -371,7 +432,6 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
 
   depends_on = [
     google_project_iam_member.dts_roles,
-    google_bigquery_dataset.ds_edw,
-    module.workflow_polling_4
+    google_bigquery_dataset.ds_edw
   ]
 }

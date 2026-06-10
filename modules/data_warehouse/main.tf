@@ -45,19 +45,20 @@ module "project-services" {
     "serviceusage.googleapis.com",
     "storage.googleapis.com",
     "storage-api.googleapis.com",
-    "workflows.googleapis.com",
-    "workflowexecutions.googleapis.com"
+    "storagetransfer.googleapis.com"
   ]
 
   activate_api_identities = [
     {
-      api = "workflows.googleapis.com"
-      roles = [
-        "roles/workflows.viewer"
-      ],
       api = "bigquerydatatransfer.googleapis.com"
       roles = [
         "roles/bigquerydatatransfer.serviceAgent"
+      ]
+    },
+    {
+      api = "storagetransfer.googleapis.com"
+      roles = [
+        "roles/storagetransfer.serviceAgent"
       ]
     }
   ]

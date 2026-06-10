@@ -101,17 +101,6 @@ resource "google_project_iam_member" "function_manage_roles" {
   depends_on = [google_service_account.cloud_function_manage_sa, google_project_iam_member.dts_roles]
 }
 
-## Grant the Cloud Workflows service account access to act as the Cloud Function service account
-resource "google_service_account_iam_member" "workflow_auth_function" {
-  service_account_id = google_service_account.cloud_function_manage_sa.name
-  role               = "roles/iam.serviceAccountUser"
-  member             = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
-
-  depends_on = [
-    google_service_account.workflow_manage_sa,
-    google_project_iam_member.function_manage_roles
-  ]
-}
 
 locals {
   dataform_region = (var.dataform_region == null ? var.region : var.dataform_region)
@@ -142,26 +131,10 @@ resource "google_dataform_repository_iam_member" "function_manage_repo" {
   member     = "serviceAccount:${google_service_account.cloud_function_manage_sa.email}"
   count      = length(local.notebook_names)
   repository = local.notebook_names[count.index]
-  depends_on = [time_sleep.wait_after_apis, google_service_account_iam_member.workflow_auth_function, google_dataform_repository.notebook_repo]
+  depends_on = [time_sleep.wait_after_apis, google_dataform_repository.notebook_repo]
 }
 
-## Grant Cloud Workflows service account access to write to the repo
-resource "google_dataform_repository_iam_member" "workflow_manage_repo" {
-  provider   = google-beta
-  project    = module.project-services.project_id
-  region     = local.dataform_region
-  role       = "roles/dataform.admin"
-  member     = "serviceAccount:${google_service_account.workflow_manage_sa.email}"
-  count      = length(local.notebook_names)
-  repository = local.notebook_names[count.index]
 
-  depends_on = [
-    google_project_iam_member.workflow_manage_sa_roles,
-    google_service_account_iam_member.workflow_auth_function,
-    google_dataform_repository_iam_member.function_manage_repo,
-    google_dataform_repository.notebook_repo
-  ]
-}
 
 # Create and deploy a Cloud Function to deploy notebooks
 ## Create the Cloud Function
@@ -203,7 +176,6 @@ resource "google_cloudfunctions2_function" "notebook_deploy_function" {
     time_sleep.wait_after_apis,
     google_project_iam_member.function_manage_roles,
     google_dataform_repository.notebook_repo,
-    google_dataform_repository_iam_member.workflow_manage_repo,
     google_dataform_repository_iam_member.function_manage_repo
   ]
 }
@@ -212,4 +184,21 @@ resource "google_cloudfunctions2_function" "notebook_deploy_function" {
 resource "time_sleep" "wait_after_function" {
   create_duration = "5s"
   depends_on      = [google_cloudfunctions2_function.notebook_deploy_function]
+}
+
+# Execute the Cloud Function to deploy notebooks
+data "google_service_account_id_token" "oidc" {
+  target_audience = google_cloudfunctions2_function.notebook_deploy_function.url
+}
+
+data "http" "invoke_function" {
+  url     = google_cloudfunctions2_function.notebook_deploy_function.url
+  method  = "GET"
+  request_headers = {
+    Authorization = "Bearer ${data.google_service_account_id_token.oidc.id_token}"
+  }
+
+  depends_on = [
+    time_sleep.wait_after_function
+  ]
 }

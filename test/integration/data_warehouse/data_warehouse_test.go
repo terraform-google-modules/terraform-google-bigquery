@@ -26,7 +26,6 @@ import (
 	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/bq"
 	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/gcloud"
 	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/tft"
-	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test/pkg/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,49 +44,35 @@ func TestDataWarehouse(t *testing.T) {
 
 		projectID := dwh.GetTFSetupStringOutput("project_id")
 		bucket := dwh.GetStringOutput("raw_bucket")
-		workflow := "initial-workflow"
 		location := "us-central1"
 
 		// Assert that the bucket is in location defined above
 		bucketOP := gcloud.Runf(t, "storage buckets describe gs://%s --project %s", bucket, projectID)
 		assert.Equal("US-CENTRAL1", bucketOP.Get("location").String(), "Bucket should be in %[1]s \n", strings.ToUpper(location))
 
-		// Assert that Workflow ran successfully
-		verifyWorkflows := func() (bool, error) {
-			workflowState := gcloud.Runf(t, "workflows executions list %s --project %s --location=%s --limit=1", workflow, projectID, location).Array()
-			state := workflowState[0].Get("state").String()
-			assert.NotEqual(t, state, "FAILED")
-			if state == "SUCCEEDED" {
-				return false, nil
-			} else {
-				return true, nil
-			}
-		}
-		utils.Poll(t, verifyWorkflows, 8, 30*time.Second)
-
 		homeDir, err := os.UserHomeDir()
-        if err != nil {
-            log.Fatal(err)
-        }
-        file, err := os.Create(homeDir + "/.bigqueryrc")
-        if err != nil {
-            log.Fatal(err)
-        }
-        file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+		file, err := os.Create(homeDir + "/.bigqueryrc")
+		if err != nil {
+			log.Fatal(err)
+		}
+		file.Close()
 
 		// Assert BigQuery tables & views are not empty
-		test_tables := func (){
+		test_tables := func() {
 
 			tables := []string{
-			"thelook.distribution_centers",
-			"thelook.events",
-			"thelook.inventory_items",
-			"thelook.order_items",
-			"thelook.orders",
-			"thelook.products",
-			"thelook.users",
-			"thelook.lookerstudio_report_distribution_centers",
-			"thelook.lookerstudio_report_profit",
+				"thelook.distribution_centers",
+				"thelook.events",
+				"thelook.inventory_items",
+				"thelook.order_items",
+				"thelook.orders",
+				"thelook.products",
+				"thelook.users",
+				"thelook.lookerstudio_report_distribution_centers",
+				"thelook.lookerstudio_report_profit",
 			}
 
 			query_template := "SELECT COUNT(*) AS count_rows FROM `%[1]s.%[2]s`;"
@@ -117,9 +102,9 @@ func TestDataWarehouse(t *testing.T) {
 			count_llm_kind := reflect.TypeOf(llm_count).Kind()
 			llm_test_result := assert.Greater(llm_count, int64(0))
 			if llm_test_result == true {
-				} else {
-					fmt.Printf("Some kind of error occurred while running the llm_count query. We think it has %[1]d rows. Here's some additional details: \n Query results. If this number is greater than 0, then there is probably an issue in the comparison: %[2]s \n Variable type for the count. This should be INT64: %[3]s \n ", llm_count, llm_op, count_llm_kind)
-				}
+			} else {
+				fmt.Printf("Some kind of error occurred while running the llm_count query. We think it has %[1]d rows. Here's some additional details: \n Query results. If this number is greater than 0, then there is probably an issue in the comparison: %[2]s \n Variable type for the count. This should be INT64: %[3]s \n ", llm_count, llm_op, count_llm_kind)
+			}
 		}
 		test_llms()
 	})
