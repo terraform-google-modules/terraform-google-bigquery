@@ -1,22 +1,27 @@
 [
   {
-    "mode": "NULLABLE",
     "name": "id",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "mode": "NULLABLE"
   },
   {
-    "mode": "NULLABLE",
     "name": "name",
-    "type": "STRING"
+    "type": "STRING",
+    "mode": "NULLABLE"
   },
   {
-    "mode": "NULLABLE",
-    "name": "latitude",
-    "type": "FLOAT"
-  },
-  {
-    "mode": "NULLABLE",
     "name": "longitude",
-    "type": "FLOAT"
+    "type": "FLOAT64",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "latitude",
+    "type": "FLOAT64",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "distribution_center_geom",
+    "type": "GEOGRAPHY",
+    "mode": "NULLABLE"
   }
 ]

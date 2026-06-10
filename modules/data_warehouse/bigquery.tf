@@ -191,6 +191,18 @@ resource "google_bigquery_table" "tbl_edw_users" {
   labels = var.labels
 }
 
+## Create a Standard table for distribution centers lookup
+resource "google_bigquery_table" "tbl_edw_distribution_centers" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "distribution_centers"
+  project             = module.project-services.project_id
+  deletion_protection = var.deletion_protection
+
+  schema = file("${path.module}/src/schema/distribution_centers_schema.json")
+
+  labels = var.labels
+}
+
 # Load Queries for Stored Procedure Execution
 ## Load Distribution Center Lookup Data Tables
 resource "google_bigquery_routine" "sp_provision_lookup_tables" {
@@ -367,7 +379,8 @@ resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
   }
 
   depends_on = [
-    google_bigquery_routine.sp_provision_lookup_tables
+    google_bigquery_routine.sp_provision_lookup_tables,
+    google_bigquery_table.tbl_edw_distribution_centers
   ]
 }
 
