@@ -191,19 +191,30 @@ resource "google_bigquery_table" "tbl_edw_users" {
   labels = var.labels
 }
 
-# Load Queries for Stored Procedure Execution
-## Load Distribution Center Lookup Data Tables
-resource "google_bigquery_routine" "sp_provision_lookup_tables" {
-  project      = module.project-services.project_id
-  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id   = "sp_provision_lookup_tables"
-  routine_type = "PROCEDURE"
-  language     = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_provision_lookup_tables.sql", {
-    project_id = module.project-services.project_id,
-    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
-    }
-  )
+# Load Queries and Execute Jobs directly timed with dependencies
+
+## Execute Query to load Distribution Center Lookup Data Table
+resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
+  job_id   = "run_sp_provision_lookup_tables_${random_id.id.hex}"
+  project  = module.project-services.project_id
+  location = var.region
+
+  query {
+    query = templatefile("${path.module}/src/sql/sp_provision_lookup_tables.sql", {
+      project_id = module.project-services.project_id,
+      dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    })
+  }
+
+  depends_on = [
+    google_bigquery_dataset.ds_edw
+  ]
+}
+
+# Wait for BigQuery storage layers to fully propagate the newly provisioned lookup tables
+resource "time_sleep" "wait_after_lookup_tables" {
+  create_duration = "30s"
+  depends_on      = [google_bigquery_job.run_sp_provision_lookup_tables]
 }
 
 ## Add Looker Studio Data Report Views
@@ -253,98 +264,102 @@ resource "google_bigquery_table" "view_lookerstudio_report_profit" {
   ]
 }
 
-## Add Sample Queries
-resource "google_bigquery_routine" "sp_sample_queries" {
-  project      = module.project-services.project_id
-  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id   = "sp_sample_queries"
-  routine_type = "PROCEDURE"
-  language     = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_sample_queries.sql", {
-    project_id = module.project-services.project_id,
-    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
-    }
-  )
+## Execute Sample Analytical Queries Job
+resource "google_bigquery_job" "run_sp_sample_queries" {
+  job_id   = "run_sp_sample_queries_${random_id.id.hex}"
+  project  = module.project-services.project_id
+  location = var.region
+
+  query {
+    query = templatefile("${path.module}/src/sql/sp_sample_queries.sql", {
+      project_id = module.project-services.project_id,
+      dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    })
+  }
 
   depends_on = [
     google_bigquery_table.tbl_edw_inventory_items,
     google_bigquery_table.tbl_edw_order_items,
+    time_sleep.wait_after_data_transfer
   ]
 }
 
+## Execute BigQuery ML Model Clustering Job
+resource "google_bigquery_job" "run_sp_bigqueryml_model" {
+  job_id   = "run_sp_bigqueryml_model_${random_id.id.hex}"
+  project  = module.project-services.project_id
+  location = var.region
 
-## Add Bigquery ML Model for clustering
-resource "google_bigquery_routine" "sp_bigqueryml_model" {
-  project      = module.project-services.project_id
-  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id   = "sp_bigqueryml_model"
-  routine_type = "PROCEDURE"
-  language     = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_model.sql", {
-    project_id = module.project-services.project_id,
-    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
-    }
-  )
+  query {
+    query = templatefile("${path.module}/src/sql/sp_bigqueryml_model.sql", {
+      project_id = module.project-services.project_id,
+      dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    })
+  }
+
   depends_on = [
-    google_bigquery_table.tbl_edw_order_items
+    google_bigquery_table.tbl_edw_order_items,
+    time_sleep.wait_after_data_transfer
   ]
 }
 
-## Create Bigquery ML Model for using text generation
-resource "google_bigquery_routine" "sp_bigqueryml_generate_create" {
-  project      = module.project-services.project_id
-  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id   = "sp_bigqueryml_generate_create"
-  routine_type = "PROCEDURE"
-  language     = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_generate_create.sql", {
-    project_id    = module.project-services.project_id,
-    dataset_id    = google_bigquery_dataset.ds_edw.dataset_id,
-    connection_id = google_bigquery_connection.vertex_ai_connection.id,
-    model_name    = var.text_generation_model_name,
-    region        = var.region
-    }
-  )
+## Execute BigQuery ML LLM Text Generation Remote Model Creation Job
+resource "google_bigquery_job" "run_sp_bigqueryml_generate_create" {
+  job_id   = "run_sp_bigqueryml_generate_create_${random_id.id.hex}"
+  project  = module.project-services.project_id
+  location = var.region
+
+  query {
+    query = templatefile("${path.module}/src/sql/sp_bigqueryml_generate_create.sql", {
+      project_id    = module.project-services.project_id,
+      dataset_id    = google_bigquery_dataset.ds_edw.dataset_id,
+      connection_id = google_bigquery_connection.vertex_ai_connection.id,
+      model_name    = var.text_generation_model_name,
+      region        = var.region
+    })
+  }
 
   depends_on = [
-    google_bigquery_routine.sp_bigqueryml_model,
-    google_bigquery_connection.vertex_ai_connection
+    google_bigquery_job.run_sp_bigqueryml_model,
+    google_project_iam_member.bq_connection_iam_vertex_ai
   ]
 }
 
-## Query Bigquery ML Model for describing customer clusters
-resource "google_bigquery_routine" "sp_bigqueryml_generate_describe" {
-  project      = module.project-services.project_id
-  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id   = "sp_bigqueryml_generate_describe"
-  routine_type = "PROCEDURE"
-  language     = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_bigqueryml_generate_describe.sql", {
-    project_id = module.project-services.project_id,
-    dataset_id = google_bigquery_dataset.ds_edw.dataset_id,
-    model_name = var.text_generation_model_name
-    }
-  )
+## Execute BigQuery ML LLM Cluster Description Query Job
+resource "google_bigquery_job" "run_sp_bigqueryml_generate_describe" {
+  job_id   = "run_sp_bigqueryml_generate_describe_${random_id.id.hex}"
+  project  = module.project-services.project_id
+  location = var.region
+
+  query {
+    query = templatefile("${path.module}/src/sql/sp_bigqueryml_generate_describe.sql", {
+      project_id = module.project-services.project_id,
+      dataset_id = google_bigquery_dataset.ds_edw.dataset_id,
+      model_name = var.text_generation_model_name
+    })
+  }
 
   depends_on = [
-    google_bigquery_routine.sp_bigqueryml_generate_create
+    google_bigquery_job.run_sp_bigqueryml_generate_create
   ]
 }
 
-## Add Translation Scripts
-resource "google_bigquery_routine" "sp_sample_translation_queries" {
-  project      = module.project-services.project_id
-  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id   = "sp_sample_translation_queries"
-  routine_type = "PROCEDURE"
-  language     = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_sample_translation_queries.sql", {
-    project_id = module.project-services.project_id,
-    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
-    }
-  )
+## Execute Sample Translation Queries Job
+resource "google_bigquery_job" "run_sp_sample_translation_queries" {
+  job_id   = "run_sp_sample_translation_queries_${random_id.id.hex}"
+  project  = module.project-services.project_id
+  location = var.region
+
+  query {
+    query = templatefile("${path.module}/src/sql/sp_sample_translation_queries.sql", {
+      project_id = module.project-services.project_id,
+      dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    })
+  }
+
   depends_on = [
-    google_bigquery_table.tbl_edw_inventory_items
+    google_bigquery_table.tbl_edw_inventory_items,
+    time_sleep.wait_after_data_transfer
   ]
 }
 
@@ -383,57 +398,6 @@ resource "google_project_iam_member" "dts_roles" {
   depends_on = [time_sleep.wait_after_apis, google_project_iam_member.bq_connection_iam_vertex_ai]
 }
 
-# Execute Stored Procedures to provision tables, views and models
-resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
-  job_id   = "run_sp_provision_lookup_tables_${random_id.id.hex}"
-  project  = module.project-services.project_id
-  location = var.region
-
-  query {
-    query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_provision_lookup_tables`();"
-  }
-
-  depends_on = [
-    google_bigquery_routine.sp_provision_lookup_tables
-  ]
-}
-
-# Wait for BigQuery storage layers to fully propagate the newly provisioned lookup tables
-resource "time_sleep" "wait_after_lookup_tables" {
-  create_duration = "30s"
-  depends_on      = [google_bigquery_job.run_sp_provision_lookup_tables]
-}
-
-resource "google_bigquery_job" "run_sp_bigqueryml_model" {
-  job_id   = "run_sp_bigqueryml_model_${random_id.id.hex}"
-  project  = module.project-services.project_id
-  location = var.region
-
-  query {
-    query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_bigqueryml_model`();"
-  }
-
-  depends_on = [
-    google_bigquery_routine.sp_bigqueryml_model
-  ]
-}
-
-resource "google_bigquery_job" "run_sp_bigqueryml_generate_create" {
-  job_id   = "run_sp_bigqueryml_generate_create_${random_id.id.hex}"
-  project  = module.project-services.project_id
-  location = var.region
-
-  query {
-    query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_bigqueryml_generate_create`();"
-  }
-
-  depends_on = [
-    google_bigquery_routine.sp_bigqueryml_generate_create,
-    google_bigquery_job.run_sp_bigqueryml_model,
-    google_project_iam_member.bq_connection_iam_vertex_ai
-  ]
-}
-
 # Set up scheduled query
 resource "google_bigquery_data_transfer_config" "dts_config" {
 
@@ -443,7 +407,10 @@ resource "google_bigquery_data_transfer_config" "dts_config" {
   data_source_id = "scheduled_query"
   schedule       = "every day 00:00"
   params = {
-    query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_bigqueryml_model`()"
+    query = templatefile("${path.module}/src/sql/sp_bigqueryml_model.sql", {
+      project_id = module.project-services.project_id,
+      dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    })
   }
   service_account_name = google_service_account.dts.email
 
