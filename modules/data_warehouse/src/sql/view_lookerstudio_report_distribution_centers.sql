@@ -25,7 +25,6 @@ WITH OrdersData AS
     `${project_id}.${dataset_id}.distribution_centers` AS dc ON inventory_items.product_distribution_center_id = dc.id
   WHERE
     order_items.created_at IS NOT NULL
-    AND order_items.created_at <= CURRENT_TIMESTAMP()
   GROUP BY 1, 2, 3, 4, 5, 6
 )
 , LagPercents AS
