@@ -231,6 +231,10 @@ resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
     })
   }
 
+  lifecycle {
+    ignore_changes = all
+  }
+
   depends_on = [
     google_bigquery_dataset.ds_edw,
     google_bigquery_table.tbl_edw_distribution_centers
@@ -258,6 +262,10 @@ resource "google_bigquery_table" "view_lookerstudio_report_distribution_centers"
     use_legacy_sql = false
   }
 
+  lifecycle {
+    ignore_changes = all
+  }
+
   labels = var.labels
 
   depends_on = [
@@ -283,6 +291,10 @@ resource "google_bigquery_table" "view_lookerstudio_report_profit" {
     use_legacy_sql = false
   }
 
+  lifecycle {
+    ignore_changes = all
+  }
+
   labels = var.labels
 
   depends_on = [
@@ -304,6 +316,10 @@ resource "google_bigquery_job" "run_sp_sample_queries" {
     })
   }
 
+  lifecycle {
+    ignore_changes = all
+  }
+
   depends_on = [
     google_bigquery_table.tbl_edw_inventory_items,
     google_bigquery_table.tbl_edw_order_items,
@@ -322,6 +338,10 @@ resource "google_bigquery_job" "run_sp_bigqueryml_model" {
       project_id = module.project-services.project_id,
       dataset_id = google_bigquery_dataset.ds_edw.dataset_id
     })
+  }
+
+  lifecycle {
+    ignore_changes = all
   }
 
   depends_on = [
@@ -346,6 +366,10 @@ resource "google_bigquery_job" "run_sp_bigqueryml_generate_create" {
     })
   }
 
+  lifecycle {
+    ignore_changes = all
+  }
+
   depends_on = [
     google_bigquery_job.run_sp_bigqueryml_model,
     google_project_iam_member.bq_connection_iam_vertex_ai
@@ -366,6 +390,10 @@ resource "google_bigquery_job" "run_sp_bigqueryml_generate_describe" {
     })
   }
 
+  lifecycle {
+    ignore_changes = all
+  }
+
   depends_on = [
     google_bigquery_job.run_sp_bigqueryml_generate_create
   ]
@@ -382,6 +410,10 @@ resource "google_bigquery_job" "run_sp_sample_translation_queries" {
       project_id = module.project-services.project_id,
       dataset_id = google_bigquery_dataset.ds_edw.dataset_id
     })
+  }
+
+  lifecycle {
+    ignore_changes = all
   }
 
   depends_on = [
