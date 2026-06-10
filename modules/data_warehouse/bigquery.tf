@@ -191,18 +191,6 @@ resource "google_bigquery_table" "tbl_edw_users" {
   labels = var.labels
 }
 
-## Create a Standard table for distribution centers lookup
-resource "google_bigquery_table" "tbl_edw_distribution_centers" {
-  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
-  table_id            = "distribution_centers"
-  project             = module.project-services.project_id
-  deletion_protection = var.deletion_protection
-
-  schema = file("${path.module}/src/schema/distribution_centers_schema.json")
-
-  labels = var.labels
-}
-
 # Load Queries for Stored Procedure Execution
 ## Load Distribution Center Lookup Data Tables
 resource "google_bigquery_routine" "sp_provision_lookup_tables" {
@@ -218,23 +206,50 @@ resource "google_bigquery_routine" "sp_provision_lookup_tables" {
   )
 }
 
-## Add Looker Studio Data Report Procedure
-resource "google_bigquery_routine" "sproc_sp_demo_lookerstudio_report" {
-  project      = module.project-services.project_id
-  dataset_id   = google_bigquery_dataset.ds_edw.dataset_id
-  routine_id   = "sp_lookerstudio_report"
-  routine_type = "PROCEDURE"
-  language     = "SQL"
-  definition_body = templatefile("${path.module}/src/sql/sp_lookerstudio_report.sql", {
-    project_id = module.project-services.project_id,
-    dataset_id = google_bigquery_dataset.ds_edw.dataset_id
-    }
-  )
+## Add Looker Studio Data Report Views
+resource "google_bigquery_table" "view_lookerstudio_report_distribution_centers" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "lookerstudio_report_distribution_centers"
+  project             = module.project-services.project_id
+  deletion_protection = false
+
+  view {
+    query = templatefile("${path.module}/src/sql/view_lookerstudio_report_distribution_centers.sql", {
+      project_id = module.project-services.project_id,
+      dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    })
+    use_legacy_sql = false
+  }
+
+  labels = var.labels
+
+  depends_on = [
+    google_bigquery_table.tbl_edw_order_items,
+    google_bigquery_table.tbl_edw_inventory_items,
+    time_sleep.wait_after_lookup_tables,
+    time_sleep.wait_after_data_transfer
+  ]
+}
+
+resource "google_bigquery_table" "view_lookerstudio_report_profit" {
+  dataset_id          = google_bigquery_dataset.ds_edw.dataset_id
+  table_id            = "lookerstudio_report_profit"
+  project             = module.project-services.project_id
+  deletion_protection = false
+
+  view {
+    query = templatefile("${path.module}/src/sql/view_lookerstudio_report_profit.sql", {
+      project_id = module.project-services.project_id,
+      dataset_id = google_bigquery_dataset.ds_edw.dataset_id
+    })
+    use_legacy_sql = false
+  }
+
+  labels = var.labels
 
   depends_on = [
     google_bigquery_table.tbl_edw_inventory_items,
-    google_bigquery_table.tbl_edw_order_items,
-    google_bigquery_routine.sp_provision_lookup_tables,
+    time_sleep.wait_after_data_transfer
   ]
 }
 
@@ -379,8 +394,7 @@ resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
   }
 
   depends_on = [
-    google_bigquery_routine.sp_provision_lookup_tables,
-    google_bigquery_table.tbl_edw_distribution_centers
+    google_bigquery_routine.sp_provision_lookup_tables
   ]
 }
 
@@ -388,22 +402,6 @@ resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
 resource "time_sleep" "wait_after_lookup_tables" {
   create_duration = "30s"
   depends_on      = [google_bigquery_job.run_sp_provision_lookup_tables]
-}
-
-resource "google_bigquery_job" "run_sp_lookerstudio_report" {
-  job_id   = "run_sp_lookerstudio_report_${random_id.id.hex}"
-  project  = module.project-services.project_id
-  location = var.region
-
-  query {
-    query = "CALL `${module.project-services.project_id}.${google_bigquery_dataset.ds_edw.dataset_id}.sp_lookerstudio_report`();"
-  }
-
-  depends_on = [
-    google_bigquery_routine.sproc_sp_demo_lookerstudio_report,
-    time_sleep.wait_after_lookup_tables,
-    time_sleep.wait_after_data_transfer
-  ]
 }
 
 resource "google_bigquery_job" "run_sp_bigqueryml_model" {
