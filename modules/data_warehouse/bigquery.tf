@@ -229,6 +229,7 @@ resource "google_bigquery_job" "run_sp_provision_lookup_tables" {
       project_id = module.project-services.project_id,
       dataset_id = google_bigquery_dataset.ds_edw.dataset_id
     })
+    use_legacy_sql = false
   }
 
   lifecycle {
@@ -314,6 +315,7 @@ resource "google_bigquery_job" "run_sp_sample_queries" {
       project_id = module.project-services.project_id,
       dataset_id = google_bigquery_dataset.ds_edw.dataset_id
     })
+    use_legacy_sql = false
   }
 
   lifecycle {
@@ -338,6 +340,7 @@ resource "google_bigquery_job" "run_sp_bigqueryml_model" {
       project_id = module.project-services.project_id,
       dataset_id = google_bigquery_dataset.ds_edw.dataset_id
     })
+    use_legacy_sql = false
   }
 
   lifecycle {
@@ -364,6 +367,7 @@ resource "google_bigquery_job" "run_sp_bigqueryml_generate_create" {
       model_name    = var.text_generation_model_name,
       region        = var.region
     })
+    use_legacy_sql = false
   }
 
   lifecycle {
@@ -388,6 +392,7 @@ resource "google_bigquery_job" "run_sp_bigqueryml_generate_describe" {
       dataset_id = google_bigquery_dataset.ds_edw.dataset_id,
       model_name = var.text_generation_model_name
     })
+    use_legacy_sql = false
   }
 
   lifecycle {
@@ -410,6 +415,7 @@ resource "google_bigquery_job" "run_sp_sample_translation_queries" {
       project_id = module.project-services.project_id,
       dataset_id = google_bigquery_dataset.ds_edw.dataset_id
     })
+    use_legacy_sql = false
   }
 
   lifecycle {
