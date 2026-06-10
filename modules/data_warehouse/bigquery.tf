@@ -343,7 +343,7 @@ resource "google_bigquery_job" "run_sp_bigqueryml_generate_create" {
     query = templatefile("${path.module}/src/sql/sp_bigqueryml_generate_create.sql", {
       project_id    = module.project-services.project_id,
       dataset_id    = google_bigquery_dataset.ds_edw.dataset_id,
-      connection_id = "${var.region}.${google_bigquery_connection.vertex_ai_connection.connection_id}",
+      connection_id = google_bigquery_connection.vertex_ai_connection.name,
       model_name    = var.text_generation_model_name,
       region        = var.region
     })
