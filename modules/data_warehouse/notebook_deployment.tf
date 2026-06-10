@@ -191,6 +191,7 @@ data "google_service_account_id_token" "oidc" {
   target_audience = google_cloudfunctions2_function.notebook_deploy_function.url
 }
 
+# tflint-ignore: terraform_unused_declarations
 data "http" "invoke_function" {
   url    = google_cloudfunctions2_function.notebook_deploy_function.url
   method = "GET"
