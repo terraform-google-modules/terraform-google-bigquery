@@ -143,6 +143,11 @@ variable "tables" {
     expiration_time     = optional(string, null),
     deletion_protection = optional(bool),
     labels              = optional(map(string), {}),
+    table_constraints = optional(object({
+      primary_key = optional(object({
+        columns = list(string)
+      }))
+    }), null),
   }))
 }
 
