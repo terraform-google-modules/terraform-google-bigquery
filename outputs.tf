@@ -20,7 +20,16 @@ output "bigquery_dataset" {
 }
 
 output "bigquery_tables" {
-  value       = google_bigquery_table.main
+  value = {
+    for table_name, table in google_bigquery_table.main :
+    table_name => {
+      id            = table.id
+      table_id      = table.table_id
+      friendly_name = table.friendly_name
+      project       = table.project
+      dataset_id    = table.dataset_id
+    }
+  }
   description = "Map of bigquery table resources being provisioned."
 }
 
