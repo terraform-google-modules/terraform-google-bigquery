@@ -102,6 +102,18 @@ resource "google_bigquery_table" "main" {
     }
   }
 
+  dynamic "table_constraints" {
+    for_each = lookup(each.value, "table_constraints", null) != null ? [each.value["table_constraints"]] : []
+    content {
+      dynamic "primary_key" {
+        for_each = lookup(table_constraints.value, "primary_key", null) != null ? [table_constraints.value["primary_key"]] : []
+        content {
+          columns = primary_key.value["columns"]
+        }
+      }
+    }
+  }
+
   lifecycle {
     ignore_changes = [
       encryption_configuration # managed by google_bigquery_dataset.main.default_encryption_configuration
