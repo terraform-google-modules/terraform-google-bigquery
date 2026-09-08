@@ -77,7 +77,7 @@ module "project" {
 
 module "kms_keyring" {
   source  = "terraform-google-modules/kms/google"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   project_id      = module.project.project_id
   location        = "us"
