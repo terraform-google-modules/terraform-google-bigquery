@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.2.2](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v10.2.1...v10.2.2) (2026-10-15)
+
+
+### Bug Fixes
+
+* populate null defaultValue in bigquery blueprint metadata ([#447](https://github.com/terraform-google-modules/terraform-google-bigquery/issues/447)) ([e11db0d](https://github.com/terraform-google-modules/terraform-google-bigquery/commit/e11db0dcd5978847d50d6af9ebbcd944a09a6f31))
+
 ## [10.2.1](https://github.com/terraform-google-modules/terraform-google-bigquery/compare/v10.2.0...v10.2.1) (2025-09-30)
 
 
